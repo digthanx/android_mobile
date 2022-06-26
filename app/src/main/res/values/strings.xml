@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Thanks App</string>
+    <string name="go_to_telegram">Go to Telegram</string>
+    <string name="input_login_message">Для входа введите имя пользователя</string>
+    <string name="telegram">Telegram</string>
+    <string name="enter">Войти</string>
+    <string name="go_to_telegram_message">Или войдите через телеграм-бот</string>
+    <string name="input_code">Введите код подтверждения</string>
+    <string name="code">Код подтверждения</string>
+    <string name="check">Проверить</string>
+    <string name="username_label">Username: </string>
+    <string name="telegram_id_label">Telegram ID: </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="registration_button_label">Регистрация</string>
+    <string name="application_label">Цифровое спасибо</string>
+    <string name="enter_button_label">Вход</string>
+    <string name="get_code_button_label">Получить код</string>
+    <string name="user_name_label">Имя пользователя</string>
+    <string name="confirmation_code_label">Код подтверждения</string>
+    <string name="balance_label">Баланс</string>
+    <string name="new_transaction_label">Новый перевод</string>
+    <string name="history_label">История</string>
+    <string name="period">Период</string>
+    <string name="my_count">Мой счет</string>
+    <string name="distributed">Распределено:</string>
+    <string name="least_distribute">Осталось раздать</string>
+    <string name="cancelled">Аннулировано:</string>
+    <string name="frozen_label">На согласовании:</string>
+    <string name="will_burn_after">Сгорят через %s день</string>
+    <string name="will_burn_after_2">Сгорят через %s дня</string>
+    <string name="will_burn_after_3">Сгорят через %s дней</string>
+    <string name="send">Отправить</string>
+    <string name="empty">\"\"</string>
+</resources>

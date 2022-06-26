@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding_x"
+    tools:context=".presentation.fragment.LoginFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/enter"
+            android:textAppearance="@style/Headline4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_xx"
+            android:layout_marginBottom="@dimen/margin_xxx"
+            android:text="@string/input_login_message"
+            android:textAppearance="@style/Subtitle1" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
+            style="?attr/textInputOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_huge_h"
+            android:hint="@string/user_name_label"
+            app:boxStrokeColor="@color/color9">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/telegram_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/user_name_label" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/get_code_btn"
+            style="@style/DefaultButton"
+            app:cornerRadius="@dimen/round_corner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/get_code_button_label" />
+    </LinearLayout>
+</RelativeLayout>
