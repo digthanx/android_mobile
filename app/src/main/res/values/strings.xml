@@ -32,4 +32,6 @@
     <string name="will_burn_after_3">Сгорят через %s дней</string>
     <string name="send">Отправить</string>
     <string name="empty">\"\"</string>
+    <string name="received_from">Перевод от %s</string>
+    <string name="sended_to">Перевод для %s</string>
 </resources>

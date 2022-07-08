@@ -42,4 +42,7 @@ interface ThanksApi {
         @Header("Authorization") token: String,
         @Body request: SendCoinsRequest
     ): Call<SendCoinsResponse>
+
+    @GET("/user/transactions/")
+    fun getUserTransactions(@Header("Authorization") token: String): Call<List<UserTransactionsResponse>>
 }

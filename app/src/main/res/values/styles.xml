@@ -15,6 +15,11 @@
         <item name="android:textSize">34sp</item>
     </style>
 
+    <style name="Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/color1</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:textColor">@color/color1</item>
         <item name="android:textSize">16sp</item>

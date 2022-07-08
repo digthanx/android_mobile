@@ -7,11 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationBarView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.presentation.fragment.BalanceFragment
 import com.teamforce.thanksapp.presentation.fragment.HistoryFragment
 import com.teamforce.thanksapp.presentation.fragment.TransactionFragment
+import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
 
 class MainActivity : AppCompatActivity(), IMainAction {
@@ -25,6 +27,15 @@ class MainActivity : AppCompatActivity(), IMainAction {
         val restoredText = prefs.getString("Token", null)
         if (restoredText != null) {
             UserDataRepository.getInstance()?.token = restoredText
+            val viewmodel = ProfileViewModel()
+            viewmodel.initViewModel()
+            viewmodel.loadUserProfile(restoredText)
+            viewmodel.profile.observe(
+                this,
+                Observer {
+                    UserDataRepository.getInstance()?.username = it.profile.tgName
+                }
+            )
             val fragment: Fragment?
             val ft: FragmentTransaction = fragmentManager.beginTransaction()
             fragment = BalanceFragment.newInstance()

@@ -49,7 +49,7 @@ class BalanceFragment : Fragment() {
             leastCount.text = it.distribute.amount.toString()
             leastDistribute.text = it.distribute.sended.toString()
             cancelled.text = it.distribute.cancelled.toString()
-            frozen.text = it.distribute.frozen.toString()
+            frozen.text = it.income.frozen.toString()
             try {
                 val dateTime: LocalDateTime =
                     LocalDateTime.parse(it.distribute.expireDate.replace("Z", ""))
