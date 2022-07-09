@@ -1,0 +1,48 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+    }
+    versionCatalogs {
+        libs {
+            version('appcompat-v7', '28.0.0')
+            version('compose', '1.1.1')
+            version('constraint', '2.1.4')
+            version('firebase-bom', '30.1.0')
+            version('google-services', '4.3.10')
+            version('kotlinx-coroutines-core', '1.6.2')
+            version('lifecycle', '2.4.1')
+            version('material', '1.5.0')
+            version('okhttp', '3.10.0')
+            version('retrofit', '2.9.0')
+            version('recyclerview', '1.2.1')
+            library('appcompat-v7', 'com.android.support', 'appcompat-v7').versionRef('appcompat-v7')
+            library('compose-runtime', 'androidx.compose.runtime', 'runtime').versionRef('compose')
+            library('constraint-layout', 'com.android.support.constraint', 'constraint-layout').versionRef('constraint')
+            library('firebase-analytics', 'com.google.firebase', 'firebase-analytics-ktx').withoutVersion()
+            library('firebase-bom', 'com.google.firebase', 'firebase-bom').versionRef('firebase-bom')
+            library('firebase-crashlytics', 'com.google.firebase', 'firebase-crashlytics-ktx').withoutVersion()
+            library('kotlinx-coroutines-core', 'org.jetbrains.kotlinx', 'kotlinx-coroutines-core').versionRef('kotlinx-coroutines-core')
+            library('lifecycle-viewmodel', 'androidx.lifecycle', 'lifecycle-viewmodel-ktx').versionRef('lifecycle')
+            library('lifecycle-runtime', 'androidx.lifecycle', 'lifecycle-runtime-ktx').versionRef('lifecycle')
+            library('lifecycle-livedata', 'androidx.lifecycle', 'lifecycle-livedata-ktx').versionRef('lifecycle')
+            library('material', 'com.google.android.material', 'material').versionRef('material')
+            library('okhttp', 'com.squareup.okhttp3', 'okhttp').versionRef('okhttp')
+            library('okhttp-logging-interceptor', 'com.squareup.okhttp3', 'logging-interceptor').versionRef('okhttp')
+            library('recyclerview', 'androidx.recyclerview', 'recyclerview').versionRef('recyclerview')
+            library('retrofit', 'com.squareup.retrofit2', 'retrofit').versionRef('retrofit')
+            library('retrofit-converter-gson', 'com.squareup.retrofit2', 'converter-gson').versionRef('retrofit')
+        }
+    }
+}
+rootProject.name = "ThanksApp"
+include ':app'

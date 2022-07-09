@@ -1,0 +1,165 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.teamforce.thanksapp"
+        minSdk 24
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        viewBinding = true
+       dataBinding = true
+      //  compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+}
+
+dependencies {
+
+    // Import the Firebase BoM
+    implementation platform(libs.firebase.bom)
+
+    implementation libs.appcompat.v7
+    implementation libs.compose.runtime
+    implementation libs.constraint.layout
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation libs.firebase.analytics
+    implementation libs.firebase.crashlytics
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.lifecycle.livedata
+    implementation libs.lifecycle.viewmodel
+    implementation libs.lifecycle.runtime
+    implementation libs.material
+    implementation libs.okhttp
+    implementation libs.okhttp.logging.interceptor
+    implementation libs.recyclerview
+    implementation libs.retrofit
+    implementation libs.retrofit.converter.gson
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
+    testImplementation 'junit:junit:4.13.2'
+
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+
+    /*   implementation(libs.CORE_KTX)
+       implementation(libs.APP_STARTUP)
+       implementation(libs.PROFILE_INSTALLER)
+
+       // UI
+       implementation(libs.ACTIVITY_KTX)
+       implementation(libs.APPCOMPAT)
+       implementation(libs.FRAGMENT_KTX)
+       implementation(libs.CARDVIEW)
+       implementation(libs.BROWSER)
+       implementation(libs.CONSTRAINT_LAYOUT)
+       implementation(libs.DRAWER_LAYOUT)
+       implementation(libs.MATERIAL)
+       implementation(libs.FLEXBOX)
+       implementation(libs.LOTTIE)
+       implementation(libs.INK_PAGE_INDICATOR)
+       implementation(libs.SLIDING_PANE_LAYOUT)
+
+       // Architecture Components
+       implementation(libs.LIFECYCLE_LIVE_DATA_KTX)
+       implementation(libs.LIFECYCLE_RUNTIME_KTX)
+       kapt(libs.LIFECYCLE_COMPILER)
+       testImplementation(libs.ARCH_TESTING)
+       implementation(libs.NAVIGATION_FRAGMENT_KTX)
+       implementation(libs.NAVIGATION_UI_KTX)
+       implementation(libs.ROOM_KTX)
+       implementation(libs.ROOM_RUNTIME)
+       kapt(libs.ROOM_COMPILER)
+       testImplementation(libs.ROOM_KTX)
+       testImplementation(libs.ROOM_RUNTIME)
+
+       // Compose
+       implementation(libs.ACTIVITY_COMPOSE)
+       implementation(libs.COMPOSE_ANIMATION)
+       implementation(libs.COMPOSE_MATERIAL)
+       implementation(libs.COMPOSE_RUNTIME)
+       implementation(libs.COMPOSE_THEME_ADAPTER)
+       implementation(libs.COMPOSE_TOOLING)
+       implementation(libs.VIEWMODEL_COMPOSE)
+       implementation(libs.MDC_COMPOSE_THEME_ADAPTER)
+       androidTestImplementation(libs.COMPOSE_TEST)
+
+       // Dagger Hilt
+       implementation(libs.HILT_ANDROID)
+       androidTestImplementation(libs.HILT_TESTING)
+       kapt(libs.HILT_COMPILER)
+       kaptAndroidTest(libs.HILT_COMPILER)
+
+       // DataStore
+       implementation(libs.DATA_STORE_PREFERENCES)
+       androidTestImplementation(libs.DATA_STORE_PREFERENCES)
+
+       // Glide
+       implementation(libs.GLIDE)
+       kapt(libs.GLIDE_COMPILER)
+
+       // Fabric and Firebase
+       implementation(libs.FIREBASE_UI_AUTH)
+       implementation(libs.CRASHLYTICS)
+
+       // Date and time API for Java.
+       implementation(libs.THREETENABP)
+       testImplementation(libs.THREETENBP)
+
+       // Kotlin
+       implementation(libs.KOTLIN_STDLIB)
+
+       // Instrumentation tests
+       androidTestImplementation(libs.ESPRESSO_CORE)
+       androidTestImplementation(libs.ESPRESSO_CONTRIB)
+       androidTestImplementation(libs.EXT_JUNIT)
+       androidTestImplementation(libs.RUNNER)
+       androidTestImplementation(libs.RULES)
+       androidTestImplementation(libs.FRAGMENT_TEST)
+       debugImplementation(libs.FRAGMENT_TEST)
+
+       // Local unit tests
+       testImplementation(libs.JUNIT)
+       testImplementation(libs.MOCKITO_CORE)
+       testImplementation(libs.MOCKITO_KOTLIN)
+       testImplementation(libs.HAMCREST)
+
+       // Solve conflicts with gson. DataBinding is using an old version.
+       implementation(libs.GSON)
+
+       implementation(libs.ARCORE)*/
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1097927147360",
+    "project_id": "thanksapp-teamforce",
+    "storage_bucket": "thanksapp-teamforce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1097927147360:android:52243ddeee449ddd892805",
+        "android_client_info": {
+          "package_name": "com.teamforce.thanksapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1097927147360-pstd1qae3f735crds844bf8s5j2jkeam.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKfehzYt43tEhOHEwZpjVON2tPmCY68Iw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1097927147360-pstd1qae3f735crds844bf8s5j2jkeam.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
