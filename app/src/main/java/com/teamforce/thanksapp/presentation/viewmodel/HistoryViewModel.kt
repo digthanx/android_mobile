@@ -2,6 +2,7 @@ package com.teamforce.thanksapp.presentation.viewmodel
 
 import android.util.Log
 import android.util.SparseArray
+import androidx.core.util.containsKey
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,12 +25,12 @@ class HistoryViewModel : ViewModel() {
     private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-    private val _transactions = MutableLiveData<SparseArray<HistoryModel>>()
-    val transactions: LiveData<SparseArray<HistoryModel>> = _transactions
+    private val _allTransactions = MutableLiveData<SparseArray<HistoryModel>>()
+    val allTransactions: LiveData<SparseArray<HistoryModel>> = _allTransactions
     private val _receivedTransactions = MutableLiveData<SparseArray<HistoryModel>>()
-    val receivedTransactions: LiveData<SparseArray<HistoryModel>> = _transactions
-    private val _sendedTransactions = MutableLiveData<SparseArray<HistoryModel>>()
-    val sendedTransactions: LiveData<SparseArray<HistoryModel>> = _transactions
+    val receivedTransactions: LiveData<SparseArray<HistoryModel>> = _receivedTransactions
+    private val _sentTransactions = MutableLiveData<SparseArray<HistoryModel>>()
+    val sentTransactions: LiveData<SparseArray<HistoryModel>> = _sentTransactions
     private val _transactionsLoadingError = MutableLiveData<String>()
     val transactionsLoadingError: LiveData<String> = _transactionsLoadingError
 
@@ -67,7 +68,7 @@ class HistoryViewModel : ViewModel() {
                                             LocalDateTime.parse(item.updatedAt.replace("+03:00", ""))
                                         val day = dateTime.dayOfYear
 
-                                        if (allData.contains(day)) {
+                                        if (allData.containsKey(day)) {
                                             val model = allData.get(day)
                                             var data = model.data
                                             data = data.plusElement(item)
@@ -78,7 +79,7 @@ class HistoryViewModel : ViewModel() {
                                         }
 
                                         if (item.sender.equals(user)) {
-                                            if (sendedData.contains(day)) {
+                                            if (sendedData.containsKey(day)) {
                                                 val model = sendedData.get(day)
                                                 var data = model.data
                                                 data = data.plusElement(item)
@@ -87,7 +88,7 @@ class HistoryViewModel : ViewModel() {
                                                 sendedData.put(day, HistoryModel(day, listOf(item)))
                                             }
                                         } else {
-                                            if (receivedData.contains(day)) {
+                                            if (receivedData.containsKey(day)) {
                                                 val model = receivedData.get(day)
                                                 var data = model.data
                                                 data = data.plusElement(item)
@@ -97,9 +98,9 @@ class HistoryViewModel : ViewModel() {
                                             }
                                         }
 
-                                        _transactions.postValue(allData)
+                                        _allTransactions.postValue(allData)
                                         _receivedTransactions.postValue(receivedData)
-                                        _sendedTransactions.postValue(sendedData)
+                                        _sentTransactions.postValue(sendedData)
                                     } catch (e: Exception) {
                                         Log.e("HistoryViewModel", e.message, e.fillInStackTrace())
                                     }
