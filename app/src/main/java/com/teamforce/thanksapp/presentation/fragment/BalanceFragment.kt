@@ -47,11 +47,11 @@ class BalanceFragment : Fragment() {
         viewModel.balance.observe(viewLifecycleOwner) {
             UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
             count.text = it.income.amount.toString()
-            distributed.text = it.income.sended.toString()
+            distributed.text = " " + it.income.sended.toString()
             leastCount.text = it.distribute.amount.toString()
-            leastDistribute.text = it.distribute.sended.toString()
-            cancelled.text = it.distribute.cancelled.toString()
-            frozen.text = it.income.frozen.toString()
+            leastDistribute.text = " " + it.distribute.sended.toString()
+            cancelled.text = " " + it.distribute.cancelled.toString()
+            frozen.text = " " + it.income.frozen.toString()
             try {
                 val dateTime: LocalDate =
                     LocalDate.parse(it.distribute.expireDate, DateTimeFormatter.ISO_DATE)
