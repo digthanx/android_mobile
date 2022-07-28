@@ -46,12 +46,43 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch { callAuthorizationEndpoint(telegramId, Dispatchers.Default) }
     }
 
-    fun verifyCode(code: String) {
+    fun verifyCode(telegramId: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callVerificationationEndpoint(code, Dispatchers.Default) }
+        viewModelScope.launch { callVerificationEndpoint(telegramId, Dispatchers.Default) }
     }
 
-    private suspend fun callVerificationationEndpoint(
+    private suspend fun callAuthorizationEndpoint(
+        telegramId: String,
+        coroutineDispatcher: CoroutineDispatcher
+    ) {
+        withContext(coroutineDispatcher) {
+            thanksApi?.authorization(AuthorizationRequest(login = telegramId))
+                ?.enqueue(object : Callback<Any> {
+                    override fun onResponse(
+                        call: Call<Any>,
+                        response: Response<Any>
+                    ) {
+                        _isLoading.postValue(false)
+                        if (response.code() == 200) {
+                            xId = response.headers().get("X-ID")
+                            xCode = response.headers().get("X-Code")
+                            _isSuccessAuth.postValue(true)
+                        } else {
+                            _isSuccessAuth.postValue(false)
+                            _authError.postValue(response.message() + " " + response.code())
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Any>, t: Throwable) {
+                        _isLoading.postValue(false)
+                        _isSuccessAuth.postValue(false)
+                        _authError.postValue(t.message)
+                    }
+                })
+        }
+    }
+
+    private suspend fun callVerificationEndpoint(
         code: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
@@ -86,34 +117,4 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    private suspend fun callAuthorizationEndpoint(
-        telegramId: String,
-        coroutineDispatcher: CoroutineDispatcher
-    ) {
-        withContext(coroutineDispatcher) {
-            thanksApi?.authorization(AuthorizationRequest(login = telegramId))
-                ?.enqueue(object : Callback<Any> {
-                    override fun onResponse(
-                        call: Call<Any>,
-                        response: Response<Any>
-                    ) {
-                        _isLoading.postValue(false)
-                        if (response.code() == 200) {
-                            xId = response.headers().get("X-ID")
-                            xCode = response.headers().get("X-Code")
-                            _isSuccessAuth.postValue(true)
-                        } else {
-                            _isSuccessAuth.postValue(false)
-                            _authError.postValue(response.message() + " " + response.code())
-                        }
-                    }
-
-                    override fun onFailure(call: Call<Any>, t: Throwable) {
-                        _isLoading.postValue(false)
-                        _isSuccessAuth.postValue(false)
-                        _authError.postValue(t.message)
-                    }
-                })
-        }
-    }
 }

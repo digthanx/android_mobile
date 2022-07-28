@@ -17,7 +17,7 @@
         android:layout_marginTop="@dimen/margin_x"
         android:focusable="false"
         android:hint="Выберите получателя"
-        android:paddingBottom="30dp"
+        android:paddingBottom="9dp"
         app:boxStrokeColor="@color/color9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -144,14 +144,24 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="110dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/users_list_rv"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_view_for_rv"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/constraint_wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_height="0dp"
+        app:cardCornerRadius="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textField" >
+        app:layout_constraintTop_toBottomOf="@+id/textField">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/users_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

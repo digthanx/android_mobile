@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
@@ -29,6 +31,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private lateinit var countEditText: EditText
     private lateinit var reasonEditText: EditText
     private lateinit var recyclerView: RecyclerView
+    private lateinit var cardViewForRecyclerView: MaterialCardView
     private lateinit var sendCoinsGroup: Group
     private var user: UserBean? = null
 
@@ -52,6 +55,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         val sendButton: Button = view.findViewById(R.id.send_coin_btn)
         sendButton.setOnClickListener(this)
         recyclerView = view.findViewById(R.id.users_list_rv)
+        cardViewForRecyclerView = view.findViewById(R.id.card_view_for_rv)
         sendCoinsGroup = view.findViewById(R.id.send_coins_group)
         countEditText = view.findViewById(R.id.count_value_et)
         reasonEditText = view.findViewById(R.id.message_value_et)
@@ -66,6 +70,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                     }
                 } else {
                     recyclerView.visibility = View.GONE
+                    cardViewForRecyclerView.visibility = View.GONE
                 }
             }
 
@@ -74,6 +79,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             override fun afterTextChanged(s: Editable) {}
         })
         viewModel.users.observe(viewLifecycleOwner) {
+            cardViewForRecyclerView.visibility = View.VISIBLE
             recyclerView.visibility = View.VISIBLE
             recyclerView.adapter = UsersAdapter(it, this)
         }
@@ -96,6 +102,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.user_item) {
+            cardViewForRecyclerView.visibility = View.GONE
             recyclerView.visibility = View.GONE
             user = v.tag as UserBean
             usersInputLayout.editText?.setText(user?.tgName)

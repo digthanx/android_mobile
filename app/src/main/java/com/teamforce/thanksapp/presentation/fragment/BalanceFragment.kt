@@ -11,7 +11,9 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
 import java.lang.Exception
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class BalanceFragment : Fragment() {
@@ -45,15 +47,15 @@ class BalanceFragment : Fragment() {
         viewModel.balance.observe(viewLifecycleOwner) {
             UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
             count.text = it.income.amount.toString()
-            distributed.text = it.income.sended.toString()
+            distributed.text = " " + it.income.sended.toString()
             leastCount.text = it.distribute.amount.toString()
-            leastDistribute.text = it.distribute.sended.toString()
-            cancelled.text = it.distribute.cancelled.toString()
-            frozen.text = it.income.frozen.toString()
+            leastDistribute.text = " " + it.distribute.sended.toString()
+            cancelled.text = " " + it.distribute.cancelled.toString()
+            frozen.text = " " + it.income.frozen.toString()
             try {
-                val dateTime: LocalDateTime =
-                    LocalDateTime.parse(it.distribute.expireDate.replace("Z", ""))
-                val from = LocalDateTime.now()
+                val dateTime: LocalDate =
+                    LocalDate.parse(it.distribute.expireDate, DateTimeFormatter.ISO_DATE)
+                val from = LocalDate.now()
                 val result: Long = ChronoUnit.DAYS.between(from, dateTime)
                 val text = result.toString()
                 if (isOne(text) && text.length == 1) {
