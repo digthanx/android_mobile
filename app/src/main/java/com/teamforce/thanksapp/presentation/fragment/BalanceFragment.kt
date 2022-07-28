@@ -11,7 +11,9 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
 import java.lang.Exception
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class BalanceFragment : Fragment() {
@@ -51,9 +53,9 @@ class BalanceFragment : Fragment() {
             cancelled.text = it.distribute.cancelled.toString()
             frozen.text = it.income.frozen.toString()
             try {
-                val dateTime: LocalDateTime =
-                    LocalDateTime.parse(it.distribute.expireDate.replace("Z", ""))
-                val from = LocalDateTime.now()
+                val dateTime: LocalDate =
+                    LocalDate.parse(it.distribute.expireDate, DateTimeFormatter.ISO_DATE)
+                val from = LocalDate.now()
                 val result: Long = ChronoUnit.DAYS.between(from, dateTime)
                 val text = result.toString()
                 if (isOne(text) && text.length == 1) {
