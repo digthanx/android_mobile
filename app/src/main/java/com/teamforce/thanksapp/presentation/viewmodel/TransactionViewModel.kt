@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.SendCoinsRequest
 import com.teamforce.thanksapp.data.request.UsersListRequest
+import com.teamforce.thanksapp.data.response.BalanceResponse
 import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.utils.RetrofitClient
@@ -31,6 +32,10 @@ class TransactionViewModel : ViewModel() {
     val isSuccessOperation: LiveData<Boolean> = _isSuccessOperation
     private val _sendCoinsError = MutableLiveData<String>()
     val sendCoinsError: LiveData<String> = _sendCoinsError
+    private val _balance = MutableLiveData<BalanceResponse>()
+    val balance: LiveData<BalanceResponse> = _balance
+    private val _balanceError = MutableLiveData<String>()
+    val balanceError: LiveData<String> = _balanceError
 
     fun initViewModel() {
         thanksApi = RetrofitClient.getInstance()
@@ -45,6 +50,37 @@ class TransactionViewModel : ViewModel() {
         _isLoading.postValue(true)
         viewModelScope.launch {
             callSendCoinsEndpoint(token, recipient, amount, reason, Dispatchers.Default)
+        }
+    }
+
+    fun loadUserBalance(token: String) {
+        _isLoading.postValue(true)
+        viewModelScope.launch { callBalanceEndpoint(token, Dispatchers.Default) }
+    }
+
+    private suspend fun callBalanceEndpoint(
+        token: String,
+        coroutineDispatcher: CoroutineDispatcher
+    ) {
+        withContext(coroutineDispatcher) {
+            thanksApi?.getBalance("Token $token")?.enqueue(object : Callback<BalanceResponse> {
+                override fun onResponse(
+                    call: Call<BalanceResponse>,
+                    response: Response<BalanceResponse>
+                ) {
+                    _isLoading.postValue(false)
+                    if (response.code() == 200) {
+                        _balance.postValue(response.body())
+                    } else {
+                        _balanceError.postValue(response.message() + " " + response.code())
+                    }
+                }
+
+                override fun onFailure(call: Call<BalanceResponse>, t: Throwable) {
+                    _isLoading.postValue(false)
+                    _balanceError.postValue(t.message)
+                }
+            })
         }
     }
 

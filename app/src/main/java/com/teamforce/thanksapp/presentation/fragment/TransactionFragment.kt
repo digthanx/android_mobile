@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.Group
@@ -33,6 +34,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var cardViewForRecyclerView: MaterialCardView
     private lateinit var sendCoinsGroup: Group
+    private lateinit var availableCoins: TextView
     private var user: UserBean? = null
 
     override fun onCreateView(
@@ -49,6 +51,14 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         viewModel = TransactionViewModel()
         viewModel.initViewModel()
         initViews(view)
+        val token = UserDataRepository.getInstance()?.token
+        if (token != null) {
+            viewModel.loadUserBalance(token)
+        }
+        viewModel.balance.observe(viewLifecycleOwner){
+            UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
+            availableCoins.text = it.distribute.amount.toString()
+        }
     }
 
     private fun initViews(view: View) {
@@ -61,6 +71,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         reasonEditText = view.findViewById(R.id.message_value_et)
         usersInputLayout = view.findViewById(R.id.textField)
         usersInput = view.findViewById(R.id.users_et)
+        availableCoins = view.findViewById(R.id.distributed_value_tv)
         usersInput.addTextChangedListener(object : TextWatcher {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
