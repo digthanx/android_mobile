@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.presentation.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +25,9 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     private var allTransactionsList: List<HistoryModel> = emptyList()
     private var receivedTransactionsList: List<HistoryModel> = emptyList()
     private var sentTransactionsList: List<HistoryModel> = emptyList()
-    private val username: String = UserDataRepository.getInstance()!!.username!!
+    // При первом входе в аккаунт на телефоне username почему то null
+    // Понять почему он null и исправить это
+    private val username: String = UserDataRepository.getInstance()?.username.toString()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +49,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         recyclerView = view.findViewById(R.id.history_rv)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
         val chipGroup = view.findViewById<ChipGroup>(R.id.chipGroup)
+        Log.d("Token", "Username ${username}")
 
         UserDataRepository.getInstance()?.token?.let {  token ->
             UserDataRepository.getInstance()?.username?.let { username ->
