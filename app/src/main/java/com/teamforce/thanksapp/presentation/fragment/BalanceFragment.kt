@@ -7,9 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.button.MaterialButton
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.activityNavController
+import com.teamforce.thanksapp.utils.navigateSafely
 import java.lang.Exception
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -25,6 +29,7 @@ class BalanceFragment : Fragment() {
     private lateinit var cancelled: TextView
     private lateinit var frozen: TextView
     private lateinit var willBurn: TextView
+    private lateinit var outBtn: MaterialButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +78,11 @@ class BalanceFragment : Fragment() {
                 Log.e(TAG, e.message, e.fillInStackTrace())
             }
         }
+
+        outBtn.setOnClickListener {
+            UserDataRepository.getInstance()?.logout(requireActivity())
+            activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
+        }
     }
 
     private fun isNotTen(text: String): Boolean {
@@ -103,6 +113,7 @@ class BalanceFragment : Fragment() {
         cancelled = view.findViewById(R.id.cancelled_value_tv)
         frozen = view.findViewById(R.id.frozen_value_tv)
         willBurn = view.findViewById(R.id.will_burn_tv)
+        outBtn = view.findViewById(R.id.btn_out)
     }
 
     companion object {

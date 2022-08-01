@@ -18,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginViewModel : ViewModel() {
+object LoginViewModel : ViewModel() {
 
     private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
@@ -116,5 +116,6 @@ class LoginViewModel : ViewModel() {
                 })
         }
     }
+
 
 }
