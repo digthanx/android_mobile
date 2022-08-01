@@ -14,6 +14,10 @@ import com.teamforce.thanksapp.databinding.ActivityMainBinding
 import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), IMainAction {
 
@@ -47,16 +51,16 @@ class MainActivity : AppCompatActivity(), IMainAction {
                     if(it.profile.tgName != "null"){
                         UserDataRepository.getInstance()?.username = it.profile.tgName
                         Log.d("Token", "Имя пользователя ------- ${it.profile.tgName}")
-                        navGraph.setStartDestination(R.id.mainFlowFragment)
                     }
                 }
             )
+            navGraph.setStartDestination(R.id.mainFlowFragment)
         } else {
             navGraph.setStartDestination(R.id.signFlowFragment)
         }
         navController.graph = navGraph
-
     }
+
 
     override fun showSuccessSendingCoins(count: Int, message: String, name: String) {
         TODO("Not yet implemented")

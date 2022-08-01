@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,6 +48,7 @@ class BalanceViewModel : ViewModel() {
                     _isLoading.postValue(false)
                     if (response.code() == 200) {
                         _balance.postValue(response.body())
+                        Log.d("Token", "Пользовательские данные ${response.body()}")
                     } else {
                         _balanceError.postValue(response.message() + " " + response.code())
                     }

@@ -7,10 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.utils.RetrofitClient
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,6 +23,13 @@ class ProfileViewModel : ViewModel() {
     val profile: LiveData<ProfileResponse> = _profile
     private val _profileError = MutableLiveData<String>()
     val profileError: LiveData<String> = _profileError
+    /*
+    private val _pets = MutableStateFlow<List<Pet>>(listOf())
+    val pets = _pets.asStateFlow()
+
+    private val _profile = MutableLiveData<ProfileResponse>()
+    val profile: LiveData<ProfileResponse> = _profile
+     */
 
     fun initViewModel() {
         thanksApi = RetrofitClient.getInstance()

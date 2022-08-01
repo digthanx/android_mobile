@@ -17,6 +17,7 @@ class UserDataRepository private constructor() {
 
     fun logout(context: Context) {
         savePreferences(context, null, null)
+        // TODO Нужно задавать переменным UserDataRepository null
     }
 
     private fun savePreferences(context: Context, authtoken: String?, telegram: String?) {

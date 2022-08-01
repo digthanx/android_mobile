@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.presentation.activity.ILoginAction
 import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
+import com.teamforce.thanksapp.utils.UserDataRepository
 
 class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
@@ -52,6 +53,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.get_code_btn) {
+            UserDataRepository.getInstance()?.username = editText?.text.toString()
             viewModel.authorizeUser(editText?.text.toString())
         }
     }
