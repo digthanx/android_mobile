@@ -14,10 +14,22 @@
         android:id="@+id/transactionFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.TransactionFragment"
         android:label="fragment_transaction"
-        tools:layout="@layout/fragment_transaction" />
+        tools:layout="@layout/fragment_transaction" >
+        <action
+            android:id="@+id/action_transactionFragment_to_transactionResultFragment"
+            app:destination="@id/transactionResultFragment" />
+    </fragment>
     <fragment
         android:id="@+id/balanceFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.BalanceFragment"
         android:label="fragment_balance"
         tools:layout="@layout/fragment_balance" />
+    <fragment
+        android:id="@+id/transactionResultFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.TransactionResultFragment"
+        android:label="TransactionResultFragment" >
+        <action
+            android:id="@+id/action_transactionResultFragment_to_transactionFragment"
+            app:destination="@id/transactionFragment" />
+    </fragment>
 </navigation>

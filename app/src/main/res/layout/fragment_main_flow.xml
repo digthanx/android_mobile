@@ -22,7 +22,7 @@
         android:id="@+id/bottom_navigation"
         style="@style/Widget.App.BottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_navigation_menu" />
 
