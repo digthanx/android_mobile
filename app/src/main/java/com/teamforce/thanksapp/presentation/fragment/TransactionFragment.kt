@@ -23,8 +23,10 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
 import java.lang.Exception
+
 
 class TransactionFragment : Fragment(), View.OnClickListener {
 
@@ -129,12 +131,27 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                     val count: Int = Integer.valueOf(countText)
                     UserDataRepository.getInstance()?.token?.let {
                         viewModel.sendCoins(it, userId, count, reason)
+                        showResultTransaction(
+                            amountThanks = count,
+                            description = reasonEditText.text.toString(),
+                            receiver = usersInput.text.toString()
+                        )
                     }
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
+    }
+    private fun showResultTransaction(amountThanks: Int, description: String, receiver: String ){
+        val bundle = Bundle()
+        bundle.putInt(Consts.AMOUNT_THANKS, amountThanks)
+        bundle.putString(Consts.DESCRIPTION_OF_TRANSACTION, description.trim())
+        bundle.putString(Consts.RECEIVER, receiver.trim())
+        findNavController().navigate(
+            R.id.action_transactionFragment_to_transactionResultFragment,
+            bundle
+        )
     }
 
     private fun logout() {
