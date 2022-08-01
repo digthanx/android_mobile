@@ -17,7 +17,8 @@
         tools:layout="@layout/fragment_transaction" >
         <action
             android:id="@+id/action_transactionFragment_to_transactionResultFragment"
-            app:destination="@id/transactionResultFragment" />
+            app:destination="@id/transactionResultFragment"
+            app:enterAnim="@anim/to_bottom_out" />
     </fragment>
     <fragment
         android:id="@+id/balanceFragment"
@@ -30,6 +31,7 @@
         android:label="TransactionResultFragment" >
         <action
             android:id="@+id/action_transactionResultFragment_to_transactionFragment"
-            app:destination="@id/transactionFragment" />
+            app:destination="@id/transactionFragment"
+            app:enterAnim="@anim/to_bottom_in" />
     </fragment>
 </navigation>
