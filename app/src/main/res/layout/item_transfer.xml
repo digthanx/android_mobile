@@ -32,7 +32,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_arrow_right_circle_line"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,4 +55,115 @@
         android:textAppearance="@style/Headline6"
         app:layout_constraintStart_toEndOf="@+id/transfer_icon_iv"
         app:layout_constraintTop_toBottomOf="@+id/label_tv" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/expanded_info_transaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/value_tv">
+
+        <ImageView
+            android:id="@+id/new_status_iv"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_arrow_left_circle_fill"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/new_date_get_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12.06.2022  12:34"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/new_label_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Перевод от "
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/new_date_get_transaction"
+            app:layout_constraintStart_toStartOf="@id/new_date_get_transaction" />
+
+        <ImageView
+            android:id="@+id/status_image"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_marginTop="13dp"
+            android:src="@drawable/ic_checkbox_circle_line"
+            app:layout_constraintTop_toBottomOf="@id/new_label_tv"
+            app:layout_constraintEnd_toStartOf="@id/status_tv"/>
+
+        <TextView
+            android:id="@+id/status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Согласовано"
+            android:textColor="@color/color6"
+            android:letterSpacing="0.05"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintTop_toBottomOf="@id/new_label_tv"
+            app:layout_constraintStart_toEndOf="@id/status_image" />
+
+        <View
+            android:id="@+id/separate_line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/color24"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/status_image"/>
+
+        <TextView
+            android:id="@+id/new_value_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+100"
+            android:textColor="@color/color6"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:layout_marginTop="26dp"
+            app:layout_constraintStart_toStartOf="@id/new_date_get_transaction"
+            app:layout_constraintTop_toBottomOf="@id/separate_line" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:letterSpacing="0.05"
+            android:lineHeight="24dp"
+            android:text="“За отличную работу на проекте, все сделано вовремя и хорошо”"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/new_value_transaction"
+            app:layout_constraintTop_toBottomOf="@id/new_value_transaction" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/standard_info_group_visible"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids=
+            "status_iv, chat_iv, transfer_icon_iv, value_tv, label_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/expanded_info_transaction"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
