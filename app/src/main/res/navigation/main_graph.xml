@@ -8,13 +8,13 @@
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.HistoryFragment"
-        android:label="fragment_history"
+        android:label="@string/history_label"
         tools:layout="@layout/fragment_history" />
     <fragment
         android:id="@+id/transactionFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.TransactionFragment"
-        android:label="fragment_transaction"
-        tools:layout="@layout/fragment_transaction" >
+        android:label="@string/new_transaction_label"
+        tools:layout="@layout/fragment_transaction">
         <action
             android:id="@+id/action_transactionFragment_to_transactionResultFragment"
             app:destination="@id/transactionResultFragment"
@@ -23,12 +23,12 @@
     <fragment
         android:id="@+id/balanceFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.BalanceFragment"
-        android:label="fragment_balance"
+        android:label="@string/balance_label"
         tools:layout="@layout/fragment_balance" />
     <fragment
         android:id="@+id/transactionResultFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.TransactionResultFragment"
-        android:label="TransactionResultFragment" >
+        android:label="@string/new_transaction_label">
         <action
             android:id="@+id/action_transactionResultFragment_to_transactionFragment"
             app:destination="@id/transactionFragment"
