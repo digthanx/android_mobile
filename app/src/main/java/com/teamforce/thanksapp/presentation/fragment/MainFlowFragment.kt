@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentMainFlowBinding
+import com.teamforce.thanksapp.utils.UserDataRepository
 
 
 class MainFlowFragment : BaseFlowFragment(
@@ -30,6 +32,11 @@ class MainFlowFragment : BaseFlowFragment(
 
     override fun setupNavigation(navController: NavController) {
         binding.bottomNavigation.setupWithNavController(navController)
+        binding.navView.setupWithNavController(navController)
+        val appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout = binding.drawerLayout)
+        val toolbar = binding.toolbar
+        toolbar.setupWithNavController(navController, appBarConfiguration)
     }
+
 }
 

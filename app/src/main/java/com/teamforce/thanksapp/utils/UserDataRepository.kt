@@ -17,6 +17,10 @@ class UserDataRepository private constructor() {
 
     fun logout(context: Context) {
         savePreferences(context, null, null)
+        token = null
+        leastCoins = null
+        username = null
+        tgId = null
         // TODO Нужно задавать переменным UserDataRepository null
     }
 
