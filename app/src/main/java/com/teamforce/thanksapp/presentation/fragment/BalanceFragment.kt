@@ -57,6 +57,7 @@ class BalanceFragment : Fragment() {
             leastDistribute.text = " " + it.distribute.sended.toString()
             cancelled.text = " " + it.distribute.cancelled.toString()
             frozen.text = " " + it.income.frozen.toString()
+            Log.d("Token", "Распределено ${it.distribute}")
             try {
                 val dateTime: LocalDate =
                     LocalDate.parse(it.distribute.expireDate, DateTimeFormatter.ISO_DATE)
