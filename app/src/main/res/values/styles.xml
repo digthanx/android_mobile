@@ -84,4 +84,12 @@
         <item name="colorOnPrimary">@color/color5</item>
     </style>
 
+    <style name="NavigationDrawer" parent="TextAppearance.AppCompat.Widget.ActionBar.Menu">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorControlHighlight">@color/color10</item>
+        <item name="android:windowBackground">@color/color10</item>
+    </style>
+
+
+
 </resources>

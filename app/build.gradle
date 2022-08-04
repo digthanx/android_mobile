@@ -52,13 +52,15 @@ android {
 }
 
 dependencies {
+    // Для navigation drawer
+
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     // Import the Firebase BoM
     implementation platform(libs.firebase.bom)
 
-    implementation libs.appcompat.v7
+    //implementation libs.appcompat.v7
     implementation libs.compose.runtime
     implementation libs.constraint.layout
     // When using the BoM, don't specify versions in Firebase dependencies
@@ -74,9 +76,9 @@ dependencies {
     implementation libs.recyclerview
     implementation libs.retrofit
     implementation libs.retrofit.converter.gson
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
     testImplementation 'junit:junit:4.13.2'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
