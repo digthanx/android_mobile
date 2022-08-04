@@ -20,6 +20,7 @@ data class BalanceResponse(
         @SerializedName("expire_date")
         val expireDate: String,
         val frozen: Int,
+        @SerializedName("sent")
         val sended: Int,
         val received: Int,
         val cancelled: Int
