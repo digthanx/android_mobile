@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
@@ -84,6 +86,7 @@ class BalanceFragment : Fragment() {
             UserDataRepository.getInstance()?.logout(requireActivity())
             activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
         }
+
     }
 
     private fun isNotTen(text: String): Boolean {

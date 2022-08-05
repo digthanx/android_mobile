@@ -1,102 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/color23"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".presentation.fragment.TransactionFragment">
+    app:cardBackgroundColor="@color/transparent"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="0dp"
+    tools:context=".presentation.fragment.TransactionResultFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="86dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@color/color22"
         android:orientation="vertical"
-        android:background="@color/color23"
-        tools:context=".presentation.fragment.TransactionResultFragment">
+        android:paddingHorizontal="24dp">
 
         <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="30dp"
-            android:src="@drawable/ic_checkbox_circle_fill"
-            app:tint="@color/black" />
+            android:layout_marginVertical="30dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/dazzel_girl" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:gravity="center"
             android:letterSpacing="0.05"
-            android:text="Спасибки отправлена"
+            android:text="Спасибо отправлено"
             android:textColor="@color/color1"
-            android:layout_marginBottom="12dp"
             android:textSize="24sp" />
 
         <TextView
             android:id="@+id/tv_amountThanks"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/color1"
-            android:textSize="48sp"
-            android:text="- 300" />
-
-
-        <TextView
-            android:id="@+id/tv_description"
+            android:layout_marginBottom="30dp"
             android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="За прекрасно проделанную работу" />
+            android:text="- 300"
+            android:textColor="@color/color13"
+            android:textSize="52sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/color1"
+            android:layout_marginVertical="21dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginVertical="21dp" />
+            android:background="@color/color13" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:text="За прекрасно проделанную работу"
+            android:textSize="14sp" />
 
         <LinearLayout
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="50dp"
             android:orientation="horizontal">
+
             <TextView
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="Получатель: " />
+                android:gravity="center"
+                android:text="Получатель: "
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_receiver"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/color1"
+                android:gravity="center"
                 android:letterSpacing="0.05"
-                android:text="Someone" />
+                android:text="Someone"
+                android:textColor="@color/color1"
+                android:textSize="14sp" />
         </LinearLayout>
 
-
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_toTheBeginning"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/color13"
+            android:paddingVertical="10dp"
+            android:text="В начало"
+            android:textColor="@color/white"
+            app:cornerRadius="10dp" />
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_toTheBeginning"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="10dp"
-        android:textColor="@color/white"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="82dp"
-        android:text="В начало" />
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>
