@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_checkCodeFragment"
-            app:destination="@id/checkCodeFragment" />
+            app:destination="@id/checkCodeFragment"
+            app:enterAnim="@anim/to_left_in"
+            app:exitAnim="@anim/to_left_in_2" />
     </fragment>
     <fragment
         android:id="@+id/checkCodeFragment"
@@ -21,7 +23,9 @@
         tools:layout="@layout/fragment_check_code" >
         <action
             android:id="@+id/action_checkCodeFragment_to_mainFlowFragment"
-            app:destination="@id/mainFlowFragment" />
+            app:destination="@id/mainFlowFragment"
+            app:enterAnim="@anim/to_left_in"
+            app:exitAnim="@anim/to_left_in_2" />
     </fragment>
     <fragment
         android:id="@+id/mainFlowFragment"

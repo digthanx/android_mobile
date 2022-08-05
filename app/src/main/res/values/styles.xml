@@ -61,7 +61,7 @@
     </style>
 
     <style name="DefaultButton" parent="Widget.Material3.Button.ElevatedButton">
-        <item name="android:backgroundTint">@color/color9</item>
+        <item name="android:backgroundTint">@color/color13</item>
         <item name="android:textColor">@color/color5</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
