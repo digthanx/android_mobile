@@ -51,8 +51,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:background="@color/color23"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroup"
-        android:layout_marginBottom="60dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
 
     <ProgressBar
         android:id="@+id/progressBar"

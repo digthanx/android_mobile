@@ -37,7 +37,9 @@
     <string name="approved">Согласовано</string>
     <string name="on_approval">На согласовании</string>
     <string name="annulled">Аннулировано</string>
-<!-- -->
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <!-- -->
 
 
 </resources>

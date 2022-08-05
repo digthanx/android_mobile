@@ -25,7 +25,7 @@
         android:name="com.teamforce.thanksapp.presentation.fragment.BalanceFragment"
         android:label="@string/balance_label"
         tools:layout="@layout/fragment_balance" />
-    <fragment
+    <dialog
         android:id="@+id/transactionResultFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.TransactionResultFragment"
         android:label="@string/new_transaction_label">
@@ -33,5 +33,5 @@
             android:id="@+id/action_transactionResultFragment_to_transactionFragment"
             app:destination="@id/transactionFragment"
             app:enterAnim="@anim/to_bottom_in" />
-    </fragment>
+    </dialog>
 </navigation>

@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.Group
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
@@ -152,6 +153,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             R.id.action_transactionFragment_to_transactionResultFragment,
             bundle
         )
+
     }
 
     private fun logout() {
