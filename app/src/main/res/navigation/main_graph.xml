@@ -22,7 +22,8 @@
         <action
             android:id="@+id/action_transactionFragment_to_transactionResultFragment"
             app:destination="@id/transactionResultFragment"
-            app:enterAnim="@anim/to_bottom_out" />
+            app:enterAnim="@anim/to_left_in"
+            app:exitAnim="@anim/to_left_in_2" />
         <action
             android:id="@+id/action_transactionFragment_to_profileFragment"
             app:destination="@id/profileFragment" />

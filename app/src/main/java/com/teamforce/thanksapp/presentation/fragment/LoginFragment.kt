@@ -1,6 +1,8 @@
 package com.teamforce.thanksapp.presentation.fragment
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,8 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.presentation.activity.ILoginAction
 import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
@@ -18,7 +22,8 @@ import com.teamforce.thanksapp.utils.UserDataRepository
 class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     private var viewModel: LoginViewModel = LoginViewModel
-    var editText: EditText? = null
+    var innerEditTextUserName: TextInputEditText? = null
+    var editTextUserName: TextInputLayout? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,10 +41,13 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     private fun initViews(view: View) {
         val getCodeButton: AppCompatButton = view.findViewById(R.id.get_code_btn)
-        editText = view.findViewById(R.id.telegram_et)
+        innerEditTextUserName = view.findViewById(R.id.telegram_et)
+        editTextUserName = view.findViewById(R.id.textField)
         getCodeButton.setOnClickListener(this)
         viewModel.authError.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            editTextUserName?.error = "Пользователь не найден"
+            editTextUserName?.isErrorEnabled = true
         }
         viewModel.isLoading.observe(viewLifecycleOwner) {
             getCodeButton.isClickable = !it
@@ -53,8 +61,8 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.get_code_btn) {
-            UserDataRepository.getInstance()?.username = editText?.text.toString()
-            viewModel.authorizeUser(editText?.text.toString())
+            UserDataRepository.getInstance()?.username = innerEditTextUserName?.text.toString()
+            viewModel.authorizeUser(innerEditTextUserName?.text.toString())
         }
     }
 
