@@ -21,9 +21,15 @@ abstract class BaseFlowFragment(
         val navController = navHostFragment.navController
 
         setupNavigation(navController)
+
+
     }
 
     protected open fun setupNavigation(navController: NavController) {
+    }
+
+    protected open fun logout(){
+
     }
 
 }
