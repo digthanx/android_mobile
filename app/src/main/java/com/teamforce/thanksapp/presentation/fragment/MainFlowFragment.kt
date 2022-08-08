@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -40,9 +41,17 @@ class MainFlowFragment : BaseFlowFragment (
         binding.bottomNavigation.setupWithNavController(navController)
         binding.navView.setupWithNavController(navController)
         val appBarConfiguration =
-            AppBarConfiguration(navController.graph, drawerLayout = binding.drawerLayout)
+            AppBarConfiguration(setOf(R.id.balanceFragment, R.id.transactionFragment, R.id.historyFragment), drawerLayout = binding.drawerLayout)
         val toolbar = binding.toolbar
         toolbar.setupWithNavController(navController, appBarConfiguration)
+    }
+
+    override fun profilePage() {
+        val header = binding.navView.getHeaderView(0)
+        val headerView = header.findViewById<LinearLayout>(R.id.header_view)
+        headerView.setOnClickListener{
+            findNavController().navigate(R.id.profileFragment)
+        }
     }
 
 
