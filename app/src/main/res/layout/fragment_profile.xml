@@ -1,42 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.fragment.ProfileFragment">
+    android:layout_width="match_parent">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".presentation.fragment.ProfileFragment">
 
-    <TextView
-        android:id="@+id/username_label_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/username_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:backgroundTint="@color/back_profile"
+            android:layout_marginBottom="27dp"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/username_value_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/username_label"
-        app:layout_constraintStart_toEndOf="@+id/username_label_tv"
-        app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/user_avatar"
+                android:scaleType="centerInside"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginStart="16dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                android:src="@drawable/ic_launcher_background"
+                android:contentDescription="@string/app_name" />
 
-    <TextView
-        android:id="@+id/tg_id_label_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/telegram_id_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_label_tv" />
 
-    <TextView
-        android:id="@+id/tg_id_value_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/telegram_id_label"
-        app:layout_constraintStart_toEndOf="@+id/tg_id_label_tv"
-        app:layout_constraintTop_toBottomOf="@+id/username_label_tv" />
+            <TextView
+                android:id="@+id/user_nick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Headline6"
+                android:layout_marginBottom="6dp"
+                android:layout_marginStart="16dp"
+                android:text="Jonny777"/>
+            <TextView
+                android:id="@+id/user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="5dp"
+                android:text="id: 4657384"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btn_out_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/exit"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                android:textSize="12sp"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:backgroundTint="@color/color25"
+                android:text="Выход"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/username_label_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/username_label" />
+
+            <TextView
+                android:id="@+id/username_value_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Subtitle1"
+                android:text="Сергеев Василий Андреевич"
+                android:layout_marginBottom="16dp"/>
+
+
+
+            <TextView
+                android:id="@+id/legal_entity_label_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/legal_label" />
+
+            <TextView
+                android:id="@+id/legal_entity_value_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Subtitle1"
+                android:text="Юридическое лицо"
+                android:layout_marginBottom="16dp"/>
+
+
+
+            <TextView
+                android:id="@+id/department_label_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/department_label" />
+
+            <TextView
+                android:id="@+id/department_value_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Subtitle1"
+                android:text="Название подразделения"
+                android:layout_marginBottom="16dp"/>
+
+
+            <TextView
+                android:id="@+id/hired_label_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hired_label" />
+
+            <TextView
+                android:id="@+id/hired_value_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Subtitle1"
+                android:text="13.11.2018"
+                android:layout_marginBottom="16dp"/>
+
+
+            <TextView
+                android:id="@+id/mobile_label_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mobile_label" />
+
+            <TextView
+                android:id="@+id/mobile_value_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Subtitle1"
+                android:text="+7(950) 239-98-89"
+                android:layout_marginBottom="16dp"/>
+
+
+
+            <TextView
+                android:id="@+id/email_label_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email_label" />
+
+            <TextView
+                android:id="@+id/email_value_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Subtitle1"
+                android:text="Jonny777@gmail.com"
+                android:layout_marginBottom="16dp"/>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Выход из аккаунта"/>
+    </LinearLayout>
+
+</ScrollView>
