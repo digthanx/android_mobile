@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -47,10 +49,12 @@ class MainFlowFragment : BaseFlowFragment (
     }
 
     override fun profilePage() {
-        val header = binding.navView.getHeaderView(0)
-        val headerView = header.findViewById<LinearLayout>(R.id.header_view)
-        headerView.setOnClickListener{
-            findNavController().navigate(R.id.profileFragment)
+        val headerView = binding.navView.getHeaderView(0)
+        val headerLinearLayout = headerView.findViewById<LinearLayout>(R.id.profileFragment)
+        //val headerLinearLayout = headerView.findViewById<Button>(R.id.btn_out_account)
+        headerLinearLayout.setOnClickListener{
+            Toast.makeText(requireContext(), "clicked", Toast.LENGTH_SHORT).show();
+            activityNavController().navigateSafely(R.id.profileFragment)
         }
     }
 
