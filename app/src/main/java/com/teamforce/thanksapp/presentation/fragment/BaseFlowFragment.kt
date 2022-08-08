@@ -21,6 +21,7 @@ abstract class BaseFlowFragment(
         val navController = navHostFragment.navController
 
         setupNavigation(navController)
+        profilePage()
 
 
     }
