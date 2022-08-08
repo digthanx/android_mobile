@@ -1,5 +1,7 @@
 package com.teamforce.thanksapp.presentation.adapter
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserTransactionsResponse
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class TransfersAdapter(
     private val username: String,
@@ -22,6 +27,7 @@ class TransfersAdapter(
         return TransfersViewHolder(view)
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: TransfersViewHolder, position: Int) {
         val status = dataSet[position].status
         if (status.equals("Одобрено")) {
@@ -59,6 +65,15 @@ class TransfersAdapter(
             holder.newValueTransaction.text = "+ " + dataSet[position].amount
         }
 
+        try {
+            val dateTime: String =
+                LocalDateTime.parse(dataSet[position].updatedAt.replace("+03:00", "")).format(DateTimeFormatter.ofPattern( "dd.MM.y HH:mm"))
+            val title = dateTime
+
+            holder.dateGetInfo.text = title.toString()
+        } catch (e: Exception) {
+            Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
+        }
         holder.view.tag = dataSet[position]
         holder.view.setOnClickListener { v -> listener.onClick(v) }
         // Description For Expanded Version
