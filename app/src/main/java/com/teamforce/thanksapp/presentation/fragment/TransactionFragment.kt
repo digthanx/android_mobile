@@ -80,7 +80,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         usersInput.addTextChangedListener(object : TextWatcher {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.length > 2 && count > before && s.toString() != user?.tgName) {
+                if (s.length > 0 && count > before && s.toString() != user?.tgName) {
                     UserDataRepository.getInstance()?.token?.let {
                         viewModel.loadUsersList(s.toString(), it)
                     }
@@ -156,10 +156,6 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
     }
 
-    private fun logout() {
-        UserDataRepository.getInstance()?.logout(requireContext())
-        activity?.recreate()
-    }
 
     companion object {
 

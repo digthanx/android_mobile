@@ -94,6 +94,7 @@
                 android:id="@+id/code_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lines="1"
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
