@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -98,6 +99,7 @@ class TransactionViewModel : ViewModel() {
                     ) {
                         _isLoading.postValue(false)
                         if (response.code() == 200) {
+                            Log.d("Token", "Кому спасибки ${response.body()}")
                             _users.postValue(response.body())
                         } else {
                             _usersLoadingError.postValue(response.message() + " " + response.code())
