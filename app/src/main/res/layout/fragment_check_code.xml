@@ -10,12 +10,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="@integer/material_motion_duration_long_1"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="-40dp"
         android:orientation="vertical">
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -23,7 +24,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_vector_image_auth" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_vector_image_login" />
         </RelativeLayout>
 
         <ImageView

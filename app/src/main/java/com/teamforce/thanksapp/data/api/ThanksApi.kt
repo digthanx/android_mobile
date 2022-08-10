@@ -19,8 +19,15 @@ interface ThanksApi {
     ): Call<Any>
 
     @POST("/verify/")
-    fun verification(
-        @Header("X-ID") xId: String?,
+    fun verificationWithTelegram(
+        @Header("X-Telegram") xId: String?,
+        @Header("X-Code") xCode: String?,
+        @Body verificationRequest: VerificationRequest
+    ): Call<VerificationResponse>
+
+    @POST("/verify/")
+    fun verificationWithEmail(
+        @Header("X-Email") xEmail: String?,
         @Header("X-Code") xCode: String?,
         @Body verificationRequest: VerificationRequest
     ): Call<VerificationResponse>

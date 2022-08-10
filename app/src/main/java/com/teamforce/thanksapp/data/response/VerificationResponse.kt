@@ -5,5 +5,6 @@ import com.google.gson.annotations.SerializedName
 data class VerificationResponse(
     var type: String = "",
     @SerializedName("is_success") var isSuccess: Boolean = false,
+    @SerializedName("token")
     var token: String = ""
 )
