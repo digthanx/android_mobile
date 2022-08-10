@@ -47,6 +47,7 @@ class CheckCodeFragment : Fragment(), View.OnClickListener {
 
         private fun initViews(view: View) {
             val enterButton: AppCompatButton = view.findViewById(R.id.enter_btn)
+            enterButton.isEnabled = false
             editText = view.findViewById(R.id.code_et)
             enterButton.setOnClickListener(this)
             viewModel.verifyError.observe(viewLifecycleOwner) {
