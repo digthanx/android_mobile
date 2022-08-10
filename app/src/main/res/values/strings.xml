@@ -44,6 +44,11 @@
     <string name="annulled">Аннулировано</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="Toast_verifyCode_hintTg">Код отправлен в телеграм</string>
+    <string name="Toast_verifyCode_hintEmail">Код отправлен на указанную электронную почту</string>
+    <string name="helperTextAboutTg">Перейдите в диалог с ботом %s,
+        напишите ему что-нибудь после чего повторите процедуру аутентификации</string>
+    <string name="helperTextAboutEmail">Проверьте вашу почту $s</string>
     <!-- -->
 
 

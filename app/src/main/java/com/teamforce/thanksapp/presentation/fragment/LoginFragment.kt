@@ -17,6 +17,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.presentation.activity.ILoginAction
 import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
 
 class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
@@ -54,9 +55,30 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         }
         viewModel.isSuccessAuth.observe(viewLifecycleOwner) {
             if (it && UserDataRepository.getInstance()?.username != null) {
-                findNavController().navigate(R.id.action_loginFragment_to_checkCodeFragment)
+                val data = sendToastAboutVerifyCode()
+                findNavController().navigate(R.id.action_loginFragment_to_checkCodeFragment, data)
             }
         }
+    }
+
+    fun sendToastAboutVerifyCode(): Bundle{
+        val emailOrTelegram = Bundle()
+        emailOrTelegram.putString(Consts.BUNDLE_TG_OR_EMAIL, innerEditTextUserName?.text.toString())
+        if(UserDataRepository.getInstance()?.statusResponseAuth.toString() == "{status=Код отправлен в телеграм}"){
+            Toast.makeText(requireContext(),
+                R.string.Toast_verifyCode_hintTg,
+                Toast.LENGTH_LONG).show()
+            emailOrTelegram.putString(Consts.BUNDLE_TG_OR_EMAIL, "0")
+            emailOrTelegram.putString(Consts.LINK_TO_BOT_Name, Consts.LINK_TO_BOT)
+        }
+        if(UserDataRepository.getInstance()?.statusResponseAuth.toString() == "{status=Код отправлен на указанную электронную почту}"){
+            Toast.makeText(requireContext(),
+                R.string.Toast_verifyCode_hintEmail,
+                Toast.LENGTH_LONG).show()
+            emailOrTelegram.putString(Consts.BUNDLE_TG_OR_EMAIL, "1")
+            emailOrTelegram.putString(Consts.BUNDLE_EMAIL, UserDataRepository.getInstance()?.username)
+        }
+        return emailOrTelegram
     }
 
     override fun onClick(v: View?) {

@@ -88,8 +88,10 @@
             app:boxCornerRadiusBottomStart="15dp"
             app:boxCornerRadiusTopEnd="15dp"
             app:boxCornerRadiusTopStart="15dp"
-            android:layout_marginBottom="@dimen/margin_huge_h"
+            android:layout_marginBottom="@dimen/margin"
             android:hint="@string/confirmation_code_label"
+            android:autoLink="web"
+            android:linksClickable="true"
             app:boxStrokeColor="@color/color9">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -100,6 +102,15 @@
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/helperText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:layout_marginBottom="@dimen/margin_huge"
+            android:text="@string/helperTextAboutTg"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/enter_btn"
