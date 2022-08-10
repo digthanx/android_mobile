@@ -2,6 +2,9 @@ package com.teamforce.thanksapp.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
 
 class UserDataRepository private constructor() {
 
@@ -9,6 +12,7 @@ class UserDataRepository private constructor() {
     var leastCoins: Int? = null
     var username: String? = null
     var tgId: String? = null
+    var statusResponseAuth: String? = null
 
     fun saveCredentials(context: Context, authtoken: String?, telegram: String?) {
         savePreferences(context, authtoken, telegram)
@@ -21,7 +25,8 @@ class UserDataRepository private constructor() {
         leastCoins = null
         username = null
         tgId = null
-        // TODO Нужно задавать переменным UserDataRepository null
+        statusResponseAuth = null
+        LoginViewModel.logout()
     }
 
     private fun savePreferences(context: Context, authtoken: String?, telegram: String?) {

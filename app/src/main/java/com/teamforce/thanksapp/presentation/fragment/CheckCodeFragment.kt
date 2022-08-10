@@ -34,39 +34,52 @@ class CheckCodeFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.enter_btn) {
-            viewModel.verifyCode(editText?.text.toString())
-        }
-    }
-
-    private fun initViews(view: View) {
-        val enterButton: AppCompatButton = view.findViewById(R.id.enter_btn)
-        editText = view.findViewById(R.id.code_et)
-        enterButton.setOnClickListener(this)
-        viewModel.verifyError.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-        }
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            enterButton.isClickable = !it
-        }
-        viewModel.verifyResult.observe(viewLifecycleOwner) {
-            if (it != null) {
-                finishLogin(it.authtoken, it.telegram)
+            Log.d("Token", "Edit text in CheckCode ${editText?.text}")
+            if (UserDataRepository.getInstance()?.statusResponseAuth == "{status=Код отправлен в телеграм}") {
+                viewModel.verifyCodeTelegram(editText?.text?.trim().toString())
+            } else if (UserDataRepository.getInstance()?.statusResponseAuth == "{status=Код отправлен на указанную электронную почту}") {
+                viewModel.verifyCodeEmail(editText?.text?.trim().toString())
+            }else{
+                Log.d("Token", "Ни один статус не прошел CheckCodeFragment OnClick")
             }
         }
     }
 
-    private fun finishLogin(authtoken: String?, telegram: String?) {
-        UserDataRepository.getInstance()?.saveCredentials(requireContext(), authtoken, telegram)
-        Log.d("Token", "цукпукп")
-        findNavController().navigate(R.id.action_checkCodeFragment_to_mainFlowFragment)
+        private fun initViews(view: View) {
+            val enterButton: AppCompatButton = view.findViewById(R.id.enter_btn)
+            enterButton.isEnabled = false
+            editText = view.findViewById(R.id.code_et)
+            enterButton.setOnClickListener(this)
+            viewModel.verifyError.observe(viewLifecycleOwner) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+            viewModel.isLoading.observe(viewLifecycleOwner) {
+                enterButton.isEnabled = !it
+            }
+            viewModel.verifyResult.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    Log.d("Token", "verifyResult in  CheckCode ${editText?.text}")
+                    finishLogin(it.authtoken, it.telegramOrEmail)
+                }
+            }
+        }
+
+        private fun finishLogin(authtoken: String?, telegram: String?) {
+            UserDataRepository.getInstance()?.saveCredentials(requireContext(), authtoken, telegram)
+            Log.d("Token", "цукпукп")
+            findNavController().navigate(R.id.action_checkCodeFragment_to_mainFlowFragment)
+        }
+
+        override fun onDetach() {
+            super.onDetach()
+        }
+
+
+        companion object {
+
+            const val TAG = "CheckCodeFragment"
+
+            @JvmStatic
+            fun newInstance() = CheckCodeFragment()
+        }
     }
-
-
-    companion object {
-
-        const val TAG = "CheckCodeFragment"
-
-        @JvmStatic
-        fun newInstance() = CheckCodeFragment()
-    }
-}

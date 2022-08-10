@@ -95,7 +95,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/user_name_label"
-                android:lines="1" />
+                android:lines="1"
+                android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

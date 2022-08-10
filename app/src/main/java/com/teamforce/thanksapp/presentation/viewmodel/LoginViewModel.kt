@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.teamforce.thanksapp.data.request.VerificationRequest
 import com.teamforce.thanksapp.data.response.VerificationResponse
 import com.teamforce.thanksapp.model.domain.UserData
 import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.UserDataRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,23 +34,30 @@ object LoginViewModel : ViewModel() {
     private val _verifyResult = MutableLiveData<UserData?>()
     val verifyResult: LiveData<UserData?> = _verifyResult
     private var xId: String? = null
+    private var xEmail: String? = null
     private var xCode: String? = null
     private var token: String? = null
-    private var telegram: String? = null
+    private var telegramOrEmail: String? = null
+
+
+    fun logout(){
+        xId = null
+        xEmail = null
+        xCode = null
+        token = null
+        telegramOrEmail = null
+    }
 
     fun initViewModel() {
         thanksApi = RetrofitClient.getInstance()
     }
 
-    fun authorizeUser(telegramId: String) {
-        telegram = telegramId
-        _isLoading.postValue(true)
-        viewModelScope.launch { callAuthorizationEndpoint(telegramId, Dispatchers.Default) }
-    }
 
-    fun verifyCode(telegramId: String) {
+
+    fun authorizeUser(telegramIdOrEmail: String) {
+        telegramOrEmail = telegramIdOrEmail
         _isLoading.postValue(true)
-        viewModelScope.launch { callVerificationEndpoint(telegramId, Dispatchers.Default) }
+        viewModelScope.launch { callAuthorizationEndpoint(telegramIdOrEmail, Dispatchers.Default) }
     }
 
     private suspend fun callAuthorizationEndpoint(
@@ -64,8 +73,16 @@ object LoginViewModel : ViewModel() {
                     ) {
                         _isLoading.postValue(false)
                         if (response.code() == 200) {
-                            xId = response.headers().get("X-ID")
+                            Log.d("Token", "Status запроса: ${response.body().toString()}")
+                            if (response.body().toString() == "{status=Код отправлен в телеграм}"){
+                                xId = response.headers().get("X-Telegram")
+                            }
+                            if(response.body() == "{status=Код отправлен на указанную электронную почту}"){
+                                xEmail = response.headers().get("X-Email")
+                            }
+                            UserDataRepository.getInstance()?.statusResponseAuth = response.body().toString()
                             xCode = response.headers().get("X-Code")
+                            Log.d("Token", "X-ID - $xId ... xCode - $xCode")
                             _isSuccessAuth.postValue(true)
                         } else {
                             _isSuccessAuth.postValue(false)
@@ -82,12 +99,18 @@ object LoginViewModel : ViewModel() {
         }
     }
 
-    private suspend fun callVerificationEndpoint(
+
+    fun verifyCodeTelegram(telegramId: String) {
+        _isLoading.postValue(true)
+        viewModelScope.launch { callVerificationEndpointTelegram(telegramId, Dispatchers.Default) }
+    }
+
+    private suspend fun callVerificationEndpointTelegram(
         code: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.verification(xId, xCode, VerificationRequest(code = code))
+            thanksApi?.verificationWithTelegram(xId, xCode, VerificationRequest(code = code))
                 ?.enqueue(object : Callback<VerificationResponse> {
                     override fun onResponse(
                         call: Call<VerificationResponse>,
@@ -100,7 +123,7 @@ object LoginViewModel : ViewModel() {
                                 _verifyResult.postValue(null)
                                 _verifyError.postValue("token == null!!!!!")
                             } else {
-                                _verifyResult.postValue(UserData(token, telegram))
+                                _verifyResult.postValue(UserData(token, telegramOrEmail))
                             }
                         } else {
                             _verifyResult.postValue(null)
@@ -116,6 +139,47 @@ object LoginViewModel : ViewModel() {
                 })
         }
     }
+
+    fun verifyCodeEmail(email: String) {
+        _isLoading.postValue(true)
+        viewModelScope.launch { callVerificationEndpointEmail(email, Dispatchers.Default) }
+    }
+
+    private suspend fun callVerificationEndpointEmail(
+        code: String,
+        coroutineDispatcher: CoroutineDispatcher
+    ) {
+        withContext(coroutineDispatcher) {
+            thanksApi?.verificationWithEmail(xEmail, xCode, VerificationRequest(code = code))
+                ?.enqueue(object : Callback<VerificationResponse> {
+                    override fun onResponse(
+                        call: Call<VerificationResponse>,
+                        response: Response<VerificationResponse>
+                    ) {
+                        _isLoading.postValue(false)
+                        if (response.code() == 200) {
+                            token = response.body()?.token
+                            if (token == null) {
+                                _verifyResult.postValue(null)
+                                _verifyError.postValue("token == null!!!!!")
+                            } else {
+                                _verifyResult.postValue(UserData(token, telegramOrEmail))
+                            }
+                        } else {
+                            _verifyResult.postValue(null)
+                            _verifyError.postValue(response.message() + " " + response.code())
+                        }
+                    }
+
+                    override fun onFailure(call: Call<VerificationResponse>, t: Throwable) {
+                        _isLoading.postValue(false)
+                        _verifyResult.postValue(null)
+                        _verifyError.postValue(t.message)
+                    }
+                })
+        }
+    }
+
 
 
 }

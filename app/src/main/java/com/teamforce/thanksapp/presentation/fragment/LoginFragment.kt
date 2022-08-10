@@ -53,7 +53,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
             getCodeButton.isClickable = !it
         }
         viewModel.isSuccessAuth.observe(viewLifecycleOwner) {
-            if (it) {
+            if (it && UserDataRepository.getInstance()?.username != null) {
                 findNavController().navigate(R.id.action_loginFragment_to_checkCodeFragment)
             }
         }
@@ -63,6 +63,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         if (v?.id == R.id.get_code_btn) {
             UserDataRepository.getInstance()?.username = innerEditTextUserName?.text.toString()
             viewModel.authorizeUser(innerEditTextUserName?.text.toString())
+            innerEditTextUserName?.text = null
         }
     }
 

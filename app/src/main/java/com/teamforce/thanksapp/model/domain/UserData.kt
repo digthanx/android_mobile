@@ -2,5 +2,5 @@ package com.teamforce.thanksapp.model.domain
 
 data class UserData(
     val authtoken: String?,
-    val telegram: String?
+    val telegramOrEmail: String?
 )
