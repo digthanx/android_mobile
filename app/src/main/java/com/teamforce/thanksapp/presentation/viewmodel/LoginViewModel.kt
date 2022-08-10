@@ -82,7 +82,6 @@ object LoginViewModel : ViewModel() {
                             }
                             UserDataRepository.getInstance()?.statusResponseAuth = response.body().toString()
                             xCode = response.headers().get("X-Code")
-                            Log.d("Token", "X-ID - $xId ... xCode - $xCode")
                             _isSuccessAuth.postValue(true)
                         } else {
                             _isSuccessAuth.postValue(false)
