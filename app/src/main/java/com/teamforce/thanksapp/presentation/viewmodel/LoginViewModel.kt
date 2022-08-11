@@ -52,8 +52,6 @@ object LoginViewModel : ViewModel() {
         thanksApi = RetrofitClient.getInstance()
     }
 
-
-
     fun authorizeUser(telegramIdOrEmail: String) {
         telegramOrEmail = telegramIdOrEmail
         _isLoading.postValue(true)
@@ -77,7 +75,7 @@ object LoginViewModel : ViewModel() {
                             if (response.body().toString() == "{status=Код отправлен в телеграм}"){
                                 xId = response.headers().get("X-Telegram")
                             }
-                            if(response.body() == "{status=Код отправлен на указанную электронную почту}"){
+                            if(response.body().toString() == "{status=Код отправлен на указанную электронную почту}"){
                                 xEmail = response.headers().get("X-Email")
                             }
                             UserDataRepository.getInstance()?.statusResponseAuth = response.body().toString()
@@ -139,9 +137,9 @@ object LoginViewModel : ViewModel() {
         }
     }
 
-    fun verifyCodeEmail(email: String) {
+    fun verifyCodeEmail(code: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callVerificationEndpointEmail(email, Dispatchers.Default) }
+        viewModelScope.launch { callVerificationEndpointEmail(code, Dispatchers.Default) }
     }
 
     private suspend fun callVerificationEndpointEmail(
@@ -149,6 +147,7 @@ object LoginViewModel : ViewModel() {
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
+            Log.d("Token", "xEmail:${xEmail} --- xCode:${xCode}---- verifyCode:${code} ")
             thanksApi?.verificationWithEmail(xEmail, xCode, VerificationRequest(code = code))
                 ?.enqueue(object : Callback<VerificationResponse> {
                     override fun onResponse(

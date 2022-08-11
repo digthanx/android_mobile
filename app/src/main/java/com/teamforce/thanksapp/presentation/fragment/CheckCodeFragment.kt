@@ -76,6 +76,7 @@ class CheckCodeFragment : Fragment(), View.OnClickListener {
                 viewModel.verifyCodeTelegram(editText?.text?.trim().toString())
             } else if (UserDataRepository.getInstance()?.statusResponseAuth == "{status=Код отправлен на указанную электронную почту}") {
                 UserDataRepository.getInstance()?.verifyCode = editText?.text?.trim().toString()
+                Log.d("Token", "Я по почте захожу")
                 viewModel.verifyCodeEmail(editText?.text?.trim().toString())
             }else{
                 Log.d("Token", "Ни один статус не прошел CheckCodeFragment OnClick")
