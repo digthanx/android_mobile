@@ -1,9 +1,6 @@
 package com.teamforce.thanksapp.data.api
 
-import com.teamforce.thanksapp.data.request.AuthorizationRequest
-import com.teamforce.thanksapp.data.request.SendCoinsRequest
-import com.teamforce.thanksapp.data.request.UsersListRequest
-import com.teamforce.thanksapp.data.request.VerificationRequest
+import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
 import retrofit2.Call
 import retrofit2.http.Body
@@ -52,4 +49,10 @@ interface ThanksApi {
 
     @GET("/user/transactions/")
     fun getUserTransactions(@Header("Authorization") token: String): Call<List<UserTransactionsResponse>>
+
+    @POST("/users-list/")
+    fun getUsersWithoutInput(
+        @Header("Authorization") token: String,
+        @Body get_users: UserListWithoutInputRequest
+    ): Call<List<UserBean>>
 }
