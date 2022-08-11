@@ -109,8 +109,24 @@
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:linksClickable="true"
+            android:clickable="true"
+            android:textStyle="italic"
+            android:focusable="true"
+            android:text="@string/helperTextStandard" />
+
+        <TextView
+            android:id="@+id/helperLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:visibility="invisible"
+            android:linksClickable="true"
+            android:clickable="false"
+            android:textStyle="italic"
+            android:focusable="true"
             android:layout_marginBottom="@dimen/margin_huge"
-            android:text="@string/helperTextAboutTg"/>
+            android:text="@string/helperLink"
+            />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/enter_btn"

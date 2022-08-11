@@ -1,5 +1,7 @@
 package com.teamforce.thanksapp.presentation.fragment
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.teamforce.thanksapp.R
@@ -37,19 +40,31 @@ class CheckCodeFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
-        setHelperText()
+        binding.helperText.setOnClickListener {
+            setHelperText()
+            setHelperLink()
+        }
     }
 
     fun setHelperText(){
-        var helperTextView = binding.helperText
+        val helperTextView = binding.helperText
         if(arguments?.getString(Consts.BUNDLE_TG_OR_EMAIL) == "1"){
             helperTextView.text =
                 String.format(getString(R.string.helperTextAboutEmail),
-                    arguments?.getString(Consts.BUNDLE_EMAIL, "null"))
+                    UserDataRepository.getInstance()?.email.toString())
+        }else{
+            helperTextView.text = String.format(getString(R.string.helperTextAboutTg),
+                arguments?.getString(Consts.LINK_TO_BOT_Name, "null"))
         }
-        helperTextView.text = String.format(getString(R.string.helperTextAboutTg),
-            arguments?.getString(Consts.LINK_TO_BOT_Name, "null"))
-
+    }
+    fun setHelperLink(){
+        var helperLink = binding.helperLink
+        helperLink.isClickable = true
+        helperLink.visibility = View.VISIBLE
+        helperLink.setOnClickListener {
+            UserDataRepository.getInstance()?.logout(requireContext())
+            findNavController().navigate(R.id.action_checkCodeFragment_to_loginFragment)
+        }
     }
 
 

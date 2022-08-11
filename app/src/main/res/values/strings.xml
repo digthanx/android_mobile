@@ -48,7 +48,9 @@
     <string name="Toast_verifyCode_hintEmail">Код отправлен на указанную электронную почту</string>
     <string name="helperTextAboutTg">Перейдите в диалог с ботом %s,
         напишите ему что-нибудь после чего повторите процедуру аутентификации</string>
-    <string name="helperTextAboutEmail">Проверьте вашу почту $s</string>
+    <string name="helperTextAboutEmail">Проверьте корректность введенной почты %s</string>
+    <string name="helperTextStandard"><u>Не пришел код?</u></string>
+    <string name="helperLink"><u>Повторить процедуру аутентификации</u></string>
     <!-- -->
 
 

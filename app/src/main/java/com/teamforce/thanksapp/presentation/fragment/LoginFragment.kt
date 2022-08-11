@@ -76,7 +76,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
                 R.string.Toast_verifyCode_hintEmail,
                 Toast.LENGTH_LONG).show()
             emailOrTelegram.putString(Consts.BUNDLE_TG_OR_EMAIL, "1")
-            emailOrTelegram.putString(Consts.BUNDLE_EMAIL, UserDataRepository.getInstance()?.username)
+            // emailOrTelegram.putString(Consts.BUNDLE_EMAIL, UserDataRepository.getInstance()?.email.toString())
         }
         return emailOrTelegram
     }
@@ -84,6 +84,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
     override fun onClick(v: View?) {
         if (v?.id == R.id.get_code_btn) {
             UserDataRepository.getInstance()?.username = innerEditTextUserName?.text.toString()
+            UserDataRepository.getInstance()?.email = innerEditTextUserName?.text.toString()
             viewModel.authorizeUser(innerEditTextUserName?.text.toString())
             innerEditTextUserName?.text = null
         }
