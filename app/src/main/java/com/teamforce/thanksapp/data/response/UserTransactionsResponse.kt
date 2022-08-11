@@ -4,6 +4,49 @@ import com.google.gson.annotations.SerializedName
 
 class UserTransactionsResponse(
     val id: Int,
+    val sender: Sender,
+    val sender_id: Int,
+    val recipient: Recipient,
+    val recipient_id: Int,
+    val transaction_status: TransactionStatus,
+    @SerializedName("transaction_class") val transactionClass: TransactionClass,
+    @SerializedName("expire_to_cancel") val expireToCancel: String,
+    val amount: String,
+    @SerializedName("created_at") val createdAt: String,
+    @SerializedName("updated_at") val updatedAt: String,
+    val reason: String
+){
+    data class Sender(
+        val sender_id: Int,
+        val sender_tg_name: String,
+        val sender_first_name: String,
+        val sender_surname: String
+
+    )
+
+    data class Recipient(
+        val recipient_id: Int,
+        val recipient_tg_name: String,
+        val recipient_first_name: String,
+        val recipient_surname: String
+    )
+
+    data class TransactionStatus(
+        val id: String,
+        @SerializedName("name")
+        val transactionStatus: String
+    )
+
+    data class TransactionClass(
+        val id: String,
+        @SerializedName("name")
+        val transactionThanks: String
+    )
+}
+
+/*
+class UserTransactionsResponse(
+    val id: Int,
     val sender: String,
     val recipient: String,
     val status: String,
@@ -13,3 +56,4 @@ class UserTransactionsResponse(
     @SerializedName("updated_at") val updatedAt: String,
     val reason: String
 )
+ */

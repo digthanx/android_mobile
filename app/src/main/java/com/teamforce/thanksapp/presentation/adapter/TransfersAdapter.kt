@@ -29,7 +29,7 @@ class TransfersAdapter(
 
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: TransfersViewHolder, position: Int) {
-        val status = dataSet[position].status
+        val status = dataSet[position].transaction_status.transactionStatus
         if (status.equals("Одобрено")) {
             holder.status.setImageResource(R.drawable.ic_checkbox_circle_line)
             // Expanded Version
@@ -46,28 +46,36 @@ class TransfersAdapter(
             holder.imageStatus.setImageResource(R.drawable.ic_time_line)
         }
 
-        if (dataSet[position].sender.equals(username)) {
+        if (dataSet[position].sender.sender_tg_name.equals(username)) {
             holder.transferIcon.setImageResource(R.drawable.ic_arrow_right_circle_line)
-            holder.label.text = String.format(holder.view.context.getString(R.string.sended_to), dataSet[position].recipient)
+            holder.label.text = String.format(holder.view.context.getString(R.string.sended_to),
+                dataSet[position].recipient.recipient_tg_name)
             holder.value.text = dataSet[position].amount
             // Expanded Version
             holder.status_expandedVersion.setImageResource(R.drawable.ic_arrow_right_circle_line)
-            holder.transactionFrom.text = String.format(holder.view.context.getString(R.string.sended_to), dataSet[position].recipient)
+            holder.transactionFrom.text = String.format(
+                holder.view.context.getString(R.string.sended_to),
+                dataSet[position].recipient.recipient_tg_name)
             holder.newValueTransaction.text = dataSet[position].amount
         } else {
             holder.transferIcon.setImageResource(R.drawable.ic_arrow_left_circle_fill)
-            holder.label.text = String.format(holder.view.context.getString(R.string.received_from), dataSet[position].sender)
+            holder.label.text = String.format(holder.view.context.getString(R.string.received_from),
+                dataSet[position].sender.sender_tg_name)
             holder.value.text = "+ " + dataSet[position].amount
             holder.value.setTextColor(R.color.color6)
             // Expanded Version
             holder.status_expandedVersion.setImageResource(R.drawable.ic_arrow_left_circle_fill)
-            holder.label.text = String.format(holder.view.context.getString(R.string.received_from), dataSet[position].sender)
+            holder.label.text = String.format(holder.view.context.getString(R.string.received_from),
+                dataSet[position].sender.sender_tg_name)
             holder.newValueTransaction.text = "+ " + dataSet[position].amount
         }
 
         try {
             val dateTime: String =
-                LocalDateTime.parse(dataSet[position].updatedAt.replace("+03:00", "")).format(DateTimeFormatter.ofPattern( "dd.MM.y HH:mm"))
+                LocalDateTime.
+                parse(dataSet[position].updatedAt.
+                replace("+03:00", "")).
+                format(DateTimeFormatter.ofPattern( "dd.MM.y HH:mm"))
             val title = dateTime
 
             holder.dateGetInfo.text = title.toString()

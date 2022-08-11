@@ -116,6 +116,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
             viewLifecycleOwner,
             Observer {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                Log.d("Token", " Ошибка лял ял ля  ${it}")
             }
         )
 
