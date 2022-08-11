@@ -77,6 +77,7 @@ object LoginViewModel : ViewModel() {
                             }
                             if(response.body().toString() == "{status=Код отправлен на указанную электронную почту}"){
                                 xEmail = response.headers().get("X-Email")
+
                             }
                             UserDataRepository.getInstance()?.statusResponseAuth = response.body().toString()
                             xCode = response.headers().get("X-Code")
