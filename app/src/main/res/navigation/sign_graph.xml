@@ -26,6 +26,9 @@
             app:destination="@id/mainFlowFragment"
             app:enterAnim="@anim/to_left_in"
             app:exitAnim="@anim/to_left_in_2" />
+        <action
+            android:id="@+id/action_checkCodeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainFlowFragment"

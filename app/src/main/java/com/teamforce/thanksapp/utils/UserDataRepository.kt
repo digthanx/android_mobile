@@ -14,6 +14,7 @@ class UserDataRepository private constructor() {
     var tgId: String? = null
     var statusResponseAuth: String? = null
     var verifyCode: String? = null
+    var email: String? = null
 
     fun saveCredentials(context: Context, authtoken: String?, telegram: String?) {
         savePreferences(context, authtoken, telegram)
@@ -28,6 +29,7 @@ class UserDataRepository private constructor() {
         tgId = null
         statusResponseAuth = null
         verifyCode = null
+        email = null
         LoginViewModel.logout()
     }
 
