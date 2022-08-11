@@ -90,10 +90,16 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
 
             override fun afterTextChanged(s: Editable) {}
         })
+        if(usersInput.text.toString().isEmpty()){
+            UserDataRepository.getInstance()?.token?.let {
+                viewModel.loadUsersListWithoutInput("true", it)
+            }
+        }
         viewModel.users.observe(viewLifecycleOwner) {
             cardViewForRecyclerView.visibility = View.VISIBLE
             recyclerView.visibility = View.VISIBLE

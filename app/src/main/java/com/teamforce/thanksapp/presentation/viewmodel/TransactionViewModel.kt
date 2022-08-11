@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.SendCoinsRequest
+import com.teamforce.thanksapp.data.request.UserListWithoutInputRequest
 import com.teamforce.thanksapp.data.request.UsersListRequest
 import com.teamforce.thanksapp.data.response.BalanceResponse
 import com.teamforce.thanksapp.data.response.SendCoinsResponse
@@ -42,17 +43,7 @@ class TransactionViewModel : ViewModel() {
         thanksApi = RetrofitClient.getInstance()
     }
 
-    fun loadUsersList(username: String, token: String) {
-        _isLoading.postValue(true)
-        viewModelScope.launch { callUsersListEndpoint(username, token, Dispatchers.Default) }
-    }
 
-    fun sendCoins(token: String, recipient: Int, amount: Int, reason: String) {
-        _isLoading.postValue(true)
-        viewModelScope.launch {
-            callSendCoinsEndpoint(token, recipient, amount, reason, Dispatchers.Default)
-        }
-    }
 
     fun loadUserBalance(token: String) {
         _isLoading.postValue(true)
@@ -85,6 +76,13 @@ class TransactionViewModel : ViewModel() {
         }
     }
 
+
+
+    fun loadUsersList(username: String, token: String) {
+        _isLoading.postValue(true)
+        viewModelScope.launch { callUsersListEndpoint(username, token, Dispatchers.Default) }
+    }
+
     private suspend fun callUsersListEndpoint(
         username: String,
         token: String,
@@ -113,6 +111,16 @@ class TransactionViewModel : ViewModel() {
                 })
         }
     }
+
+
+
+    fun sendCoins(token: String, recipient: Int, amount: Int, reason: String) {
+        _isLoading.postValue(true)
+        viewModelScope.launch {
+            callSendCoinsEndpoint(token, recipient, amount, reason, Dispatchers.Default)
+        }
+    }
+
 
     private suspend fun callSendCoinsEndpoint(
         token: String,
@@ -143,4 +151,42 @@ class TransactionViewModel : ViewModel() {
                 })
         }
     }
+
+    fun loadUsersListWithoutInput(get_users: String, token: String) {
+        _isLoading.postValue(true)
+        viewModelScope.launch { callUsersListWithoutInputEndpoint(get_users, token, Dispatchers.Default) }
+    }
+
+    private suspend fun callUsersListWithoutInputEndpoint(
+        get_users: String,
+        token: String,
+        dispatcher: CoroutineDispatcher
+    ) {
+        withContext(dispatcher) {
+            thanksApi?.getUsersWithoutInput("Token $token",
+                get_users = UserListWithoutInputRequest(get_users))
+                ?.enqueue(object : Callback<List<UserBean>> {
+                    override fun onResponse(
+                        call: Call<List<UserBean>>,
+                        response: Response<List<UserBean>>
+                    ) {
+                        _isLoading.postValue(false)
+                        if (response.code() == 200) {
+                            Log.d("Token", "Кому спасибки ${response.body()}")
+                            _users.postValue(response.body())
+                        } else {
+                            _usersLoadingError.postValue(response.message() + " " + response.code())
+                        }
+                    }
+
+                    override fun onFailure(call: Call<List<UserBean>>, t: Throwable) {
+                        _isLoading.postValue(false)
+                        _usersLoadingError.postValue(t.message)
+                    }
+                })
+        }
+    }
+
+
+
 }
