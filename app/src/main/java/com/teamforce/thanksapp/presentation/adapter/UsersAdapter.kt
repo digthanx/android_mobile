@@ -41,9 +41,9 @@ class UsersAdapter(
 
         init {
             view = v
-            tgName = v.findViewById(R.id.tg_name_value_tv)
-            surname = v.findViewById(R.id.surname_value_tv)
-            name = v.findViewById(R.id.name_value_tv)
+            tgName = v.findViewById(R.id.user_tg_name)
+            surname = v.findViewById(R.id.user_surname_label_tv)
+            name = v.findViewById(R.id.user_name_label_tv)
         }
     }
 }
