@@ -10,6 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserTransactionsResponse
+import com.teamforce.thanksapp.presentation.activity.MainActivity
+import com.teamforce.thanksapp.utils.Consts
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -31,19 +33,22 @@ class TransfersAdapter(
     override fun onBindViewHolder(holder: TransfersViewHolder, position: Int) {
         val status = dataSet[position].transaction_status.transactionStatus
         if (status.equals("Одобрено")) {
-            holder.status.setImageResource(R.drawable.ic_checkbox_circle_line)
+            holder.status.setImageResource(R.drawable.ic_applied_transaction)
             // Expanded Version
             holder.statusTextView.text = "Согласовано"
-            holder.imageStatus.setImageResource(R.drawable.ic_checkbox_circle_line)
+            holder.statusTextView.setTextColor(R.color.color6)
+            holder.imageStatus.setImageResource(R.drawable.ic_applied_transaction)
         } else if (status.equals("Отклонено")) {
-            holder.status.setImageResource(R.drawable.ic_close_circle_line)
+            holder.status.setImageResource(R.drawable.ic_declined_transaction)
             // Expanded Version
             holder.statusTextView.text = "Аннулировано"
-            holder.imageStatus.setImageResource(R.drawable.ic_close_circle_line)
+            holder.statusTextView.setTextColor(R.color.color8)
+            holder.imageStatus.setImageResource(R.drawable.ic_declined_transaction)
         } else {
-            holder.status.setImageResource(R.drawable.ic_time_line)
+            holder.status.setImageResource(R.drawable.ic_wating_transaction)
             holder.statusTextView.text = "На согласовании"
-            holder.imageStatus.setImageResource(R.drawable.ic_time_line)
+            holder.statusTextView.setTextColor(R.color.color7)
+            holder.imageStatus.setImageResource(R.drawable.ic_wating_transaction)
         }
 
         if (dataSet[position].sender.sender_tg_name.equals(username)) {
@@ -62,7 +67,7 @@ class TransfersAdapter(
             holder.label.text = String.format(holder.view.context.getString(R.string.received_from),
                 dataSet[position].sender.sender_tg_name)
             holder.value.text = "+ " + dataSet[position].amount
-            holder.value.setTextColor(R.color.color6)
+            holder.value.setTextColor(R.color.colorPrimary)
             // Expanded Version
             holder.status_expandedVersion.setImageResource(R.drawable.ic_arrow_left_circle_fill)
             holder.label.text = String.format(holder.view.context.getString(R.string.received_from),
@@ -87,51 +92,6 @@ class TransfersAdapter(
         // Description For Expanded Version
         holder.newReasonTransaction.text = "\"" + dataSet[position].reason + "\""
     }
-
-
-//    override fun onBindViewHolder(holder: TransfersViewHolder, position: Int) {
-//        val status = dataSet[position].status
-//        if (status.equals("Одобрено")) {
-//            holder.status.setImageResource(R.drawable.ic_checkbox_circle_line)
-//            // Expanded Version
-//            holder.statusTextView.text = "Согласовано"
-//            holder.imageStatus.setImageResource(R.drawable.ic_checkbox_circle_line)
-//        } else if (status.equals("Отклонено")) {
-//            holder.status.setImageResource(R.drawable.ic_close_circle_line)
-//            // Expanded Version
-//            holder.statusTextView.text = "Аннулировано"
-//            holder.imageStatus.setImageResource(R.drawable.ic_close_circle_line)
-//        } else {
-//            holder.status.setImageResource(R.drawable.ic_time_line)
-//            holder.statusTextView.text = "На согласовании"
-//            holder.imageStatus.setImageResource(R.drawable.ic_time_line)
-//        }
-//
-//        if (dataSet[position].sender.equals(username)) {
-//            holder.transferIcon.setImageResource(R.drawable.ic_arrow_right_circle_line)
-//            holder.label.text = String.format(holder.view.context.getString(R.string.sended_to), dataSet[position].recipient)
-//            holder.value.text = dataSet[position].amount
-//            // Expanded Version
-//            holder.status_expandedVersion.setImageResource(R.drawable.ic_arrow_right_circle_line)
-//            holder.transactionFrom.text = String.format(holder.view.context.getString(R.string.sended_to), dataSet[position].recipient)
-//            holder.newValueTransaction.text = dataSet[position].amount
-//        } else {
-//            holder.transferIcon.setImageResource(R.drawable.ic_arrow_left_circle_fill)
-//            holder.label.text = String.format(holder.view.context.getString(R.string.received_from), dataSet[position].sender)
-//            holder.value.text = "+ " + dataSet[position].amount
-//            holder.value.setTextColor(R.color.color6)
-//            // Expanded Version
-//            holder.status_expandedVersion.setImageResource(R.drawable.ic_arrow_left_circle_fill)
-//            holder.label.text = String.format(holder.view.context.getString(R.string.received_from), dataSet[position].sender)
-//            holder.newValueTransaction.text = "+ " + dataSet[position].amount
-//        }
-//
-//        holder.view.tag = dataSet[position]
-//        holder.view.setOnClickListener { v -> listener.onClick(v) }
-//        // Description For Expanded Version
-//        holder.newReasonTransaction.text = "\"" + dataSet[position].reason + "\""
-//    }
-
 
 
     override fun getItemCount(): Int {

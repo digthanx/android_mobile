@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="3dp"
+    android:layout_marginBottom="15dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/standard_group"
+        android:visibility="visible"
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
         <ImageView
             android:id="@+id/status_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_time_line"
+            android:src="@drawable/ic_wating_transaction"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,9 +25,8 @@
             android:id="@+id/chat_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="4dp"
-            android:src="@drawable/ic_chat_quote_line"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_chat"
             app:layout_constraintEnd_toStartOf="@+id/status_iv"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,10 +34,7 @@
             android:id="@+id/transfer_icon_iv"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_arrow_right_circle_line"
+            android:src="@drawable/ic_arrow_right_circle_fill"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,8 +42,7 @@
             android:id="@+id/label_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="20dp"
             android:text="Перевод от "
             android:textAppearance="@style/Body2"
             app:layout_constraintStart_toEndOf="@+id/transfer_icon_iv"
@@ -55,9 +52,11 @@
             android:id="@+id/value_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="20dp"
             android:text="+ 100"
             android:textAppearance="@style/Headline6"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/transfer_icon_iv"
             app:layout_constraintTop_toBottomOf="@+id/label_tv" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -108,7 +107,7 @@
             android:layout_width="17dp"
             android:layout_height="17dp"
             android:layout_marginTop="13dp"
-            android:src="@drawable/ic_checkbox_circle_line"
+            android:src="@drawable/ic_applied_transaction"
             app:layout_constraintTop_toBottomOf="@id/new_transaction_from_tv"
             app:layout_constraintStart_toStartOf="@id/new_transaction_from_tv"/>
 
@@ -117,7 +116,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Согласовано"
-            android:textColor="@color/color6"
             android:letterSpacing="0.05"
             android:layout_marginTop="12dp"
             android:layout_marginStart="10dp"
@@ -139,7 +137,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+100"
-            android:textColor="@color/color6"
+            android:textColor="@color/colorPrimary"
             android:textSize="48sp"
             android:textStyle="bold"
             android:layout_marginTop="26dp"
@@ -158,17 +156,7 @@
             app:layout_constraintStart_toStartOf="@id/new_value_transaction"
             app:layout_constraintTop_toBottomOf="@id/new_value_transaction" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginTop="12dp"
-            android:background="@color/color24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_description" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</RelativeLayout>
+</com.google.android.material.card.MaterialCardView>
