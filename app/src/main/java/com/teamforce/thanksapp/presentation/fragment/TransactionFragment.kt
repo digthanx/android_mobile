@@ -22,6 +22,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserBean
+import com.teamforce.thanksapp.databinding.FragmentTransactionBinding
+import com.teamforce.thanksapp.databinding.FragmentTransactionResultBinding
 import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
@@ -30,6 +32,9 @@ import java.lang.Exception
 
 
 class TransactionFragment : Fragment(), View.OnClickListener {
+
+    private var _binding: FragmentTransactionBinding? = null
+    private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
     private lateinit var viewModel: TransactionViewModel
     private lateinit var usersInput: TextInputEditText
@@ -47,7 +52,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_transaction, container, false)
+        _binding = FragmentTransactionBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,16 +73,16 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initViews(view: View) {
-        val sendButton: Button = view.findViewById(R.id.send_coin_btn)
+        val sendButton: Button = binding.sendCoinBtn
         sendButton.setOnClickListener(this)
-        recyclerView = view.findViewById(R.id.users_list_rv)
-        cardViewForRecyclerView = view.findViewById(R.id.card_view_for_rv)
-        sendCoinsGroup = view.findViewById(R.id.send_coins_group)
-        countEditText = view.findViewById(R.id.count_value_et)
-        reasonEditText = view.findViewById(R.id.message_value_et)
-        usersInputLayout = view.findViewById(R.id.textField)
-        usersInput = view.findViewById(R.id.users_et)
-        availableCoins = view.findViewById(R.id.distributed_value_tv)
+        recyclerView = binding.usersListRv
+        cardViewForRecyclerView = binding.cardViewForRv
+        sendCoinsGroup = binding.sendCoinsGroup
+        countEditText = binding.countValueEt
+        reasonEditText = binding.messageValueEt
+        usersInputLayout = binding.textField
+        usersInput = binding.usersEt
+        availableCoins = binding.distributedValueTv
         usersInput.addTextChangedListener(object : TextWatcher {
             // TODO Возможно стоит будет оптимизировать вызов списка пользователей
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
