@@ -8,7 +8,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/section_one"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="20dp"
         android:background="@color/lightPrimary"
         app:layout_constraintTop_toTopOf="parent"
