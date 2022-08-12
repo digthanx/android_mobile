@@ -78,11 +78,15 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         usersInput = view.findViewById(R.id.users_et)
         availableCoins = view.findViewById(R.id.distributed_value_tv)
         usersInput.addTextChangedListener(object : TextWatcher {
-
+            // TODO Возможно стоит будет оптимизировать вызов списка пользователей
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.length > 0 && count > before && s.toString() != user?.tgName) {
+                if (s.trim().length > 0 && count > before && s.toString() != user?.tgName) {
                     UserDataRepository.getInstance()?.token?.let {
                         viewModel.loadUsersList(s.toString(), it)
+                    }
+                }else if(usersInput.text?.trim().toString().isEmpty()){
+                    UserDataRepository.getInstance()?.token?.let {
+                        viewModel.loadUsersListWithoutInput("true", it)
                     }
                 } else {
                     recyclerView.visibility = View.GONE
@@ -95,7 +99,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
             override fun afterTextChanged(s: Editable) {}
         })
-        if(usersInput.text.toString().isEmpty()){
+        if(usersInput.text?.trim().toString().isEmpty()){
             UserDataRepository.getInstance()?.token?.let {
                 viewModel.loadUsersListWithoutInput("true", it)
             }
