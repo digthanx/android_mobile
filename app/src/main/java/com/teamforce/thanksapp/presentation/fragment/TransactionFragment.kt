@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
@@ -45,6 +46,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private lateinit var cardViewForRecyclerView: MaterialCardView
     private lateinit var sendCoinsGroup: Group
     private lateinit var availableCoins: TextView
+    private lateinit var chipGroup: ChipGroup
     private var user: UserBean? = null
 
     override fun onCreateView(
@@ -85,6 +87,18 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         usersInputLayout = binding.textField
         usersInput = binding.usersEt
         availableCoins = binding.distributedValueTv
+        chipGroup = binding.chipGroup
+    }
+
+    fun checkedChip(){
+        when(chipGroup.checkedChipId){
+            R.id.chipOne -> {
+                binding.chipOne.apply {
+                    this.isChecked = true
+
+                }
+            }
+        }
 
     }
 
