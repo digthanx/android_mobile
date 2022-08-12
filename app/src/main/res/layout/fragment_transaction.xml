@@ -61,6 +61,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/image_transaction"
                 android:layout_width="144dp"
                 android:layout_height="144dp"
                 android:layout_marginTop="@dimen/margin_h"
@@ -95,12 +96,59 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_x"
+                android:text="3027"
                 android:textAppearance="@style/Caption.Violet"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/distributed_label_tv" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chipGroup"
+        app:singleSelection="true"
+        app:layout_constraintStart_toStartOf="@id/count_layout"
+        app:layout_constraintTop_toBottomOf="@id/count_layout">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:backgroundTint="@color/color11"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:text="1" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipFive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:backgroundTint="@color/color11"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:text="5" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipTen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:backgroundTint="@color/color11"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:text="10" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipTwentyFive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:backgroundTint="@color/color11"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:text="25" />
+
+    </com.google.android.material.chip.ChipGroup>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/reason_value"
@@ -110,7 +158,7 @@
         android:outlineProvider="none"
         app:cardCornerRadius="@dimen/round_corner_xlarge"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/count_layout"
+        app:layout_constraintTop_toBottomOf="@+id/chipGroup"
         app:strokeColor="@color/color20"
         app:strokeWidth="@dimen/stroke_size">
 
@@ -138,7 +186,7 @@
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/send_coins_group"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="send_coin_btn,reason_value,count_layout"
@@ -148,6 +196,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_view_for_rv"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="0dp"
         app:cardCornerRadius="4dp"
         android:backgroundTint="@color/back_profile"
