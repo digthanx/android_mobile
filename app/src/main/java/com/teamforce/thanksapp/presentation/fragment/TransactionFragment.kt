@@ -3,6 +3,7 @@ package com.teamforce.thanksapp.presentation.fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,6 +67,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         initViews(view)
         dropDownMenuUserInput(usersInput)
         appealToDB()
+        checkedChip()
         val token = UserDataRepository.getInstance()?.token
         if (token != null) {
             viewModel.loadUserBalance(token)
@@ -91,14 +93,32 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     }
 
     fun checkedChip(){
-        when(chipGroup.checkedChipId){
-            R.id.chipOne -> {
-                binding.chipOne.apply {
-                    this.isChecked = true
-
+        Log.d("Token", "i'm inner chip function")
+        chipGroup.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId){
+                R.id.chipOne -> {
+                    Log.d("Token", "i'm inner chip one")
+                    countEditText.setText("1")
+                }
+                R.id.chipFive -> {
+                    binding.chipFive.apply {
+                        countEditText.setText("5")
+                    }
+                }
+                R.id.chipTen -> {
+                    binding.chipTen.apply {
+                        countEditText.setText("10")
+                    }
+                }
+                R.id.chipTwentyFive -> {
+                    binding.chipTwentyFive.apply {
+                        countEditText.setText("25")
+                    }
                 }
             }
         }
+
+
 
     }
 
