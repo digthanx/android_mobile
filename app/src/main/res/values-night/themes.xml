@@ -2,10 +2,19 @@
     <!-- Base application theme. -->
     <style name="Theme.ThanksApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryDark">@color/color1</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/color9</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.ThanksApp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.ThanksApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.ThanksApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
