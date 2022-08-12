@@ -10,7 +10,6 @@
         android:id="@+id/date_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:text="6 июня"
         android:layout_marginBottom="12dp"
@@ -18,17 +17,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/transfers_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:cardCornerRadius="24dp"
+        android:layout_marginTop="20dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_tv">
+        app:layout_constraintTop_toBottomOf="@+id/date_tv"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/transfers_rv"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

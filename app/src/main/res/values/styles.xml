@@ -2,12 +2,13 @@
 <resources>
 
     <style name="Headline3" parent="TextAppearance.MaterialComponents.Headline3">
-        <item name="android:textColor">@color/color1</item>
+        <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textSize">48sp</item>
     </style>
 
-    <style name="Headline3.Violet" parent="Headline3">
-        <item name="android:textColor">@color/color13</item>
+    <style name="Headline3.White" parent="Headline3">
+        <item name="android:textColor">@color/color5</item>
     </style>
 
     <style name="Headline4" parent="TextAppearance.MaterialComponents.Headline4">
@@ -40,8 +41,15 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="Body2.Violet" parent="Body2">
-        <item name="android:textColor">@color/color13</item>
+    <style name="Body2.Black" parent="Body2">
+        <item name="android:textColor">@color/color1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Body2.White" parent="Body2">
+        <item name="android:textColor">@color/color5</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Caption" parent="TextAppearance.MaterialComponents.Caption">
@@ -62,7 +70,7 @@
     </style>
 
     <style name="DefaultButton" parent="Widget.Material3.Button.ElevatedButton">
-        <item name="android:backgroundTint">@color/color13</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
         <item name="android:textColor">@color/color5</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
@@ -73,17 +81,11 @@
     </style>
 
     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
-        <item name="colorPrimary">@color/color1</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/color5</item>
+
     </style>
 
-    <style name="Toolbar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-        <item name="android:background">@color/color1</item>
-        <item name="colorOnPrimary">@color/color5</item>
-    </style>
 
     <style name="NavigationDrawer" parent="TextAppearance.AppCompat.Widget.ActionBar.Menu">
         <item name="android:windowTranslucentStatus">true</item>
@@ -98,6 +100,21 @@
     <style name="BottomSheetDialogWithoutBackground" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowBackground">@null</item>
     </style>
+
+
+    <style name="ToolBarStyle" parent="ToolBarStyle.Base"/>
+
+    <style name="ToolBarStyle.Base" parent="">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/color5</item>
+        <item name="colorOnPrimary">@color/color5</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+
+
+
 
 
 </resources>

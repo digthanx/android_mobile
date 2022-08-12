@@ -5,53 +5,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color23"
     tools:context=".presentation.fragment.HistoryFragment">
 
-    <com.google.android.material.chip.ChipGroup
-        android:layout_width="match_parent"
-        android:id="@+id/chipGroup"
-        app:singleSelection="true"
-        android:layout_marginTop="16dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/chipBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="wrap_content">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipAll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:checkable="true"
-            android:checked="true"
-            android:text="Все" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:singleSelection="true">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipReceived"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:layout_marginStart="8dp"
-            android:text="Получено" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:checked="true"
+                android:text="Вся история"
+                android:textColor="@color/history_chip_text_color_state"
+                app:chipBackgroundColor="@color/white"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipSent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:checkable="true"
-            android:text="Отправлено" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipReceived"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="Получено"
+                android:textColor="@color/history_chip_text_color_state"
+                app:chipBackgroundColor="@color/white"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
 
-    </com.google.android.material.chip.ChipGroup>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipSent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="Отправлено"
+                android:textColor="@color/history_chip_text_color_state"
+                app:chipBackgroundColor="@color/white"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+        </com.google.android.material.chip.ChipGroup>
+    </com.google.android.material.card.MaterialCardView>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/history_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:background="@color/color23"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/chipBox" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -62,6 +83,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/history_rv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/chipBox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
