@@ -3,6 +3,7 @@ package com.teamforce.thanksapp.presentation.fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +19,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserBean
+import com.teamforce.thanksapp.databinding.FragmentTransactionBinding
+import com.teamforce.thanksapp.databinding.FragmentTransactionResultBinding
 import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
@@ -30,6 +34,9 @@ import java.lang.Exception
 
 
 class TransactionFragment : Fragment(), View.OnClickListener {
+
+    private var _binding: FragmentTransactionBinding? = null
+    private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
     private lateinit var viewModel: TransactionViewModel
     private lateinit var usersInput: TextInputEditText
@@ -40,6 +47,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private lateinit var cardViewForRecyclerView: MaterialCardView
     private lateinit var sendCoinsGroup: Group
     private lateinit var availableCoins: TextView
+    private lateinit var chipGroup: ChipGroup
     private var user: UserBean? = null
 
     override fun onCreateView(
@@ -47,7 +55,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_transaction, container, false)
+        _binding = FragmentTransactionBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,6 +65,9 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         viewModel = TransactionViewModel()
         viewModel.initViewModel()
         initViews(view)
+        dropDownMenuUserInput(usersInput)
+        appealToDB()
+        checkedChip()
         val token = UserDataRepository.getInstance()?.token
         if (token != null) {
             viewModel.loadUserBalance(token)
@@ -67,17 +79,51 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initViews(view: View) {
-        val sendButton: Button = view.findViewById(R.id.send_coin_btn)
+        val sendButton: Button = binding.sendCoinBtn
         sendButton.setOnClickListener(this)
-        recyclerView = view.findViewById(R.id.users_list_rv)
-        cardViewForRecyclerView = view.findViewById(R.id.card_view_for_rv)
-        sendCoinsGroup = view.findViewById(R.id.send_coins_group)
-        countEditText = view.findViewById(R.id.count_value_et)
-        reasonEditText = view.findViewById(R.id.message_value_et)
-        usersInputLayout = view.findViewById(R.id.textField)
-        usersInput = view.findViewById(R.id.users_et)
-        availableCoins = view.findViewById(R.id.distributed_value_tv)
-        usersInput.addTextChangedListener(object : TextWatcher {
+        recyclerView = binding.usersListRv
+        cardViewForRecyclerView = binding.cardViewForRv
+        sendCoinsGroup = binding.sendCoinsGroup
+        countEditText = binding.countValueEt
+        reasonEditText = binding.messageValueEt
+        usersInputLayout = binding.textField
+        usersInput = binding.usersEt
+        availableCoins = binding.distributedValueTv
+        chipGroup = binding.chipGroup
+    }
+
+    fun checkedChip(){
+        Log.d("Token", "i'm inner chip function")
+        chipGroup.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId){
+                R.id.chipOne -> {
+                    Log.d("Token", "i'm inner chip one")
+                    countEditText.setText("1")
+                }
+                R.id.chipFive -> {
+                    binding.chipFive.apply {
+                        countEditText.setText("5")
+                    }
+                }
+                R.id.chipTen -> {
+                    binding.chipTen.apply {
+                        countEditText.setText("10")
+                    }
+                }
+                R.id.chipTwentyFive -> {
+                    binding.chipTwentyFive.apply {
+                        countEditText.setText("25")
+                    }
+                }
+            }
+        }
+
+
+
+    }
+
+    fun dropDownMenuUserInput(userInput: TextInputEditText){
+        userInput.addTextChangedListener(object : TextWatcher {
             // TODO Возможно стоит будет оптимизировать вызов списка пользователей
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.trim().length > 0 && count > before && s.toString() != user?.tgName) {
@@ -104,6 +150,9 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                 viewModel.loadUsersListWithoutInput("true", it)
             }
         }
+    }
+
+    fun appealToDB(){
         viewModel.users.observe(viewLifecycleOwner) {
             cardViewForRecyclerView.visibility = View.VISIBLE
             recyclerView.visibility = View.VISIBLE
@@ -154,6 +203,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             }
         }
     }
+
+
     private fun showResultTransaction(amountThanks: Int, description: String, receiver: String ){
         val bundle = Bundle()
         bundle.putInt(Consts.AMOUNT_THANKS, amountThanks)
