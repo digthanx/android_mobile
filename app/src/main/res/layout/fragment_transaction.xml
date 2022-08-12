@@ -186,17 +186,17 @@
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/send_coins_group"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="send_coin_btn,reason_value,count_layout"
+        app:constraint_referenced_ids="send_coin_btn,reason_value,count_layout, chipGroup"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="110dp" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_view_for_rv"
         android:layout_width="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_height="0dp"
         app:cardCornerRadius="4dp"
         android:backgroundTint="@color/back_profile"

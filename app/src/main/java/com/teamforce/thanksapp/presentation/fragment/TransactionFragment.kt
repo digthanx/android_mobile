@@ -62,6 +62,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         viewModel = TransactionViewModel()
         viewModel.initViewModel()
         initViews(view)
+        dropDownMenuUserInput(usersInput)
+        appealToDB()
         val token = UserDataRepository.getInstance()?.token
         if (token != null) {
             viewModel.loadUserBalance(token)
@@ -83,7 +85,11 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         usersInputLayout = binding.textField
         usersInput = binding.usersEt
         availableCoins = binding.distributedValueTv
-        usersInput.addTextChangedListener(object : TextWatcher {
+
+    }
+
+    fun dropDownMenuUserInput(userInput: TextInputEditText){
+        userInput.addTextChangedListener(object : TextWatcher {
             // TODO Возможно стоит будет оптимизировать вызов списка пользователей
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.trim().length > 0 && count > before && s.toString() != user?.tgName) {
@@ -110,6 +116,9 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                 viewModel.loadUsersListWithoutInput("true", it)
             }
         }
+    }
+
+    fun appealToDB(){
         viewModel.users.observe(viewLifecycleOwner) {
             cardViewForRecyclerView.visibility = View.VISIBLE
             recyclerView.visibility = View.VISIBLE
@@ -160,6 +169,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             }
         }
     }
+
+
     private fun showResultTransaction(amountThanks: Int, description: String, receiver: String ){
         val bundle = Bundle()
         bundle.putInt(Consts.AMOUNT_THANKS, amountThanks)
