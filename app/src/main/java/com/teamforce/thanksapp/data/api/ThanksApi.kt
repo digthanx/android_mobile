@@ -50,6 +50,9 @@ interface ThanksApi {
     @GET("/user/transactions/")
     fun getUserTransactions(@Header("Authorization") token: String): Call<List<UserTransactionsResponse>>
 
+    @GET("/feed/")
+    fun getFeed(@Header("Authorization") token: String): Call<List<FeedResponse>>
+
     @POST("/users-list/")
     fun getUsersWithoutInput(
         @Header("Authorization") token: String,
