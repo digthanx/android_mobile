@@ -1,6 +1,6 @@
 package com.teamforce.thanksapp.presentation.adapter
 
-import android.util.Log
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +53,7 @@ class FeedAdapter (
         val view: View = binding.root
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
         if(!currentList[position].transaction.sender.equals(username) &&
             !currentList[position].transaction.recipient.equals(username)){

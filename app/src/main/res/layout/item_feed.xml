@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/standard_group"
         android:visibility="visible"
-        android:layout_margin="20dp"
+        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -30,20 +30,21 @@
             android:text="вчера в 20:30"
             app:layout_constraintStart_toEndOf="@+id/user_avatar"
             app:layout_constraintTop_toTopOf="parent"/>
-
         <TextView
             android:id="@+id/senderAndReceiver"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="/@AnnaKim_TF получил 150 спасибок от /@mekhaga"
-            android:layout_marginStart="20dp"
+            android:text="@string/someoneToSomeone"
+            android:layout_marginStart="60dp"
+            android:paddingVertical="5dp"
             app:layout_constraintStart_toEndOf="@+id/user_avatar"
             app:layout_constraintTop_toBottomOf="@id/date_time"/>
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleButtonGroup"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
             app:layout_constraintStart_toStartOf="@id/date_time"
             app:layout_constraintTop_toBottomOf="@id/senderAndReceiver">
             <com.google.android.material.button.MaterialButton
