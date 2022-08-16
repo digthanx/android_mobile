@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/profileFragment"
+            android:icon="@drawable/ic_account"
+            android:title="Мой аккаунт" />
+    </group>
+
+    <group
+        android:id="@+id/main_group"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/feedFragment"
+            android:enabled="true"
+            android:icon="@drawable/ic_account"
+            android:title="@string/feed_label"/>
+        <item
+            android:id="@+id/balanceFragment"
+            android:enabled="true"
+            android:icon="@drawable/ic_coin_line"
+            android:title="@string/balance_label"
+            android:checked="true"/>
+        <item
+            android:id="@+id/transactionFragment"
+            android:enabled="true"
+            android:icon="@drawable/ic_arrow_right_circle_line"
+            android:title="@string/new_transaction_label"/>
+        <item
+            android:id="@+id/historyFragment"
+            android:enabled="true"
+            android:icon="@drawable/ic_history_line"
+            android:title="@string/history_label"/>
+    </group>
+
+</menu>

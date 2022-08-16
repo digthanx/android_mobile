@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="15dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/standard_group"
+        android:visibility="visible"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/user_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_right_circle_fill"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:textSize="12sp"
+            android:text="вчера в 20:30"
+            app:layout_constraintStart_toEndOf="@+id/user_avatar"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/senderAndReceiver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/someoneToSomeone"
+            android:layout_marginStart="60dp"
+            android:paddingVertical="5dp"
+            app:layout_constraintStart_toEndOf="@+id/user_avatar"
+            app:layout_constraintTop_toBottomOf="@id/date_time"/>
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleButtonGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            app:layout_constraintStart_toStartOf="@id/date_time"
+            app:layout_constraintTop_toBottomOf="@id/senderAndReceiver">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/comment_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="435"
+                android:insetRight="5dp"
+
+                style="?attr/materialButtonOutlinedStyle"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dislike_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12k"
+                android:insetRight="5dp"
+                android:insetLeft="5dp"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/like_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:insetLeft="5dp"
+                android:text="213k"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/superLightGray"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toggleButtonGroup"/>
+
+</LinearLayout>

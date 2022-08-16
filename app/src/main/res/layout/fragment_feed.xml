@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color23"
+    tools:context=".presentation.fragment.FeedFragment">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/chipBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAllEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="@string/allEvent"
+                android:textColor="@color/history_chip_text_color_state"
+                app:chipBackgroundColor="@color/white"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipMineEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="@string/mineEvent"
+                android:textColor="@color/history_chip_text_color_state"
+                app:chipBackgroundColor="@color/white"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPublicEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="@string/publicEvent"
+                android:textColor="@color/history_chip_text_color_state"
+                app:chipBackgroundColor="@color/white"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+        </com.google.android.material.chip.ChipGroup>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/feed_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:background="@color/color23"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chipBox" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/feed_rv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chipBox" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

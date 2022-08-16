@@ -34,8 +34,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     private var receivedTransactionsList: List<HistoryModel> = emptyList()
     private var sentTransactionsList: List<HistoryModel> = emptyList()
 
-    // При первом входе в аккаунт на телефоне username почему то null
-    // Понять почему он null и исправить это
+
     private val username: String = UserDataRepository.getInstance()?.username.toString()
 
     override fun onCreateView(
