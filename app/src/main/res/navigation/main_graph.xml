@@ -40,4 +40,9 @@
         android:name="com.teamforce.thanksapp.presentation.fragment.ProfileFragment"
         android:label="Профиль"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.FeedFragment"
+        android:label="@string/feed_label"
+        tools:layout="@layout/fragment_feed" />
 </navigation>

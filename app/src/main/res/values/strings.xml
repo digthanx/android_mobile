@@ -33,6 +33,7 @@
     <string name="user_name_label">Имя пользователя</string>
     <string name="confirmation_code_label">Код подтверждения</string>
     <string name="balance_label">Баланс</string>
+    <string name="feed_label">Лента</string>
     <string name="new_transaction_label">Новый перевод</string>
     <string name="history_label">История</string>
     <string name="period">Период</string>

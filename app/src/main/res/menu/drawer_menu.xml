@@ -11,6 +11,11 @@
         android:id="@+id/main_group"
         android:checkableBehavior="single">
         <item
+            android:id="@+id/feedFragment"
+            android:enabled="true"
+            android:icon="@drawable/ic_account"
+            android:title="@string/feed_label"/>
+        <item
             android:id="@+id/balanceFragment"
             android:enabled="true"
             android:icon="@drawable/ic_coin_line"

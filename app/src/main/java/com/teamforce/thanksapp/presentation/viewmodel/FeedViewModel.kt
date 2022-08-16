@@ -67,7 +67,6 @@ class FeedViewModel: ViewModel() {
                                             myFeeds.add(item)
                                         }
                                         if(item.event_type.is_personal) publicFeeds.add(item)
-
                                         _allFeeds.postValue(feeds)
                                         _myFeeds.postValue(myFeeds)
                                         _publicFeeds.postValue(publicFeeds)

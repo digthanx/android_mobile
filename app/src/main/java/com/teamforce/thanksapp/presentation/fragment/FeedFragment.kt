@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
@@ -18,6 +19,8 @@ import com.teamforce.thanksapp.presentation.adapter.FeedAdapter
 import com.teamforce.thanksapp.presentation.adapter.HistoryAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class FeedFragment : Fragment() {
@@ -26,14 +29,11 @@ class FeedFragment : Fragment() {
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
     private var viewModel: FeedViewModel = FeedViewModel()
-    private var recyclerView = binding.feedRv
-    private val progressBar = binding.progressBar
-    private val chipGroup = binding.chipGroup
 
     private val username: String = UserDataRepository.getInstance()?.username.toString()
 
 
-    private var allTFeedsList: List<FeedResponse> = emptyList()
+    private var allFeedsList: List<FeedResponse> = emptyList()
     private var mineFeedsList: List<FeedResponse> = emptyList()
     private var publicFeedsList: List<FeedResponse> = emptyList()
 
@@ -50,9 +50,35 @@ class FeedFragment : Fragment() {
         viewModel.initViewModel()
         inflateRecyclerView()
         getListsFromDb()
-        chipGroup.setOnCheckedChangeListener { _, checkedId ->
+        binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
             refreshRecyclerView(checkedId)
         }
+    }
+
+
+    private fun inflateRecyclerView(){
+        UserDataRepository.getInstance()?.token?.let{ token ->
+            UserDataRepository.getInstance()?.username?.let { username ->
+                viewModel.loadFeedsList(token = token, user = username)
+            }
+        }
+        binding.feedRv.adapter = FeedAdapter(username)
+    }
+
+    private fun refreshRecyclerView(checkedId: Int) {
+        val feeds: List<FeedResponse> = when (checkedId) {
+            R.id.chipAllEvent -> {
+                allFeedsList
+            }
+            R.id.chipMineEvent -> mineFeedsList
+            R.id.chipPublicEvent -> publicFeedsList
+            else -> {
+                Toast.makeText(requireContext(), "Wrong chip", Toast.LENGTH_LONG).show()
+                emptyList()
+            }
+        }
+       // Log.d("Token", "Feeds - ${feeds}")
+        (binding.feedRv.adapter as FeedAdapter).submitList(feeds)
     }
 
     private fun getListsFromDb(){
@@ -60,20 +86,22 @@ class FeedFragment : Fragment() {
             viewLifecycleOwner,
             Observer { isLoading ->
                 if (isLoading) {
-                    recyclerView.visibility = View.GONE
-                    progressBar.visibility = View.VISIBLE
+                    binding.feedRv.visibility = View.GONE
+                    binding.progressBar.visibility = View.VISIBLE
                 } else {
-                    recyclerView.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
+                    binding.feedRv.visibility = View.VISIBLE
+                    binding.chipAllEvent.isChecked = true
+                    binding.progressBar.visibility = View.GONE
                 }
             }
         )
         viewModel.allFeeds.observe(
             viewLifecycleOwner,
             Observer {
-                allTFeedsList = it!!
-                if (chipGroup.checkedChipId == R.id.chipAll) {
-                    (recyclerView.adapter as FeedAdapter).submitList(allTFeedsList)
+                allFeedsList = it!!
+               // Log.d("Token", "allFeeds ${allFeedsList}")
+                if (binding.chipGroup.checkedChipId == R.id.chipAllEvent) {
+                    (binding.feedRv.adapter as FeedAdapter).submitList(allFeedsList)
                 }
             }
         )
@@ -81,8 +109,9 @@ class FeedFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 mineFeedsList = it
-                if (chipGroup.checkedChipId == R.id.chipReceived) {
-                    (recyclerView.adapter as FeedAdapter).submitList(mineFeedsList)
+               // Log.d("Token", "mineFeeds ${mineFeedsList}")
+                if (binding.chipGroup.checkedChipId == R.id.chipReceived) {
+                    (binding.feedRv.adapter as FeedAdapter).submitList(mineFeedsList)
                 }
             }
         )
@@ -91,8 +120,9 @@ class FeedFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 publicFeedsList = it
-                if (chipGroup.checkedChipId == R.id.chipSent) {
-                    (recyclerView.adapter as FeedAdapter).submitList(publicFeedsList)
+                //Log.d("Token", "publicFeeds ${publicFeedsList}")
+                if (binding.chipGroup.checkedChipId == R.id.chipSent) {
+                    (binding.feedRv.adapter as FeedAdapter).submitList(publicFeedsList)
                 }
             }
         )
@@ -101,31 +131,13 @@ class FeedFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                Log.d("Token", " Ошибка лял ял ля  ${it}")
+                //Log.d("Token", " Ошибка лял ял ля  ${it}")
             }
         )
+
     }
 
-    private fun inflateRecyclerView(){
-        recyclerView.itemAnimator = DefaultItemAnimator()
-        UserDataRepository.getInstance()?.token?.let{ token ->
-            UserDataRepository.getInstance()?.username?.let { username ->
-                viewModel.loadFeedsList(token = token, user = username)
-            }
-        }
-    }
 
-    private fun refreshRecyclerView(checkedId: Int) {
-        val feeds: List<FeedResponse> = when (checkedId) {
-            R.id.chipAllEvent -> allTFeedsList
-            R.id.chipMineEvent -> mineFeedsList
-            R.id.chipPublicEvent -> publicFeedsList
-            else -> {
-                Toast.makeText(requireContext(), "Wrong chip", Toast.LENGTH_LONG).show()
-                emptyList()
-            }
-        }
-        (recyclerView.adapter as FeedAdapter).submitList(feeds)
-    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.presentation.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +16,8 @@ import com.teamforce.thanksapp.databinding.ItemFeedBinding
 
 class FeedAdapter (
     private val username: String,
-    private val dataSet: List<FeedResponse>,
 ): ListAdapter<FeedResponse, FeedAdapter.FeedViewHolder>(DiffCallback){
+
 
     companion object DiffCallback : DiffUtil.ItemCallback<FeedResponse>(){
         override fun areItemsTheSame(oldItem: FeedResponse, newItem: FeedResponse): Boolean {
@@ -26,7 +27,9 @@ class FeedAdapter (
         override fun areContentsTheSame(oldItem: FeedResponse, newItem: FeedResponse): Boolean {
             return oldItem == newItem
         }
+
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
         val binding = ItemFeedBinding
@@ -35,7 +38,10 @@ class FeedAdapter (
         return FeedViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = dataSet.size
+    override fun getItemCount(): Int {
+        //Log.d("Token", "DataSet size - ${currentList.size}")
+        return currentList.size
+    }
 
     class FeedViewHolder(binding: ItemFeedBinding): RecyclerView.ViewHolder(binding.root){
         val avatarUser: ImageView = binding.userAvatar
@@ -48,26 +54,26 @@ class FeedAdapter (
     }
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        if(!dataSet[position].transaction.sender.equals(username) &&
-            !dataSet[position].transaction.recipient.equals(username)){
+        if(!currentList[position].transaction.sender.equals(username) &&
+            !currentList[position].transaction.recipient.equals(username)){
             holder.senderAndReceiver.text =
                 String.format(holder.view.context.getString(
                     R.string.someoneToSomeone),
-                    dataSet[position].transaction.recipient,
+                    currentList[position].transaction.recipient,
                     "150",
-                    dataSet[position].transaction.sender)
-        }else if(!dataSet[position].transaction.sender.equals(username)){
+                    currentList[position].transaction.sender)
+        }else if(!currentList[position].transaction.sender.equals(username)){
             holder.senderAndReceiver.text =
                 String.format(holder.view.context.getString(
                     R.string.youFromSomeone),
                     "150",
-                    dataSet[position].transaction.sender)
+                    currentList[position].transaction.sender)
 
         }else{
             holder.senderAndReceiver.text =
                 String.format(holder.view.context.getString(
                     R.string.youToSomeone),
-                    dataSet[position].transaction.recipient,
+                    currentList[position].transaction.recipient,
                     "150")
         }
     }
