@@ -51,7 +51,10 @@
     <string name="helperTextAboutEmail">Проверьте корректность введенной почты %s</string>
     <string name="helperTextStandard"><u>Не пришел код?</u></string>
     <string name="helperLink"><u>Повторить процедуру аутентификации</u></string>
-    <!-- -->
+    <!--Лента событий -->
+    <string name="someoneToSomeone">%s получил %s спасибок от %s</string>
+    <string name="youFromSomeone">Вы получили %s спасибок от %s</string>
+    <string name="youToSomeone">$s получил %s спасибок от вас</string>
 
 
 </resources>

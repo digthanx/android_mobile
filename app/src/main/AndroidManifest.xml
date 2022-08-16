@@ -14,17 +14,6 @@
         android:theme="@style/Theme.ThanksApp"
         android:usesCleartextTraffic="true">
         <activity
-            android:theme="@style/Theme.ThanksApp.NoActionBar"
-            android:screenOrientation="portrait"
-            android:name=".presentation.activity.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <data android:scheme="tg" />
-            </intent-filter>
-        </activity>
-        <activity
             android:screenOrientation="portrait"
             android:name=".presentation.activity.MainActivity"
             android:exported="true">
