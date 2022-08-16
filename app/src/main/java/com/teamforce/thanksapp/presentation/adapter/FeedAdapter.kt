@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
@@ -14,7 +16,17 @@ import com.teamforce.thanksapp.databinding.ItemFeedBinding
 class FeedAdapter (
     private val username: String,
     private val dataSet: List<FeedResponse>,
-): RecyclerView.Adapter<FeedAdapter.FeedViewHolder>(){
+): ListAdapter<FeedResponse, FeedAdapter.FeedViewHolder>(DiffCallback){
+
+    companion object DiffCallback : DiffUtil.ItemCallback<FeedResponse>(){
+        override fun areItemsTheSame(oldItem: FeedResponse, newItem: FeedResponse): Boolean {
+            return oldItem.time == newItem.time
+        }
+
+        override fun areContentsTheSame(oldItem: FeedResponse, newItem: FeedResponse): Boolean {
+            return oldItem == newItem
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
         val binding = ItemFeedBinding

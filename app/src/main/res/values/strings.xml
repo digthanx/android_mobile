@@ -1,4 +1,5 @@
 <resources>
+    <!-- Вход и аутентификация -->
     <string name="app_name">Thanks App</string>
     <string name="go_to_telegram">Go to Telegram</string>
     <string name="input_login_message">Для входа введите имя пользователя</string>
@@ -8,6 +9,15 @@
     <string name="input_code">Введите код подтверждения</string>
     <string name="code">Код подтверждения</string>
     <string name="check">Проверить</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="Toast_verifyCode_hintTg">Код отправлен в телеграм</string>
+    <string name="Toast_verifyCode_hintEmail">Код отправлен на указанную электронную почту</string>
+    <string name="helperTextAboutTg">Перейдите в диалог с ботом %s,
+        напишите ему что-нибудь после чего повторите процедуру аутентификации</string>
+    <string name="helperTextAboutEmail">Проверьте корректность введенной почты %s</string>
+    <string name="helperTextStandard"><u>Не пришел код?</u></string>
+    <string name="helperLink"><u>Повторить процедуру аутентификации</u></string>
     <!-- Profile Fragment -->
     <string name="username_label">ФИО</string>
     <string name="legal_label">Юр.Лицо</string>
@@ -15,8 +25,7 @@
     <string name="hired_label">Дата начала работы</string>
     <string name="mobile_label">Телефон</string>
     <string name="email_label">Email</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Баланс фрагмент -->
     <string name="registration_button_label">Регистрация</string>
     <string name="application_label">Цифровое спасибо</string>
     <string name="enter_button_label">Вход</string>
@@ -37,24 +46,22 @@
     <string name="will_burn_after_3">Сгорят через %s дней</string>
     <string name="send">Отправить</string>
     <string name="empty">\"\"</string>
+    <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
     <string name="sended_to">Перевод для %s</string>
     <string name="approved">Согласовано</string>
     <string name="on_approval">На согласовании</string>
     <string name="annulled">Аннулировано</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="Toast_verifyCode_hintTg">Код отправлен в телеграм</string>
-    <string name="Toast_verifyCode_hintEmail">Код отправлен на указанную электронную почту</string>
-    <string name="helperTextAboutTg">Перейдите в диалог с ботом %s,
-        напишите ему что-нибудь после чего повторите процедуру аутентификации</string>
-    <string name="helperTextAboutEmail">Проверьте корректность введенной почты %s</string>
-    <string name="helperTextStandard"><u>Не пришел код?</u></string>
-    <string name="helperLink"><u>Повторить процедуру аутентификации</u></string>
+    <!--Utils -->
     <!--Лента событий -->
     <string name="someoneToSomeone">%s получил %s спасибок от %s</string>
     <string name="youFromSomeone">Вы получили %s спасибок от %s</string>
     <string name="youToSomeone">$s получил %s спасибок от вас</string>
+    <string name="allEvent">Все</string>
+    <string name="mineEvent">Мои</string>
+    <string name="publicEvent">Публичные</string>
+    <!-- Utils -->
+    <string name="yesterday">Вчера</string>
 
 
 </resources>
