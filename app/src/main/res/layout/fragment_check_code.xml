@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/color10"
     android:orientation="vertical"
-    tools:context=".presentation.fragment.CheckCodeFragment">
+    tools:context=".presentation.fragment.auth.CheckCodeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

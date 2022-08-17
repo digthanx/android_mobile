@@ -1,7 +1,5 @@
-package com.teamforce.thanksapp.presentation.fragment
+package com.teamforce.thanksapp.presentation.fragment.auth
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,11 +8,9 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.databinding.ActivityMainBinding
 import com.teamforce.thanksapp.databinding.FragmentCheckCodeBinding
 import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
 import com.teamforce.thanksapp.utils.Consts

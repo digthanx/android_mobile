@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.ThanksApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/general_brand</item>
+        <item name="colorPrimaryDark">@color/general_brand</item>
         <item name="colorAccent">@color/color9</item>
         <!-- Customize your theme here. -->
     </style>
