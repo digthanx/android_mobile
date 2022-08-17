@@ -17,4 +17,5 @@
 
     <style name="Theme.ThanksApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+
 </resources>
