@@ -16,8 +16,13 @@
     <string name="helperTextAboutTg">Перейдите в диалог с ботом %s,
         напишите ему что-нибудь после чего повторите процедуру аутентификации</string>
     <string name="helperTextAboutEmail">Проверьте корректность введенной почты %s</string>
-    <string name="helperTextStandard"><u>Не пришел код?</u></string>
-    <string name="helperLink"><u>Повторить процедуру аутентификации</u></string>
+    <string name="helperTextStandard">Не пришел код?</string>
+    <string name="helperLink">Повторить процедуру аутентификации</string>
+    <string name="auth_label">Введите имя пользователя</string>
+    <string name="get_code_button_label">Получить код</string>
+    <string name="confirmation_code_label">Введите код подтверждения</string>
+    <string name="incorrect_code">Неверный код</string>
+    <string name="auth">Авторизация</string>
     <!-- Profile Fragment -->
     <string name="username_label">ФИО</string>
     <string name="legal_label">Юр.Лицо</string>
@@ -29,9 +34,7 @@
     <string name="registration_button_label">Регистрация</string>
     <string name="application_label">Цифровое спасибо</string>
     <string name="enter_button_label">Вход</string>
-    <string name="get_code_button_label">Получить код</string>
     <string name="user_name_label">Имя пользователя</string>
-    <string name="confirmation_code_label">Код подтверждения</string>
     <string name="balance_label">Баланс</string>
     <string name="feed_label">Лента</string>
     <string name="new_transaction_label">Новый перевод</string>
@@ -72,6 +75,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

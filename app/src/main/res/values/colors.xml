@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="general_brand">#F15929</color>
+    <color name="general_brand_secondary">#FFF0D9</color>
+    <color name="general_background">#FFFFFF</color>
+    <color name="general_contrast">#212121</color>
+    <color name="general_secondary">#8A8A8E</color>
+    <color name="general_color_grey">#CECECE</color>
+    <color name="minor_success">#42AB44</color>
+    <color name="minor_success_secondary">#EDF8ED</color>
+    <color name="minor_error">#FF4E4E</color>
+    <color name="minor_error_secondary">#FEEFEF</color>
+    <color name="minor_warning">#FCCE2A</color>
+    <color name="minor_warning_secondary">#FFF4EC</color>
+    <color name="minor_info">#2E5AAC</color>
+    <color name="minor_info_secondary">#EEF2FA</color>
+    <color name="minor_grey">#EAEAEA</color>
+
+
+
+
     <color name="transparent">#00BB86FC</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

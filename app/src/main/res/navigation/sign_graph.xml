@@ -3,36 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sign_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/greetFragment">
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.teamforce.thanksapp.presentation.fragment.LoginFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.auth.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_checkCodeFragment"
-            app:destination="@id/checkCodeFragment"
-            app:enterAnim="@anim/to_left_in"
-            app:exitAnim="@anim/to_left_in_2" />
-    </fragment>
-    <fragment
-        android:id="@+id/checkCodeFragment"
-        android:name="com.teamforce.thanksapp.presentation.fragment.CheckCodeFragment"
-        android:label="fragment_check_code"
-        tools:layout="@layout/fragment_check_code" >
-        <action
-            android:id="@+id/action_checkCodeFragment_to_mainFlowFragment"
+            android:id="@+id/action_loginFragment_to_mainFlowFragment"
             app:destination="@id/mainFlowFragment"
             app:enterAnim="@anim/to_left_in"
             app:exitAnim="@anim/to_left_in_2" />
-        <action
-            android:id="@+id/action_checkCodeFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainFlowFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.MainFlowFragment"
         android:label="fragment_main_flow"
         tools:layout="@layout/fragment_main_flow" />
+    <fragment
+        android:id="@+id/greetFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.auth.GreetFragment"
+        android:label="fragment_greet"
+        tools:layout="@layout/fragment_greet" >
+        <action
+            android:id="@+id/action_greetFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/to_left_in"
+            app:exitAnim="@anim/to_left_in_2" />
+    </fragment>
 </navigation>

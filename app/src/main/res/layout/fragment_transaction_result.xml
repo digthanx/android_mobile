@@ -25,7 +25,7 @@
             android:layout_gravity="center"
             android:layout_marginVertical="30dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/dazzel_girl" />
+            android:src="@drawable/greet_picture" />
 
         <TextView
             android:layout_width="match_parent"
