@@ -21,6 +21,8 @@
     <string name="auth_label">Введите имя пользователя</string>
     <string name="get_code_button_label">Получить код</string>
     <string name="confirmation_code_label">Введите код подтверждения</string>
+    <string name="incorrect_code">Неверный код</string>
+    <string name="auth">Авторизация</string>
     <!-- Profile Fragment -->
     <string name="username_label">ФИО</string>
     <string name="legal_label">Юр.Лицо</string>

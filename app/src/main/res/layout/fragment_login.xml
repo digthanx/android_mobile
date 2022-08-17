@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Авторизация"
+            android:text="@string/auth"
             android:textSize="32sp"
             android:textStyle="bold"
             android:textColor="@color/white"/>
@@ -73,6 +73,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:boxCornerRadiusBottomEnd="15dp"
                 app:boxCornerRadiusBottomStart="15dp"
                 app:boxCornerRadiusTopEnd="15dp"
@@ -99,6 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
+                android:visibility="gone"
                 android:linksClickable="true"
                 android:layout_gravity="center"
                 android:clickable="true"
@@ -111,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:linksClickable="true"
                 android:clickable="false"
                 android:focusable="true"
@@ -131,10 +133,16 @@
                 app:cornerRadius="12dp"
                 android:backgroundTint="@color/general_brand"
                 android:paddingVertical="17dp" />
+
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
-
-
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/codeGroup"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="textFieldCode, code_et, helperLink, helperText"/>
 
 </LinearLayout>
