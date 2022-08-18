@@ -43,9 +43,9 @@
     <string name="my_count">Мой счет</string>
     <string name="distributed">Распределено:</string>
     <string name="least_distribute">Осталось раздать</string>
-    <string name="cancelled">Аннулировано:</string>
-    <string name="frozen_label">На согласовании:</string>
-    <string name="will_burn_after">Сгорят через %s день</string>
+    <string name="cancelled">Аннулировано</string>
+    <string name="frozen_label">На согласовании</string>
+    <string name="will_burn_after">Сгорят через \u200b %s день</string>
     <string name="will_burn_after_2">Сгорят через %s дня</string>
     <string name="will_burn_after_3">Сгорят через %s дней</string>
     <string name="send">Отправить</string>
