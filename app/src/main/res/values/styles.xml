@@ -4,7 +4,7 @@
     <style name="Headline3" parent="TextAppearance.MaterialComponents.Headline3">
         <item name="android:textColor">@color/lightBlack</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">48sp</item>
+        <item name="android:textSize">32sp</item>
     </style>
 
     <style name="Headline3.White" parent="Headline3">
@@ -81,7 +81,7 @@
     </style>
 
     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/general_brand</item>
         <item name="colorOnPrimary">@color/color5</item>
 
     </style>
@@ -105,7 +105,7 @@
     <style name="ToolBarStyle" parent="ToolBarStyle.Base"/>
 
     <style name="ToolBarStyle.Base" parent="">
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/general_brand</item>
         <item name="android:textColor">@color/color5</item>
         <item name="colorOnPrimary">@color/color5</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>

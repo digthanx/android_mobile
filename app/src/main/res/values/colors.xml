@@ -16,6 +16,9 @@
     <color name="minor_info">#2E5AAC</color>
     <color name="minor_info_secondary">#EEF2FA</color>
     <color name="minor_grey">#EAEAEA</color>
+    <color name="blue">#92C4F2</color>
+    <color name="yellow">#FCE17A</color>
+    <color name="general_background_light">#66FFFFFF</color>
 
 
 

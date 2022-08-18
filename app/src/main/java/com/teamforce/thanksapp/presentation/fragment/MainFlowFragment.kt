@@ -41,22 +41,22 @@ class MainFlowFragment : BaseFlowFragment (
 
     override fun setupNavigation(navController: NavController) {
         binding.bottomNavigation.setupWithNavController(navController)
-        binding.navView.setupWithNavController(navController)
-        val appBarConfiguration =
-            AppBarConfiguration(setOf(R.id.balanceFragment, R.id.transactionFragment, R.id.historyFragment), drawerLayout = binding.drawerLayout)
-        val toolbar = binding.toolbar
-        toolbar.setupWithNavController(navController, appBarConfiguration)
+//        binding.navView.setupWithNavController(navController)
+//        val appBarConfiguration =
+//            AppBarConfiguration(setOf(R.id.balanceFragment, R.id.transactionFragment, R.id.historyFragment), drawerLayout = binding.drawerLayout)
+//        val toolbar = binding.toolbar
+//        toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 
-    override fun profilePage() {
-        val headerView = binding.navView.getHeaderView(0)
-        val headerLinearLayout = headerView.findViewById<LinearLayout>(R.id.profileFragment)
-        //val headerLinearLayout = headerView.findViewById<Button>(R.id.btn_out_account)
-        headerLinearLayout.setOnClickListener{
-            Toast.makeText(requireContext(), "clicked", Toast.LENGTH_SHORT).show();
-            activityNavController().navigateSafely(R.id.profileFragment)
-        }
-    }
+//    override fun profilePage() {
+//        val headerView = binding.navView.getHeaderView(0)
+//        val headerLinearLayout = headerView.findViewById<LinearLayout>(R.id.profileFragment)
+//        //val headerLinearLayout = headerView.findViewById<Button>(R.id.btn_out_account)
+//        headerLinearLayout.setOnClickListener{
+//            Toast.makeText(requireContext(), "clicked", Toast.LENGTH_SHORT).show();
+//            activityNavController().navigateSafely(R.id.profileFragment)
+//        }
+//    }
 
 
 
