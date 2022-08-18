@@ -28,8 +28,9 @@
     <string name="legal_label">Юр.Лицо</string>
     <string name="department_label">Подразделение</string>
     <string name="hired_label">Дата начала работы</string>
-    <string name="mobile_label">Телефон</string>
-    <string name="email_label">Email</string>
+    <string name="mobile_label">Мобильный номер</string>
+    <string name="email_label">Корпоративная почта</string>
+    <string name="lastAuth">Последний вход сегодня %s</string>
     <!-- Баланс фрагмент -->
     <string name="registration_button_label">Регистрация</string>
     <string name="application_label">Цифровое спасибо</string>
