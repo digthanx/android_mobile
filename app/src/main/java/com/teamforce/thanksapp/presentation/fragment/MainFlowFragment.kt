@@ -1,25 +1,14 @@
 package com.teamforce.thanksapp.presentation.fragment
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentMainFlowBinding
-import com.teamforce.thanksapp.utils.UserDataRepository
-import com.teamforce.thanksapp.utils.activityNavController
-import com.teamforce.thanksapp.utils.navigateSafely
 
 
 class MainFlowFragment : BaseFlowFragment (
@@ -42,11 +31,19 @@ class MainFlowFragment : BaseFlowFragment (
     override fun setupNavigation(navController: NavController) {
         binding.bottomNavigation.setupWithNavController(navController)
 //        binding.navView.setupWithNavController(navController)
-//        val appBarConfiguration =
-//            AppBarConfiguration(setOf(R.id.balanceFragment, R.id.transactionFragment, R.id.historyFragment), drawerLayout = binding.drawerLayout)
-//        val toolbar = binding.toolbar
-//        toolbar.setupWithNavController(navController, appBarConfiguration)
+        val appBarConfiguration =
+            AppBarConfiguration(setOf(R.id.feedFragment, R.id.balanceFragment, R.id.transactionFragment, R.id.historyFragment))
+        val toolbar = binding.toolbar
+        val collapsingToolbar = binding.collapsingToolbar
+        collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
+
+
+        binding.profile.setOnClickListener{
+            navController.navigate(R.id.profileFragment)
+        }
     }
+
+
 
 //    override fun profilePage() {
 //        val headerView = binding.navView.getHeaderView(0)
