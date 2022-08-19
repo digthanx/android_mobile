@@ -38,22 +38,33 @@
                         android:layout_gravity="start"
                         android:layout_marginEnd="10dp"
                         android:src="@drawable/ic_app_logo"/>
-                    <ImageView
+                    <com.google.android.material.card.MaterialCardView
                         android:id="@+id/profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_account"
+                        app:cardCornerRadius="100dp"
                         android:layout_gravity="end"
-                        android:layout_marginEnd="16dp"
                         android:focusable="true"
-                        android:clickable="true"/>
-                    <ImageView
+                        android:clickable="true"
+                        android:layout_marginEnd="16dp">
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/smile"
+                            android:scaleType="matrix"
+                            android:layout_margin="5dp"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                            />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <ImageButton
                         android:id="@+id/notify"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_bell"
+                        android:backgroundTint="@color/general_brand"
                         android:layout_gravity="end"
-                        android:layout_marginEnd="18dp"
+                        android:layout_marginEnd="15dp"
                         android:focusable="true"
                         android:clickable="true"/>
                 </com.google.android.material.appbar.MaterialToolbar>

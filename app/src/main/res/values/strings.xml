@@ -31,6 +31,12 @@
     <string name="mobile_label">Мобильный номер</string>
     <string name="email_label">Корпоративная почта</string>
     <string name="lastAuth">Последний вход сегодня %s</string>
+    <string name="userFio">%s %s %s</string>
+    <string name="placeJob">МЕСТО РАБОТЫ</string>
+    <string name="information">ИНФОРМАЦИЯ</string>
+    <string name="wouldYouLikeToExit">Выйти из профиля?</string>
+    <string name="accept">Да</string>
+    <string name="decline">Нет</string>
     <!-- Баланс фрагмент -->
     <string name="registration_button_label">Регистрация</string>
     <string name="application_label">Цифровое спасибо</string>
@@ -78,6 +84,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 
 </resources>
