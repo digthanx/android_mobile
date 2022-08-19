@@ -143,6 +143,8 @@ class ProfileFragment : Fragment() {
             departmentUser.text = it.profile.department
             hiredAt.text = it.profile.hiredAt
             // Пока не знаю как изображение подгружать и как с ними работать
+
+            UserDataRepository.getInstance()?.profileId = it.profile.id
         }
 
         binding.exitBtn.setOnClickListener {
