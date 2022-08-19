@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -38,7 +35,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private lateinit var countEditText: EditText
     private lateinit var reasonEditText: EditText
     private lateinit var recyclerView: RecyclerView
-    private lateinit var sendCoinsGroup: Group
+    private lateinit var sendCoinsGroup: LinearLayout
     private lateinit var availableCoins: TextView
     private lateinit var chipGroup: ChipGroup
     private var user: UserBean? = null
@@ -77,7 +74,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         val sendButton: Button = binding.sendCoinBtn
         sendButton.setOnClickListener(this)
         recyclerView = binding.usersListRv
-        sendCoinsGroup = binding.sendCoinsGroup
+        sendCoinsGroup = binding.sendCoinLinear
         countEditText = binding.countValueEt
         reasonEditText = binding.messageValueEt
         usersInputLayout = binding.textField

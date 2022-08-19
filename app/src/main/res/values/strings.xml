@@ -58,7 +58,8 @@
     <string name="will_burn_after">Сгорят через \u200b %s день</string>
     <string name="will_burn_after_2">Сгорят через %s дня</string>
     <string name="will_burn_after_3">Сгорят через %s дней</string>
-    <string name="send">Отправить</string>
+    <!-- Транзакция фрагмент -->
+    <string name="send">Перевести</string>
     <string name="empty">\"\"</string>
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
