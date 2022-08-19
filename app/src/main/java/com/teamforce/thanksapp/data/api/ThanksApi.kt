@@ -3,10 +3,7 @@ package com.teamforce.thanksapp.data.api
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ThanksApi {
 
@@ -58,4 +55,11 @@ interface ThanksApi {
         @Header("Authorization") token: String,
         @Body get_users: UserListWithoutInputRequest
     ): Call<List<UserBean>>
+
+    @PUT("/update-profile-image/{id}/")
+    fun putUserAvatar(
+        @Header("Authorization") token: String,
+        @Path("id") userId: String,
+        @Body putAvatar: PutUserAvatarRequest
+    ): Call<PutUserAvatarResponse>
 }
