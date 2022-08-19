@@ -10,10 +10,12 @@ object Consts {
     const val BUNDLE_EMAIL = "bundleEmail"
     const val LINK_TO_BOT = "https://t.me/DefaultAndreyBot"
     const val LINK_TO_BOT_Name = "LinkToBot"
+    const val SELECT_PICTURE = 200
 
     val MAIN = MainActivity()
 
     private const val SP_NAME = "com.teamforce.thanksapp"
     private const val SP_ARG_TELEGRAM = "Telegram"
     private const val SP_ARG_TOKEN = "Token"
+
 }

@@ -37,6 +37,9 @@
     <string name="wouldYouLikeToExit">Выйти из профиля?</string>
     <string name="accept">Да</string>
     <string name="decline">Нет</string>
+    <string name="whatEditInProfile">Что именно вы хотите отредактировать?</string>
+    <string name="photo">Аватар</string>
+    <string name="stringData">Личную информацию</string>
     <!-- Баланс фрагмент -->
     <string name="registration_button_label">Регистрация</string>
     <string name="application_label">Цифровое спасибо</string>
