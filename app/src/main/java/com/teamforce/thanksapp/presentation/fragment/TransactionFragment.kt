@@ -170,6 +170,12 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             recyclerView.visibility = View.GONE
             user = v.tag as UserBean
             usersInputLayout.visibility = View.GONE
+            with(binding){
+                // Аватар потом
+                receiverTgName.text = user?.tgName
+                receiverNameLabelTv.text = user?.firstname
+                receiverSurnameLabelTv.text = user?.surname
+            }
             sendCoinsGroup.visibility = View.VISIBLE
         } else if (v?.id == R.id.send_coin_btn) {
             val userId = user?.userId ?: -1
@@ -182,23 +188,27 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                         viewModel.sendCoins(it, userId, count, reason)
                         showResultTransaction(
                             amountThanks = count,
-                            description = reasonEditText.text.toString(),
-                            receiver = usersInput.text.toString()
+                            receiverTg = user?.tgName.toString(),
+                            receiverName = user?.firstname.toString(),
+                            receiverSurname = user?.surname.toString()
                         )
                     }
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+                    //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
 
 
-    private fun showResultTransaction(amountThanks: Int, description: String, receiver: String ){
+    private fun showResultTransaction(amountThanks: Int, receiverTg: String, receiverName: String,
+                                      receiverSurname: String ){
         val bundle = Bundle()
         bundle.putInt(Consts.AMOUNT_THANKS, amountThanks)
-        bundle.putString(Consts.DESCRIPTION_OF_TRANSACTION, description.trim())
-        bundle.putString(Consts.RECEIVER, receiver.trim())
+        bundle.putString(Consts.RECEIVER_TG, receiverTg.trim())
+        bundle.putString(Consts.RECEIVER_NAME, receiverName.trim())
+        bundle.putString(Consts.RECEIVER_SURNAME, receiverSurname.trim())
         findNavController().navigate(
             R.id.action_transactionFragment_to_transactionResultFragment,
             bundle

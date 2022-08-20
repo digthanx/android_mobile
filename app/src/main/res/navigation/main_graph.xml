@@ -18,23 +18,13 @@
         <action
             android:id="@+id/action_transactionFragment_to_transactionResultFragment"
             app:destination="@id/transactionResultFragment"
-            app:enterAnim="@anim/to_left_in"
-            app:exitAnim="@anim/to_left_in_2" />
+            app:enterAnim="@anim/to_bottom_out" />
     </fragment>
     <fragment
         android:id="@+id/balanceFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.BalanceFragment"
         android:label="@string/balance_label"
         tools:layout="@layout/fragment_balance" />
-    <dialog
-        android:id="@+id/transactionResultFragment"
-        android:name="com.teamforce.thanksapp.presentation.fragment.TransactionResultFragment"
-        android:label="@string/new_transaction_label">
-        <action
-            android:id="@+id/action_transactionResultFragment_to_transactionFragment"
-            app:destination="@id/transactionFragment"
-            app:enterAnim="@anim/to_bottom_in" />
-    </dialog>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.ProfileFragment"
@@ -45,4 +35,18 @@
         android:name="com.teamforce.thanksapp.presentation.fragment.FeedFragment"
         android:label="@string/feed_label"
         tools:layout="@layout/fragment_feed" />
+    <fragment
+        android:id="@+id/transactionResultFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.TransactionResultFragment"
+        android:label="@string/transaction_result_label"
+        tools:layout="@layout/fragment_transaction_result">
+        <action
+            android:id="@+id/action_transactionResultFragment_to_transactionFragment"
+            app:destination="@id/transactionFragment"
+            app:enterAnim="@anim/to_bottom_in" />
+        <action
+            android:id="@+id/action_transactionResultFragment_to_historyFragment2"
+            app:destination="@id/historyFragment"
+            app:enterAnim="@anim/to_bottom_in" />
+    </fragment>
 </navigation>

@@ -48,6 +48,7 @@
     <string name="balance_label">Баланс</string>
     <string name="feed_label">Лента</string>
     <string name="new_transaction_label">Новый перевод</string>
+    <string name="transaction_result_label">Отправлено</string>
     <string name="history_label">История</string>
     <string name="period">Период</string>
     <string name="my_count">Мой счет</string>

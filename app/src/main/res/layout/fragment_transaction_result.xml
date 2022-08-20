@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
+
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_view"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:cardBackgroundColor="@color/transparent"
-    app:cardCornerRadius="24dp"
-    app:cardElevation="0dp"
+    android:layout_width="match_parent"
     tools:context=".presentation.fragment.TransactionResultFragment">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/color22"
-        android:orientation="vertical"
-        android:paddingHorizontal="24dp">
+        android:background="@color/general_background"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -25,83 +20,133 @@
             android:layout_gravity="center"
             android:layout_marginVertical="30dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/greet_picture" />
+            android:src="@drawable/ic_wallet" />
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:letterSpacing="0.05"
-            android:text="Спасибо отправлено"
-            android:textColor="@color/color1"
-            android:textSize="24sp" />
+            android:layout_marginBottom="70dp"
+            android:gravity="center">
 
-        <TextView
-            android:id="@+id/tv_amountThanks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:gravity="center"
-            android:text="- 300"
-            android:textColor="@color/color13"
-            android:textSize="52sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginVertical="21dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@color/color13" />
-
-        <TextView
-            android:id="@+id/tv_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:gravity="center"
-            android:text="За прекрасно проделанную работу"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="50dp"
-            android:orientation="horizontal">
-
-            <TextView
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/receiver_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Получатель: "
-                android:textSize="14sp" />
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingHorizontal="40dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="5dp">
 
-            <TextView
-                android:id="@+id/tv_receiver"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:letterSpacing="0.05"
-                android:text="Someone"
-                android:textColor="@color/color1"
-                android:textSize="14sp" />
-        </LinearLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="12dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="15dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/receiver_avatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:src="@drawable/ic_account"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+                    <TextView
+                        android:id="@+id/receiver_name_label_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="Дмитрий"
+                        android:textAppearance="@style/Body2"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/receiver_avatar"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/receiver_surname_label_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="Малков"
+                        android:textAppearance="@style/Body2"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/receiver_name_label_tv"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/receiver_tg_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="3dp"
+                        android:text="/@NyamaMDE"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toEndOf="@id/receiver_avatar"
+                        app:layout_constraintTop_toBottomOf="@+id/receiver_name_label_tv" />
+
+                    <TextView
+                        android:id="@+id/amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="3dp"
+                        android:text="-500"
+                        android:textStyle="bold"
+                        android:textSize="32sp"
+                        android:textColor="@color/minor_error"
+                        android:layout_marginEnd="52dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/amount_currency"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_currency"
+                        app:tint="@color/minor_error"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintStart_toEndOf="@id/amount"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </RelativeLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_toTheHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="14dp"
+            android:paddingVertical="17dp"
+            android:text="История операций"
+            android:textColor="@color/white"
+            app:cornerRadius="12dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_toTheBeginning"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="14dp"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/color13"
-            android:paddingVertical="10dp"
-            android:text="В начало"
-            android:textColor="@color/white"
-            app:cornerRadius="10dp" />
+            android:backgroundTint="@color/general_background"
+            android:paddingVertical="17dp"
+            android:text="Закрыть"
+            android:textColor="@color/black"
+            app:cornerRadius="12dp" />
 
     </LinearLayout>
+</androidx.core.widget.NestedScrollView>
 
 
-</com.google.android.material.card.MaterialCardView>
+
+
+

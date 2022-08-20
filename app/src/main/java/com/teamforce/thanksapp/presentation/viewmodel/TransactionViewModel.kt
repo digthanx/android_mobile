@@ -139,7 +139,10 @@ class TransactionViewModel : ViewModel() {
                         _isLoading.postValue(false)
                         if (response.code() == 201) {
                             _isSuccessOperation.postValue(true)
-                        } else {
+                        } else if(response.code() == 400) {
+                            _sendCoinsError.postValue("Нельзя перевести больше 50% от имеющейся под распределение суммы")
+                        }else{
+                            Log.d("Token", "Я в эксепшене ${response.body()}")
                             _sendCoinsError.postValue(response.message() + " " + response.code())
                         }
                     }

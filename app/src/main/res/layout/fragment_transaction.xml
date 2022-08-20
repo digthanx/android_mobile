@@ -137,7 +137,7 @@
                 android:paddingHorizontal="8dp"
                 android:gravity="center">
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/user_item"
+                    android:id="@+id/receiver"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="5dp"
                     android:layout_marginHorizontal="8dp"
@@ -154,7 +154,7 @@
                         android:layout_height="match_parent">
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/user_avatar"
+                            android:id="@+id/receiver_avatar"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@drawable/ic_account"
@@ -164,37 +164,37 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/user_name_label_tv"
+                            android:id="@+id/receiver_name_label_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
                             android:text="Дмитрий"
                             android:textStyle="bold"
                             android:textAppearance="@style/Body2"
-                            app:layout_constraintStart_toEndOf="@+id/user_avatar"
+                            app:layout_constraintStart_toEndOf="@+id/receiver_avatar"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/user_surname_label_tv"
+                            android:id="@+id/receiver_surname_label_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:text="Малков"
                             android:textStyle="bold"
                             android:textAppearance="@style/Body2"
-                            app:layout_constraintStart_toEndOf="@+id/user_name_label_tv"
+                            app:layout_constraintStart_toEndOf="@+id/receiver_name_label_tv"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/user_tg_name"
+                            android:id="@+id/receiver_tg_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="3dp"
                             android:text="/@NyamaMDE"
                             android:textSize="12sp"
-                            app:layout_constraintStart_toEndOf="@id/user_avatar"
-                            app:layout_constraintTop_toBottomOf="@+id/user_name_label_tv" />
+                            app:layout_constraintStart_toEndOf="@id/receiver_avatar"
+                            app:layout_constraintTop_toBottomOf="@+id/receiver_name_label_tv" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
             </RelativeLayout>
@@ -238,7 +238,6 @@
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:textSize="54sp"
-                    android:text="2500"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
