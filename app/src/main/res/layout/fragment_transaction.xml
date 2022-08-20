@@ -279,7 +279,7 @@
                     android:checkable="true"
                     android:checked="true"
                     android:backgroundTint="@color/chip_background_color_state"
-                    style="@style/MyChips"
+                    style="@style/MyChipsOrange"
                     android:text="1" />
 
                 <com.google.android.material.chip.Chip
@@ -288,7 +288,7 @@
                     android:layout_height="wrap_content"
                     android:checkable="true"
                     android:backgroundTint="@color/chip_background_color_state"
-                    style="@style/MyChips"
+                    style="@style/MyChipsOrange"
                     android:text="5" />
 
                 <com.google.android.material.chip.Chip
@@ -297,7 +297,7 @@
                     android:layout_height="wrap_content"
                     android:checkable="true"
                     android:backgroundTint="@color/chip_background_color_state"
-                    style="@style/MyChips"
+                    style="@style/MyChipsOrange"
                     android:text="10" />
 
                 <com.google.android.material.chip.Chip
@@ -306,7 +306,7 @@
                     android:layout_height="wrap_content"
                     android:checkable="true"
                     android:backgroundTint="@color/chip_background_color_state"
-                    style="@style/MyChips"
+                    style="@style/MyChipsOrange"
                     android:text="25" />
 
             </com.google.android.material.chip.ChipGroup>

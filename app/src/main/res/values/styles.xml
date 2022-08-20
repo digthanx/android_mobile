@@ -127,7 +127,7 @@
     </style>
 
 
-    <style name="MyChips" parent="">
+    <style name="MyChipsOrange" parent="">
         <item name="chipIconEnabled">true</item>
         <item name="chipIconVisible">true</item>
         <item name="chipIcon">@drawable/ic_currency</item>
@@ -141,6 +141,15 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">5dp</item>
         <item name="android:layout_width">20dp</item>
+
+    </style>
+
+    <style name="MyChipsHistory" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:textColor">@color/chip_text_color_state</item>
+        <item name="android:textStyle">bold</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Chips</item>
+        <item name="strokeColor">@color/black</item>
+        <item name="strokeWidth">2dp</item>
     </style>
 
 
