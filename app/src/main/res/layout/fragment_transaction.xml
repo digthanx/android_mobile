@@ -1,227 +1,329 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="@dimen/padding_x"
-    android:paddingEnd="@dimen/padding_x"
-    android:background="@color/color24"
+    android:layout_width="match_parent"
     tools:context=".presentation.fragment.TransactionFragment">
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textField"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_x"
-        android:focusable="false"
-        app:boxCornerRadiusTopStart="15dp"
-        app:boxCornerRadiusTopEnd="15dp"
-        app:boxCornerRadiusBottomStart="15dp"
-        app:boxCornerRadiusBottomEnd="15dp"
-        android:hint="Выберите получателя"
-        android:paddingBottom="9dp"
-        app:boxStrokeColor="@color/almostColorPrimary"
-        android:textColorHint="@color/almostColorPrimary"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/users_et"
-            android:lines="1"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_user_add_line" />
+            android:layout_marginTop="@dimen/margin_x"
+            android:focusable="false"
+            app:boxCornerRadiusTopStart="15dp"
+            app:boxCornerRadiusTopEnd="15dp"
+            app:boxCornerRadiusBottomStart="15dp"
+            app:boxCornerRadiusBottomEnd="15dp"
+            android:visibility="visible"
+            android:paddingStart="@dimen/padding_x"
+            android:paddingEnd="@dimen/padding_x"
+            android:hint="Выберите получателя"
+            android:paddingBottom="9dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/count_layout"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:outlineProvider="none"
-        app:cardBackgroundColor="@color/color10"
-        app:cardCornerRadius="@dimen/round_corner_xlarge"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textField"
-        app:strokeColor="@color/color11"
-        app:strokeWidth="@dimen/stroke_size">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/margin_x"
-            android:layout_marginEnd="@dimen/margin_x">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_h"
-                android:text="Перевести спасибок"
-                android:textAppearance="@style/Body2.White"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/image_transaction"
-                android:layout_width="144dp"
-                android:layout_height="144dp"
-                android:layout_marginTop="@dimen/margin_h"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_coins_line"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:background="@null"
-                android:id="@+id/count_value_et"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/users_et"
+                android:lines="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="@color/color13"
-                android:textAppearance="@style/Headline3.White"
-                app:layout_constraintBottom_toTopOf="@+id/distributed_label_tv"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:drawableEnd="@drawable/ic_user_add_line" />
 
-            <TextView
-                android:id="@+id/distributed_label_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_x"
-                android:text="Доступно: "
-                android:textAppearance="@style/Caption.Violet"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent" />
-
-            <TextView
-                android:id="@+id/distributed_value_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_x"
-                android:text="3027"
-                android:textAppearance="@style/Caption.Violet"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/distributed_label_tv" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.chip.ChipGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/chipGroup"
-        app:singleSelection="true"
-        app:layout_constraintStart_toStartOf="@id/count_layout"
-        app:layout_constraintTop_toBottomOf="@id/count_layout">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipOne"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:backgroundTint="@color/chip_background_color_state"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:text="1" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipFive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:backgroundTint="@color/chip_background_color_state"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:text="5" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipTen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:backgroundTint="@color/chip_background_color_state"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:text="10" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipTwentyFive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:backgroundTint="@color/chip_background_color_state"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:text="25" />
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/reason_value"
-        android:layout_width="match_parent"
-        android:layout_height="118dp"
-        android:layout_marginTop="@dimen/margin_h"
-        android:outlineProvider="none"
-        app:cardCornerRadius="@dimen/round_corner_xlarge"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroup"
-        app:strokeColor="@color/color20"
-        app:strokeWidth="@dimen/stroke_size">
-
-        <EditText
-            android:background="@null"
-            android:id="@+id/message_value_et"
-            android:layout_width="match_parent"
-            android:layout_margin="@dimen/margin_x"
-            android:layout_height="78dp"
-            android:gravity="top"
-            android:hint="Обоснование"
-            android:textAppearance="@style/Body1.Gray" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/send_coin_btn"
-        style="@style/DefaultButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_h"
-        android:text="@string/send"
-        app:cornerRadius="@dimen/round_corner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reason_value" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/send_coins_group"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="send_coin_btn,reason_value,count_layout, chipGroup"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="110dp" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_view_for_rv"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:maxHeight="400dp"
-        android:backgroundTint="@color/white"
-        android:visibility="visible"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textField">
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/users_list_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="18dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+            android:layout_marginTop="18dp"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textField"/>
 
-        </androidx.recyclerview.widget.RecyclerView>
-    </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/send_coin_linear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="16dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginHorizontal="16dp"
+                app:cardBackgroundColor="@color/general_background_black_gray">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:layout_gravity="end">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"
+                        android:src="@drawable/ic_big_currency">
+
+                    </ImageView>
+                </RelativeLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginStart="25dp">
 
 
+                    <TextView
+                        android:id="@+id/distributed_label_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Доступно: "
+                        android:textSize="14sp"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@+id/distributed_value_tv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/distributed_value_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="23sp"
+                        android:text="3027"
+                        app:layout_constraintTop_toBottomOf="@id/distributed_label_tv"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/currency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="3dp"
+                        android:src="@drawable/ic_currency"
+                        android:text="D"
+                        app:layout_constraintTop_toBottomOf="@id/distributed_label_tv"
+                        app:layout_constraintStart_toEndOf="@+id/distributed_value_tv" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="8dp"
+                android:gravity="center">
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/receiver"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="5dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginVertical="12dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/receiver_avatar"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_account"
+                            android:background="@color/colorPrimary"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/receiver_name_label_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="Дмитрий"
+                            android:textStyle="bold"
+                            android:textAppearance="@style/Body2"
+                            app:layout_constraintStart_toEndOf="@+id/receiver_avatar"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/receiver_surname_label_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="Малков"
+                            android:textStyle="bold"
+                            android:textAppearance="@style/Body2"
+                            app:layout_constraintStart_toEndOf="@+id/receiver_name_label_tv"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/receiver_tg_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="3dp"
+                            android:text="/@NyamaMDE"
+                            android:textSize="12sp"
+                            app:layout_constraintStart_toEndOf="@id/receiver_avatar"
+                            app:layout_constraintTop_toBottomOf="@+id/receiver_name_label_tv" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </RelativeLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/reason_value"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
+                android:layout_marginHorizontal="16dp"
+                android:outlineProvider="none"
+                app:cardCornerRadius="@dimen/round_corner_xlarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chipGroup"
+                app:strokeColor="@color/color20"
+                app:strokeWidth="@dimen/stroke_size">
+
+                <EditText
+                    android:background="@null"
+                    android:id="@+id/message_value_et"
+                    android:layout_width="match_parent"
+                    android:layout_margin="@dimen/margin_x"
+                    android:layout_height="78dp"
+                    android:gravity="top"
+                    android:hint="Причина перевода"
+                    android:textAppearance="@style/Body1.Gray" />
+            </com.google.android.material.card.MaterialCardView>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="center">
+                <EditText
+                    android:background="@null"
+                    android:id="@+id/count_value_et"
+                    android:layout_width="wrap_content"
+                    android:minWidth="40dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="54sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+                <ImageView
+                    android:id="@+id/currency2"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    app:tint="@color/black"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ic_currency"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/count_value_et" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/black"
+                    app:layout_constraintStart_toStartOf="@+id/count_value_et"
+                    app:layout_constraintEnd_toEndOf="@+id/currency2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="24dp"
+                android:layout_gravity="center"
+                android:id="@+id/chipGroup"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:checked="true"
+                    android:backgroundTint="@color/chip_background_color_state"
+                    style="@style/MyChips"
+                    android:text="1" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipFive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:backgroundTint="@color/chip_background_color_state"
+                    style="@style/MyChips"
+                    android:text="5" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:backgroundTint="@color/chip_background_color_state"
+                    style="@style/MyChips"
+                    android:text="10" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTwentyFive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:backgroundTint="@color/chip_background_color_state"
+                    style="@style/MyChips"
+                    android:text="25" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/send_coin_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="44dp"
+                android:layout_marginHorizontal="16dp"
+                android:text="@string/send"
+                app:cornerRadius="12dp"
+                android:backgroundTint="@color/general_brand"
+                android:paddingVertical="17dp" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

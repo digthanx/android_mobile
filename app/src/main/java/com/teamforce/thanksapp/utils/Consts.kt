@@ -5,7 +5,9 @@ import com.teamforce.thanksapp.presentation.activity.MainActivity
 object Consts {
     const val AMOUNT_THANKS = "amount_thanks"
     const val DESCRIPTION_OF_TRANSACTION = "descriptionOfTransaction"
-    const val RECEIVER = "receiverOfTransaction"
+    const val RECEIVER_TG = "receiverOfTransaction"
+    const val RECEIVER_NAME = "receiverOfTransaction"
+    const val RECEIVER_SURNAME = "receiverOfTransaction"
     const val BUNDLE_TG_OR_EMAIL = "telegramOrEmail"
     const val BUNDLE_EMAIL = "bundleEmail"
     const val LINK_TO_BOT = "https://t.me/DefaultAndreyBot"

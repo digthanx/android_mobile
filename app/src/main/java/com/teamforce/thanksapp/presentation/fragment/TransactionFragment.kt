@@ -7,30 +7,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-import androidx.cardview.widget.CardView
+import android.widget.*
 import androidx.constraintlayout.widget.Group
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.databinding.FragmentTransactionBinding
-import com.teamforce.thanksapp.databinding.FragmentTransactionResultBinding
 import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
-import java.lang.Exception
 
 
 class TransactionFragment : Fragment(), View.OnClickListener {
@@ -44,8 +35,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private lateinit var countEditText: EditText
     private lateinit var reasonEditText: EditText
     private lateinit var recyclerView: RecyclerView
-    private lateinit var cardViewForRecyclerView: MaterialCardView
-    private lateinit var sendCoinsGroup: Group
+    private lateinit var sendCoinsGroup: LinearLayout
     private lateinit var availableCoins: TextView
     private lateinit var chipGroup: ChipGroup
     private var user: UserBean? = null
@@ -76,14 +66,15 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
             availableCoins.text = it.distribute.amount.toString()
         }
+
+
     }
 
     private fun initViews(view: View) {
         val sendButton: Button = binding.sendCoinBtn
         sendButton.setOnClickListener(this)
         recyclerView = binding.usersListRv
-        cardViewForRecyclerView = binding.cardViewForRv
-        sendCoinsGroup = binding.sendCoinsGroup
+        sendCoinsGroup = binding.sendCoinLinear
         countEditText = binding.countValueEt
         reasonEditText = binding.messageValueEt
         usersInputLayout = binding.textField
@@ -136,7 +127,6 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                     }
                 } else {
                     recyclerView.visibility = View.GONE
-                    cardViewForRecyclerView.visibility = View.GONE
                 }
             }
 
@@ -154,7 +144,6 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
     fun appealToDB(){
         viewModel.users.observe(viewLifecycleOwner) {
-            cardViewForRecyclerView.visibility = View.VISIBLE
             recyclerView.visibility = View.VISIBLE
             recyclerView.adapter = UsersAdapter(it, this)
         }
@@ -176,11 +165,17 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        Log.d("Token", " View id -  ${v?.id}")
         if (v?.id == R.id.user_item) {
-            cardViewForRecyclerView.visibility = View.GONE
             recyclerView.visibility = View.GONE
             user = v.tag as UserBean
-            usersInputLayout.editText?.setText(user?.tgName)
+            usersInputLayout.visibility = View.GONE
+            with(binding){
+                // Аватар потом
+                receiverTgName.text = user?.tgName
+                receiverNameLabelTv.text = user?.firstname
+                receiverSurnameLabelTv.text = user?.surname
+            }
             sendCoinsGroup.visibility = View.VISIBLE
         } else if (v?.id == R.id.send_coin_btn) {
             val userId = user?.userId ?: -1
@@ -193,23 +188,27 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                         viewModel.sendCoins(it, userId, count, reason)
                         showResultTransaction(
                             amountThanks = count,
-                            description = reasonEditText.text.toString(),
-                            receiver = usersInput.text.toString()
+                            receiverTg = user?.tgName.toString(),
+                            receiverName = user?.firstname.toString(),
+                            receiverSurname = user?.surname.toString()
                         )
                     }
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+                    //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
 
 
-    private fun showResultTransaction(amountThanks: Int, description: String, receiver: String ){
+    private fun showResultTransaction(amountThanks: Int, receiverTg: String, receiverName: String,
+                                      receiverSurname: String ){
         val bundle = Bundle()
         bundle.putInt(Consts.AMOUNT_THANKS, amountThanks)
-        bundle.putString(Consts.DESCRIPTION_OF_TRANSACTION, description.trim())
-        bundle.putString(Consts.RECEIVER, receiver.trim())
+        bundle.putString(Consts.RECEIVER_TG, receiverTg.trim())
+        bundle.putString(Consts.RECEIVER_NAME, receiverName.trim())
+        bundle.putString(Consts.RECEIVER_SURNAME, receiverSurname.trim())
         findNavController().navigate(
             R.id.action_transactionFragment_to_transactionResultFragment,
             bundle

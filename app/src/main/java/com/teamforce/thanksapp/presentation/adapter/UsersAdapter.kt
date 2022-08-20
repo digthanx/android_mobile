@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserBean
@@ -13,6 +14,7 @@ class UsersAdapter(
     private val dataSet: List<UserBean>,
     private val listener: View.OnClickListener
 ) : RecyclerView.Adapter<UsersAdapter.UserViewHolder>() {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -25,8 +27,9 @@ class UsersAdapter(
         holder.tgName.text = dataSet[position].tgName
         holder.name.text = dataSet[position].firstname
         holder.surname.text = dataSet[position].surname
-        holder.view.tag = dataSet[position]
+        holder.cardView.tag = dataSet[position]
         holder.view.setOnClickListener { v -> listener.onClick(v) }
+        holder.cardView.setOnClickListener { cardView -> listener.onClick(cardView) }
     }
 
     override fun getItemCount(): Int {
@@ -38,12 +41,14 @@ class UsersAdapter(
         val surname: TextView
         val name: TextView
         val view: View
+        val cardView: CardView
 
         init {
             view = v
             tgName = v.findViewById(R.id.user_tg_name)
             surname = v.findViewById(R.id.user_surname_label_tv)
             name = v.findViewById(R.id.user_name_label_tv)
+            cardView = v.findViewById(R.id.user_item)
         }
     }
 }

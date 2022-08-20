@@ -48,6 +48,7 @@
     <string name="balance_label">Баланс</string>
     <string name="feed_label">Лента</string>
     <string name="new_transaction_label">Новый перевод</string>
+    <string name="transaction_result_label">Отправлено</string>
     <string name="history_label">История</string>
     <string name="period">Период</string>
     <string name="my_count">Мой счет</string>
@@ -58,7 +59,8 @@
     <string name="will_burn_after">Сгорят через \u200b %s день</string>
     <string name="will_burn_after_2">Сгорят через %s дня</string>
     <string name="will_burn_after_3">Сгорят через %s дней</string>
-    <string name="send">Отправить</string>
+    <!-- Транзакция фрагмент -->
+    <string name="send">Перевести</string>
     <string name="empty">\"\"</string>
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
