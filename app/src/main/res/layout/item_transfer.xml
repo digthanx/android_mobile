@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/label_tv"
+            android:id="@+id/tgNameUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -38,16 +38,16 @@
             app:cardCornerRadius="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginStart="20dp"
-            app:cardBackgroundColor="@color/minor_success"
             app:layout_constraintStart_toEndOf="@+id/transfer_icon_iv"
-            app:layout_constraintTop_toBottomOf="@+id/label_tv">
+            app:layout_constraintTop_toBottomOf="@+id/tgNameUser">
             <TextView
-                android:id="@+id/status_iv"
+                android:id="@+id/status_transfer_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
                 android:paddingVertical="2dp"
                 android:paddingHorizontal="12dp"
+                android:background="@color/minor_success"
                 android:textColor="@color/general_background"
                 android:text="Выполнен" />
         </com.google.android.material.card.MaterialCardView>
@@ -55,7 +55,7 @@
 
 
         <TextView
-            android:id="@+id/value_tv"
+            android:id="@+id/valueTransfer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -73,7 +73,7 @@
             android:background="@color/general_background"
             android:src="@drawable/ic__cross_red"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/value_tv"
+            app:layout_constraintTop_toBottomOf="@id/valueTransfer"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <View
@@ -84,7 +84,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:background="@color/lightGray"/>
+            android:background="@color/superLightGray"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

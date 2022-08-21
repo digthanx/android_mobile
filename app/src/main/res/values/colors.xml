@@ -22,6 +22,7 @@
     <color name="general_background_gray">#626262</color>
     <color name="general_background_black_gray">#4B4747</color>
     <color name="lightGray">#99A2A2A2</color>
+    <color name="superLightGray">#80CECECE</color>
 
 
 
@@ -41,7 +42,6 @@
     <color name="lightBlack">#CC000000</color>
     <color name="lightPrimary">#F2E7FE</color>
     <color name="superLightPrimary">#B9A0D0</color>
-    <color name="superLightGray">#80CECECE</color>
     <color name="orange">#F8E4A1</color>
 
 

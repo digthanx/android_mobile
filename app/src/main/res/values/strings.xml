@@ -68,6 +68,8 @@
     <string name="approved">Согласовано</string>
     <string name="on_approval">На согласовании</string>
     <string name="annulled">Аннулировано</string>
+    <string name="refused">Отклонен</string>
+    <string name="occured">Выполнен</string>
     <string name="allHistory">Вся история</string>
     <string name="received">Получено</string>
     <string name="sended">Отправлено</string>

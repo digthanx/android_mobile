@@ -109,7 +109,6 @@ class HistoryViewModel : ViewModel() {
                                             val model = allData.get(day)
                                             var data = model.data
                                             data = data.plusElement(item)
-                                            Log.e("66676", data.size.toString())
                                             allData.put(day, HistoryModel(day, data))
                                         } else {
                                             allData.put(day, HistoryModel(day, listOf(item)))
