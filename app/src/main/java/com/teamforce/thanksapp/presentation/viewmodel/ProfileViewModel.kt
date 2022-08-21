@@ -1,10 +1,11 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
+import android.app.Application
+import android.content.Context
+import android.net.Uri
+import android.os.FileUtils
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.PutUserAvatarRequest
 import com.teamforce.thanksapp.data.response.ProfileResponse
@@ -13,11 +14,14 @@ import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Part
+import java.security.Provider
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel() : ViewModel() {
 
     private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
@@ -69,25 +73,28 @@ class ProfileViewModel : ViewModel() {
     }
 
 
-    fun loadUpdateAvatarUserProfile(token: String, userId: String, uriImage: String) {
+    fun loadUpdateAvatarUserProfile(token: String, userId: String, imageFilePart: MultipartBody.Part) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callUpdateAvatarProfileEndpoint(token, userId = userId, uriImage, Dispatchers.Default) }
+        viewModelScope.launch { callUpdateAvatarProfileEndpoint(token, userId = userId, imageFilePart, Dispatchers.Default) }
     }
 
     private suspend fun callUpdateAvatarProfileEndpoint(
         token: String,
         userId: String,
-        uriImage: String,
+        imageFilePart: MultipartBody.Part,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.putUserAvatar("Token $token", userId = userId, PutUserAvatarRequest(uriImage))?.enqueue(object : Callback<PutUserAvatarResponse> {
+            Log.d("Token", "Я внутри вызова функции")
+            thanksApi?.putUserAvatar("Token $token", userId = userId, imageFilePart)?.enqueue(object : Callback<PutUserAvatarResponse> {
                 override fun onResponse(
                     call: Call<PutUserAvatarResponse>,
                     response: Response<PutUserAvatarResponse>
                 ) {
                     _isLoading.postValue(false)
                     if (response.code() == 200) {
+                        Log.d("Token", "${response.body()}")
+                        Log.d("Token", "Я внутри успешного вызова функции выше response body")
                         _imageUri.postValue(response.body())
                     } else {
                         _imageUriError.postValue(response.message() + " " + response.code())

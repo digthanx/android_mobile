@@ -1,19 +1,13 @@
 package com.teamforce.thanksapp.presentation.fragment
 
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,7 +19,13 @@ import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.activityNavController
 import com.teamforce.thanksapp.utils.navigateSafely
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
+import java.io.InputStream
 
 
 class ProfileFragment : Fragment() {
@@ -35,51 +35,6 @@ class ProfileFragment : Fragment() {
 
     private val viewModel = ProfileViewModel()
 
-    private val imageChooser = {
-        val i = Intent()
-        i.type = "image/*"
-        i.action = Intent.ACTION_GET_CONTENT
-
-
-        val launchSomeActivity = registerForActivityResult<Intent, ActivityResult>(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result: ActivityResult ->
-            if (result.resultCode
-                == Activity.RESULT_OK
-            ) {
-                val data = result.data
-                // do your operation from here....
-                if (data != null
-                    && data.data != null
-                ) {
-                    val selectedImageUri: Uri? = data.data
-                    val selectedImageBitmap: Bitmap
-                    try {
-                        selectedImageUri?.let {
-                            if(Build.VERSION.SDK_INT < 28) {
-                                val bitmap = MediaStore.Images.Media.getBitmap(
-                                    requireContext().contentResolver,
-                                    selectedImageUri
-                                )
-                                userAvatar.setImageBitmap(bitmap)
-                            } else {
-                                val source = ImageDecoder.createSource(requireContext().contentResolver, selectedImageUri)
-                                val bitmap = ImageDecoder.decodeBitmap(source)
-                                userAvatar.setImageBitmap(bitmap)
-                            }
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-//                    imageView.setImageBitmap(
-//                        selectedImageBitmap
-//                    )
-                }
-            }
-        }
-
-        launchSomeActivity.launch(i)
-    }
 
     private lateinit var userTgName: TextView
     private lateinit var userAvatar: ImageView
@@ -91,18 +46,28 @@ class ProfileFragment : Fragment() {
     private lateinit var companyUser: TextView
     private lateinit var departmentUser: TextView
     private lateinit var hiredAt: TextView
-    private lateinit var loadImage: ActivityResultLauncher<String>
+    private var loadImage: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.GetContent(), ActivityResultCallback {
+        it?.let {
+            binding.userAvatar.setImageURI(it)
+            imageConversionToBytes(it.toString())
+        }
+
+//        ActivityResultCallback<Uri> {
+//            Log.d("Я в колбеке", "${it}")
+//            imageFilePart = imageConversionToBytes(it.toString())
+//        }
+    })
+    private lateinit  var imageFilePart: MultipartBody.Part
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
 
     }
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -110,9 +75,53 @@ class ProfileFragment : Fragment() {
         initViews()
         requestData()
         setData()
+        binding.exitBtn.setOnClickListener {
+            showAlertDialogForExit()
+        }
+
+        binding.editBtn.setOnClickListener{
+            showAlertDialogForEditProfile()
+        }
+
+    }
+
+    fun uploadImage(){
         loadImage = registerForActivityResult(ActivityResultContracts.GetContent(), ActivityResultCallback {
             binding.userAvatar.setImageURI(it)
+            it?.let {
+                binding.userAvatar.setImageURI(it)
+               imageConversionToBytes(it.toString())
+            }
         })
+    }
+
+    fun imageConversionToBytes(imageUri: String) {
+
+        val imageFile = Uri.parse(imageUri).path?.let { File(it) }
+        val iStream = context?.contentResolver?.openInputStream(Uri.parse(imageUri))
+
+        val bytes = iStream?.let { getBytes(it) }
+        // bytes не защищен save call
+        val filePart: MultipartBody.Part = MultipartBody.Part.createFormData("file", imageFile?.path, RequestBody.create(
+            MediaType.parse("image/png"), bytes))
+        UserDataRepository.getInstance()?.token.let { token ->
+            UserDataRepository.getInstance()?.profileId.let { id ->
+                viewModel.loadUpdateAvatarUserProfile(token!!, id!!, filePart)
+            }
+        }
+
+    }
+
+    @Throws(IOException::class)
+    private fun getBytes(inputStream: InputStream): ByteArray? {
+        val byteBuffer = ByteArrayOutputStream()
+        val bufferSize = 20971520
+        val buffer = ByteArray(bufferSize)
+        var len = 0
+        while (inputStream.read(buffer).also { len = it } != -1) {
+            byteBuffer.write(buffer, 0, len)
+        }
+        return byteBuffer.toByteArray()
     }
 
 
@@ -147,19 +156,12 @@ class ProfileFragment : Fragment() {
             UserDataRepository.getInstance()?.profileId = it.profile.id
         }
 
-        binding.exitBtn.setOnClickListener {
-            showAlertDialogForExit()
-        }
-
-        binding.editBtn.setOnClickListener{
-            showAlertDialogForEditProfile()
-        }
 
     }
 
     private fun showAlertDialogForExit(){
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage(resources.getString(R.string.whatEditInProfile))
+            .setMessage(resources.getString(R.string.wouldYouLikeToExit))
 
             .setNegativeButton(resources.getString(R.string.decline)) { dialog, which ->
                 dialog.dismiss()
@@ -174,15 +176,10 @@ class ProfileFragment : Fragment() {
 
     private fun showAlertDialogForEditProfile(){
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage(resources.getString(R.string.wouldYouLikeToExit))
+            .setMessage(resources.getString(R.string.whatEditInProfile))
 
             .setNegativeButton(resources.getString(R.string.photo)) { dialog, which ->
                 dialog.cancel()
-                //imageChooser()
-//                val i = Intent()
-//                i.type = "image/*"
-//                i.action = Intent.ACTION_GET_CONTENT
-//                startActivity(i)
                 loadImage.launch("image/*")
             }
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
