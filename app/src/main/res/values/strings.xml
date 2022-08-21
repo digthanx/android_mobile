@@ -73,6 +73,10 @@
     <string name="allHistory">Вся история</string>
     <string name="received">Получено</string>
     <string name="sended">Отправлено</string>
+    <!-- Additional Info Bottom Sheet Dialog Fragment -->
+    <string name="message">Сообщение</string>
+    <string name="statusTransfer">Статус перевода</string>
+
     <!--Utils -->
     <!--Лента событий -->
     <string name="someoneToSomeone">%s получил %s спасибок от %s</string>
@@ -94,7 +98,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
 
 </resources>
