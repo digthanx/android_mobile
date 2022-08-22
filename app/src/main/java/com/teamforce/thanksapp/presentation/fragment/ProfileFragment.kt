@@ -11,11 +11,15 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.activityNavController
 import com.teamforce.thanksapp.utils.navigateSafely
@@ -49,7 +53,8 @@ class ProfileFragment : Fragment() {
     private var loadImage: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.GetContent(), ActivityResultCallback {
         it?.let {
             binding.userAvatar.setImageURI(it)
-            imageConversionToBytes(it.toString())
+            funURIToMultipart(it)
+            //imageConversionToBytes(it.toString())
         }
 
 //        ActivityResultCallback<Uri> {
@@ -85,32 +90,36 @@ class ProfileFragment : Fragment() {
 
     }
 
-    fun uploadImage(){
-        loadImage = registerForActivityResult(ActivityResultContracts.GetContent(), ActivityResultCallback {
-            binding.userAvatar.setImageURI(it)
-            it?.let {
-                binding.userAvatar.setImageURI(it)
-               imageConversionToBytes(it.toString())
-            }
-        })
-    }
-
-    fun imageConversionToBytes(imageUri: String) {
-
-        val imageFile = Uri.parse(imageUri).path?.let { File(it) }
-        val iStream = context?.contentResolver?.openInputStream(Uri.parse(imageUri))
-
-        val bytes = iStream?.let { getBytes(it) }
-        // bytes не защищен save call
-        val filePart: MultipartBody.Part = MultipartBody.Part.createFormData("file", imageFile?.path, RequestBody.create(
-            MediaType.parse("image/png"), bytes))
+    private fun  funURIToMultipart(imageURI: Uri){
+        val file: File = File(imageURI.path!!)
+        val requestFile: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+        val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
         UserDataRepository.getInstance()?.token.let { token ->
             UserDataRepository.getInstance()?.profileId.let { id ->
-                viewModel.loadUpdateAvatarUserProfile(token!!, id!!, filePart)
+                viewModel.loadUpdateAvatarUserProfile(token!!, id!!, body)
             }
         }
-
     }
+
+
+//    fun imageConversionToBytes(imageUri: String) {
+//
+//        val imageFile = Uri.parse(imageUri).path?.let { File(it) }
+//        val iStream = context?.contentResolver?.openInputStream(Uri.parse(imageUri))
+//
+//        val bytes = iStream?.let { getBytes(it) }
+//        Log.d("Token", "Bytes ${bytes}")
+//        // bytes не защищен save call
+//        val filePart: MultipartBody.Part = MultipartBody.Part.createFormData("file", imageFile?.path, RequestBody.create(
+//            MediaType.parse("image/png"), bytes))
+//        Log.d("Token", "Filepart.body ${filePart.body()}")
+//        UserDataRepository.getInstance()?.token.let { token ->
+//            UserDataRepository.getInstance()?.profileId.let { id ->
+//                viewModel.loadUpdateAvatarUserProfile(token!!, id!!, filePart)
+//            }
+//        }
+//
+//    }
 
     @Throws(IOException::class)
     private fun getBytes(inputStream: InputStream): ByteArray? {
@@ -151,7 +160,10 @@ class ProfileFragment : Fragment() {
             companyUser.text = it.profile.organization
             departmentUser.text = it.profile.department
             hiredAt.text = it.profile.hiredAt
-            // Пока не знаю как изображение подгружать и как с ними работать
+            Glide.with(this)
+                .load("https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80".toUri())
+                .centerCrop()
+                .into(userAvatar)
 
             UserDataRepository.getInstance()?.profileId = it.profile.id
         }

@@ -85,8 +85,8 @@ class ProfileViewModel() : ViewModel() {
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            Log.d("Token", "Я внутри вызова функции")
-            thanksApi?.putUserAvatar("Token $token", userId = userId, imageFilePart)?.enqueue(object : Callback<PutUserAvatarResponse> {
+            Log.d("Token", "Я внутри вызова функции Вот image ${imageFilePart}")
+            thanksApi?.putUserAvatar("Token $token", userId = userId, PutUserAvatarRequest(imageFilePart))?.enqueue(object : Callback<PutUserAvatarResponse> {
                 override fun onResponse(
                     call: Call<PutUserAvatarResponse>,
                     response: Response<PutUserAvatarResponse>

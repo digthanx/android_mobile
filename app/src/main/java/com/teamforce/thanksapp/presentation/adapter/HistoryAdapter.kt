@@ -16,7 +16,6 @@ import java.util.*
 
 class HistoryAdapter(
     private val username: String,
-    private val listener: View.OnClickListener,
     private val context: Context
 ) : ListAdapter<HistoryModel, HistoryAdapter.HistoryViewHolder>(DiffCallback) {
 
@@ -48,9 +47,9 @@ class HistoryAdapter(
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }
 
-        holder.transfers.adapter = TransfersAdapter(username, getItem(position).data, listener, context)
+        holder.transfers.adapter = TransfersAdapter(username, getItem(position).data, context)
         holder.view.tag = getItem(position)
-        holder.view.setOnClickListener { v -> listener.onClick(v) }
+
     }
 
     private fun getMonth(dateTime: LocalDateTime): String {
