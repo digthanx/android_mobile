@@ -2,6 +2,7 @@ package com.teamforce.thanksapp.presentation.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserTransactionsResponse
 import com.teamforce.thanksapp.databinding.ItemTransferBinding
+import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
+import com.teamforce.thanksapp.utils.Consts.DATE_TRANSACTION
+import com.teamforce.thanksapp.utils.Consts.DESCRIPTION_TRANSACTION_1
+import com.teamforce.thanksapp.utils.Consts.DESCRIPTION_TRANSACTION_2_WHO
+import com.teamforce.thanksapp.utils.Consts.DESCRIPTION_TRANSACTION_3_AMOUNT
+import com.teamforce.thanksapp.utils.Consts.LABEL_STATUS_TRANSACTION
+import com.teamforce.thanksapp.utils.Consts.REASON_TRANSACTION
+import com.teamforce.thanksapp.utils.Consts.STATUS_TRANSACTION
+import com.teamforce.thanksapp.utils.Consts.WE_REFUSED_YOUR_OPERATION
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -28,53 +38,61 @@ class TransfersAdapter(
             LayoutInflater.from(parent.context), parent, false)
 
         return TransfersViewHolder(binding)
+
     }
 
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: TransfersViewHolder, position: Int) {
         val status = dataSet[position].transaction_status.transactionStatus
-        if (status.equals("Одобрено")) {
-            holder.status.text = context.getString(R.string.occured)
-            holder.status.setBackgroundColor(context.getColor(R.color.minor_success))
-            // Expanded Version
-//            holder.statusTextView.text = "Выполнен"
-//            holder.statusTextView.setTextColor(R.color.minor_success)
-//            holder.imageStatus.setImageResource(R.drawable.ic_applied_transaction)
-        } else if (status.equals("Отклонено")) {
-            holder.status.text = context.getString(R.string.refused)
-            holder.status.setBackgroundColor(context.getColor(R.color.minor_error))
-            // Expanded Version
-//            holder.statusTextView.text = "Аннулировано"
-//            holder.statusTextView.setTextColor(R.color.minor_error)
-//            holder.imageStatus.setImageResource(R.drawable.ic_declined_transaction)
-        } else {
-            holder.status.text = context.getString(R.string.on_approval)
-            holder.status.setBackgroundColor(context.getColor(R.color.minor_warning))
-//            holder.statusTextView.text = "На согласовании"
-//            holder.statusTextView.setTextColor(R.color.color7)
-//            holder.imageStatus.setImageResource(R.drawable.ic_wating_transaction)
-        }
-
-        if (dataSet[position].sender.sender_tg_name.equals(username)) {
-            holder.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+        holder.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+        if(dataSet[position].sender.sender_tg_name.equals(username)){
+            // Ты отправитель
+            holder.valueTransfer.text = "- " + dataSet[position].amount
             holder.tgNameUser.text = "@" + dataSet[position].recipient.recipient_tg_name
-            holder.valueTransfer.text = "- " +  dataSet[position].amount
-//            // Expanded Version
-//            holder.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
-//            holder.transactionFrom.text = String.format(
-//                holder.view.context.getString(R.string.sended_to),
-//                dataSet[position].recipient.recipient_tg_name)
-//            holder.newValueTransaction.text = dataSet[position].amount
-        } else {
-            holder.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+            holder.descr_transaction_1 = context.getString(R.string.youSended)
+            holder.labelStatusTransaction = context.getString(R.string.statusTransfer)
+
+
+            if (status.equals("Одобрено")) {
+                holder.status.text = context.getString(R.string.occured)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_success))
+                holder.comingStatusTransaction = context.getString(R.string.occured)
+
+            } else if (status.equals("Отклонено")) {
+                holder.status.text = context.getString(R.string.refused)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_error))
+
+                holder.descr_transaction_1 = context.getString(R.string.youWantedToSend)
+                holder.weRefusedYourOperation = true
+                holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
+                // Где мне брать причину отказа? Записывать в переменную ниже
+               // holder.comingStatusTransaction = context.getString(R.string.on_approval)
+            } else {
+                holder.status.text = context.getString(R.string.on_approval)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_warning))
+                holder.comingStatusTransaction = context.getString(R.string.on_approval)
+
+            }
+
+        }else{
+            // Ты получатель
+            holder.descr_transaction_1 = context.getString(R.string.youGot)
             holder.tgNameUser.text = "@" + dataSet[position].sender.sender_tg_name
+            holder.labelStatusTransaction = context.getString(R.string.typeTransfer)
             holder.valueTransfer.text = "+ " + dataSet[position].amount
-            holder.valueTransfer.setTextColor(context.getColor(R.color.minor_success))
-            // Expanded Version
-            holder.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
-            holder.tgNameUser.text = "@" + dataSet[position].sender.sender_tg_name
-//            holder.newValueTransaction.text = "+ " + dataSet[position].amount
+            holder.comingStatusTransaction = context.getString(R.string.comingTransfer)
+            if (status.equals("Одобрено")) {
+                holder.status.text = context.getString(R.string.occured)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_success))
+            } else if (status.equals("Отклонено")) {
+                holder.status.text = context.getString(R.string.refused)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_error))
+            } else {
+                holder.status.text = context.getString(R.string.on_approval)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_warning))
+
+            }
         }
 
         try {
@@ -83,15 +101,28 @@ class TransfersAdapter(
                 parse(dataSet[position].updatedAt.
                 replace("+03:00", "")).
                 format(DateTimeFormatter.ofPattern( "dd.MM.y HH:mm"))
-            val title = dateTime
+            holder.dateGetInfo = dateTime
 
-//            holder.dateGetInfo.text = title.toString()
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }
         holder.view.tag = dataSet[position]
         holder.view.setOnClickListener { v ->
+            val bundle = Bundle()
+            bundle.apply {
+                // аву пока не передаю
+                putString(DATE_TRANSACTION, holder.dateGetInfo)
+                putString(DESCRIPTION_TRANSACTION_1, holder.descr_transaction_1)
+                putString(DESCRIPTION_TRANSACTION_2_WHO, holder.tgNameUser.text.toString())
+                putString(DESCRIPTION_TRANSACTION_3_AMOUNT, context.getString(R.string.amountThanks, dataSet[position].amount))
+                putString(REASON_TRANSACTION, dataSet[position].reason)
+                putString(STATUS_TRANSACTION, holder.comingStatusTransaction)
+                putString(LABEL_STATUS_TRANSACTION, holder.labelStatusTransaction)
+                putString(AMOUNT_THANKS, holder.valueTransfer.text.toString())
+                putBoolean(WE_REFUSED_YOUR_OPERATION, holder.weRefusedYourOperation)
 
+            }
+            v.findNavController().navigate(R.id.action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2, bundle)
         }
         // Description For Expanded Version
 //        holder.newReasonTransaction.text = "\"" + dataSet[position].reason + "\""
@@ -107,29 +138,13 @@ class TransfersAdapter(
         val userAvatar: ImageView = binding.transferIconIv
         val tgNameUser: TextView = binding.tgNameUser
         val valueTransfer: TextView = binding.valueTransfer
+
         val view: View = binding.root
-
-//        // Expanded version
-//        // Данные дополнительные сразу будут добавлены, просто будут скрыты от пользователя
-//        val dateGetInfo: TextView
-//        val transactionFrom: TextView
-//        val statusTextView: TextView
-//        val imageStatus: ImageView
-//        val status_expandedVersion: ImageView
-//        val newValueTransaction: TextView
-//        val newReasonTransaction: TextView
-
-
-
-
-//        init {
-//            dateGetInfo = v.findViewById(R.id.new_date_get_transaction)
-//            transactionFrom = v.findViewById(R.id.new_transaction_from_tv)
-//            statusTextView = v.findViewById(R.id.status_tv)
-//            imageStatus = v.findViewById(R.id.status_image)
-//            status_expandedVersion = v.findViewById(R.id.new_status_iv)
-//            newValueTransaction = v.findViewById(R.id.new_value_transaction)
-//            newReasonTransaction = v.findViewById(R.id.tv_description)
-//        }
+        var dateGetInfo: String = "null"
+        var who: String = "null"
+        var labelStatusTransaction: String = "null"
+        var descr_transaction_1: String = "null"
+        var comingStatusTransaction: String = "null"
+        var weRefusedYourOperation: Boolean = false
     }
 }

@@ -9,7 +9,11 @@
         android:id="@+id/historyFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.HistoryFragment"
         android:label="@string/history_label"
-        tools:layout="@layout/fragment_history" />
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2"
+            app:destination="@id/additionalInfoTransactionBottomSheetFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/transactionFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.TransactionFragment"
@@ -49,4 +53,12 @@
             app:destination="@id/historyFragment"
             app:enterAnim="@anim/to_bottom_in" />
     </fragment>
+    <dialog
+        android:id="@+id/additionalInfoTransactionBottomSheetFragment2"
+        android:name="com.teamforce.thanksapp.presentation.fragment.AdditionalInfoTransactionBottomSheetFragment"
+        android:label="AdditionalInfoTransactionBottomSheetFragment" >
+        <action
+            android:id="@+id/action_additionalInfoTransactionBottomSheetFragment2_to_historyFragment"
+            app:destination="@id/historyFragment" />
+    </dialog>
 </navigation>

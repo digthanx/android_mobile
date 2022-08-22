@@ -1,32 +1,51 @@
 package com.teamforce.thanksapp.presentation.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoTransactionBottomSheetBinding
+import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
+import com.teamforce.thanksapp.utils.Consts.DATE_TRANSACTION
+import com.teamforce.thanksapp.utils.Consts.DESCRIPTION_TRANSACTION_1
+import com.teamforce.thanksapp.utils.Consts.DESCRIPTION_TRANSACTION_2_WHO
+import com.teamforce.thanksapp.utils.Consts.DESCRIPTION_TRANSACTION_3_AMOUNT
+import com.teamforce.thanksapp.utils.Consts.LABEL_STATUS_TRANSACTION
+import com.teamforce.thanksapp.utils.Consts.REASON_TRANSACTION
+import com.teamforce.thanksapp.utils.Consts.STATUS_TRANSACTION
+import com.teamforce.thanksapp.utils.Consts.WE_REFUSED_YOUR_OPERATION
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AdditionalInfoTransactionBottomSheetFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AdditionalInfoTransactionBottomSheetFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment() {
+
+    private var _binding: FragmentAdditionalInfoTransactionBottomSheetBinding? = null
+    private val binding get() = checkNotNull(_binding) { "Binding is null" }
+
+
+    private var dateTransaction: String? = null
+    private var descr_transaction_1: String? = null
+    private var descr_transaction_2_who: String? = null
+    private var descr_transaction_3_amount: String? = null
+    private var reason_transaction: String? = null
+    private var status_transaction: String? = null
+    private var label_status_transaction: String? = null
+    private var amount_thanks: String? = null
+    private var we_refused_your: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            dateTransaction = it.getString(DATE_TRANSACTION)
+            descr_transaction_1 = it.getString(DESCRIPTION_TRANSACTION_1)
+            descr_transaction_2_who = it.getString(DESCRIPTION_TRANSACTION_2_WHO)
+            descr_transaction_3_amount = it.getString(DESCRIPTION_TRANSACTION_3_AMOUNT)
+            reason_transaction = it.getString(REASON_TRANSACTION)
+            status_transaction = it.getString(STATUS_TRANSACTION)
+            label_status_transaction = it.getString(LABEL_STATUS_TRANSACTION)
+            amount_thanks = it.getString(AMOUNT_THANKS)
+            we_refused_your = it.getBoolean(WE_REFUSED_YOUR_OPERATION)
         }
     }
 
@@ -34,31 +53,28 @@ class AdditionalInfoTransactionBottomSheetFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(
-            R.layout.fragment_additional_info_transaction_bottom_sheet,
-            container,
-            false
-        )
+        _binding = FragmentAdditionalInfoTransactionBottomSheetBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AdditionalInfoTransactionBottomSheetFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AdditionalInfoTransactionBottomSheetFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun getTheme(): Int  = R.style.AppBottomSheetDialogTheme
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(binding){
+            dateTransactionTv.text = dateTransaction
+            descriptionTransactionYouDo.text = descr_transaction_1
+            descriptionTransactionWho.text = descr_transaction_2_who
+            descriptionTransactionAmountText.text = descr_transaction_3_amount
+            valueTransfer.text = amount_thanks
+            reasonTransaction.text = reason_transaction
+            labelStatusTransaction.text = label_status_transaction
+            statusTransaction.text = status_transaction
+        }
+        if(we_refused_your == true){
+            binding.currencyTransaction.visibility = View.GONE
+            binding.valueTransfer.visibility = View.GONE
+            binding.weRefused.visibility = View.VISIBLE
+        }
     }
 }

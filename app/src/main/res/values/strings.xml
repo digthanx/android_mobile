@@ -76,6 +76,14 @@
     <!-- Additional Info Bottom Sheet Dialog Fragment -->
     <string name="message">Сообщение</string>
     <string name="statusTransfer">Статус перевода</string>
+    <string name="typeTransfer">Тип перевода</string>
+    <string name="reasonOfRefusing">Причина отказа</string>
+    <string name="youSended">Вы отправили</string>
+    <string name="youGot">Вы получили от</string>
+    <string name="youWantedToSend">Вы хотели отправить</string>
+    <string name="weRefusedYourOperation">Мы отклонили вашу операцию</string>
+    <string name="comingTransfer">Входящий перевод</string>
+    <string name="amountThanks">%s спасибок</string>
 
     <!--Utils -->
     <!--Лента событий -->
