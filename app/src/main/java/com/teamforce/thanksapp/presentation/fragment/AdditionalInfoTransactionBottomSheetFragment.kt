@@ -4,10 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoTransactionBottomSheetBinding
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
+import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.DATE_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.DESCRIPTION_TRANSACTION_1
 import com.teamforce.thanksapp.utils.Consts.DESCRIPTION_TRANSACTION_2_WHO
@@ -25,6 +31,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
 
 
     private var dateTransaction: String? = null
+    private var avatar: String? = null
     private var descr_transaction_1: String? = null
     private var descr_transaction_2_who: String? = null
     private var descr_transaction_3_amount: String? = null
@@ -37,6 +44,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            avatar = it.getString(AVATAR_USER)
             dateTransaction = it.getString(DATE_TRANSACTION)
             descr_transaction_1 = it.getString(DESCRIPTION_TRANSACTION_1)
             descr_transaction_2_who = it.getString(DESCRIPTION_TRANSACTION_2_WHO)
@@ -75,6 +83,12 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
             binding.currencyTransaction.visibility = View.GONE
             binding.valueTransfer.visibility = View.GONE
             binding.weRefused.visibility = View.VISIBLE
+        }
+        if(!avatar.isNullOrEmpty()){
+            Glide.with(this)
+                .load(avatar?.toUri())
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .into(binding.userAvatar)
         }
     }
 }

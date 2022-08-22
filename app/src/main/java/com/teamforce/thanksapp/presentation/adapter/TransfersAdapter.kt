@@ -9,12 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserTransactionsResponse
 import com.teamforce.thanksapp.databinding.ItemTransferBinding
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
+import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.DATE_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.DESCRIPTION_TRANSACTION_1
 import com.teamforce.thanksapp.utils.Consts.DESCRIPTION_TRANSACTION_2_WHO
@@ -45,13 +51,20 @@ class TransfersAdapter(
     override fun onBindViewHolder(holder: TransfersViewHolder, position: Int) {
         val status = dataSet[position].transaction_status.transactionStatus
         holder.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+        Log.d("Token", " Фото ${"${Consts.BASE_URL}${dataSet[position].recipient.recipient_photo}"}")
         if(dataSet[position].sender.sender_tg_name.equals(username)){
             // Ты отправитель
             holder.valueTransfer.text = "- " + dataSet[position].amount
             holder.tgNameUser.text = "@" + dataSet[position].recipient.recipient_tg_name
             holder.descr_transaction_1 = context.getString(R.string.youSended)
             holder.labelStatusTransaction = context.getString(R.string.statusTransfer)
-
+            if(!dataSet[position].recipient.recipient_photo.isNullOrEmpty()){
+                Glide.with(context)
+                    .load("${Consts.BASE_URL}${dataSet[position].recipient.recipient_photo}".toUri())
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .into(holder.userAvatar)
+                holder.avatar = "${Consts.BASE_URL}${dataSet[position].recipient.recipient_photo}"
+            }
 
             if (status.equals("Одобрено")) {
                 holder.status.text = context.getString(R.string.occured)
@@ -76,6 +89,13 @@ class TransfersAdapter(
 
         }else{
             // Ты получатель
+            if(!dataSet[position].sender.sender_photo.isNullOrEmpty()){
+                Glide.with(context)
+                    .load("${Consts.BASE_URL}${dataSet[position].sender.sender_photo}".toUri())
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .into(holder.userAvatar)
+                holder.avatar = "${Consts.BASE_URL}${dataSet[position].sender.sender_photo}"
+            }
             holder.descr_transaction_1 = context.getString(R.string.youGot)
             holder.tgNameUser.text = "@" + dataSet[position].sender.sender_tg_name
             holder.labelStatusTransaction = context.getString(R.string.typeTransfer)
@@ -110,6 +130,7 @@ class TransfersAdapter(
             val bundle = Bundle()
             bundle.apply {
                 // аву пока не передаю
+                putString(AVATAR_USER, holder.avatar)
                 putString(DATE_TRANSACTION, holder.dateGetInfo)
                 putString(DESCRIPTION_TRANSACTION_1, holder.descr_transaction_1)
                 putString(DESCRIPTION_TRANSACTION_2_WHO, holder.tgNameUser.text.toString())
@@ -145,5 +166,6 @@ class TransfersAdapter(
         var descr_transaction_1: String = "null"
         var comingStatusTransaction: String = "null"
         var weRefusedYourOperation: Boolean = false
+        var avatar: String? = null
     }
 }

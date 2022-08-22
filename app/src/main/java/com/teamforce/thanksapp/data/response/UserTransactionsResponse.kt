@@ -20,7 +20,8 @@ class UserTransactionsResponse(
         val sender_id: Int,
         val sender_tg_name: String,
         val sender_first_name: String,
-        val sender_surname: String
+        val sender_surname: String,
+        val sender_photo: String?
 
     )
 
@@ -28,7 +29,8 @@ class UserTransactionsResponse(
         val recipient_id: Int,
         val recipient_tg_name: String,
         val recipient_first_name: String,
-        val recipient_surname: String
+        val recipient_surname: String,
+        val recipient_photo: String?
     )
 
     data class TransactionStatus(

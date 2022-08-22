@@ -22,8 +22,10 @@ object Consts {
     const val STATUS_TRANSACTION = "satus-transaction"
     const val LABEL_STATUS_TRANSACTION = "label-status-transaction"
     const val WE_REFUSED_YOUR_OPERATION = "we-refused_your_operation"
+    const val AVATAR_USER = "user-avatar"
 
     val MAIN = MainActivity()
+    const val BASE_URL: String = "http://176.99.6.251:8888"
 
     private const val SP_NAME = "com.teamforce.thanksapp"
     private const val SP_ARG_TELEGRAM = "Telegram"

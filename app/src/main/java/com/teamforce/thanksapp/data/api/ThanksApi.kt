@@ -57,11 +57,11 @@ interface ThanksApi {
         @Body get_users: UserListWithoutInputRequest
     ): Call<List<UserBean>>
 
-    @Multipart
+
     @PUT("/update-profile-image/{id}/")
     fun putUserAvatar(
         @Header("Authorization") token: String,
         @Path("id") userId: String,
-        @Part image: MultipartBody.Part
+        @Body photo: PutUserAvatarRequest
     ): Call<PutUserAvatarResponse>
 }
