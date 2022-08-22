@@ -80,7 +80,7 @@ ext.llibs = [
 ext.versions = [
     COMPILE_SDK : 31,
     TARGET_SDK : 30,
-    MIN_SDK : 21,
+    MIN_SDK : 23,
 
     ANDROID_GRADLE_PLUGIN : "7.2.0",
     BENCHMARK : "1.1.0-rc02",

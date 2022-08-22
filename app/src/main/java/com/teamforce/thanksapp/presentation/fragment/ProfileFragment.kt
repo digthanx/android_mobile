@@ -184,8 +184,6 @@ class ProfileFragment : Fragment() {
             }
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
                 dialog.cancel()
-                UserDataRepository.getInstance()?.logout(requireContext())
-                activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
             }
             .show()
     }

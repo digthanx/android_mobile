@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
@@ -68,7 +69,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                 )
             }
         }
-        recyclerView.adapter = HistoryAdapter(username, this)
+        recyclerView.adapter = HistoryAdapter(username, this, requireContext())
 
         viewModel.isLoading.observe(
             viewLifecycleOwner,
@@ -152,6 +153,8 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         Log.d("Token", "Click on RV")
         val expInfo = v?.findViewById<View>(R.id.expanded_info_transaction)
         val standardGroup = v?.findViewById<View>(R.id.standard_group)
+        val bundle = Bundle()
+
         if (standardGroup?.visibility == View.VISIBLE) {
             if (expInfo != null) {
                 crossfade(expInfo, standardGroup)

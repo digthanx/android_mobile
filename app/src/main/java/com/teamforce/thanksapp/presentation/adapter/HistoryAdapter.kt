@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.presentation.adapter
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,8 @@ import java.util.*
 
 class HistoryAdapter(
     private val username: String,
-    private val listener: View.OnClickListener
+    private val listener: View.OnClickListener,
+    private val context: Context
 ) : ListAdapter<HistoryModel, HistoryAdapter.HistoryViewHolder>(DiffCallback) {
 
     companion object DiffCallback : DiffUtil.ItemCallback<HistoryModel>(){
@@ -46,7 +48,7 @@ class HistoryAdapter(
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }
 
-        holder.transfers.adapter = TransfersAdapter(username, getItem(position).data, listener)
+        holder.transfers.adapter = TransfersAdapter(username, getItem(position).data, listener, context)
         holder.view.tag = getItem(position)
         holder.view.setOnClickListener { v -> listener.onClick(v) }
     }

@@ -13,6 +13,15 @@ object Consts {
     const val LINK_TO_BOT = "https://t.me/DefaultAndreyBot"
     const val LINK_TO_BOT_Name = "LinkToBot"
     const val SELECT_PICTURE = 200
+    // Аргументы в расширенную инфу о траназкции
+    const val DATE_TRANSACTION = "date-transaction"
+    const val DESCRIPTION_TRANSACTION_1 = "description-transaction"
+    const val DESCRIPTION_TRANSACTION_2_WHO = "description-transaction_2_who"
+    const val DESCRIPTION_TRANSACTION_3_AMOUNT = "description-transaction_2_who_3_amount"
+    const val REASON_TRANSACTION = "reason-transaction"
+    const val STATUS_TRANSACTION = "satus-transaction"
+    const val LABEL_STATUS_TRANSACTION = "label-status-transaction"
+    const val WE_REFUSED_YOUR_OPERATION = "we-refused_your_operation"
 
     val MAIN = MainActivity()
 

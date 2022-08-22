@@ -76,7 +76,6 @@
         app:boxCornerRadiusBottomStart="15dp"
         android:focusable="false"
         android:hint="@string/period"
-        android:paddingBottom="30dp"
         android:layout_marginTop="@dimen/margin_x">
 
     <com.google.android.material.textfield.TextInputEditText
@@ -99,6 +98,7 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:visibility="gone" />
 
 </LinearLayout>
