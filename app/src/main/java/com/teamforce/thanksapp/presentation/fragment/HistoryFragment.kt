@@ -1,22 +1,15 @@
 package com.teamforce.thanksapp.presentation.fragment
 
-import android.animation.*
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
-import android.view.animation.TranslateAnimation
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
@@ -27,7 +20,7 @@ import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
 
 
-class HistoryFragment : Fragment(), View.OnClickListener {
+class HistoryFragment : Fragment() {
 
     private lateinit var viewModel: HistoryViewModel
     private lateinit var recyclerView: RecyclerView
@@ -69,7 +62,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                 )
             }
         }
-        recyclerView.adapter = HistoryAdapter(username, this, requireContext())
+        recyclerView.adapter = HistoryAdapter(username, requireContext())
 
         viewModel.isLoading.observe(
             viewLifecycleOwner,
@@ -149,52 +142,6 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         return list.asReversed()
     }
 
-    override fun onClick(v: View?) {
-        Log.d("Token", "Click on RV")
-        val expInfo = v?.findViewById<View>(R.id.expanded_info_transaction)
-        val standardGroup = v?.findViewById<View>(R.id.standard_group)
-        val bundle = Bundle()
-
-        if (standardGroup?.visibility == View.VISIBLE) {
-            if (expInfo != null) {
-                crossfade(expInfo, standardGroup)
-            }
-
-        } else {
-            if (expInfo != null && standardGroup != null) {
-                crossfade(standardGroup, expInfo)
-            }
-        }
-    }
-
-    fun crossfade(inView: View, outView: View) {
-        // TODO доделать анимацию, чтобы список плавно возращался
-        var inAnimator: ValueAnimator = ValueAnimator.ofFloat(0f, 1f)
-        var outAnimator: ValueAnimator = ValueAnimator.ofFloat(1f, 0f)
-
-        inAnimator.addUpdateListener { animator ->
-            inView.alpha = animator.animatedValue as Float
-        }
-        outAnimator.addUpdateListener { animator ->
-            outView.alpha = animator.animatedValue as Float
-        }
-
-        var set: AnimatorSet = AnimatorSet()
-        set.playTogether(outAnimator, inAnimator)
-        set.setDuration(300)
-
-        set.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?) {
-                inView.visibility = View.VISIBLE
-
-            }
-
-            override fun onAnimationEnd(animation: Animator?) {
-                outView.visibility = View.GONE
-            }
-        })
-        set.start()
-    }
 
 
     companion object {

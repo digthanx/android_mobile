@@ -29,7 +29,6 @@ import java.time.format.DateTimeFormatter
 class TransfersAdapter(
     private val username: String,
     private val dataSet: List<UserTransactionsResponse>,
-    private val listener: View.OnClickListener,
     private val context: Context
 ) : RecyclerView.Adapter<TransfersAdapter.TransfersViewHolder>() {
 
