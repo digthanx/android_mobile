@@ -62,7 +62,7 @@ class FeedFragment : Fragment() {
                 viewModel.loadFeedsList(token = token, user = username)
             }
         }
-        binding.feedRv.adapter = FeedAdapter(username)
+        binding.feedRv.adapter = FeedAdapter(username, requireContext())
     }
 
     private fun refreshRecyclerView(checkedId: Int) {
@@ -99,7 +99,7 @@ class FeedFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 allFeedsList = it!!
-               // Log.d("Token", "allFeeds ${allFeedsList}")
+                Log.d("Token", "allFeeds ${allFeedsList}")
                 if (binding.chipGroup.checkedChipId == R.id.chipAllEvent) {
                     (binding.feedRv.adapter as FeedAdapter).submitList(allFeedsList)
                 }
@@ -109,7 +109,7 @@ class FeedFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 mineFeedsList = it
-               // Log.d("Token", "mineFeeds ${mineFeedsList}")
+               Log.d("Token", "mineFeeds ${mineFeedsList}")
                 if (binding.chipGroup.checkedChipId == R.id.chipReceived) {
                     (binding.feedRv.adapter as FeedAdapter).submitList(mineFeedsList)
                 }
@@ -120,7 +120,7 @@ class FeedFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 publicFeedsList = it
-                //Log.d("Token", "publicFeeds ${publicFeedsList}")
+                Log.d("Token", "publicFeeds ${publicFeedsList}")
                 if (binding.chipGroup.checkedChipId == R.id.chipSent) {
                     (binding.feedRv.adapter as FeedAdapter).submitList(publicFeedsList)
                 }

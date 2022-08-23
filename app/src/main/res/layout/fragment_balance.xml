@@ -115,7 +115,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="@dimen/margin"
                                         android:textAppearance="@style/Headline3.White"
-                                        android:text="2 300"
+                                        android:text="NULL"
                                         app:layout_constraintTop_toBottomOf="@id/myCount"
                                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -229,7 +229,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="8dp"
                                         android:textAppearance="@style/Headline3.White"
-                                        android:text="200"
+                                        android:text="NULL"
                                         app:layout_constraintTop_toBottomOf="@+id/remains_distribute_label_tv"
                                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -304,7 +304,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
-                        android:text=" 20"
+                        android:text=" null"
                         android:layout_marginStart="37dp"
                         android:textAppearance="@style/Body2"
                         app:layout_constraintStart_toStartOf="@+id/icon_refuse"
@@ -356,7 +356,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:layout_marginStart="37dp"
-                        android:text=" 40"
+                        android:text=" null"
                         android:textAppearance="@style/Body2"
                         app:layout_constraintStart_toStartOf="@+id/icon_waiting"
                         app:layout_constraintTop_toBottomOf="@id/frozen_label_tv" />

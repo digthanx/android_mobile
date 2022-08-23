@@ -25,6 +25,7 @@ data class FeedResponse(
         val status: String,
         @SerializedName("is_anonymous")
         val is_anon: Boolean,
-        val reason: String
+        val reason: String,
+        val photo: String?
     )
 }

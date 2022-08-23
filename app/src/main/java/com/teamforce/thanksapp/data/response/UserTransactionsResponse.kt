@@ -18,7 +18,7 @@ class UserTransactionsResponse(
 ){
     data class Sender(
         val sender_id: Int,
-        val sender_tg_name: String,
+        val sender_tg_name: String?,
         val sender_first_name: String,
         val sender_surname: String,
         val sender_photo: String?

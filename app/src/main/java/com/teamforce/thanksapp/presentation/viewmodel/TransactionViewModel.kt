@@ -114,10 +114,10 @@ class TransactionViewModel : ViewModel() {
 
 
 
-    fun sendCoins(token: String, recipient: Int, amount: Int, reason: String) {
+    fun sendCoins(token: String, recipient: Int, amount: Int, reason: String, isAnon: Boolean) {
         _isLoading.postValue(true)
         viewModelScope.launch {
-            callSendCoinsEndpoint(token, recipient, amount, reason, Dispatchers.Default)
+            callSendCoinsEndpoint(token, recipient, amount, reason, isAnon, Dispatchers.Default)
         }
     }
 
@@ -127,10 +127,11 @@ class TransactionViewModel : ViewModel() {
         recipient: Int,
         amount: Int,
         reason: String,
+        isAnon: Boolean,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.sendCoins("Token $token", SendCoinsRequest(recipient, amount, reason))
+            thanksApi?.sendCoins("Token $token", SendCoinsRequest(recipient, amount, reason, isAnon))
                 ?.enqueue(object : Callback<SendCoinsResponse> {
                     override fun onResponse(
                         call: Call<SendCoinsResponse>,
