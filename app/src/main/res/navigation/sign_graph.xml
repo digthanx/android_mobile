@@ -13,8 +13,10 @@
         <action
             android:id="@+id/action_loginFragment_to_mainFlowFragment"
             app:destination="@id/mainFlowFragment"
-            app:enterAnim="@anim/to_left_in"
-            app:exitAnim="@anim/to_left_in_2" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/mainFlowFragment"
@@ -29,7 +31,9 @@
         <action
             android:id="@+id/action_greetFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:enterAnim="@anim/to_left_in"
-            app:exitAnim="@anim/to_left_in_2" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 </navigation>

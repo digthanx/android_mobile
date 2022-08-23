@@ -52,7 +52,7 @@ class TransfersAdapter(
         val status = dataSet[position].transaction_status.transactionStatus
         holder.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
         Log.d("Token", " Фото ${"${Consts.BASE_URL}${dataSet[position].recipient.recipient_photo}"}")
-        if(dataSet[position].sender.sender_tg_name.equals(username)){
+        if(dataSet[position].sender.sender_tg_name != null && dataSet[position].sender.sender_tg_name.equals(username)){
             // Ты отправитель
             holder.valueTransfer.text = "- " + dataSet[position].amount
             holder.tgNameUser.text = "@" + dataSet[position].recipient.recipient_tg_name
@@ -88,19 +88,25 @@ class TransfersAdapter(
             }
 
         }else{
-            // Ты получатель
-            if(!dataSet[position].sender.sender_photo.isNullOrEmpty()){
-                Glide.with(context)
-                    .load("${Consts.BASE_URL}${dataSet[position].sender.sender_photo}".toUri())
-                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                    .into(holder.userAvatar)
-                holder.avatar = "${Consts.BASE_URL}${dataSet[position].sender.sender_photo}"
+            if(dataSet[position].sender.sender_tg_name ==  null) {
+                holder.tgNameUser.text = "@" + "аноним"
+
+            }else{
+                // Ты получатель
+                if(!dataSet[position].sender.sender_photo.isNullOrEmpty()){
+                    Glide.with(context)
+                        .load("${Consts.BASE_URL}${dataSet[position].sender.sender_photo}".toUri())
+                        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .into(holder.userAvatar)
+                    holder.avatar = "${Consts.BASE_URL}${dataSet[position].sender.sender_photo}"
+                }
+                holder.descr_transaction_1 = context.getString(R.string.youGot)
+                holder.tgNameUser.text = "@" + dataSet[position].sender.sender_tg_name
+                holder.labelStatusTransaction = context.getString(R.string.typeTransfer)
+                holder.valueTransfer.text = "+ " + dataSet[position].amount
+                holder.comingStatusTransaction = context.getString(R.string.comingTransfer)
             }
-            holder.descr_transaction_1 = context.getString(R.string.youGot)
-            holder.tgNameUser.text = "@" + dataSet[position].sender.sender_tg_name
-            holder.labelStatusTransaction = context.getString(R.string.typeTransfer)
-            holder.valueTransfer.text = "+ " + dataSet[position].amount
-            holder.comingStatusTransaction = context.getString(R.string.comingTransfer)
+
             if (status.equals("Одобрено")) {
                 holder.status.text = context.getString(R.string.occured)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_success))

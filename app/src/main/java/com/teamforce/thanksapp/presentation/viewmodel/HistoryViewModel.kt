@@ -113,8 +113,7 @@ class HistoryViewModel : ViewModel() {
                                         } else {
                                             allData.put(day, HistoryModel(day, listOf(item)))
                                         }
-
-                                        if (item.sender.sender_tg_name.equals(user)) {
+                                        if (item.sender.sender_tg_name != null && item.sender.sender_tg_name.equals(user)) {
                                             if (sendedData.containsKey(day)) {
                                                 val model = sendedData.get(day)
                                                 var data = model.data
