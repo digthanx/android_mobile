@@ -78,20 +78,19 @@ class FeedAdapter (
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(holder.avatarUser)
         }
-
         if(!currentList[position].transaction.sender.equals(username) &&
             !currentList[position].transaction.recipient.equals(username)){
             holder.senderAndReceiver.text =
                 String.format(holder.view.context.getString(
                     R.string.someoneToSomeone),
                     currentList[position].transaction.recipient,
-                    "150",
+                    currentList[position].transaction.amount.substringBefore("."),
                     currentList[position].transaction.sender)
         }else if(!currentList[position].transaction.sender.equals(username)){
             holder.senderAndReceiver.text =
                 String.format(holder.view.context.getString(
                     R.string.youFromSomeone),
-                    "150",
+                    currentList[position].transaction.amount.substringBefore("."),
                     currentList[position].transaction.sender)
 
         }else{
@@ -99,7 +98,7 @@ class FeedAdapter (
                 String.format(holder.view.context.getString(
                     R.string.youToSomeone),
                     currentList[position].transaction.recipient,
-                    "150")
+                    currentList[position].transaction.amount.substringBefore("."))
         }
         try {
             val zdt: ZonedDateTime = ZonedDateTime.parse(currentList[position].time, DateTimeFormatter.ISO_DATE_TIME)
