@@ -89,7 +89,7 @@
     <!--Лента событий -->
     <string name="someoneToSomeone">%s получил %s спасибок от %s</string>
     <string name="youFromSomeone">Вы получили %s спасибок от %s</string>
-    <string name="youToSomeone">$s получил %s спасибок от вас</string>
+    <string name="youToSomeone">%s получил %s спасибок от вас</string>
     <string name="allEvent">Все</string>
     <string name="mineEvent">Мои</string>
     <string name="publicEvent">Публичные</string>

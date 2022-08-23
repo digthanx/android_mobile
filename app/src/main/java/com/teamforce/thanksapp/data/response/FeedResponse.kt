@@ -22,6 +22,7 @@ data class FeedResponse(
         val id: Int,
         val sender: String,
         val recipient: String,
+        val amount: String,
         val status: String,
         @SerializedName("is_anonymous")
         val is_anon: Boolean,
