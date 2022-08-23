@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:textSize="12sp"
-            android:text="вчера в 20:30"
+            android:text="null"
             app:layout_constraintStart_toEndOf="@+id/user_avatar"
             app:layout_constraintTop_toTopOf="parent"/>
         <TextView
@@ -40,40 +40,50 @@
             app:layout_constraintStart_toEndOf="@+id/user_avatar"
             app:layout_constraintTop_toBottomOf="@id/date_time"/>
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
+        <LinearLayout
             android:id="@+id/toggleButtonGroup"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
             app:layout_constraintStart_toStartOf="@id/date_time"
             app:layout_constraintTop_toBottomOf="@id/senderAndReceiver">
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/comment_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:text="435"
-                android:insetRight="5dp"
-
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/minor_info_secondary"
+                android:textColor="@color/general_contrast"
+                app:iconTint="@color/general_contrast"
+                app:icon="@drawable/ic_comment"
+                android:layout_marginEnd="4dp"
+                style="?attr/materialButtonOutlinedStyle"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/like_btn"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/minor_info_secondary"
+                app:cornerRadius="8dp"
+                android:text="0"
+                android:textColor="@color/general_contrast"
+                app:iconTint="@color/general_contrast"
+                android:layout_marginEnd="4dp"
+                app:icon="@drawable/ic_like"
                 style="?attr/materialButtonOutlinedStyle"
+
                 />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/dislike_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:text="12k"
-                android:insetRight="5dp"
-                android:insetLeft="5dp"
+                android:text="0"
+                app:cornerRadius="8dp"
+                android:textColor="@color/general_contrast"
+                app:iconTint="@color/general_contrast"
+                android:backgroundTint="@color/minor_info_secondary"
+                app:icon="@drawable/ic_dislike"
                 style="?attr/materialButtonOutlinedStyle"
                 />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/like_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:insetLeft="5dp"
-                android:text="213k"
-                style="?attr/materialButtonOutlinedStyle"
-                />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

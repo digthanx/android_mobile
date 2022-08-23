@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +37,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private lateinit var sendCoinsGroup: LinearLayout
     private lateinit var availableCoins: TextView
     private lateinit var chipGroup: ChipGroup
+    private lateinit var checkBoxIsAnon: CheckBox
     private var user: UserBean? = null
 
     override fun onCreateView(
@@ -81,6 +81,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         usersInput = binding.usersEt
         availableCoins = binding.distributedValueTv
         chipGroup = binding.chipGroup
+        checkBoxIsAnon = binding.isAnon
     }
 
     fun checkedChip(){
@@ -181,25 +182,29 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             val userId = user?.userId ?: -1
             val countText = countEditText.text.toString()
             val reason = reasonEditText.text.toString()
-            if (userId != -1 && countText.isNotEmpty() && reason.isNotEmpty()) {
-                try {
-                    val count: Int = Integer.valueOf(countText)
-                    UserDataRepository.getInstance()?.token?.let {
-                        viewModel.sendCoins(it, userId, count, reason)
-                        showResultTransaction(
-                            amountThanks = count,
-                            receiverTg = user?.tgName.toString(),
-                            receiverName = user?.firstname.toString(),
-                            receiverSurname = user?.surname.toString()
-                        )
+            val isAnon = when(checkBoxIsAnon.isChecked){
+                true -> true
+                else -> false
+            }
+                if (userId != -1 && countText.isNotEmpty() && reason.isNotEmpty()) {
+                    try {
+                        val count: Int = Integer.valueOf(countText)
+                        UserDataRepository.getInstance()?.token?.let {
+                            viewModel.sendCoins(it, userId, count, reason, isAnon)
+                            showResultTransaction(
+                                amountThanks = count,
+                                receiverTg = user?.tgName.toString(),
+                                receiverName = user?.firstname.toString(),
+                                receiverSurname = user?.surname.toString()
+                            )
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+                        //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()
                     }
-                } catch (e: Exception) {
-                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
-                    //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()
                 }
             }
         }
-    }
 
 
     private fun showResultTransaction(amountThanks: Int, receiverTg: String, receiverName: String,
@@ -214,14 +219,5 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             bundle
         )
 
-    }
-
-
-    companion object {
-
-        const val TAG = "TransactionFragment"
-
-        @JvmStatic
-        fun newInstance() = TransactionFragment()
     }
 }
