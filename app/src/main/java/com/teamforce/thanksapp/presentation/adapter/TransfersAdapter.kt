@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.card.MaterialCardView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserTransactionsResponse
 import com.teamforce.thanksapp.databinding.ItemTransferBinding
@@ -68,11 +69,15 @@ class TransfersAdapter(
             if (status.equals("Одобрено")) {
                 holder.status.text = context.getString(R.string.occured)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_success))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_success))
+
                 holder.comingStatusTransaction = context.getString(R.string.occured)
 
             } else if (status.equals("Отклонено")) {
                 holder.status.text = context.getString(R.string.refused)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_error))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_error))
+
 
                 holder.descr_transaction_1 = context.getString(R.string.youWantedToSend)
                 holder.weRefusedYourOperation = true
@@ -82,6 +87,8 @@ class TransfersAdapter(
             } else {
                 holder.status.text = context.getString(R.string.on_approval)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_warning))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_warning))
+
                 holder.comingStatusTransaction = context.getString(R.string.on_approval)
 
             }
@@ -89,7 +96,7 @@ class TransfersAdapter(
         }else{
             if(dataSet[position].sender.sender_tg_name == "anonymous") {
                 holder.descr_transaction_1 = context.getString(R.string.youGot)
-                holder.tgNameUser.text = "аноним"
+                holder.tgNameUser.text = " Аноним"
                 holder.labelStatusTransaction = context.getString(R.string.typeTransfer)
                 holder.valueTransfer.text = "+ " + dataSet[position].amount
                 holder.comingStatusTransaction = context.getString(R.string.comingTransfer)
@@ -113,12 +120,17 @@ class TransfersAdapter(
             if (status.equals("Одобрено")) {
                 holder.status.text = context.getString(R.string.occured)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_success))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_success))
             } else if (status.equals("Отклонено")) {
                 holder.status.text = context.getString(R.string.refused)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_error))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_error))
+
             } else {
                 holder.status.text = context.getString(R.string.on_approval)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_warning))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_warning))
+
 
             }
         }
@@ -167,6 +179,7 @@ class TransfersAdapter(
         val userAvatar: ImageView = binding.transferIconIv
         val tgNameUser: TextView = binding.tgNameUser
         val valueTransfer: TextView = binding.valueTransfer
+        val statusCard: MaterialCardView = binding.statusCard
 
         val view: View = binding.root
         var dateGetInfo: String = "null"

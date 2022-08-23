@@ -38,6 +38,7 @@
             app:cardCornerRadius="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginStart="20dp"
+            app:cardBackgroundColor="@color/minor_success"
             app:layout_constraintStart_toEndOf="@+id/transfer_icon_iv"
             app:layout_constraintTop_toBottomOf="@+id/tgNameUser">
             <TextView
