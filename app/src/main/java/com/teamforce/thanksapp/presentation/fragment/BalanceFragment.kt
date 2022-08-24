@@ -6,8 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import com.google.android.material.card.MaterialCardView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
@@ -25,6 +30,9 @@ class BalanceFragment : Fragment() {
     private lateinit var cancelled: TextView
     private lateinit var frozen: TextView
     private lateinit var willBurn: TextView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var sectionOne: MaterialCardView
+    private lateinit var sectionSecond: LinearLayout
 
 
     override fun onCreateView(
@@ -76,8 +84,25 @@ class BalanceFragment : Fragment() {
             }
         }
 
+        viewModel.isLoading.observe(
+            viewLifecycleOwner,
+            Observer { isLoading ->
+                if (isLoading) {
+                    progressBar.visibility = View.VISIBLE
+                    sectionOne.visibility = View.GONE
+                    sectionSecond.visibility = View.GONE
+                } else {
+                    progressBar.visibility = View.GONE
+                    sectionOne.visibility = View.VISIBLE
+                    sectionSecond.visibility = View.VISIBLE
+                }
+            }
+        )
+
 
     }
+
+
 
     private fun isNotTen(text: String): Boolean {
         return text.length > 1 && text[text.length - 2] != "1".first()
@@ -107,6 +132,9 @@ class BalanceFragment : Fragment() {
         cancelled = view.findViewById(R.id.cancelled_value_tv)
         frozen = view.findViewById(R.id.frozen_value_tv)
         willBurn = view.findViewById(R.id.will_burn_tv)
+        progressBar = view.findViewById(R.id.progressBar)
+        sectionOne = view.findViewById(R.id.section_one)
+        sectionSecond = view.findViewById(R.id.second_linear)
     }
 
     companion object {

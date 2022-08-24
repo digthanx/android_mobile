@@ -65,9 +65,10 @@ interface ThanksApi {
         @Body photo: PutUserAvatarRequest
     ): Call<PutUserAvatarResponse>
 
-    @PUT
+    @PUT("/cancel-transaction/{id}/")
     fun cancelTransaction(
         @Header("Authorization") token: String,
-        @Path("id") transactionId: String
+        @Path("id") transactionId: String,
+        @Body status: CancelTransactionRequest
     ): Call<CancelTransactionResponse>
 }

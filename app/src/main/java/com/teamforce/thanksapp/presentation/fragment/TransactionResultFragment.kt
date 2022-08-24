@@ -1,9 +1,11 @@
 package com.teamforce.thanksapp.presentation.fragment
 
 
+import android.app.Instrumentation
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentTransactionResultBinding
@@ -11,6 +13,7 @@ import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_NAME
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_SURNAME
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_TG
+import kotlinx.coroutines.withContext
 
 
 class TransactionResultFragment : Fragment() {
@@ -51,7 +54,8 @@ class TransactionResultFragment : Fragment() {
             findNavController().navigate(R.id.action_transactionResultFragment_to_transactionFragment)
         }
         binding.btnToTheHistory.setOnClickListener {
-            findNavController().navigate(R.id.action_transactionResultFragment_to_historyFragment2)
+            activity?.onBackPressed()
+            findNavController().popBackStack()
         }
     }
 

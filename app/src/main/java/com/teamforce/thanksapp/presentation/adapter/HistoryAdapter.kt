@@ -11,13 +11,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.model.domain.HistoryModel
+import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
 import java.time.LocalDateTime
 import java.util.*
 
 class HistoryAdapter(
     private val username: String,
-    private val context: Context
+    private val context: Context,
+    private val viewModel: HistoryViewModel
 ) : ListAdapter<HistoryModel, HistoryAdapter.HistoryViewHolder>(DiffCallback) {
+
+    var transAdapter: TransfersAdapter? = null
 
     companion object DiffCallback : DiffUtil.ItemCallback<HistoryModel>(){
         override fun areItemsTheSame(oldItem: HistoryModel, newItem: HistoryModel): Boolean {
@@ -46,8 +50,8 @@ class HistoryAdapter(
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }
-
-        holder.transfers.adapter = TransfersAdapter(username, getItem(position).data, context)
+        transAdapter = TransfersAdapter(username, getItem(position).data, context, viewModel)
+        holder.transfers.adapter = transAdapter
         holder.view.tag = getItem(position)
 
     }

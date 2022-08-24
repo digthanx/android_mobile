@@ -161,7 +161,7 @@ class ProfileFragment : Fragment() {
             departmentUser.text = it.profile.department
             hiredAt.text = it.profile.hiredAt
             Glide.with(this)
-                .load("https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80".toUri())
+                .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
                 .centerCrop()
                 .into(userAvatar)
 

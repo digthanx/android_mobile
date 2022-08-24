@@ -13,11 +13,15 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.model.domain.HistoryModel
 import com.teamforce.thanksapp.presentation.adapter.HistoryAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.activityNavController
+import com.teamforce.thanksapp.utils.navigateSafely
 
 
 class HistoryFragment : Fragment() {
@@ -62,7 +66,8 @@ class HistoryFragment : Fragment() {
                 )
             }
         }
-        recyclerView.adapter = HistoryAdapter(username, requireContext())
+
+        recyclerView.adapter = HistoryAdapter(username, requireContext(), viewModel)
 
         viewModel.isLoading.observe(
             viewLifecycleOwner,
@@ -109,7 +114,17 @@ class HistoryFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                Log.d("Token", " Ошибка лял ял ля  ${it}")
+                Log.d("Token", " Ошибка в HistoryViewModel ля ля ля   ${it}")
+            }
+        )
+
+        viewModel.cancelTransaction.observe(
+            viewLifecycleOwner,
+            Observer {
+                Snackbar.make(view, requireContext().resources.getString(R.string.successfulCancel), Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(context?.getColor(R.color.minor_success)!!)
+                    .setTextColor(context?.getColor(R.color.white)!!)
+                    .show()
             }
         )
 
@@ -117,6 +132,8 @@ class HistoryFragment : Fragment() {
             refreshRecyclerView(checkedId)
         }
     }
+
+
 
     private fun refreshRecyclerView(checkedId: Int) {
         val transactions: List<HistoryModel> = when (checkedId) {

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/whole_screen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".presentation.fragment.BalanceFragment">
@@ -135,8 +136,10 @@
                                         android:id="@+id/distributed_value_tv"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/margin_x"
+                                        android:layout_marginBottom="24dp"
+                                        android:layout_marginStart="3dp"
                                         android:textColor="@color/white"
+                                        android:text="null"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/distributed_label_tv" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -249,8 +252,10 @@
                                         android:id="@+id/least_value_tv"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/margin_x"
+                                        android:layout_marginBottom="24dp"
+                                        android:layout_marginStart="3dp"
                                         android:textColor="@color/white"
+                                        android:text="null"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/least_label_tv" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -265,6 +270,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
+            android:id="@+id/second_linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -376,7 +382,17 @@
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/second_linear"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.core.widget.NestedScrollView>

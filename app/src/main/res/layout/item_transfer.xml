@@ -9,6 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/standard_group"
         android:visibility="visible"
+        android:focusable="true"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

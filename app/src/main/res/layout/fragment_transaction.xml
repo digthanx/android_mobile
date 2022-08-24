@@ -219,7 +219,7 @@
                     android:layout_margin="@dimen/margin_x"
                     android:layout_height="78dp"
                     android:gravity="top"
-                    android:hint="Причина перевода"
+                    android:hint="@string/reason_transaction"
                     android:textAppearance="@style/Body1.Gray" />
             </com.google.android.material.card.MaterialCardView>
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -237,6 +237,7 @@
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:textSize="54sp"
+                    android:text="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
