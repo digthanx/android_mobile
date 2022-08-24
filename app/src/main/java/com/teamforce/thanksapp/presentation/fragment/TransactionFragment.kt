@@ -56,7 +56,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        shouldMeGoToHistoryFragment()
         viewModel = TransactionViewModel()
         viewModel.initViewModel()
         initViews(view)
@@ -101,6 +101,15 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                 }
             }
         )
+    }
+
+    private fun shouldMeGoToHistoryFragment(){
+        val bool = arguments?.getBoolean(Consts.SHOULD_ME_GOTO_HISTORY, false)
+        bool?.let {
+            if(it){
+                findNavController().navigate(R.id.action_transactionFragment_to_historyFragment)
+            }
+        }
     }
 
     fun checkedChip(){

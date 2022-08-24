@@ -23,6 +23,7 @@ object Consts {
     const val LABEL_STATUS_TRANSACTION = "label-status-transaction"
     const val WE_REFUSED_YOUR_OPERATION = "we-refused_your_operation"
     const val AVATAR_USER = "user-avatar"
+    const val SHOULD_ME_GOTO_HISTORY = "ShouldMeGoToHistory"
 
     val MAIN = MainActivity()
     const val BASE_URL: String = "http://176.99.6.251:8888"

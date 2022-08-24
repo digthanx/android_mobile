@@ -39,6 +39,8 @@ class MainFlowFragment : BaseFlowFragment (
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
 
+        // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
+        binding.bottomNavigation.setupWithNavController(navController)
 
         binding.profile.setOnClickListener{
             navController.navigate(R.id.profileFragment)
@@ -48,6 +50,15 @@ class MainFlowFragment : BaseFlowFragment (
             .setLaunchSingleTop(true)
             .setEnterAnim(R.anim.slide_in_right)
             .setExitAnim(R.anim.slide_out_left)
+            .setPopEnterAnim(R.anim.slide_in_left)
+            .setPopExitAnim(R.anim.slide_out_right)
+            .setPopUpTo(navController.graph.startDestinationId, false)
+            .build()
+
+        val optionForTransaction = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
             .setPopEnterAnim(R.anim.slide_in_left)
             .setPopExitAnim(R.anim.slide_out_right)
             .setPopUpTo(navController.graph.startDestinationId, false)
@@ -65,7 +76,7 @@ class MainFlowFragment : BaseFlowFragment (
                     return@OnItemSelectedListener true
                 }
                 R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, option)
+                    navController.navigate(R.id.transactionFragment, null, optionForTransaction)
                     return@OnItemSelectedListener true
                 }
                 R.id.historyFragment -> {

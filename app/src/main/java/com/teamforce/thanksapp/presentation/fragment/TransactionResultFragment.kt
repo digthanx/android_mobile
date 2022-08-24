@@ -9,6 +9,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentTransactionResultBinding
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_NAME
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_SURNAME
@@ -56,7 +57,9 @@ class TransactionResultFragment : Fragment() {
             findNavController().navigate(R.id.action_transactionResultFragment_to_transactionFragment)
         }
         binding.btnToTheHistory.setOnClickListener {
-            findNavController().navigate(R.id.historyFragment)
+            var bundle = Bundle()
+            bundle.putBoolean(Consts.SHOULD_ME_GOTO_HISTORY, true)
+            findNavController().navigate(R.id.action_transactionResultFragment_to_transactionFragment, bundle)
         }
     }
 
