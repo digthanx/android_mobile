@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
@@ -21,6 +22,9 @@ import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 
 class TransactionFragment : Fragment(), View.OnClickListener {
@@ -38,6 +42,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private lateinit var availableCoins: TextView
     private lateinit var chipGroup: ChipGroup
     private lateinit var checkBoxIsAnon: CheckBox
+    private lateinit var progressBar: ProgressBar
     private var user: UserBean? = null
 
     override fun onCreateView(
@@ -51,7 +56,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        shouldMeGoToHistoryFragment()
         viewModel = TransactionViewModel()
         viewModel.initViewModel()
         initViews(view)
@@ -82,6 +87,29 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         availableCoins = binding.distributedValueTv
         chipGroup = binding.chipGroup
         checkBoxIsAnon = binding.isAnon
+        progressBar = binding.progressBar
+
+        viewModel.isLoading.observe(
+            viewLifecycleOwner,
+            Observer { isLoading ->
+                if (isLoading) {
+                    recyclerView.visibility = View.GONE
+                    progressBar.visibility = View.VISIBLE
+                } else {
+                    recyclerView.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                }
+            }
+        )
+    }
+
+    private fun shouldMeGoToHistoryFragment(){
+        val bool = arguments?.getBoolean(Consts.SHOULD_ME_GOTO_HISTORY, false)
+        bool?.let {
+            if(it){
+                findNavController().navigate(R.id.action_transactionFragment_to_historyFragment)
+            }
+        }
     }
 
     fun checkedChip(){

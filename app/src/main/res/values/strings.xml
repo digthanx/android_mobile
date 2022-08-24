@@ -61,6 +61,7 @@
     <string name="will_burn_after_3">Сгорят через %s дней</string>
     <!-- Транзакция фрагмент -->
     <string name="send">Перевести</string>
+    <string name="reason_transaction">Причина перевода</string>
     <string name="empty">\"\"</string>
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
@@ -73,6 +74,8 @@
     <string name="allHistory">Вся история</string>
     <string name="received">Получено</string>
     <string name="sended">Отправлено</string>
+    <string name="cancelTransaction">Отменить перевод?</string>
+    <string name="successfulCancel">Спасибки вернуться на ваш счет :)</string>
     <!-- Additional Info Bottom Sheet Dialog Fragment -->
     <string name="message">Сообщение</string>
     <string name="statusTransfer">Статус перевода</string>

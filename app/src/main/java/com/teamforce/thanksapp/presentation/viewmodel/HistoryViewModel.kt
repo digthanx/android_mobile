@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.data.request.CancelTransactionRequest
+import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.UserTransactionsResponse
 import com.teamforce.thanksapp.model.domain.HistoryModel
@@ -39,6 +41,11 @@ class HistoryViewModel : ViewModel() {
     val profile: LiveData<ProfileResponse> = _profile
     private val _profileError = MutableLiveData<String>()
     val profileError: LiveData<String> = _profileError
+
+    private val _cancelTransaction = MutableLiveData<CancelTransactionResponse>()
+    val cancelTransaction: LiveData<CancelTransactionResponse> = _cancelTransaction
+    private val _cancelTransactionError = MutableLiveData<String>()
+    val cancelTransactionError: LiveData<String> = _cancelTransactionError
 
     fun initViewModel() {
         thanksApi = RetrofitClient.getInstance()
@@ -151,6 +158,40 @@ class HistoryViewModel : ViewModel() {
                         _transactionsLoadingError.postValue(t.message)
                     }
                 })
+        }
+    }
+
+
+    fun cancelUserTransaction(token: String, transactionId: String, status: String) {
+        _isLoading.postValue(true)
+        viewModelScope.launch { cancelUserTransactionEndpoint(token, transactionId, status, Dispatchers.Default) }
+    }
+
+    private suspend fun cancelUserTransactionEndpoint(
+        token: String,
+        transactionId: String,
+        status: String,
+        coroutineDispatcher: CoroutineDispatcher
+    ) {
+        withContext(coroutineDispatcher) {
+            thanksApi?.cancelTransaction("Token $token", transactionId, CancelTransactionRequest(status))?.enqueue(object : Callback<CancelTransactionResponse> {
+                override fun onResponse(
+                    call: Call<CancelTransactionResponse>,
+                    response: Response<CancelTransactionResponse>
+                ) {
+                    _isLoading.postValue(false)
+                    if (response.code() == 200) {
+                        _cancelTransaction.postValue(response.body())
+                    } else {
+                        _cancelTransactionError.postValue(response.message() + " " + response.code())
+                    }
+                }
+
+                override fun onFailure(call: Call<CancelTransactionResponse>, t: Throwable) {
+                    _isLoading.postValue(false)
+                    _cancelTransactionError.postValue(t.message)
+                }
+            })
         }
     }
 }
