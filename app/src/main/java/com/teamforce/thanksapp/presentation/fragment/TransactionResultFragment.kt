@@ -50,12 +50,13 @@ class TransactionResultFragment : Fragment() {
         binding.receiverTgName.text  = receiverTg
         binding.receiverNameLabelTv.text  = receiverName
         binding.receiverSurnameLabelTv.text  = receiverSurname
+
+
         binding.btnToTheBeginning.setOnClickListener {
             findNavController().navigate(R.id.action_transactionResultFragment_to_transactionFragment)
         }
         binding.btnToTheHistory.setOnClickListener {
-            activity?.onBackPressed()
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.historyFragment)
         }
     }
 
