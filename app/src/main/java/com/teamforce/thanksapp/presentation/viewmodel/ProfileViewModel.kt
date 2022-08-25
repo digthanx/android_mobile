@@ -1,9 +1,5 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
-import android.app.Application
-import android.content.Context
-import android.net.Uri
-import android.os.FileUtils
 import android.util.Log
 import androidx.lifecycle.*
 import com.teamforce.thanksapp.data.api.ThanksApi
@@ -12,14 +8,12 @@ import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Part
-import java.security.Provider
+import java.io.File
 
 class ProfileViewModel() : ViewModel() {
 
@@ -86,7 +80,7 @@ class ProfileViewModel() : ViewModel() {
     ) {
         withContext(coroutineDispatcher) {
             Log.d("Token", "Я внутри вызова функции Вот image ${imageFilePart}")
-            thanksApi?.putUserAvatar("Token $token", userId = userId, PutUserAvatarRequest(imageFilePart))?.enqueue(object : Callback<PutUserAvatarResponse> {
+            thanksApi?.putUserAvatar("Token $token", userId = userId, imageFilePart)?.enqueue(object : Callback<PutUserAvatarResponse> {
                 override fun onResponse(
                     call: Call<PutUserAvatarResponse>,
                     response: Response<PutUserAvatarResponse>

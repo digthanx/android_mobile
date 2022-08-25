@@ -1,13 +1,22 @@
 package com.teamforce.thanksapp.presentation.fragment
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,17 +28,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
-import com.teamforce.thanksapp.utils.Consts
-import com.teamforce.thanksapp.utils.UserDataRepository
-import com.teamforce.thanksapp.utils.activityNavController
-import com.teamforce.thanksapp.utils.navigateSafely
+import com.teamforce.thanksapp.utils.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
 
 
 class ProfileFragment : Fragment() {
@@ -39,6 +42,44 @@ class ProfileFragment : Fragment() {
 
     private val viewModel = ProfileViewModel()
 
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                addPhotoFromIntent()
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.grant_permission), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+            val imageBitmap = data.createBitmapFromResult(requireActivity())
+            val imageUri = data.data
+            funURIToMultipart(imageUri!!, imageBitmap!!)
+        }
+    }
+
+    private fun addPhotoFromIntent() {
+        val cameraIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE).takeIf { intent ->
+            intent.resolveActivity(requireActivity().packageManager) != null
+        }
+
+        val galleryIntent = Intent(Intent.ACTION_PICK).apply { this.type = "image/*" }
+
+        val intentChooser = Intent(Intent.ACTION_CHOOSER).apply {
+            this.putExtra(Intent.EXTRA_INTENT, galleryIntent)
+            cameraIntent?.let { intent ->
+                this.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayListOf(intent).toTypedArray<Parcelable>())
+            }
+            this.putExtra(Intent.EXTRA_TITLE, resources.getString(R.string.gallery_title))
+        }
+
+        startActivityForResult(intentChooser, CODE_IMG_GALLERY)
+    }
 
     private lateinit var userTgName: TextView
     private lateinit var userAvatar: ImageView
@@ -50,19 +91,6 @@ class ProfileFragment : Fragment() {
     private lateinit var companyUser: TextView
     private lateinit var departmentUser: TextView
     private lateinit var hiredAt: TextView
-    private var loadImage: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.GetContent(), ActivityResultCallback {
-        it?.let {
-            binding.userAvatar.setImageURI(it)
-            funURIToMultipart(it)
-            //imageConversionToBytes(it.toString())
-        }
-
-//        ActivityResultCallback<Uri> {
-//            Log.d("Я в колбеке", "${it}")
-//            imageFilePart = imageConversionToBytes(it.toString())
-//        }
-    })
-    private lateinit  var imageFilePart: MultipartBody.Part
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +101,7 @@ class ProfileFragment : Fragment() {
         return binding.root
 
     }
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,9 +119,17 @@ class ProfileFragment : Fragment() {
 
     }
 
-    private fun  funURIToMultipart(imageURI: Uri){
-        val file: File = File(imageURI.path!!)
-        val requestFile: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+    private fun  funURIToMultipart(imageURI: Uri, imageBitmap: Bitmap){
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor = requireContext().contentResolver.query(imageURI, projection, null, null, null)!!
+        cursor.moveToFirst()
+        val columnIndex: Int = cursor.getColumnIndex(projection[0])
+        val filePath: String = cursor.getString(columnIndex)
+        cursor.close()
+        val file: File = File(filePath)
+        val stream = ByteArrayOutputStream()
+        val file2 = imageBitmap.compress(Bitmap.CompressFormat.JPEG,100 , stream)
+        val requestFile: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), stream.toByteArray())
         val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
         UserDataRepository.getInstance()?.token.let { token ->
             UserDataRepository.getInstance()?.profileId.let { id ->
@@ -101,37 +138,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-
-//    fun imageConversionToBytes(imageUri: String) {
-//
-//        val imageFile = Uri.parse(imageUri).path?.let { File(it) }
-//        val iStream = context?.contentResolver?.openInputStream(Uri.parse(imageUri))
-//
-//        val bytes = iStream?.let { getBytes(it) }
-//        Log.d("Token", "Bytes ${bytes}")
-//        // bytes не защищен save call
-//        val filePart: MultipartBody.Part = MultipartBody.Part.createFormData("file", imageFile?.path, RequestBody.create(
-//            MediaType.parse("image/png"), bytes))
-//        Log.d("Token", "Filepart.body ${filePart.body()}")
-//        UserDataRepository.getInstance()?.token.let { token ->
-//            UserDataRepository.getInstance()?.profileId.let { id ->
-//                viewModel.loadUpdateAvatarUserProfile(token!!, id!!, filePart)
-//            }
-//        }
-//
-//    }
-
-    @Throws(IOException::class)
-    private fun getBytes(inputStream: InputStream): ByteArray? {
-        val byteBuffer = ByteArrayOutputStream()
-        val bufferSize = 20971520
-        val buffer = ByteArray(bufferSize)
-        var len = 0
-        while (inputStream.read(buffer).also { len = it } != -1) {
-            byteBuffer.write(buffer, 0, len)
-        }
-        return byteBuffer.toByteArray()
-    }
 
 
 
@@ -160,11 +166,12 @@ class ProfileFragment : Fragment() {
             companyUser.text = it.profile.organization
             departmentUser.text = it.profile.department
             hiredAt.text = it.profile.hiredAt
-            Glide.with(this)
-                .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
-                .centerCrop()
-                .into(userAvatar)
-
+            if(!it.profile.photo.isNullOrEmpty()){
+                Glide.with(this)
+                    .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
+                    .centerCrop()
+                    .into(userAvatar)
+            }
             UserDataRepository.getInstance()?.profileId = it.profile.id
         }
 
@@ -192,7 +199,8 @@ class ProfileFragment : Fragment() {
 
             .setNegativeButton(resources.getString(R.string.photo)) { dialog, which ->
                 dialog.cancel()
-                loadImage.launch("image/*")
+                //loadImage.launch("image/*")
+                addPhotoFromIntent()
             }
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
                 dialog.cancel()
@@ -200,9 +208,6 @@ class ProfileFragment : Fragment() {
             .show()
     }
 
-    private fun changePhotoUser(){
-
-    }
 
 
     private fun initViews() {
@@ -221,6 +226,9 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
+
+        private const val CODE_IMG_GALLERY = 111
+        private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
 
         const val TAG = "ProfileFragment"
 
