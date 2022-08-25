@@ -42,9 +42,7 @@ class MainFlowFragment : BaseFlowFragment (
         // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
         binding.bottomNavigation.setupWithNavController(navController)
 
-        binding.profile.setOnClickListener{
-            navController.navigate(R.id.profileFragment)
-        }
+
 
         val option = NavOptions.Builder()
             .setLaunchSingleTop(true)
@@ -63,6 +61,19 @@ class MainFlowFragment : BaseFlowFragment (
             .setPopExitAnim(R.anim.slide_out_right)
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
+
+        val optionForProfileFragment = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+            .setPopExitAnim(R.anim.slide_up)
+            .setPopUpTo(navController.graph.startDestinationId, false)
+            .build()
+
+        binding.profile.setOnClickListener{
+            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
+        }
 
         binding.bottomNavigation.menu.getItem(1).isChecked = true
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
