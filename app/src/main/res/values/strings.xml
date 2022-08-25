@@ -62,6 +62,7 @@
     <!-- Транзакция фрагмент -->
     <string name="send">Перевести</string>
     <string name="reason_transaction">Причина перевода</string>
+    <string name="unsuccessfulSendCoins">Нельзя переводить больше 50% от суммы доступной для перевода</string>
     <string name="empty">\"\"</string>
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
@@ -89,6 +90,7 @@
     <string name="amountThanks">%s спасибок</string>
 
     <!--Utils -->
+    <string name="OK">Ок</string>
     <!--Лента событий -->
     <string name="someoneToSomeone">%s получил %s спасибок от %s</string>
     <string name="youFromSomeone">Вы получили %s спасибок от %s</string>

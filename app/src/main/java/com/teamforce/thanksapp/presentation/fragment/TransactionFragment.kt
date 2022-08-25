@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
@@ -22,9 +24,6 @@ import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 
 
 class TransactionFragment : Fragment(), View.OnClickListener {
@@ -179,15 +178,27 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
             if (it) {
                 Toast.makeText(requireContext(), "Success!", Toast.LENGTH_LONG).show()
-                usersInputLayout.editText?.setText("")
-                countEditText.setText(R.string.empty)
-                reasonEditText.setText(R.string.empty)
-                sendCoinsGroup.visibility = View.GONE
+                showResultTransaction(
+                    amountThanks = Integer.valueOf(countEditText.text.toString()),
+                    receiverTg = user?.tgName.toString(),
+                    receiverName = user?.firstname.toString(),
+                    receiverSurname = user?.surname.toString()
+                )
             }
         }
         viewModel.sendCoinsError.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            sendCoinsGroup.visibility = View.GONE
+            usersInputLayout.visibility = View.VISIBLE
+            //Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            val snack = Snackbar.make(requireView(), requireContext().resources.getString(R.string.unsuccessfulSendCoins), Snackbar.LENGTH_LONG)
+                snack.setTextMaxLines(3)
+                .setTextColor(context?.getColor(R.color.white)!!)
+                .setAction(context?.getString(R.string.OK)!!){
+                    snack.dismiss()
+                }
+                snack.show()
         }
+
         viewModel.usersLoadingError.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
@@ -219,12 +230,6 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                         val count: Int = Integer.valueOf(countText)
                         UserDataRepository.getInstance()?.token?.let {
                             viewModel.sendCoins(it, userId, count, reason, isAnon)
-                            showResultTransaction(
-                                amountThanks = count,
-                                receiverTg = user?.tgName.toString(),
-                                receiverName = user?.firstname.toString(),
-                                receiverSurname = user?.surname.toString()
-                            )
                         }
                     } catch (e: Exception) {
                         Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
@@ -237,6 +242,10 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
     private fun showResultTransaction(amountThanks: Int, receiverTg: String, receiverName: String,
                                       receiverSurname: String ){
+        usersInputLayout.editText?.setText("")
+        countEditText.setText(R.string.empty)
+        reasonEditText.setText(R.string.empty)
+        sendCoinsGroup.visibility = View.GONE
         val bundle = Bundle()
         bundle.putInt(Consts.AMOUNT_THANKS, amountThanks)
         bundle.putString(Consts.RECEIVER_TG, receiverTg.trim())
