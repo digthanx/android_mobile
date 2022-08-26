@@ -6,6 +6,7 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.PutUserAvatarRequest
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
+import com.teamforce.thanksapp.data.response.UpdateProfileResponse
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.*
 import okhttp3.MultipartBody
@@ -29,6 +30,11 @@ class ProfileViewModel() : ViewModel() {
     val imageUri: LiveData<PutUserAvatarResponse> = _imageUri
     private val _imageUriError = MutableLiveData<String>()
     val imageUriError: LiveData<String> = _imageUriError
+
+    private val _updateProfile = MutableLiveData<UpdateProfileResponse>()
+    val updateProfile: LiveData<UpdateProfileResponse> = _updateProfile
+    private val _updateProfileError = MutableLiveData<String>()
+    val updateProfileError: LiveData<String> = _updateProfileError
 
 
     fun initViewModel() {
@@ -87,8 +93,6 @@ class ProfileViewModel() : ViewModel() {
                 ) {
                     _isLoading.postValue(false)
                     if (response.code() == 200) {
-                        Log.d("Token", "${response.body()}")
-                        Log.d("Token", "Я внутри успешного вызова функции выше response body")
                         _imageUri.postValue(response.body())
                     } else {
                         _imageUriError.postValue(response.message() + " " + response.code())
@@ -102,4 +106,44 @@ class ProfileViewModel() : ViewModel() {
             })
         }
     }
+
+    fun loadUpdateProfile(token: String, userId: String, tgName: String, surname: String,
+                          firstName: String, middleName: String, nickname: String) {
+        _isLoading.postValue(true)
+        viewModelScope.launch { callUpdateProfileEndpoint(token, userId = userId, tgName, surname,
+            firstName, middleName, nickname, Dispatchers.Default) }
+    }
+
+    private suspend fun callUpdateProfileEndpoint(
+        token: String,
+        userId: String,
+        tgName: String, surname: String,
+        firstName: String, middleName: String, nickname: String,
+        coroutineDispatcher: CoroutineDispatcher
+    ) {
+        withContext(coroutineDispatcher) {
+            thanksApi?.updateProfile("Token $token", userId = userId, tgName, surname,
+                firstName, middleName, nickname)?.enqueue(object : Callback<UpdateProfileResponse> {
+                override fun onResponse(
+                    call: Call<UpdateProfileResponse>,
+                    response: Response<UpdateProfileResponse>
+                ) {
+                    _isLoading.postValue(false)
+                    if (response.code() == 200) {
+                        Log.d("Token", "${response.body()}")
+                        Log.d("Token", "Я внутри успешного вызова функции выше response body")
+                        _updateProfile.postValue(response.body())
+                    } else {
+                        _updateProfileError.postValue(response.message() + " " + response.code())
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateProfileResponse>, t: Throwable) {
+                    _isLoading.postValue(false)
+                    _updateProfileError.postValue(t.message)
+                }
+            })
+        }
+    }
+
 }
