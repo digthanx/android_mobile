@@ -9,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -182,7 +184,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                     amountThanks = Integer.valueOf(countEditText.text.toString()),
                     receiverTg = user?.tgName.toString(),
                     receiverName = user?.firstname.toString(),
-                    receiverSurname = user?.surname.toString()
+                    receiverSurname = user?.surname.toString(),
+                    photo = "${Consts.BASE_URL}/media/${user?.photo}"
                 )
             }
         }
@@ -211,7 +214,12 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             user = v.tag as UserBean
             usersInputLayout.visibility = View.GONE
             with(binding){
-                // Аватар потом
+                if(!user?.photo.isNullOrEmpty()){
+                    Glide.with(v)
+                        .load("${Consts.BASE_URL}/media/${user?.photo}".toUri())
+                        .centerCrop()
+                        .into(receiverAvatar)
+                }
                 receiverTgName.text = user?.tgName
                 receiverNameLabelTv.text = user?.firstname
                 receiverSurnameLabelTv.text = user?.surname
@@ -241,7 +249,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
 
     private fun showResultTransaction(amountThanks: Int, receiverTg: String, receiverName: String,
-                                      receiverSurname: String ){
+                                      receiverSurname: String, photo: String){
         usersInputLayout.editText?.setText("")
         countEditText.setText(R.string.empty)
         reasonEditText.setText(R.string.empty)
@@ -251,6 +259,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         bundle.putString(Consts.RECEIVER_TG, receiverTg.trim())
         bundle.putString(Consts.RECEIVER_NAME, receiverName.trim())
         bundle.putString(Consts.RECEIVER_SURNAME, receiverSurname.trim())
+        bundle.putString(Consts.AVATAR_USER, photo)
         findNavController().navigate(
             R.id.action_transactionFragment_to_transactionResultFragment,
             bundle
