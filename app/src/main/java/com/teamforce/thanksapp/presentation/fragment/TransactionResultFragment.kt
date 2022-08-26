@@ -4,13 +4,16 @@ package com.teamforce.thanksapp.presentation.fragment
 import android.app.Instrumentation
 import android.os.Bundle
 import android.view.*
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentTransactionResultBinding
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
+import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_NAME
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_SURNAME
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_TG
@@ -26,6 +29,7 @@ class TransactionResultFragment : Fragment() {
     private var receiverTg: String? = null
     private var receiverName: String? = null
     private var receiverSurname: String? = null
+    private var receiverPhoto: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +37,7 @@ class TransactionResultFragment : Fragment() {
             amountThanks = it.getInt(AMOUNT_THANKS)
             receiverTg = it.getString(RECEIVER_TG)
             receiverName = it.getString(RECEIVER_NAME)
-            receiverSurname = it.getString(RECEIVER_SURNAME)
+            receiverPhoto = it.getString(AVATAR_USER)
         }
     }
 
@@ -51,6 +55,12 @@ class TransactionResultFragment : Fragment() {
         binding.receiverTgName.text  = receiverTg
         binding.receiverNameLabelTv.text  = receiverName
         binding.receiverSurnameLabelTv.text  = receiverSurname
+        if(receiverPhoto?.contains("null", ignoreCase = true) != true){
+            Glide.with(view)
+                .load(receiverPhoto?.toUri())
+                .centerCrop()
+                .into(binding.receiverAvatar)
+        }
 
 
         binding.btnToTheBeginning.setOnClickListener {

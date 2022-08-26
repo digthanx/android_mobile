@@ -169,8 +169,7 @@
                             android:id="@+id/receiver_avatar"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/ic_account"
-                            android:background="@color/colorPrimary"
+                            android:src="@drawable/ic_anon_avatar"
                             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
