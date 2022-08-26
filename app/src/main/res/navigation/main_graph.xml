@@ -22,7 +22,7 @@
         <action
             android:id="@+id/action_transactionFragment_to_transactionResultFragment"
             app:destination="@id/transactionResultFragment"
-            app:enterAnim="@anim/to_bottom_out" />
+            app:enterAnim="@anim/fade_in" />
         <action
             android:id="@+id/action_transactionFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
@@ -49,8 +49,7 @@
         tools:layout="@layout/fragment_transaction_result">
         <action
             android:id="@+id/action_transactionResultFragment_to_transactionFragment"
-            app:destination="@id/transactionFragment"
-            app:enterAnim="@anim/to_bottom_in" />
+            app:destination="@id/transactionFragment" />
         <action
             android:id="@+id/action_transactionResultFragment_to_historyFragment"
             app:destination="@id/historyFragment"

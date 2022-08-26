@@ -3,8 +3,10 @@ package com.teamforce.thanksapp.data.api
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
+import java.io.File
 
 interface ThanksApi {
 
@@ -58,12 +60,23 @@ interface ThanksApi {
     ): Call<List<UserBean>>
 
 
-    @PUT("/update-profile-image/{id}/")
+
+//    @Multipart
+//    @POST("/update-profile-image/{id}/")
+//    fun putUserAvatar(
+//        @Header("Authorization") token: String,
+//        @Path("id") userId: String,
+//        @Part photo: MultipartBody.Part
+//    ): Call<PutUserAvatarResponse>
+
+    @Multipart
+    @POST("/update-profile-image/{id}/")
     fun putUserAvatar(
         @Header("Authorization") token: String,
         @Path("id") userId: String,
-        @Body photo: PutUserAvatarRequest
+        @Part photo: MultipartBody.Part
     ): Call<PutUserAvatarResponse>
+
 
     @PUT("/cancel-transaction/{id}/")
     fun cancelTransaction(

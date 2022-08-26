@@ -134,13 +134,14 @@ class TransactionViewModel : ViewModel() {
                         call: Call<SendCoinsResponse>,
                         response: Response<SendCoinsResponse>
                     ) {
+                        _isSuccessOperation.postValue(false)
                         _isLoading.postValue(false)
                         if (response.code() == 201) {
+                            Log.d("Token", "Успешный перевод средств")
                             _isSuccessOperation.postValue(true)
                         } else if(response.code() == 400) {
-                            _sendCoinsError.postValue("Нельзя перевести больше 50% от имеющейся под распределение суммы")
+                            _sendCoinsError.postValue(response.message() + " " + response.code())
                         }else{
-                            Log.d("Token", "Я в эксепшене ${response.body()}")
                             _sendCoinsError.postValue(response.message() + " " + response.code())
                         }
                     }
