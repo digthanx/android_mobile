@@ -6,28 +6,32 @@ import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.databinding.FragmentHistoryBinding
 import com.teamforce.thanksapp.model.domain.HistoryModel
 import com.teamforce.thanksapp.presentation.adapter.HistoryAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
-import com.teamforce.thanksapp.utils.activityNavController
-import com.teamforce.thanksapp.utils.navigateSafely
 
 
 class HistoryFragment : Fragment() {
 
+
+    private var _binding: FragmentHistoryBinding? = null
+    private val binding get() = checkNotNull(_binding) { "Binding is null" }
+
+    private lateinit var swipeToRefresh: SwipeRefreshLayout
     private lateinit var viewModel: HistoryViewModel
     private lateinit var recyclerView: RecyclerView
+    private lateinit var chipGroup: ChipGroup
     private var allTransactionsList: List<HistoryModel> = emptyList()
     private var receivedTransactionsList: List<HistoryModel> = emptyList()
     private var sentTransactionsList: List<HistoryModel> = emptyList()
@@ -39,33 +43,27 @@ class HistoryFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_history, container, false)
+    ): View {
+        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel = HistoryViewModel()
-        viewModel.initViewModel()
-        initViews(view)
+        initViews()
+        loadDataFromServer()
+        setDataWithChip(view)
     }
 
-    private fun initViews(view: View) {
-        recyclerView = view.findViewById(R.id.history_rv)
+    private fun initViews() {
+        viewModel = HistoryViewModel()
+        viewModel.initViewModel()
+        swipeToRefresh = binding.swipeRefreshLayout
+        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
+        recyclerView = binding.historyRv
         recyclerView.itemAnimator = DefaultItemAnimator()
-        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-        val chipGroup = view.findViewById<ChipGroup>(R.id.chipGroup)
-        Log.d("Token", "Username ${username}")
+        chipGroup = binding.chipGroup
 
-        UserDataRepository.getInstance()?.token?.let { token ->
-            UserDataRepository.getInstance()?.username?.let { username ->
-                viewModel.loadTransactionsList(
-                    token,
-                    username
-                )
-            }
-        }
 
         recyclerView.adapter = HistoryAdapter(username, requireContext(), viewModel)
 
@@ -74,13 +72,36 @@ class HistoryFragment : Fragment() {
             Observer { isLoading ->
                 if (isLoading) {
                     recyclerView.visibility = View.GONE
-                    progressBar.visibility = View.VISIBLE
+                    swipeToRefresh.isRefreshing = true
                 } else {
                     recyclerView.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
+                    swipeToRefresh.isRefreshing = false
                 }
             }
         )
+
+        chipGroup.setOnCheckedChangeListener { _, checkedId ->
+            refreshRecyclerView(checkedId)
+        }
+
+        swipeToRefresh.setOnRefreshListener {
+            loadDataFromServer()
+            swipeToRefresh.isRefreshing = false
+        }
+    }
+
+    private fun loadDataFromServer(){
+        UserDataRepository.getInstance()?.token?.let { token ->
+            UserDataRepository.getInstance()?.username?.let { username ->
+                viewModel.loadTransactionsList(
+                    token,
+                    username
+                )
+            }
+        }
+    }
+
+    private fun setDataWithChip(view: View){
         viewModel.allTransactions.observe(
             viewLifecycleOwner,
             Observer {
@@ -114,7 +135,7 @@ class HistoryFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                Log.d("Token", " Ошибка в HistoryViewModel ля ля ля   ${it}")
+                Log.d("Token", " Ошибка в HistoryViewModel ля ля ля   $it")
             }
         )
 
@@ -127,10 +148,6 @@ class HistoryFragment : Fragment() {
                     .show()
             }
         )
-
-        chipGroup.setOnCheckedChangeListener { _, checkedId ->
-            refreshRecyclerView(checkedId)
-        }
     }
 
 
@@ -149,7 +166,7 @@ class HistoryFragment : Fragment() {
     }
 
     private fun sparseArrayToReversedList(transactions: SparseArray<HistoryModel>): List<HistoryModel> {
-        val list: ArrayList<HistoryModel> = ArrayList<HistoryModel>()
+        val list: ArrayList<HistoryModel> = ArrayList()
         for (i in 0 until transactions.size()) {
             val model = transactions.get(transactions.keyAt(i))
             if (model != null) {
@@ -165,7 +182,5 @@ class HistoryFragment : Fragment() {
 
         const val TAG = "HistoryFragment"
 
-        @JvmStatic
-        fun newInstance() = HistoryFragment()
     }
 }
