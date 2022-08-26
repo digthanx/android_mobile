@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
@@ -23,7 +24,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
@@ -91,6 +94,10 @@ class ProfileFragment : Fragment() {
     private lateinit var companyUser: TextView
     private lateinit var departmentUser: TextView
     private lateinit var hiredAt: TextView
+    private lateinit var header: MaterialCardView
+    private lateinit var information: MaterialCardView
+    private lateinit var placeJob: MaterialCardView
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -120,6 +127,12 @@ class ProfileFragment : Fragment() {
     }
 
     private fun  funURIToMultipart(imageURI: Uri, imageBitmap: Bitmap){
+        // Хардовая вставка картинки с самого начала
+        // Убрать как только сделаю обновление по свайпам
+        Glide.with(this)
+            .load(imageURI)
+            .centerCrop()
+            .into(userAvatar)
         val projection = arrayOf(MediaStore.Images.Media.DATA)
         val cursor: Cursor = requireContext().contentResolver.query(imageURI, projection, null, null, null)!!
         cursor.moveToFirst()
@@ -222,7 +235,29 @@ class ProfileFragment : Fragment() {
         departmentUser = binding.departmentValueTv
         hiredAt = binding.dateStartValueTv
 
+        header = binding.header
+        information = binding.information
+        placeJob = binding.placeJob
+        progressBar = binding.progressBar
+
         viewModel.initViewModel()
+
+        viewModel.isLoading.observe(
+            viewLifecycleOwner,
+            Observer { isLoading ->
+                if (isLoading) {
+                    header.visibility = View.GONE
+                    information.visibility = View.GONE
+                    placeJob.visibility = View.GONE
+                    progressBar.visibility = View.VISIBLE
+                } else {
+                    header.visibility = View.VISIBLE
+                    information.visibility = View.VISIBLE
+                    placeJob.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                }
+            }
+        )
     }
 
     companion object {
