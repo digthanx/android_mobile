@@ -64,6 +64,10 @@
     <string name="reason_transaction">Причина перевода</string>
     <string name="unsuccessfulSendCoins">Нельзя переводить больше 50% от суммы доступной для перевода</string>
     <string name="empty">\"\"</string>
+    <!-- item_user -->
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="tgName">TgName</string>
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
     <string name="sended_to">Перевод для %s</string>
