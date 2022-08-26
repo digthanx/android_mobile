@@ -10,8 +10,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.card.MaterialCardView
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
+import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
 import java.time.LocalDate
@@ -20,6 +23,10 @@ import java.time.temporal.ChronoUnit
 
 class BalanceFragment : Fragment() {
 
+    private var _binding: FragmentBalanceBinding? = null
+    private val binding get() = checkNotNull(_binding) { "Binding is null" }
+
+    private lateinit var viewModel: BalanceViewModel
     private lateinit var count: TextView
     private lateinit var distributed: TextView
     private lateinit var leastCount: TextView
@@ -27,29 +34,56 @@ class BalanceFragment : Fragment() {
     private lateinit var cancelled: TextView
     private lateinit var frozen: TextView
     private lateinit var willBurn: TextView
-    private lateinit var progressBar: ProgressBar
     private lateinit var sectionOne: MaterialCardView
     private lateinit var sectionSecond: LinearLayout
+    private lateinit var swipeToRefresh: SwipeRefreshLayout
 
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_balance, container, false)
+    ): View {
+        _binding = FragmentBalanceBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViews(view)
-        val viewModel = BalanceViewModel()
-        viewModel.initViewModel()
-        val token = UserDataRepository.getInstance()?.token
-        if (token != null) {
-            viewModel.loadUserBalance(token)
+        loadBalanceData()
+        setBalanceData()
+        viewModel.isLoading.observe(
+            viewLifecycleOwner,
+            Observer { isLoading ->
+                if (isLoading) {
+                    swipeToRefresh.isRefreshing = true
+                    sectionOne.visibility = View.GONE
+                    sectionSecond.visibility = View.GONE
+                } else {
+                    sectionOne.visibility = View.VISIBLE
+                    sectionSecond.visibility = View.VISIBLE
+                    swipeToRefresh.isRefreshing = false
+                }
+            }
+        )
+
+        swipeToRefresh.setOnRefreshListener {
+            loadBalanceData()
+            swipeToRefresh.isRefreshing = false
         }
+
+    }
+
+
+
+    private fun loadBalanceData(){
+        UserDataRepository.getInstance()?.token?.let {
+            viewModel.loadUserBalance(it)
+        }
+    }
+
+    private fun setBalanceData(){
         viewModel.balance.observe(viewLifecycleOwner) {
             UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
             count.text = it.income.amount.toString()
@@ -80,26 +114,7 @@ class BalanceFragment : Fragment() {
                 Log.e(TAG, e.message, e.fillInStackTrace())
             }
         }
-
-        viewModel.isLoading.observe(
-            viewLifecycleOwner,
-            Observer { isLoading ->
-                if (isLoading) {
-                    progressBar.visibility = View.VISIBLE
-                    sectionOne.visibility = View.GONE
-                    sectionSecond.visibility = View.GONE
-                } else {
-                    progressBar.visibility = View.GONE
-                    sectionOne.visibility = View.VISIBLE
-                    sectionSecond.visibility = View.VISIBLE
-                }
-            }
-        )
-
-
     }
-
-
 
     private fun isNotTen(text: String): Boolean {
         return text.length > 1 && text[text.length - 2] != "1".first()
@@ -122,16 +137,19 @@ class BalanceFragment : Fragment() {
     }
 
     private fun initViews(view: View) {
-        count = view.findViewById(R.id.count_value_tv)
-        distributed = view.findViewById(R.id.distributed_value_tv)
-        leastCount = view.findViewById(R.id.least_count)
-        leastDistribute = view.findViewById(R.id.least_value_tv)
-        cancelled = view.findViewById(R.id.cancelled_value_tv)
-        frozen = view.findViewById(R.id.frozen_value_tv)
-        willBurn = view.findViewById(R.id.will_burn_tv)
-        progressBar = view.findViewById(R.id.progressBar)
-        sectionOne = view.findViewById(R.id.section_one)
-        sectionSecond = view.findViewById(R.id.second_linear)
+        viewModel = BalanceViewModel()
+        viewModel.initViewModel()
+        count = binding.countValueTv
+        distributed = binding.distributedValueTv
+        leastCount = binding.leastCount
+        leastDistribute = binding.leastValueTv
+        cancelled = binding.cancelledValueTv
+        frozen = binding.frozenValueTv
+        willBurn = binding.willBurnTv
+        sectionOne = binding.sectionOne
+        sectionSecond = binding.secondLinear
+        swipeToRefresh = binding.swipeRefreshLayout
+        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
     }
 
     companion object {

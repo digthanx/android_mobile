@@ -236,7 +236,7 @@ class ProfileFragment : Fragment() {
 
     private fun initViews() {
         swipeToRefresh = binding.swipeRefreshLayout
-
+        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         userTgName = binding.userTelegramId
         userAvatar = binding.userAvatar
         userFio = binding.userFio

@@ -50,7 +50,7 @@
                         android:layout_marginStart="12dp"
                         android:textSize="16sp"
                         android:textColor="@color/black"
-                        android:text="Имя Фамилия Отчество"
+                        android:text="@string/name"
                         app:layout_constraintStart_toEndOf="@id/user_avatar"
                         app:layout_constraintTop_toTopOf="parent"/>
                     <TextView
@@ -58,9 +58,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
+                        android:text="@string/tgName"
                         android:layout_marginStart="12dp"
                         android:textColor="@color/general_brand"
-                        android:text="Телеграм"
                         app:layout_constraintStart_toEndOf="@id/user_avatar"
                         app:layout_constraintTop_toBottomOf="@id/user_fio"/>
 
@@ -125,7 +125,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/Subtitle1"
-                        android:text="Корпоративная почта"
                         android:layout_marginBottom="16dp"/>
 
                     <TextView
@@ -141,7 +140,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/Subtitle1"
-                        android:text="Номер телефона"
                         android:layout_marginBottom="16dp"/>
                 </LinearLayout>
 
@@ -177,15 +175,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:layout_marginBottom="4dp"
-                        android:text="Компания" />
+                        android:text="Компания"
+                        android:layout_marginBottom="4dp"/>
 
                     <TextView
                         android:id="@+id/company_value_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/Subtitle1"
-                        android:text="Компания"
                         android:layout_marginBottom="16dp"/>
 
                     <TextView
@@ -193,8 +190,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:layout_marginBottom="4dp"
-                        android:text="Подразделение" />
+                        android:text="Подразделение"
+                        android:layout_marginBottom="4dp"/>
 
                     <TextView
                         android:id="@+id/department_value_tv"
@@ -217,7 +214,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/Subtitle1"
-                        android:text="Дата начала работы"
                         android:layout_marginBottom="16dp"/>
                 </LinearLayout>
 
