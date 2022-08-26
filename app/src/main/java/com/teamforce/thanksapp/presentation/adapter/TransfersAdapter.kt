@@ -62,6 +62,12 @@ class TransfersAdapter(
         holder.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
         if(dataSet[position].sender.sender_tg_name != "anonymous" && dataSet[position].sender.sender_tg_name.equals(username)){
             // Ты отправитель
+            if(dataSet[position].canUserCancel){
+                holder.btnRefusedTransaction.visibility = View.VISIBLE
+                holder.btnRefusedTransaction.setOnClickListener {
+                    showAlertDialogForCancelTransaction(dataSet[position].id)
+                }
+            }
             holder.valueTransfer.text = "- " + dataSet[position].amount
             holder.tgNameUser.text = "@" + dataSet[position].recipient.recipient_tg_name
             holder.descr_transaction_1 = context.getString(R.string.youSended)
@@ -172,9 +178,6 @@ class TransfersAdapter(
 
             }
             v.findNavController().navigate(R.id.action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2, bundle)
-        }
-        holder.btnRefusedTransaction.setOnClickListener {
-            showAlertDialogForCancelTransaction(dataSet[position].id)
         }
 
     }
