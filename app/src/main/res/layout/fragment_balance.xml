@@ -304,7 +304,7 @@
                             android:id="@+id/cancelled_label_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
+                            android:layout_marginStart="39dp"
                             android:text="@string/cancelled"
                             android:textAppearance="@style/Body2"
                             app:layout_constraintStart_toStartOf="@id/icon_refuse"
