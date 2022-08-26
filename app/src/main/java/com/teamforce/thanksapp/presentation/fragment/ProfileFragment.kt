@@ -25,6 +25,8 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -57,6 +59,49 @@ class ProfileFragment : Fragment() {
             }
         }
 
+
+    private lateinit var userTgName: TextView
+    private lateinit var userAvatar: ImageView
+    private lateinit var userFio: TextView
+
+    private lateinit var userEmail: TextView
+    private lateinit var userPhone: TextView
+
+    private lateinit var companyUser: TextView
+    private lateinit var departmentUser: TextView
+    private lateinit var hiredAt: TextView
+    private lateinit var header: MaterialCardView
+    private lateinit var information: MaterialCardView
+    private lateinit var placeJob: MaterialCardView
+    private lateinit var swipeToRefresh: SwipeRefreshLayout
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+        requestData()
+        setData()
+        binding.exitBtn.setOnClickListener {
+            showAlertDialogForExit()
+        }
+
+        binding.editBtn.setOnClickListener{
+            showAlertDialogForEditProfile()
+        }
+        swipeToRefresh()
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
@@ -84,55 +129,14 @@ class ProfileFragment : Fragment() {
         startActivityForResult(intentChooser, CODE_IMG_GALLERY)
     }
 
-    private lateinit var userTgName: TextView
-    private lateinit var userAvatar: ImageView
-    private lateinit var userFio: TextView
-
-    private lateinit var userEmail: TextView
-    private lateinit var userPhone: TextView
-
-    private lateinit var companyUser: TextView
-    private lateinit var departmentUser: TextView
-    private lateinit var hiredAt: TextView
-    private lateinit var header: MaterialCardView
-    private lateinit var information: MaterialCardView
-    private lateinit var placeJob: MaterialCardView
-    private lateinit var progressBar: ProgressBar
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        return binding.root
-
-    }
-
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initViews()
-        requestData()
-        setData()
-        binding.exitBtn.setOnClickListener {
-            showAlertDialogForExit()
-        }
-
-        binding.editBtn.setOnClickListener{
-            showAlertDialogForEditProfile()
-        }
-
-    }
 
     private fun  funURIToMultipart(imageURI: Uri, imageBitmap: Bitmap){
         // Хардовая вставка картинки с самого начала
         // Убрать как только сделаю обновление по свайпам
-        Glide.with(this)
-            .load(imageURI)
-            .centerCrop()
-            .into(userAvatar)
+//        Glide.with(this)
+//            .load(imageURI)
+//            .centerCrop()
+//            .into(userAvatar)
         val projection = arrayOf(MediaStore.Images.Media.DATA)
         val cursor: Cursor = requireContext().contentResolver.query(imageURI, projection, null, null, null)!!
         cursor.moveToFirst()
@@ -191,6 +195,13 @@ class ProfileFragment : Fragment() {
 
     }
 
+    private fun swipeToRefresh(){
+        swipeToRefresh.setOnRefreshListener {
+            requestData()
+            swipeToRefresh.isRefreshing = false
+        }
+    }
+
     private fun showAlertDialogForExit(){
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.wouldYouLikeToExit))
@@ -224,6 +235,8 @@ class ProfileFragment : Fragment() {
 
 
     private fun initViews() {
+        swipeToRefresh = binding.swipeRefreshLayout
+        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         userTgName = binding.userTelegramId
         userAvatar = binding.userAvatar
         userFio = binding.userFio
@@ -238,7 +251,6 @@ class ProfileFragment : Fragment() {
         header = binding.header
         information = binding.information
         placeJob = binding.placeJob
-        progressBar = binding.progressBar
 
         viewModel.initViewModel()
 
@@ -249,12 +261,13 @@ class ProfileFragment : Fragment() {
                     header.visibility = View.GONE
                     information.visibility = View.GONE
                     placeJob.visibility = View.GONE
-                    progressBar.visibility = View.VISIBLE
+                    swipeToRefresh.isRefreshing = true
                 } else {
                     header.visibility = View.VISIBLE
                     information.visibility = View.VISIBLE
                     placeJob.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
+                    swipeToRefresh.isRefreshing = false
+
                 }
             }
         )

@@ -73,6 +73,7 @@
             android:id="@+id/refuse_transaction_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:background="@color/general_background"
             android:src="@drawable/ic__cross_red"
             app:layout_constraintEnd_toEndOf="parent"

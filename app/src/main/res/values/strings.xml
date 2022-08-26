@@ -41,6 +41,7 @@
     <string name="photo">Аватар</string>
     <string name="stringData">Личную информацию</string>
     <!-- Баланс фрагмент -->
+    <string name="spaceWithContent"> %s</string>
     <string name="registration_button_label">Регистрация</string>
     <string name="application_label">Цифровое спасибо</string>
     <string name="enter_button_label">Вход</string>
