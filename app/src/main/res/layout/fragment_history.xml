@@ -1,114 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/general_background"
+    android:orientation="vertical"
+    tools:context=".presentation.fragment.HistoryFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/general_background"
-        tools:context=".presentation.fragment.HistoryFragment">
+        android:layout_height="125dp"
+        android:fitsSystemWindows="true">
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/general_background"
-            app:singleSelection="true">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:checked="true"
-                android:text="@string/allHistory"
-                android:textStyle="bold"
-                app:chipStrokeWidth="1dp"
-                app:chipStrokeColor="@color/chip_history_underline_color"
-                android:textColor="@color/history_chip_text_color_state"
-                app:chipBackgroundColor="@color/white"
-                style="@style/MyChipsHistory">
-            </com.google.android.material.chip.Chip>
-
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipReceived"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="@string/received"
-                android:textStyle="bold"
-                app:chipStrokeWidth="1dp"
-                app:chipStrokeColor="@color/chip_history_underline_color"
-                android:textColor="@color/history_chip_text_color_state"
-                app:chipBackgroundColor="@color/white"
-                style="@style/MyChipsHistory"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipSent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="@string/sended"
-                android:textStyle="bold"
-                app:chipStrokeWidth="1dp"
-                app:chipStrokeColor="@color/chip_history_underline_color"
-                android:textColor="@color/history_chip_text_color_state"
-                app:chipBackgroundColor="@color/white"
-                style="@style/MyChipsHistory"/>
-
-        </com.google.android.material.chip.ChipGroup>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textField"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxStrokeWidth="0.5dp"
-            app:boxBackgroundColor="@color/color5"
-            android:paddingHorizontal="16dp"
-            android:textColorHint="@color/general_color_grey"
-            app:boxCornerRadiusTopStart="15dp"
-            app:boxCornerRadiusTopEnd="15dp"
-            app:boxCornerRadiusBottomEnd="15dp"
-            app:boxCornerRadiusBottomStart="15dp"
-            android:focusable="false"
-            android:hint="@string/period"
-            android:layout_marginTop="@dimen/margin_x">
+            android:layout_height="match_parent"
+            android:elevation="0dp"
+            android:fitsSystemWindows="true"
+            app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded"
+            app:expandedTitleTextColor="@color/white"
+            app:layout_scrollFlags="enterAlways">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/period_et"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/Theme.ThanksApp.PopupOverlay"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_calendar"/>
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="enterAlways"
+                app:titleTextColor="@color/white">
 
-        </com.google.android.material.textfield.TextInputLayout>
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/ic_app_logo" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="100dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:scaleType="matrix"
+                        android:src="@drawable/smile"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <ImageButton
+                    android:id="@+id/notify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="15dp"
+                    android:backgroundTint="@color/general_brand"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_bell" />
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:cardBackgroundColor="@color/general_brand"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="4dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/history_rv"
+        <com.google.android.material.card.MaterialCardView
+            style="@style/MyCardView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            android:layout_height="match_parent"
+            android:elevation="0dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/general_background"
+                    app:singleSelection="true">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAll"
+                        style="@style/MyChipsHistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:checked="true"
+                        android:text="@string/allHistory"
+                        android:textColor="@color/history_chip_text_color_state"
+                        android:textStyle="bold"
+                        app:chipBackgroundColor="@color/white"
+                        app:chipStrokeColor="@color/chip_history_underline_color"
+                        app:chipStrokeWidth="1dp"></com.google.android.material.chip.Chip>
 
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipReceived"
+                        style="@style/MyChipsHistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:text="@string/received"
+                        android:textColor="@color/history_chip_text_color_state"
+                        android:textStyle="bold"
+                        app:chipBackgroundColor="@color/white"
+                        app:chipStrokeColor="@color/chip_history_underline_color"
+                        app:chipStrokeWidth="1dp" />
 
-    </LinearLayout>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipSent"
+                        style="@style/MyChipsHistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:text="@string/sended"
+                        android:textColor="@color/history_chip_text_color_state"
+                        android:textStyle="bold"
+                        app:chipBackgroundColor="@color/white"
+                        app:chipStrokeColor="@color/chip_history_underline_color"
+                        app:chipStrokeWidth="1dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textField"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_x"
+                    android:focusable="false"
+                    android:hint="@string/period"
+                    android:paddingHorizontal="16dp"
+                    android:textColorHint="@color/general_color_grey"
+                    app:boxBackgroundColor="@color/color5"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeWidth="0.5dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/period_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_calendar" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipeRefreshLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/history_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+</LinearLayout>
 
 
 
