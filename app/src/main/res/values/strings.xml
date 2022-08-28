@@ -30,6 +30,7 @@
     <string name="hired_label">Дата начала работы</string>
     <string name="mobile_label">Мобильный номер</string>
     <string name="email_label">Корпоративная почта</string>
+    <string name="company_label">Компания</string>
     <string name="lastAuth">Последний вход сегодня %s</string>
     <string name="userFio">%s %s %s</string>
     <string name="placeJob">МЕСТО РАБОТЫ</string>
@@ -40,6 +41,13 @@
     <string name="whatEditInProfile">Что именно вы хотите отредактировать?</string>
     <string name="photo">Аватар</string>
     <string name="stringData">Личную информацию</string>
+    <!-- Edit Profile Bottom Sheet Fragment -->
+    <string name="contacts">КОНТАКТЫ</string>
+    <string name="save">Сохранить</string>
+    <string name="surname">Фамилия</string>
+    <string name="firstname">Имя</string>
+    <string name="middleName">Отчество</string>
+
     <!-- Баланс фрагмент -->
     <string name="spaceWithContent"> %s</string>
     <string name="registration_button_label">Регистрация</string>
@@ -67,7 +75,6 @@
     <string name="empty">\"\"</string>
     <!-- item_user -->
     <string name="name">Name</string>
-    <string name="surname">Surname</string>
     <string name="tgName">TgName</string>
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>

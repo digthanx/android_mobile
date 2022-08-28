@@ -36,7 +36,11 @@
         android:id="@+id/profileFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.ProfileFragment"
         android:label="Профиль"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileBottomSheetFragment"
+            app:destination="@id/editProfileBottomSheetFragment" />
+    </fragment>
     <fragment
         android:id="@+id/feedFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.FeedFragment"
@@ -63,4 +67,12 @@
             android:id="@+id/action_additionalInfoTransactionBottomSheetFragment2_to_historyFragment"
             app:destination="@id/historyFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/editProfileBottomSheetFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.EditProfileBottomSheetFragment"
+        android:label="EditProfileBottomSheetFragment" >
+        <action
+            android:id="@+id/action_editProfileBottomSheetFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 </navigation>

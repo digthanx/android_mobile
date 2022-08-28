@@ -228,6 +228,7 @@ class ProfileFragment : Fragment() {
             }
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
                 dialog.cancel()
+                findNavController().navigate(R.id.action_profileFragment_to_editProfileBottomSheetFragment)
             }
             .show()
     }

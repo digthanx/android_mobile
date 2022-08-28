@@ -175,7 +175,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="Компания"
+                        android:text="@string/company_label"
                         android:layout_marginBottom="4dp"/>
 
                     <TextView
@@ -190,7 +190,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="Подразделение"
+                        android:text="@string/department_label"
                         android:layout_marginBottom="4dp"/>
 
                     <TextView
@@ -198,7 +198,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/Subtitle1"
-                        android:text="Департамент отсутсвующих данных"
                         android:layout_marginBottom="16dp"/>
 
                     <TextView
@@ -207,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
                         android:layout_marginBottom="4dp"
-                        android:text="Дата начала работы" />
+                        android:text="@string/hired_label" />
 
                     <TextView
                         android:id="@+id/dateStart_value_tv"
