@@ -9,6 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
@@ -47,11 +51,27 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
+        val toolbar = binding.toolbar
+        val collapsingToolbar = binding.collapsingToolbar
+        collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
         viewModel.initViewModel()
         inflateRecyclerView()
         getListsFromDb()
         binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
             refreshRecyclerView(checkedId)
+        }
+        val optionForProfileFragment = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+            .setPopExitAnim(R.anim.slide_up)
+            .setPopUpTo(navController.graph.startDestinationId, false)
+            .build()
+        binding.profile.setOnClickListener {
+            findNavController().navigate(R.id.action_feedFragment_to_profileFragment, null, optionForProfileFragment )
         }
     }
 

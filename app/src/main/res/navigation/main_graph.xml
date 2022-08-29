@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2"
             app:destination="@id/additionalInfoTransactionBottomSheetFragment2" />
+        <action
+            android:id="@+id/action_historyFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/transactionFragment"
@@ -31,17 +34,29 @@
         android:id="@+id/balanceFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.BalanceFragment"
         android:label="@string/balance_label"
-        tools:layout="@layout/fragment_balance" />
+        tools:layout="@layout/fragment_balance" >
+        <action
+            android:id="@+id/action_balanceFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.ProfileFragment"
         android:label="Профиль"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileBottomSheetFragment"
+            app:destination="@id/editProfileBottomSheetFragment" />
+    </fragment>
     <fragment
         android:id="@+id/feedFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.FeedFragment"
         android:label="@string/feed_label"
-        tools:layout="@layout/fragment_feed" />
+        tools:layout="@layout/fragment_feed" >
+        <action
+            android:id="@+id/action_feedFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/transactionResultFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.TransactionResultFragment"
@@ -63,4 +78,12 @@
             android:id="@+id/action_additionalInfoTransactionBottomSheetFragment2_to_historyFragment"
             app:destination="@id/historyFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/editProfileBottomSheetFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.EditProfileBottomSheetFragment"
+        android:label="EditProfileBottomSheetFragment" >
+        <action
+            android:id="@+id/action_editProfileBottomSheetFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 </navigation>

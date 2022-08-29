@@ -14,10 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,6 +23,8 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
@@ -66,6 +65,10 @@ class ProfileFragment : Fragment() {
 
     private lateinit var userEmail: TextView
     private lateinit var userPhone: TextView
+    private var contactId_1: String? = null
+    private var contactId_2: String? = null
+    private var contactValue_1: String? = null
+    private var contactValue_2: String? = null
 
     private lateinit var companyUser: TextView
     private lateinit var departmentUser: TextView
@@ -88,6 +91,10 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
+
+        binding.toolbarProfile.setupWithNavController(navController, appBarConfiguration)
         initViews()
         requestData()
         setData()
@@ -173,10 +180,32 @@ class ProfileFragment : Fragment() {
             userTgName.text = "@" + it.profile.tgName
 
             if(it.profile.contacts.size == 1){
-                userEmail.text = it.profile.contacts[0].contact_id
+                if(it.profile.contacts[0].contact_type == "@"){
+                    userEmail.text = it.profile.contacts[0].contact_id
+                    contactId_1 = it.profile.contacts[0].id
+                    contactValue_1 = it.profile.contacts[0].contact_id
+                }else{
+                    userPhone.text = it.profile.contacts[0].contact_id
+                    contactId_2 = it.profile.contacts[0].id
+                    contactValue_2 = it.profile.contacts[0].contact_id
+                }
             }else if(it.profile.contacts.size == 2){
-                userEmail.text = it.profile.contacts[0].contact_id
-                userPhone.text = it.profile.contacts[1].contact_id
+                if(it.profile.contacts[0].contact_type == "@"){
+                    userEmail.text = it.profile.contacts[0].contact_id
+                    contactId_1 = it.profile.contacts[0].id
+                    userPhone.text = it.profile.contacts[1].contact_id
+                    contactId_2 = it.profile.contacts[1].id
+                    contactValue_1 = it.profile.contacts[0].contact_id
+                    contactValue_2 = it.profile.contacts[1].contact_id
+
+                }else{
+                    userEmail.text = it.profile.contacts[1].contact_id
+                    contactId_1 = it.profile.contacts[1].id
+                    userPhone.text = it.profile.contacts[0].contact_id
+                    contactId_2 = it.profile.contacts[0].id
+                    contactValue_1 = it.profile.contacts[1].contact_id
+                    contactValue_2 = it.profile.contacts[0].contact_id
+                }
             }
 
 
@@ -228,6 +257,12 @@ class ProfileFragment : Fragment() {
             }
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
                 dialog.cancel()
+                val bundle = Bundle()
+                bundle.putString("contact_id_1", contactId_1)
+                bundle.putString("contact_id_2", contactId_2)
+                bundle.putString("contact_value_1", contactValue_1)
+                bundle.putString("contact_value_2", contactValue_2)
+                findNavController().navigate(R.id.action_profileFragment_to_editProfileBottomSheetFragment, bundle)
             }
             .show()
     }

@@ -60,15 +60,6 @@ interface ThanksApi {
     ): Call<List<UserBean>>
 
 
-
-//    @Multipart
-//    @POST("/update-profile-image/{id}/")
-//    fun putUserAvatar(
-//        @Header("Authorization") token: String,
-//        @Path("id") userId: String,
-//        @Part photo: MultipartBody.Part
-//    ): Call<PutUserAvatarResponse>
-
     @Multipart
     @POST("/update-profile-image/{id}/")
     fun putUserAvatar(
@@ -84,4 +75,27 @@ interface ThanksApi {
         @Path("id") transactionId: String,
         @Body status: CancelTransactionRequest
     ): Call<CancelTransactionResponse>
+
+
+
+    @PUT("/update-profile-by-user/{id}/")
+    fun updateProfile(
+        @Header("Authorization") token: String,
+        @Path("id") userId: String,
+        @Body data: UpdateProfileRequest
+    ): Call<UpdateProfileResponse>
+
+    @PUT("/update-contact-by-user/{id}/")
+    fun updateContact(
+        @Header("Authorization") token: String,
+        @Path("id") contactId: String,
+        @Body data: UpdateContactRequest,
+    ): Call<UpdateContactResponse>
+
+    @POST("/create-contact-by-user/")
+    fun createContact(
+        @Header("Authorization") token: String,
+        @Body data: CreateContactRequest?,
+    ): Call<CreateContactResponse>
+
 }

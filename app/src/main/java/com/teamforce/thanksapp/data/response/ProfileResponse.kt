@@ -28,6 +28,7 @@ data class ProfileResponse(
     )
 
     data class Contact(
+        val id: String,
         val contact_type: String,
         val contact_id: String
     )

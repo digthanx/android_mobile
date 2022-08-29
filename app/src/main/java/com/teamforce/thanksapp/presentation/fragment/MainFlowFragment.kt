@@ -13,7 +13,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentMainFlowBinding
 
 
-class MainFlowFragment : BaseFlowFragment (
+class MainFlowFragment : BaseFlowFragment(
     R.layout.fragment_main_flow, R.id.nav_host_fragment_main
 ) {
 
@@ -31,17 +31,11 @@ class MainFlowFragment : BaseFlowFragment (
     }
 
     override fun setupNavigation(navController: NavController) {
-       // binding.bottomNavigation.setupWithNavController(navController)
+        // binding.bottomNavigation.setupWithNavController(navController)
 //        binding.navView.setupWithNavController(navController)
-        val appBarConfiguration =
-            AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
-        val toolbar = binding.toolbar
-        val collapsingToolbar = binding.collapsingToolbar
-        collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
 
         // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
         binding.bottomNavigation.setupWithNavController(navController)
-
 
 
         val option = NavOptions.Builder()
@@ -53,13 +47,35 @@ class MainFlowFragment : BaseFlowFragment (
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
 
+        val optionFeed = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(R.anim.to_right_in)
+            .setExitAnim(R.anim.to_left_out)
+            .setPopEnterAnim(R.anim.to_left_in)
+            .setPopExitAnim(R.anim.to_right_out)
+
+            .setPopUpTo(navController.graph.startDestinationId, false)
+            .build()
+
+        val optionHistory = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(R.anim.to_left_in)
+            .setExitAnim(R.anim.to_right_out)
+            .setPopEnterAnim(R.anim.to_right_in)
+            .setPopExitAnim(R.anim.to_left_out)
+
+            .setPopUpTo(navController.graph.startDestinationId, false)
+            .build()
+
+
+
+
         val optionForTransaction = NavOptions.Builder()
             .setLaunchSingleTop(true)
             .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
             .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(R.anim.slide_in_left)
-            .setPopExitAnim(R.anim.slide_out_right)
-            .setPopUpTo(navController.graph.startDestinationId, false)
+            .setPopEnterAnim(com.google.android.material.R.anim.abc_fade_in)
+            .setPopExitAnim(com.google.android.material.R.anim.abc_fade_out)
             .build()
 
         val optionForProfileFragment = NavOptions.Builder()
@@ -71,19 +87,19 @@ class MainFlowFragment : BaseFlowFragment (
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
 
-        binding.profile.setOnClickListener{
-            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
-        }
+//        binding.profile.setOnClickListener{
+//            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
+//        }
 
         binding.bottomNavigation.menu.getItem(1).isChecked = true
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, option)
+                    navController.navigate(R.id.balanceFragment, null, optionForTransaction)
                     return@OnItemSelectedListener true
                 }
                 R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, option)
+                    navController.navigate(R.id.feedFragment, null, optionForTransaction)
                     return@OnItemSelectedListener true
                 }
                 R.id.transactionFragment -> {
@@ -91,18 +107,17 @@ class MainFlowFragment : BaseFlowFragment (
                     return@OnItemSelectedListener true
                 }
                 R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, option)
+                    navController.navigate(R.id.historyFragment, null, optionForTransaction)
                     return@OnItemSelectedListener true
                 }
             }
             true
         })
 
-        binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener{ item ->
+        binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
             return@OnItemReselectedListener
         })
     }
-
 
 
 //    override fun profilePage() {
@@ -114,7 +129,6 @@ class MainFlowFragment : BaseFlowFragment (
 //            activityNavController().navigateSafely(R.id.profileFragment)
 //        }
 //    }
-
 
 
 }

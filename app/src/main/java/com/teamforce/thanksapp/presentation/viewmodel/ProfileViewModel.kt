@@ -6,6 +6,7 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.PutUserAvatarRequest
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
+import com.teamforce.thanksapp.data.response.UpdateProfileResponse
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.*
 import okhttp3.MultipartBody
@@ -29,6 +30,8 @@ class ProfileViewModel() : ViewModel() {
     val imageUri: LiveData<PutUserAvatarResponse> = _imageUri
     private val _imageUriError = MutableLiveData<String>()
     val imageUriError: LiveData<String> = _imageUriError
+
+
 
 
     fun initViewModel() {
@@ -87,8 +90,6 @@ class ProfileViewModel() : ViewModel() {
                 ) {
                     _isLoading.postValue(false)
                     if (response.code() == 200) {
-                        Log.d("Token", "${response.body()}")
-                        Log.d("Token", "Я внутри успешного вызова функции выше response body")
                         _imageUri.postValue(response.body())
                     } else {
                         _imageUriError.postValue(response.message() + " " + response.code())
@@ -102,4 +103,6 @@ class ProfileViewModel() : ViewModel() {
             })
         }
     }
+
+
 }
