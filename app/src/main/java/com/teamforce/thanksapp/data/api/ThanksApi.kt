@@ -76,15 +76,22 @@ interface ThanksApi {
         @Body status: CancelTransactionRequest
     ): Call<CancelTransactionResponse>
 
-    @POST("/update-profile-by-user/{id}/")
+//    @PUT("/update-profile-by-user/{id}/")
+//    fun updateProfile(
+//        @Header("Authorization") token: String,
+//        @Path("id") userId: String,
+//        @Query("tg_name") tgName: String?,
+//        @Query("surname") surname: String?,
+//        @Query("first_name") firstName: String?,
+//        @Query("middle_name") middleName: String?,
+//        @Query("nickname") nickname: String?
+//    ): Call<UpdateProfileResponse>
+
+    @PUT("/update-profile-by-user/{id}/")
     fun updateProfile(
         @Header("Authorization") token: String,
         @Path("id") userId: String,
-        @Query("tg_name") tgName: String?,
-        @Query("surname") surname: String?,
-        @Query("first_name") firstName: String?,
-        @Query("middle_name") middleName: String?,
-        @Query("nickname") nickname: String?
+        @Body data: UpdateProfileRequest
     ): Call<UpdateProfileResponse>
 
     @POST("/update-contact-by-user/{id}/")

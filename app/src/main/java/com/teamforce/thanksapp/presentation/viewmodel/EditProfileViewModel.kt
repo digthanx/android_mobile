@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.data.request.UpdateProfileRequest
 import com.teamforce.thanksapp.data.response.UpdateContactResponse
 import com.teamforce.thanksapp.data.response.UpdateProfileResponse
 import com.teamforce.thanksapp.utils.RetrofitClient
@@ -35,6 +36,9 @@ class EditProfileViewModel(): ViewModel(){
     private val _updateContactError = MutableLiveData<String>()
     val updateContactError: LiveData<String> = _updateContactError
 
+    private val _isSuccessOperation = MutableLiveData<Boolean>()
+    val isSuccessOperation: LiveData<Boolean> = _isSuccessOperation
+
 
 
     fun initViewModel() {
@@ -56,8 +60,8 @@ class EditProfileViewModel(): ViewModel(){
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.updateProfile("Token $token", userId = userId, tgName, surname,
-                firstName, middleName, nickname)?.enqueue(object : Callback<UpdateProfileResponse> {
+            thanksApi?.updateProfile("Token $token", userId = userId, UpdateProfileRequest(tgName, surname,
+                firstName, middleName, nickname))?.enqueue(object : Callback<UpdateProfileResponse> {
                 override fun onResponse(
                     call: Call<UpdateProfileResponse>,
                     response: Response<UpdateProfileResponse>
@@ -65,7 +69,6 @@ class EditProfileViewModel(): ViewModel(){
                     _isLoading.postValue(false)
                     if (response.code() == 200) {
                         Log.d("Token", "${response.body()}")
-                        Log.d("Token", "Я внутри успешного вызова функции выше response body")
                         _updateProfile.postValue(response.body())
                     } else {
                         _updateProfileError.postValue(response.message() + " " + response.code())

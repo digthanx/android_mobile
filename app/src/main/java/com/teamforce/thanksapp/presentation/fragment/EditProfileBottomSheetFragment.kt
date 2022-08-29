@@ -43,6 +43,11 @@ class EditProfileBottomSheetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.initViewModel()
+        var surname: String? = ""
+        var firstName: String? = ""
+        var middleName: String? = ""
+        var phone: String? = ""
+        var email: String? = ""
 
 
         with(binding){
@@ -52,13 +57,39 @@ class EditProfileBottomSheetFragment : Fragment() {
             emailEt.text.toString()
             phoneEt.text.toString()
         }
+
         binding.btnSaveChanges.setOnClickListener {
+            if (binding.firstEt.text?.trim().toString() == ""){
+                firstName = null
+            }else{
+                firstName = binding.firstEt.text?.trim().toString()
+            }
+            if (binding.surnameEt.text?.trim().toString() == ""){
+                surname = null
+            }else{
+                surname = binding.surnameEt.text?.trim().toString()
+            }
+            if (binding.middleEt.text?.trim().toString() == ""){
+                middleName = null
+            }else{
+                middleName = binding.middleEt.text?.trim().toString()
+            }
+            if (binding.phoneEt.text?.trim().toString() == ""){
+                phone = null
+            }else{
+                phone = binding.phoneEt.text?.trim().toString()
+            }
+            if (binding.emailEt.text?.trim().toString() == ""){
+                email = null
+            }else{
+                email = binding.emailEt.text?.trim().toString()
+            }
             UserDataRepository.getInstance()?.token?.let { token ->
                 UserDataRepository.getInstance()?.profileId?.let { profileId ->
                     viewModel.loadUpdateProfile(token, profileId,
-                        firstName = binding.firstEt.text?.trim().toString(),
-                        surname = binding.surnameEt.text?.trim().toString(),
-                        middleName = binding.middleEt.text?.trim().toString(),
+                        firstName = firstName,
+                        surname = surname,
+                        middleName = middleName,
                         tgName = null,
                         nickname = null
                     )
