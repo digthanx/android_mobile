@@ -48,6 +48,7 @@ class EditProfileBottomSheetFragment : Fragment() {
         var middleName: String? = ""
         var phone: String? = ""
         var email: String? = ""
+        var contactType: String = ""
 
 
         with(binding){
@@ -93,6 +94,7 @@ class EditProfileBottomSheetFragment : Fragment() {
                         tgName = null,
                         nickname = null
                     )
+                    viewModel.loadCreateContact(token, )
                 }
             }
 
