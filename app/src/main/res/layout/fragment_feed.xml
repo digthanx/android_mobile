@@ -1,188 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <ScrollView
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="125dp"
+        android:fitsSystemWindows="true">
 
-        <LinearLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:elevation="0dp"
+            android:fitsSystemWindows="true"
+            app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded"
+            app:expandedTitleTextColor="@color/white"
+            app:layout_scrollFlags="enterAlways">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBarLayout"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/Theme.ThanksApp.PopupOverlay"
                 android:layout_width="match_parent"
-                android:layout_height="125dp"
-                android:fitsSystemWindows="true">
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="enterAlways"
+                app:titleTextColor="@color/white">
 
-                <com.google.android.material.appbar.CollapsingToolbarLayout
-                    android:id="@+id/collapsingToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:elevation="0dp"
-                    android:fitsSystemWindows="true"
-                    app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded"
-                    app:expandedTitleTextColor="@color/white"
-                    app:layout_scrollFlags="enterAlways">
-
-                    <com.google.android.material.appbar.MaterialToolbar
-                        android:id="@+id/toolbar"
-                        style="@style/Theme.ThanksApp.PopupOverlay"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:elevation="0dp"
-                        app:layout_collapseMode="pin"
-                        app:layout_scrollFlags="enterAlways"
-                        app:titleTextColor="@color/white">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_app_logo" />
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/profile"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="16dp"
-                            android:clickable="true"
-                            android:focusable="true"
-                            app:cardCornerRadius="100dp">
-
-                            <com.google.android.material.imageview.ShapeableImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:scaleType="matrix"
-                                android:src="@drawable/smile"
-                                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <ImageButton
-                            android:id="@+id/notify"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="15dp"
-                            android:backgroundTint="@color/general_brand"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:src="@drawable/ic_bell" />
-                    </com.google.android.material.appbar.MaterialToolbar>
-
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-            </com.google.android.material.appbar.AppBarLayout>
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                app:cardBackgroundColor="@color/general_brand"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="4dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/ic_app_logo" />
 
                 <com.google.android.material.card.MaterialCardView
-                    style="@style/MyCardView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:elevation="0dp">
+                    android:id="@+id/profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="100dp">
 
-                    <LinearLayout
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:scaleType="matrix"
+                        android:src="@drawable/smile"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <ImageButton
+                    android:id="@+id/notify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="15dp"
+                    android:backgroundTint="@color/general_brand"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_bell" />
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/general_brand"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="4dp">
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/MyCardView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context=".presentation.fragment.FeedFragment">
+
+                <LinearLayout
+                    android:id="@+id/chipBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:orientation="horizontal"
+                    app:cardCornerRadius="15dp">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroup"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        tools:context=".presentation.fragment.FeedFragment">
+                        android:layout_marginHorizontal="20dp"
+                        android:background="@color/white"
+                        app:singleSelection="true">
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/chipBox"
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipAllEvent"
+                            style="@style/MyChipsFeed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="27dp"
-                            app:cardCornerRadius="15dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            android:checkable="true"
+                            android:text="@string/allEvent"/>
 
-                            <com.google.android.material.chip.ChipGroup
-                                android:id="@+id/chipGroup"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginHorizontal="20dp"
-                                android:layout_marginVertical="5dp"
-                                android:background="@color/white"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:singleSelection="true">
-
-                                <com.google.android.material.chip.Chip
-                                    android:id="@+id/chipAllEvent"
-                                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checkable="true"
-                                    android:text="@string/allEvent"
-                                    android:textColor="@color/history_chip_text_color_state"
-                                    app:chipBackgroundColor="@color/white" />
-
-                                <com.google.android.material.chip.Chip
-                                    android:id="@+id/chipMineEvent"
-                                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checkable="true"
-                                    android:text="@string/mineEvent"
-                                    android:textColor="@color/history_chip_text_color_state"
-                                    app:chipBackgroundColor="@color/white" />
-
-                                <com.google.android.material.chip.Chip
-                                    android:id="@+id/chipPublicEvent"
-                                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checkable="true"
-                                    android:text="@string/publicEvent"
-                                    android:textColor="@color/history_chip_text_color_state"
-                                    app:chipBackgroundColor="@color/white" />
-
-                            </com.google.android.material.chip.ChipGroup>
-                        </com.google.android.material.card.MaterialCardView>
-
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/feed_rv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/chipBox" />
-
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            style="?android:attr/progressBarStyle"
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipMineEvent"
+                            style="@style/MyChipsFeed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="@+id/feed_rv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/chipBox" />
+                            android:checkable="true"
+                            android:text="@string/mineEvent" />
 
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-    </ScrollView>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipPublicEvent"
+                            style="@style/MyChipsFeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="@string/publicEvent" />
+
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipeRefreshLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/feed_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

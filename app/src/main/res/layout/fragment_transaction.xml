@@ -31,6 +31,7 @@
                 android:backgroundTint="@color/general_brand"
                 android:clickable="true"
                 android:focusable="true"
+                android:visibility="gone"
                 app:tint="@color/general_background"
                 android:src="@drawable/ic__cross_red"/>
         </com.google.android.material.appbar.MaterialToolbar>

@@ -126,6 +126,7 @@
                                     android:layout_marginTop="@dimen/margin_x"
                                     android:focusable="false"
                                     android:hint="@string/period"
+                                    android:visibility="gone"
                                     android:paddingHorizontal="8dp"
                                     android:paddingBottom="30dp"
                                     android:textColorHint="@color/general_color_grey"

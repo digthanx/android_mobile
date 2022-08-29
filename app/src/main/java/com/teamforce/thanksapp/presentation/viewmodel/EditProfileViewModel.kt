@@ -153,7 +153,10 @@ class EditProfileViewModel(): ViewModel(){
                     if (response.code() == 200) {
                         _updateContact.postValue(response.body())
                     } else {
-                        //Log.d("Token", "Ошибка ${response}")
+                        Log.d("Token", "Ошибка ${response.body()?.non_field_errors}")
+                        Log.d("Token", "Ошибка ${response.body()}")
+                        Log.d("Token", "Ошибка ${response.message()}")
+                        Log.d("Token", "Ошибка ${response.errorBody().toString()}")
                         _updateContactError.postValue(response.message() + " " + response.code())
                     }
                 }
