@@ -49,6 +49,7 @@ class EditProfileViewModel(): ViewModel(){
 
 
 
+
     fun initViewModel() {
         thanksApi = RetrofitClient.getInstance()
     }
@@ -152,6 +153,7 @@ class EditProfileViewModel(): ViewModel(){
                     if (response.code() == 200) {
                         _updateContact.postValue(response.body())
                     } else {
+                        //Log.d("Token", "Ошибка ${response}")
                         _updateContactError.postValue(response.message() + " " + response.code())
                     }
                 }
