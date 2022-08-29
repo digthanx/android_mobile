@@ -65,6 +65,10 @@ class ProfileFragment : Fragment() {
 
     private lateinit var userEmail: TextView
     private lateinit var userPhone: TextView
+    private var contactId_1: String? = null
+    private var contactId_2: String? = null
+    private var contactValue_1: String? = null
+    private var contactValue_2: String? = null
 
     private lateinit var companyUser: TextView
     private lateinit var departmentUser: TextView
@@ -176,10 +180,32 @@ class ProfileFragment : Fragment() {
             userTgName.text = "@" + it.profile.tgName
 
             if(it.profile.contacts.size == 1){
-                userEmail.text = it.profile.contacts[0].contact_id
+                if(it.profile.contacts[0].contact_type == "@"){
+                    userEmail.text = it.profile.contacts[0].contact_id
+                    contactId_1 = it.profile.contacts[0].id
+                    contactValue_1 = it.profile.contacts[0].contact_id
+                }else{
+                    userPhone.text = it.profile.contacts[0].contact_id
+                    contactId_2 = it.profile.contacts[0].id
+                    contactValue_2 = it.profile.contacts[0].contact_id
+                }
             }else if(it.profile.contacts.size == 2){
-                userEmail.text = it.profile.contacts[0].contact_id
-                userPhone.text = it.profile.contacts[1].contact_id
+                if(it.profile.contacts[0].contact_type == "@"){
+                    userEmail.text = it.profile.contacts[0].contact_id
+                    contactId_1 = it.profile.contacts[0].id
+                    userPhone.text = it.profile.contacts[1].contact_id
+                    contactId_2 = it.profile.contacts[1].id
+                    contactValue_1 = it.profile.contacts[0].contact_id
+                    contactValue_2 = it.profile.contacts[1].contact_id
+
+                }else{
+                    userEmail.text = it.profile.contacts[1].contact_id
+                    contactId_1 = it.profile.contacts[1].id
+                    userPhone.text = it.profile.contacts[0].contact_id
+                    contactId_2 = it.profile.contacts[0].id
+                    contactValue_1 = it.profile.contacts[1].contact_id
+                    contactValue_2 = it.profile.contacts[0].contact_id
+                }
             }
 
 
@@ -231,7 +257,12 @@ class ProfileFragment : Fragment() {
             }
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
                 dialog.cancel()
-                findNavController().navigate(R.id.action_profileFragment_to_editProfileBottomSheetFragment)
+                val bundle = Bundle()
+                bundle.putString("contact_id_1", contactId_1)
+                bundle.putString("contact_id_2", contactId_2)
+                bundle.putString("contact_value_1", contactValue_1)
+                bundle.putString("contact_value_2", contactValue_2)
+                findNavController().navigate(R.id.action_profileFragment_to_editProfileBottomSheetFragment, bundle)
             }
             .show()
     }

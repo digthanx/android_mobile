@@ -85,7 +85,7 @@ interface ThanksApi {
         @Body data: UpdateProfileRequest
     ): Call<UpdateProfileResponse>
 
-    @POST("/update-contact-by-user/{id}/")
+    @PUT("/update-contact-by-user/{id}/")
     fun updateContact(
         @Header("Authorization") token: String,
         @Path("id") contactId: String,

@@ -23,12 +23,19 @@ class EditProfileBottomSheetFragment : Fragment() {
 
     private val viewModel = EditProfileViewModel()
 
+    private var contactId_1: String? = null
+    private var contactId_2: String? = null
+    private var contactValue_1Email: String? = null
+    private var contactValue_2Phone: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
+            contactId_1 = it.getString("contact_id_1")
+            contactId_2 = it.getString("contact_id_2")
+            contactValue_1Email = it.getString("contact_value_1")
+            contactValue_2Phone = it.getString("contact_value_2")
         }
     }
 
@@ -50,14 +57,6 @@ class EditProfileBottomSheetFragment : Fragment() {
         var email: String? = ""
         var contactType: String = ""
 
-
-        with(binding){
-            surnameEt.text.toString()
-            firstEt.text.toString()
-            middleEt.text.toString()
-            emailEt.text.toString()
-            phoneEt.text.toString()
-        }
 
         binding.btnSaveChanges.setOnClickListener {
             if (binding.firstEt.text?.trim().toString() == ""){
@@ -94,7 +93,37 @@ class EditProfileBottomSheetFragment : Fragment() {
                         tgName = null,
                         nickname = null
                     )
-                    viewModel.loadCreateContact(token, )
+                    if (email != null && phone != null){
+                        // 2 запроса
+                        if (contactValue_1Email != null && contactValue_2Phone != null){
+                            viewModel.loadUpdateContact(token, contactId_1!!, email.toString())
+                            viewModel.loadUpdateContact(token, contactId_2!!, phone.toString())
+                        }else if(contactValue_1Email == null && contactValue_2Phone != null){
+                            // создание email, обновление телефона
+                            viewModel.loadCreateContact(token, email.toString(), "@", profileId)
+                            viewModel.loadUpdateContact(token, contactId_2!!, phone.toString())
+                        }else{
+                            // обновление email, создание телефона
+                            viewModel.loadCreateContact(token, phone.toString(), "P", profileId)
+                            viewModel.loadUpdateContact(token, contactId_1!!, email.toString())
+                        }
+                    }else if(email == null && phone != null){
+                        if(contactValue_2Phone == null){
+                            // создание телефона
+                            viewModel.loadCreateContact(token, phone.toString(), "P", profileId)
+                        }else{
+                            // обновление телефона
+                            viewModel.loadUpdateContact(token, contactId_2!!, phone.toString())
+                        }
+                    }else{
+                        if(contactValue_1Email == null){
+                            // создание email
+                            viewModel.loadCreateContact(token, email.toString(), "@", profileId)
+                        }else{
+                            // обновление email
+                            viewModel.loadUpdateContact(token, contactId_1!!, email.toString())
+                        }
+                    }
                 }
             }
 
