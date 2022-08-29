@@ -44,19 +44,28 @@ class EditProfileBottomSheetFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.initViewModel()
 
-        val bundle = Bundle()
+
         with(binding){
+            surnameEt.text.toString()
+            firstEt.text.toString()
+            middleEt.text.toString()
             emailEt.text.toString()
             phoneEt.text.toString()
         }
         binding.btnSaveChanges.setOnClickListener {
             UserDataRepository.getInstance()?.token?.let { token ->
                 UserDataRepository.getInstance()?.profileId?.let { profileId ->
-                    //viewModel.loadUpdateProfile(token, profileId, tgName =  )
+                    viewModel.loadUpdateProfile(token, profileId,
+                        firstName = binding.firstEt.text?.trim().toString(),
+                        surname = binding.surnameEt.text?.trim().toString(),
+                        middleName = binding.middleEt.text?.trim().toString(),
+                        tgName = null,
+                        nickname = null
+                    )
                 }
             }
 
-            findNavController().navigate(R.id.action_profileFragment_to_editProfileBottomSheetFragment)
+            findNavController().navigate(R.id.action_editProfileBottomSheetFragment_to_profileFragment)
         }
     }
 

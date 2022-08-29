@@ -87,4 +87,11 @@ interface ThanksApi {
         @Query("nickname") nickname: String?
     ): Call<UpdateProfileResponse>
 
+    @POST("/update-contact-by-user/{id}/")
+    fun updateContact(
+        @Header("Authorization") token: String,
+        @Path("id") userId: String,
+        @Query("contact_id") contactId: String?,
+    ): Call<UpdateContactResponse>
+
 }
