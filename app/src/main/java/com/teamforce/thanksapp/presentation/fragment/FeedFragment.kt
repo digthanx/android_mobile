@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
@@ -36,7 +38,8 @@ class FeedFragment : Fragment() {
 
     private val username: String = UserDataRepository.getInstance()?.username.toString()
 
-
+    private lateinit var navController: NavController
+    private lateinit var swipeToRefresh: SwipeRefreshLayout
     private var allFeedsList: List<FeedResponse> = emptyList()
     private var mineFeedsList: List<FeedResponse> = emptyList()
     private var publicFeedsList: List<FeedResponse> = emptyList()
@@ -51,12 +54,7 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
-        val toolbar = binding.toolbar
-        val collapsingToolbar = binding.collapsingToolbar
-        collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
-        viewModel.initViewModel()
+        initView()
         inflateRecyclerView()
         getListsFromDb()
         binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -73,6 +71,22 @@ class FeedFragment : Fragment() {
         binding.profile.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_profileFragment, null, optionForProfileFragment )
         }
+        swipeToRefresh.setOnRefreshListener {
+            inflateRecyclerView()
+            swipeToRefresh.isRefreshing = false
+        }
+    }
+
+    private fun initView(){
+        swipeToRefresh = binding.swipeRefreshLayout
+        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
+        navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
+        val toolbar = binding.toolbar
+        val collapsingToolbar = binding.collapsingToolbar
+        collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
+        viewModel.initViewModel()
+        binding.feedRv.adapter = FeedAdapter(username, requireContext())
     }
 
 
@@ -82,7 +96,6 @@ class FeedFragment : Fragment() {
                 viewModel.loadFeedsList(token = token, user = username)
             }
         }
-        binding.feedRv.adapter = FeedAdapter(username, requireContext())
     }
 
     private fun refreshRecyclerView(checkedId: Int) {
@@ -107,11 +120,11 @@ class FeedFragment : Fragment() {
             Observer { isLoading ->
                 if (isLoading) {
                     binding.feedRv.visibility = View.GONE
-                    binding.progressBar.visibility = View.VISIBLE
+                    swipeToRefresh.isRefreshing = true
                 } else {
                     binding.feedRv.visibility = View.VISIBLE
                     binding.chipAllEvent.isChecked = true
-                    binding.progressBar.visibility = View.GONE
+                    swipeToRefresh.isRefreshing = false
                 }
             }
         )

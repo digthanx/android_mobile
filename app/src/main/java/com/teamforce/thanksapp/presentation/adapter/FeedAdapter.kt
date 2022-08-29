@@ -66,17 +66,21 @@ class FeedAdapter (
         val likesBtn: MaterialButton = binding.likeBtn
         val dislikesBtn: MaterialButton = binding.dislikeBtn
         val commentBtn: MaterialButton = binding.commentBtn
+        val standardGroup = binding.standardGroup
         val view: View = binding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        if(!currentList[position].transaction.photo.isNullOrEmpty()) {
+        if(!currentList[position].transaction.recipient_photo.isNullOrEmpty()) {
             Glide.with(context)
-                .load("${Consts.BASE_URL}${currentList[position].transaction.photo}".toUri())
+                .load("${Consts.BASE_URL}${currentList[position].transaction.recipient_photo}".toUri())
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(holder.avatarUser)
+        }else{
+            holder.avatarUser.setImageResource(R.drawable.ic_anon_avatar)
+
         }
         if(!currentList[position].transaction.sender.equals(username) &&
             !currentList[position].transaction.recipient.equals(username)){
@@ -92,6 +96,7 @@ class FeedAdapter (
                     R.string.youFromSomeone),
                     currentList[position].transaction.amount.substringBefore("."),
                     currentList[position].transaction.sender)
+            holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
 
         }else{
             holder.senderAndReceiver.text =
@@ -99,6 +104,8 @@ class FeedAdapter (
                     R.string.youToSomeone),
                     currentList[position].transaction.recipient,
                     currentList[position].transaction.amount.substringBefore("."))
+            holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
+
         }
         try {
             val zdt: ZonedDateTime = ZonedDateTime.parse(currentList[position].time, DateTimeFormatter.ISO_DATE_TIME)
