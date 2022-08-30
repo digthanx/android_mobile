@@ -14,7 +14,9 @@ import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.*
+import okhttp3.MediaType
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -138,7 +140,6 @@ class TransactionViewModel : ViewModel() {
                         _isSuccessOperation.postValue(false)
                         _isLoading.postValue(false)
                         if (response.code() == 201) {
-                            Log.d("Token", "Успешный перевод средств")
                             _isSuccessOperation.postValue(true)
                         } else if(response.code() == 400) {
                             _sendCoinsError.postValue(response.message() + " " + response.code())
@@ -180,7 +181,11 @@ class TransactionViewModel : ViewModel() {
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.sendCoinsWithImage("Token $token", imageFilePart, SendCoinsRequest(recipient, amount, reason, isAnon))
+            val recipientB = RequestBody.create(MediaType.parse("multipart/form-data"), recipient.toString())
+            val amountB = RequestBody.create(MediaType.parse("multipart/form-data"), amount.toString())
+            val reasonB = RequestBody.create(MediaType.parse("multipart/form-data"), reason.toString())
+            val isAnonB = RequestBody.create(MediaType.parse("multipart/form-data"), isAnon.toString())
+            thanksApi?.sendCoinsWithImage("Token $token", imageFilePart, recipientB, amountB, reasonB, isAnonB)
                 ?.enqueue(object : Callback<SendCoinsResponse> {
                     override fun onResponse(
                         call: Call<SendCoinsResponse>,

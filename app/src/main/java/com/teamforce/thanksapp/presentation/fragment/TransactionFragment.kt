@@ -67,6 +67,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private val detachImgBtn: ImageButton by lazy { binding.detachImgBtn }
     private val image: ImageView by lazy { binding.image }
     private val attachImageBtn: MaterialButton by lazy { binding.attachImageBtn }
+    private var imageFilePart: MultipartBody.Part? = null
     private var user: UserBean? = null
 
     override fun onCreateView(
@@ -106,6 +107,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
         detachImgBtn.setOnClickListener {
             imgCard.visibility = View.GONE
+            imageFilePart = null
         }
 
     }
@@ -186,6 +188,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         val requestFile: RequestBody =
             RequestBody.create(MediaType.parse("multipart/form-data"), stream.toByteArray())
         val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
+        imageFilePart = body
 //        UserDataRepository.getInstance()?.token.let { token ->
 //            UserDataRepository.getInstance()?.profileId.let { id ->
 //                viewModel.loadUpdateAvatarUserProfile(token!!, id!!, body)
@@ -326,7 +329,11 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                     try {
                         val count: Int = Integer.valueOf(countText)
                         UserDataRepository.getInstance()?.token?.let {
-                            viewModel.sendCoins(it, userId, count, reason, isAnon)
+                            if (imageFilePart == null){
+                                viewModel.sendCoins(it, userId, count, reason, isAnon)
+                            }else{
+                                viewModel.sendCoinsWithImage(it, userId, count, reason, isAnon, imageFilePart!!)
+                            }
                         }
                     } catch (e: Exception) {
                         Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
