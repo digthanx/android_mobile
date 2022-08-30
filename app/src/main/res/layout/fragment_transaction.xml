@@ -50,7 +50,7 @@
                 app:boxCornerRadiusTopEnd="15dp"
                 app:boxCornerRadiusBottomStart="15dp"
                 app:boxCornerRadiusBottomEnd="15dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:paddingStart="@dimen/padding_x"
                 android:paddingEnd="@dimen/padding_x"
                 android:hint="Выберите получателя"
@@ -83,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -351,24 +351,25 @@
                     android:id="@+id/show_attached_img_card"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:visibility="gone"
                     android:layout_marginStart="16dp"
                     app:cardCornerRadius="16dp">
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_launcher_background"/>
                         <ImageButton
                             android:id="@+id/detach_img_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="55dp"
                             android:layout_marginBottom="50dp"
-                            android:src="@drawable/ic_cross_white"
-                            app:tint="@color/white" />
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/greet_picture"
-                            android:background="@color/superLightGray"/>
+                            android:backgroundTint="@color/transparent"
+                            android:src="@drawable/ic_cross_white"/>
                     </RelativeLayout>
 
                 </com.google.android.material.card.MaterialCardView>

@@ -47,6 +47,14 @@ interface ThanksApi {
         @Body request: SendCoinsRequest
     ): Call<SendCoinsResponse>
 
+    @Multipart
+    @POST("/send-coins/")
+    fun sendCoinsWithImage(
+        @Header("Authorization") token: String,
+        @Part photo: MultipartBody.Part,
+        @Body request: SendCoinsRequest
+    ): Call<SendCoinsResponse>
+
     @GET("/user/transactions/")
     fun getUserTransactions(@Header("Authorization") token: String): Call<List<UserTransactionsResponse>>
 

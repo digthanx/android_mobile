@@ -1,6 +1,14 @@
 package com.teamforce.thanksapp.presentation.fragment
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.database.Cursor
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -17,6 +25,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -29,6 +39,12 @@ import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.createBitmapFromResult
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 class TransactionFragment : Fragment(), View.OnClickListener {
@@ -47,6 +63,10 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private lateinit var chipGroup: ChipGroup
     private lateinit var checkBoxIsAnon: SwitchMaterial
     private lateinit var progressBar: ProgressBar
+    private val imgCard: MaterialCardView by lazy { binding.showAttachedImgCard }
+    private val detachImgBtn: ImageButton by lazy { binding.detachImgBtn }
+    private val image: ImageView by lazy { binding.image }
+    private val attachImageBtn: MaterialButton by lazy { binding.attachImageBtn }
     private var user: UserBean? = null
 
     override fun onCreateView(
@@ -70,6 +90,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         dropDownMenuUserInput(usersInput)
         appealToDB()
         checkedChip()
+
         val token = UserDataRepository.getInstance()?.token
         if (token != null) {
             viewModel.loadUserBalance(token)
@@ -79,6 +100,13 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             availableCoins.text = it.distribute.amount.toString()
         }
 
+        attachImageBtn.setOnClickListener {
+            addPhotoFromIntent()
+        }
+
+        detachImgBtn.setOnClickListener {
+            imgCard.visibility = View.GONE
+        }
 
     }
 
@@ -108,6 +136,61 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                 }
             }
         )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+            val imageBitmap = data.createBitmapFromResult(requireActivity())
+            val imageUri = data.data
+            imgCard.visibility = View.VISIBLE
+            Glide.with(this)
+                .load(imageBitmap)
+                .centerCrop()
+                .into(image)
+            funURIToMultipart(imageUri!!, imageBitmap!!)
+        }
+    }
+
+    private fun addPhotoFromIntent() {
+        val cameraIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE).takeIf { intent ->
+            intent.resolveActivity(requireActivity().packageManager) != null
+        }
+
+        val galleryIntent = Intent(Intent.ACTION_PICK).apply { this.type = "image/*" }
+
+        val intentChooser = Intent(Intent.ACTION_CHOOSER).apply {
+            this.putExtra(Intent.EXTRA_INTENT, galleryIntent)
+            cameraIntent?.let { intent ->
+                this.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayListOf(intent).toTypedArray<Parcelable>())
+            }
+            this.putExtra(Intent.EXTRA_TITLE, resources.getString(R.string.gallery_title))
+        }
+
+        startActivityForResult(intentChooser, CODE_IMG_GALLERY)
+    }
+
+
+    private fun  funURIToMultipart(imageURI: Uri, imageBitmap: Bitmap) {
+
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor =
+            requireContext().contentResolver.query(imageURI, projection, null, null, null)!!
+        cursor.moveToFirst()
+        val columnIndex: Int = cursor.getColumnIndex(projection[0])
+        val filePath: String = cursor.getString(columnIndex)
+        cursor.close()
+        val file: File = File(filePath)
+        val stream = ByteArrayOutputStream()
+        val file2 = imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        val requestFile: RequestBody =
+            RequestBody.create(MediaType.parse("multipart/form-data"), stream.toByteArray())
+        val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
+//        UserDataRepository.getInstance()?.token.let { token ->
+//            UserDataRepository.getInstance()?.profileId.let { id ->
+//                viewModel.loadUpdateAvatarUserProfile(token!!, id!!, body)
+//            }
+//        }
     }
 
     private fun shouldMeGoToHistoryFragment(){
@@ -271,5 +354,10 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             bundle
         )
 
+    }
+
+    companion object{
+        private const val CODE_IMG_GALLERY = 111
+        private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
     }
 }

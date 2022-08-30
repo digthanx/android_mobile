@@ -14,6 +14,7 @@ import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.*
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -129,6 +130,57 @@ class TransactionViewModel : ViewModel() {
     ) {
         withContext(dispatcher) {
             thanksApi?.sendCoins("Token $token", SendCoinsRequest(recipient, amount, reason, isAnon))
+                ?.enqueue(object : Callback<SendCoinsResponse> {
+                    override fun onResponse(
+                        call: Call<SendCoinsResponse>,
+                        response: Response<SendCoinsResponse>
+                    ) {
+                        _isSuccessOperation.postValue(false)
+                        _isLoading.postValue(false)
+                        if (response.code() == 201) {
+                            Log.d("Token", "Успешный перевод средств")
+                            _isSuccessOperation.postValue(true)
+                        } else if(response.code() == 400) {
+                            _sendCoinsError.postValue(response.message() + " " + response.code())
+                        }else{
+                            _sendCoinsError.postValue(response.message() + " " + response.code())
+                        }
+                    }
+
+                    override fun onFailure(call: Call<SendCoinsResponse>, t: Throwable) {
+                        _isLoading.postValue(false)
+                        _sendCoinsError.postValue(t.message)
+                    }
+                })
+        }
+    }
+
+
+    fun sendCoinsWithImage(token: String, recipient: Int, amount: Int,
+                           reason: String,
+                           isAnon: Boolean,
+                           imageFilePart: MultipartBody.Part) {
+        _isLoading.postValue(true)
+        viewModelScope.launch {
+            callSendCoinsWithImageEndpoint(token, recipient, amount,
+                reason, isAnon,
+                imageFilePart,
+                Dispatchers.Default)
+        }
+    }
+
+
+    private suspend fun callSendCoinsWithImageEndpoint(
+        token: String,
+        recipient: Int,
+        amount: Int,
+        reason: String,
+        isAnon: Boolean,
+        imageFilePart: MultipartBody.Part,
+        dispatcher: CoroutineDispatcher
+    ) {
+        withContext(dispatcher) {
+            thanksApi?.sendCoinsWithImage("Token $token", imageFilePart, SendCoinsRequest(recipient, amount, reason, isAnon))
                 ?.enqueue(object : Callback<SendCoinsResponse> {
                     override fun onResponse(
                         call: Call<SendCoinsResponse>,
