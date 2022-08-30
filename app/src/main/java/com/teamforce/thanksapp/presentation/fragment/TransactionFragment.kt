@@ -20,6 +20,7 @@ import android.widget.*
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -356,9 +357,16 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         bundle.putString(Consts.RECEIVER_NAME, receiverName.trim())
         bundle.putString(Consts.RECEIVER_SURNAME, receiverSurname.trim())
         bundle.putString(Consts.AVATAR_USER, photo)
+        val optionForResult = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(R.anim.bottom_out)
+            .setPopEnterAnim(com.google.android.material.R.anim.abc_fade_in)
+            .setPopExitAnim(com.google.android.material.R.anim.abc_fade_out)
+            .build()
         findNavController().navigate(
             R.id.action_transactionFragment_to_transactionResultFragment,
-            bundle
+            bundle,
+            optionForResult
         )
 
     }

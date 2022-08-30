@@ -8,25 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
-import com.teamforce.thanksapp.databinding.FragmentTransactionResultBinding
-import com.teamforce.thanksapp.model.domain.HistoryModel
 import com.teamforce.thanksapp.presentation.adapter.FeedAdapter
-import com.teamforce.thanksapp.presentation.adapter.HistoryAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 class FeedFragment : Fragment() {
@@ -65,7 +58,7 @@ class FeedFragment : Fragment() {
             .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
             .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
             .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.slide_up)
+            .setPopExitAnim(R.anim.bottom_in)
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
         binding.profile.setOnClickListener {

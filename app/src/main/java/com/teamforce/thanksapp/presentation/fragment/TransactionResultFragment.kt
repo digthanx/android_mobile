@@ -55,21 +55,34 @@ class TransactionResultFragment : Fragment() {
         binding.receiverTgName.text  = receiverTg
         binding.receiverNameLabelTv.text  = receiverName
         binding.receiverSurnameLabelTv.text  = receiverSurname
-        if(receiverPhoto?.contains("null", ignoreCase = true) != true){
+        if(receiverPhoto.isNullOrEmpty()){
             Glide.with(view)
                 .load(receiverPhoto?.toUri())
                 .centerCrop()
                 .into(binding.receiverAvatar)
+        }else{
+            binding.receiverAvatar.setImageResource(R.drawable.ic_anon_avatar)
         }
-
+        val optionForResult = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(com.google.android.material.R.anim.abc_fade_in)
+            .setExitAnim(com.google.android.material.R.anim.abc_fade_out)
+            .build()
 
         binding.btnToTheBeginning.setOnClickListener {
-            findNavController().navigate(R.id.action_transactionResultFragment_to_transactionFragment)
+            findNavController().navigate(
+                R.id.action_transactionResultFragment_to_transactionFragment,
+                null, optionForResult)
         }
         binding.btnToTheHistory.setOnClickListener {
+
             var bundle = Bundle()
             bundle.putBoolean(Consts.SHOULD_ME_GOTO_HISTORY, true)
-            findNavController().navigate(R.id.action_transactionResultFragment_to_transactionFragment, bundle)
+            findNavController().navigate(
+                R.id.action_transactionResultFragment_to_transactionFragment,
+                bundle,
+                optionForResult
+            )
         }
     }
 
