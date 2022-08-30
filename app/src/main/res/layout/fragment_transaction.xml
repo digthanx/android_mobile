@@ -319,7 +319,6 @@
                         android:layout_height="wrap_content"
                         android:checkable="true"
                         android:checked="true"
-                        android:backgroundTint="@color/chip_background_color_state"
                         style="@style/MyChipsOrange"
                         android:text="1" />
 
@@ -328,7 +327,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
-                        android:backgroundTint="@color/chip_background_color_state"
                         style="@style/MyChipsOrange"
                         android:text="5" />
 
@@ -337,7 +335,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
-                        android:backgroundTint="@color/chip_background_color_state"
                         style="@style/MyChipsOrange"
                         android:text="10" />
 
@@ -346,7 +343,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
-                        android:backgroundTint="@color/chip_background_color_state"
                         style="@style/MyChipsOrange"
                         android:text="25" />
 
