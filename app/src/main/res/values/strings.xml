@@ -17,7 +17,7 @@
         напишите ему что-нибудь после чего повторите процедуру аутентификации</string>
     <string name="helperTextAboutEmail">Проверьте корректность введенной почты %s</string>
     <string name="helperTextStandard">Не пришел код?</string>
-    <string name="helperLink">Повторить процедуру аутентификации</string>
+    <string name="helperLink"><u>Повторить процедуру аутентификации</u></string>
     <string name="auth_label">Введите имя пользователя</string>
     <string name="get_code_button_label">Получить код</string>
     <string name="confirmation_code_label">Введите код подтверждения</string>

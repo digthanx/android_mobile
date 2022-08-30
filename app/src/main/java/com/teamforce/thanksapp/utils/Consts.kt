@@ -10,7 +10,7 @@ object Consts {
     const val RECEIVER_SURNAME = "receiverOfTransaction"
     const val BUNDLE_TG_OR_EMAIL = "telegramOrEmail"
     const val BUNDLE_EMAIL = "bundleEmail"
-    const val LINK_TO_BOT = "https://t.me/DefaultAndreyBot"
+    const val LINK_TO_BOT = "https://t.me/DigitalRefBot"
     const val LINK_TO_BOT_Name = "LinkToBot"
     const val SELECT_PICTURE = 200
     // Аргументы в расширенную инфу о траназкции
