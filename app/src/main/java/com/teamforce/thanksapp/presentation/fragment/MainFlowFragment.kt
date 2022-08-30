@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationBarView
 import com.teamforce.thanksapp.R
@@ -83,7 +82,7 @@ class MainFlowFragment : BaseFlowFragment(
             .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
             .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
             .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.slide_up)
+            .setPopExitAnim(R.anim.bottom_in)
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
 

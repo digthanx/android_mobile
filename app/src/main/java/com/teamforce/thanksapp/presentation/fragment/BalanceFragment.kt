@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,7 +17,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.card.MaterialCardView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
-import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
 import java.time.LocalDate
@@ -86,7 +84,7 @@ class BalanceFragment : Fragment() {
             .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
             .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
             .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.slide_up)
+            .setPopExitAnim(R.anim.bottom_in)
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
         binding.profile.setOnClickListener {

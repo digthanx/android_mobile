@@ -24,8 +24,7 @@
         tools:layout="@layout/fragment_transaction">
         <action
             android:id="@+id/action_transactionFragment_to_transactionResultFragment"
-            app:destination="@id/transactionResultFragment"
-            app:enterAnim="@anim/fade_in" />
+            app:destination="@id/transactionResultFragment" />
         <action
             android:id="@+id/action_transactionFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
