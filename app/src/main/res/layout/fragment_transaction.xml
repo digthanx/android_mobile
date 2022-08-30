@@ -50,7 +50,7 @@
                 app:boxCornerRadiusTopEnd="15dp"
                 app:boxCornerRadiusBottomStart="15dp"
                 app:boxCornerRadiusBottomEnd="15dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:paddingStart="@dimen/padding_x"
                 android:paddingEnd="@dimen/padding_x"
                 android:hint="Выберите получателя"
@@ -83,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -239,30 +239,6 @@
                     </com.google.android.material.card.MaterialCardView>
                 </RelativeLayout>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/reason_value"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="32dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:outlineProvider="none"
-                    app:cardCornerRadius="@dimen/round_corner_xlarge"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/chipGroup"
-                    app:strokeColor="@color/color20"
-                    app:strokeWidth="@dimen/stroke_size">
-
-                    <EditText
-                        android:background="@null"
-                        android:id="@+id/message_value_et"
-                        android:layout_width="match_parent"
-                        android:layout_margin="@dimen/margin_x"
-                        android:layout_height="78dp"
-                        android:gravity="top"
-                        android:hint="@string/reason_transaction"
-                        android:textAppearance="@style/Body1.Gray" />
-                </com.google.android.material.card.MaterialCardView>
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -309,6 +285,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:layout_marginTop="24dp"
+                    android:layout_marginBottom="40dp"
                     android:layout_gravity="center"
                     android:id="@+id/chipGroup"
                     app:singleSelection="true">
@@ -348,6 +325,66 @@
 
                 </com.google.android.material.chip.ChipGroup>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/reason_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:outlineProvider="none"
+                    app:cardCornerRadius="@dimen/round_corner_xlarge"
+                    app:strokeColor="@color/color20"
+                    app:strokeWidth="@dimen/stroke_size">
+
+                    <EditText
+                        android:background="@null"
+                        android:id="@+id/message_value_et"
+                        android:layout_width="match_parent"
+                        android:layout_margin="@dimen/margin_x"
+                        android:layout_height="78dp"
+                        android:gravity="top"
+                        android:hint="@string/reason_transaction"
+                        android:textAppearance="@style/Body1.Gray" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/show_attached_img_card"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="16dp"
+                    app:cardCornerRadius="16dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <ImageButton
+                            android:id="@+id/detach_img_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="55dp"
+                            android:layout_marginBottom="50dp"
+                            android:src="@drawable/ic_cross_white"
+                            app:tint="@color/white" />
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/greet_picture"
+                            android:background="@color/superLightGray"/>
+                    </RelativeLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/attach_image_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/NotFilledButton"
+                    android:layout_marginVertical="16dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:text="@string/addPhoto"
+                    app:icon="@drawable/ic_attach"
+                    app:iconGravity="textStart"
+                    android:paddingVertical="17dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -362,7 +399,7 @@
                         android:layout_weight="1"
                         android:text="Анонимно"/>
 
-                    <CheckBox
+                    <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/isAnon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

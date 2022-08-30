@@ -76,6 +76,20 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="NotFilledButton" parent="">
+        <item name="android:backgroundTint">@color/general_background</item>
+        <item name="iconTint">@color/general_brand</item>
+        <item name="elevation">0dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="textAllCaps">false</item>
+        <item name="strokeColor">@color/general_brand</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">@color/general_brand</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+
     <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
     </style>

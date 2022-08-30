@@ -70,6 +70,7 @@
     <string name="will_burn_after_3">Сгорят через %s дней</string>
     <!-- Транзакция фрагмент -->
     <string name="send">Перевести</string>
+    <string name="addPhoto">Добавить фото</string>
     <string name="reason_transaction">Причина перевода</string>
     <string name="unsuccessfulSendCoins">Нельзя переводить больше 50% от суммы доступной для перевода</string>
     <string name="empty">\"\"</string>

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
@@ -44,7 +45,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private lateinit var sendCoinsGroup: LinearLayout
     private lateinit var availableCoins: TextView
     private lateinit var chipGroup: ChipGroup
-    private lateinit var checkBoxIsAnon: CheckBox
+    private lateinit var checkBoxIsAnon: SwitchMaterial
     private lateinit var progressBar: ProgressBar
     private var user: UserBean? = null
 
