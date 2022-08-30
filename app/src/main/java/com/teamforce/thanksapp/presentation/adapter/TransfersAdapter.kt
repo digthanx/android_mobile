@@ -163,10 +163,12 @@ class TransfersAdapter(
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }
         holder.view.tag = dataSet[position]
+        holder.photoFromSender = dataSet[position].photo
         holder.standardGroup.setOnClickListener { v ->
             val bundle = Bundle()
             bundle.apply {
                 // аву пока не передаю
+                putString("photo_from_sender", holder.photoFromSender)
                 putString(AVATAR_USER, holder.avatar)
                 putString(DATE_TRANSACTION, holder.dateGetInfo)
                 putString(DESCRIPTION_TRANSACTION_1, holder.descr_transaction_1)
@@ -215,6 +217,7 @@ class TransfersAdapter(
         val statusCard: MaterialCardView = binding.statusCard
         val btnRefusedTransaction: ImageButton = binding.refuseTransactionBtn
         var standardGroup: ConstraintLayout = binding.standardGroup
+        var photoFromSender: String? = null
 
         val view: View = binding.root
         var dateGetInfo: String = "null"

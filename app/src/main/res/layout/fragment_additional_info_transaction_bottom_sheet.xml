@@ -1,155 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:paddingBottom="40dp"
-    android:paddingHorizontal="16dp"
-    android:orientation="vertical">
-
-    <ImageView
-        android:id="@+id/user_avatar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginBottom="12dp"
-        android:src="@drawable/ic_anon_avatar"/>
-
-    <TextView
-        android:id="@+id/date_transaction_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Сегодня в 12:30"/>
-
+    android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/description_transaction_you_do"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/general_contrast"
-            android:text="Вы отправили"/>
-        <TextView
-            android:id="@+id/description_transaction_who"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/general_brand"
-            android:text=" \@AnnaKim_TF"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/description_transaction_amount_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
-        android:textColor="@color/general_contrast"
-
-        android:text="200 спасибок"/>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="25dp"
-        android:gravity="center">
-        <TextView
-            android:id="@+id/valueTransfer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:textSize="40dp"
-            android:textStyle="bold"
-            android:textColor="@color/minor_success"
-            android:text="-200"/>
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="40dp">
 
         <ImageView
-            android:id="@+id/currency_transaction"
-            android:layout_width="27dp"
-            android:layout_height="27dp"
-            android:layout_marginTop="2dp"
-            android:src="@drawable/ic_currency"
-            app:tint="@color/minor_success" />
+            android:id="@+id/user_avatar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/ic_anon_avatar" />
 
         <TextView
-            android:id="@+id/we_refused"
+            android:id="@+id/date_transaction_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:visibility="gone"
-            android:textSize="20dp"
+            android:text="Сегодня в 12:30" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/description_transaction_you_do"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Вы отправили"
+                android:textColor="@color/general_contrast" />
+
+            <TextView
+                android:id="@+id/description_transaction_who"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" \@AnnaKim_TF"
+                android:textColor="@color/general_brand" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/description_transaction_amount_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:text="200 спасибок"
+
+            android:textColor="@color/general_contrast" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/valueTransfer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="-200"
+                android:textColor="@color/minor_success"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/currency_transaction"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_currency"
+                app:tint="@color/minor_success" />
+
+            <TextView
+                android:id="@+id/we_refused"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/weRefusedYourOperation"
+                android:textColor="@color/minor_error"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/separate_line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="22dp"
+            android:background="@color/color24" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="15dp"
+            android:letterSpacing="0.25"
+            android:text="@string/information"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/photo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="7dp"
+            android:letterSpacing="0.05"
+            android:text="@string/photo"
+            android:textColor="@color/black"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/minor_error"
-            android:text="@string/weRefusedYourOperation"/>
+            android:visibility="gone" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view_img"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:cardCornerRadius="12dp"
+            android:visibility="gone"
+            android:layout_marginBottom="21dp"
+            android:layout_gravity="start">
+            <ImageView
+                android:id="@+id/sender_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_launcher_background"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="7dp"
+            android:letterSpacing="0.05"
+            android:text="@string/message"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/reason_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="26dp"
+            android:text="Некая причина перевода"
+            android:textColor="@color/general_contrast"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/label_status_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="7dp"
+            android:letterSpacing="0.05"
+            android:text="@string/statusTransfer"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/status_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/occured"
+            android:textColor="@color/general_contrast"
+            android:textSize="14dp" />
 
     </LinearLayout>
+</ScrollView>
 
-    <View
-        android:id="@+id/separate_line"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/color24"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="22dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="21dp"
-        android:textSize="10sp"
-        android:letterSpacing="0.45"
-        android:layout_gravity="start"
-        android:text="@string/information"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:letterSpacing="0.05"
-        android:layout_gravity="start"
-        android:text="@string/message"/>
-
-    <TextView
-        android:id="@+id/reason_transaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:textSize="14dp"
-        android:textColor="@color/general_contrast"
-        android:layout_marginBottom="26dp"
-        android:text="Некая причина перевода"/>
-
-    <TextView
-        android:id="@+id/label_status_transaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginBottom="7dp"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:letterSpacing="0.05"
-        android:text="@string/statusTransfer"/>
-
-    <TextView
-        android:id="@+id/status_transaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:textSize="14dp"
-        android:textColor="@color/general_contrast"
-        android:text="@string/occured"/>
-
-</LinearLayout>
 
 
 

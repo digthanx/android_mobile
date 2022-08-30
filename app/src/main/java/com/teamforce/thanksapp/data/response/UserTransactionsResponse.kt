@@ -15,7 +15,8 @@ class UserTransactionsResponse(
     @SerializedName("can_user_cancel") val canUserCancel: Boolean,
     @SerializedName("created_at") val createdAt: String,
     @SerializedName("updated_at") val updatedAt: String,
-    val reason: String
+    val reason: String,
+    val photo: String?
 ){
     data class Sender(
         val sender_id: Int,

@@ -251,7 +251,7 @@ class ProfileFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.whatEditInProfile))
 
-            .setNegativeButton(resources.getString(R.string.photo)) { dialog, which ->
+            .setNegativeButton(resources.getString(R.string.avatar)) { dialog, which ->
                 dialog.cancel()
                 //loadImage.launch("image/*")
                 addPhotoFromIntent()

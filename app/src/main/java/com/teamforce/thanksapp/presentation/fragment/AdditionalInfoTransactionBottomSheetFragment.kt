@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.presentation.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +40,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
     private var label_status_transaction: String? = null
     private var amount_thanks: String? = null
     private var we_refused_your: Boolean? = null
+    private var photo_from_sender: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
             label_status_transaction = it.getString(LABEL_STATUS_TRANSACTION)
             amount_thanks = it.getString(AMOUNT_THANKS)
             we_refused_your = it.getBoolean(WE_REFUSED_YOUR_OPERATION)
+            photo_from_sender = it.getString("photo_from_sender")
         }
     }
 
@@ -88,6 +91,19 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
                 .load(avatar?.toUri())
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(binding.userAvatar)
+        }
+        if (!photo_from_sender.isNullOrEmpty()){
+            Log.d("Token", "${photo_from_sender}")
+            binding.photoTv.visibility = View.VISIBLE
+            binding.cardViewImg.visibility = View.VISIBLE
+            Glide.with(this)
+                .load(photo_from_sender)
+                .centerCrop()
+                .into(binding.senderImage)
+        }else{
+            binding.photoTv.visibility = View.GONE
+            binding.cardViewImg.visibility = View.GONE
+
         }
     }
 }
