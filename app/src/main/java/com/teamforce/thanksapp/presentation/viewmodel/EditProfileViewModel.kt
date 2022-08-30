@@ -10,6 +10,7 @@ import com.teamforce.thanksapp.data.request.CreateContactRequest
 import com.teamforce.thanksapp.data.request.UpdateContactRequest
 import com.teamforce.thanksapp.data.request.UpdateProfileRequest
 import com.teamforce.thanksapp.data.response.CreateContactResponse
+import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.UpdateContactResponse
 import com.teamforce.thanksapp.data.response.UpdateProfileResponse
 import com.teamforce.thanksapp.utils.RetrofitClient
@@ -48,11 +49,51 @@ class EditProfileViewModel(): ViewModel(){
     val isSuccessOperation: LiveData<Boolean> = _isSuccessOperation
 
 
+    private val _profile = MutableLiveData<ProfileResponse>()
+    val profile: LiveData<ProfileResponse> = _profile
+    private val _profileError = MutableLiveData<String>()
+    val profileError: LiveData<String> = _profileError
+
 
 
     fun initViewModel() {
         thanksApi = RetrofitClient.getInstance()
     }
+
+
+
+    fun loadUserProfile(token: String) {
+        _isLoading.postValue(true)
+        viewModelScope.launch { callProfileEndpoint(token, Dispatchers.Default) }
+    }
+
+    private suspend fun callProfileEndpoint(
+        token: String,
+        coroutineDispatcher: CoroutineDispatcher
+    ) {
+        withContext(coroutineDispatcher) {
+            thanksApi?.getProfile("Token $token")?.enqueue(object : Callback<ProfileResponse> {
+                override fun onResponse(
+                    call: Call<ProfileResponse>,
+                    response: Response<ProfileResponse>
+                ) {
+                    _isLoading.postValue(false)
+                    if (response.code() == 200) {
+                        _profile.postValue(response.body())
+                    } else {
+                        _profileError.postValue(response.message() + " " + response.code())
+                    }
+                }
+
+                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+                    _isLoading.postValue(false)
+                    _profileError.postValue(t.message)
+                }
+            })
+        }
+    }
+
+
 
     fun loadUpdateProfile(token: String, userId: String, tgName: String?, surname: String?,
                           firstName: String?, middleName: String?, nickname: String?) {

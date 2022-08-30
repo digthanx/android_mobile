@@ -75,7 +75,7 @@
     <string name="empty">\"\"</string>
     <!-- item_user -->
     <string name="name">Name</string>
-    <string name="tgName">TgName</string>
+    <string name="tgName">\@%s</string>
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
     <string name="sended_to">Перевод для %s</string>

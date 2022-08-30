@@ -127,13 +127,13 @@
     </style>
 
 
-    <style name="MyChipsOrange" parent="">
-        <item name="chipIconEnabled">true</item>
+    <style name="MyChipsOrange" parent="@style/Widget.MaterialComponents.Chip.Choice">
         <item name="chipIconVisible">true</item>
         <item name="chipIcon">@drawable/ic_currency</item>
-        <item name="chipIconTint">@color/general_brand</item>
-        <item name="android:textColor">@color/chip_text_color_state</item>
+        <item name="chipIconTint">@color/transaction_chip_text_color_state</item>
+        <item name="android:textColor">@color/transaction_chip_text_color_state</item>
         <item name="android:textStyle">bold</item>
+        <item name="chipBackgroundColor">@color/chip_background_color_state</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.ChipsHistory</item>
     </style>
 

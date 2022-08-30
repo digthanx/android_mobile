@@ -5,17 +5,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="16dp"
         android:orientation="vertical">
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="0dp">
+            android:clickable="true"
+            android:focusable="true"
+            app:cardElevation="20dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
                 android:paddingHorizontal="16dp"
                 android:paddingBottom="17dp">
 
@@ -25,7 +27,7 @@
                     android:layout_width="52dp"
                     android:layout_height="52dp"
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                    android:src="@drawable/ic_launcher_background"
+                    android:src="@drawable/ic_anon_avatar"
                     android:contentDescription="@string/app_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +44,7 @@
                     app:layout_constraintStart_toEndOf="@id/user_avatar"
                     app:layout_constraintTop_toTopOf="parent"/>
                 <TextView
-                    android:id="@+id/user_telegramId"
+                    android:id="@+id/user_telegramName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
@@ -62,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/superLightGray">
+            android:background="@color/general_background">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:textSize="10sp"
-                    android:letterSpacing="0.25"
+                    android:letterSpacing="0.2"
                     android:text="@string/contacts"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -180,7 +182,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:textSize="10sp"
-                    android:letterSpacing="0.25"
+                    android:letterSpacing="0.2"
                     android:text="@string/placeJob"/>
 
                 <com.google.android.material.card.MaterialCardView

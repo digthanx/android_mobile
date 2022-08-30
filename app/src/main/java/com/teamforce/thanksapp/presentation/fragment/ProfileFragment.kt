@@ -177,7 +177,8 @@ class ProfileFragment : Fragment() {
             userFio.text = String.format(requireContext().getString(R.string.userFio),
                 it.profile.surname ,it.profile.firstname, it.profile.middlename)
 
-            userTgName.text = "@" + it.profile.tgName
+            userTgName.text = String.format(
+                requireContext().getString(R.string.tgName), it.profile.tgName)
 
             if(it.profile.contacts.size == 1){
                 if(it.profile.contacts[0].contact_type == "@"){
@@ -262,6 +263,8 @@ class ProfileFragment : Fragment() {
                 bundle.putString("contact_id_2", contactId_2)
                 bundle.putString("contact_value_1", contactValue_1)
                 bundle.putString("contact_value_2", contactValue_2)
+                bundle.putString("company", companyUser.text.toString())
+                bundle.putString("department", departmentUser.text.toString())
                 findNavController().navigate(R.id.action_profileFragment_to_editProfileBottomSheetFragment, bundle)
             }
             .show()
