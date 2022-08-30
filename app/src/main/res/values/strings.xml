@@ -17,7 +17,7 @@
         напишите ему что-нибудь после чего повторите процедуру аутентификации</string>
     <string name="helperTextAboutEmail">Проверьте корректность введенной почты %s</string>
     <string name="helperTextStandard">Не пришел код?</string>
-    <string name="helperLink">Повторить процедуру аутентификации</string>
+    <string name="helperLink"><u>Повторить процедуру аутентификации</u></string>
     <string name="auth_label">Введите имя пользователя</string>
     <string name="get_code_button_label">Получить код</string>
     <string name="confirmation_code_label">Введите код подтверждения</string>
@@ -70,6 +70,7 @@
     <string name="will_burn_after_3">Сгорят через %s дней</string>
     <!-- Транзакция фрагмент -->
     <string name="send">Перевести</string>
+    <string name="addPhoto">Добавить фото</string>
     <string name="reason_transaction">Причина перевода</string>
     <string name="unsuccessfulSendCoins">Нельзя переводить больше 50% от суммы доступной для перевода</string>
     <string name="empty">\"\"</string>

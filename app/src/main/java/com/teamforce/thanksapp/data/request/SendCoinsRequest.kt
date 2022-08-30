@@ -1,6 +1,6 @@
 package com.teamforce.thanksapp.data.request
 
-class SendCoinsRequest(
+data class SendCoinsRequest(
     val recipient: Int,
     val amount: Int,
     val reason: String,
