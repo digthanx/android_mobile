@@ -69,7 +69,8 @@ class TransfersAdapter(
                 }
             }
             holder.valueTransfer.text = "- " + dataSet[position].amount
-            holder.tgNameUser.text = "@" + dataSet[position].recipient.recipient_tg_name
+            holder.tgNameUser.text = String.format(
+                context.getString(R.string.tgName), dataSet[position].recipient.recipient_tg_name)
             holder.descr_transaction_1 = context.getString(R.string.youSended)
             holder.labelStatusTransaction = context.getString(R.string.statusTransfer)
             if(!dataSet[position].recipient.recipient_photo.isNullOrEmpty()){
@@ -125,7 +126,8 @@ class TransfersAdapter(
                 }
                 holder.descr_transaction_1 = context.getString(R.string.youGot)
 
-                holder.tgNameUser.text = "@" + dataSet[position].sender.sender_tg_name
+                holder.tgNameUser.text = String.format(
+                    context.getString(R.string.tgName), dataSet[position].sender.sender_tg_name)
                 holder.labelStatusTransaction = context.getString(R.string.typeTransfer)
                 holder.valueTransfer.text = "+ " + dataSet[position].amount
                 holder.comingStatusTransaction = context.getString(R.string.comingTransfer)

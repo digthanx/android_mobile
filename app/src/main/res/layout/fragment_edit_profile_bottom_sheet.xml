@@ -5,17 +5,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="16dp"
         android:orientation="vertical">
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             app:cardElevation="20dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
                 android:paddingHorizontal="16dp"
                 android:paddingBottom="17dp">
 
@@ -42,7 +44,7 @@
                     app:layout_constraintStart_toEndOf="@id/user_avatar"
                     app:layout_constraintTop_toTopOf="parent"/>
                 <TextView
-                    android:id="@+id/user_telegramId"
+                    android:id="@+id/user_telegramName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
