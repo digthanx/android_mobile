@@ -79,6 +79,7 @@
     <string name="tgName">\@%s</string>
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
+    <string name="G">Ожидает истечния периода отмены</string>
     <string name="sended_to">Перевод для %s</string>
     <string name="approved">Согласовано</string>
     <string name="on_approval">На согласовании</string>
@@ -100,6 +101,8 @@
     <string name="youGot">Вы получили от</string>
     <string name="youWantedToSend">Вы хотели отправить</string>
     <string name="weRefusedYourOperation">Мы отклонили вашу операцию</string>
+    <string name="operationWasRefused">Операция была отменена</string>
+    <string name="iRefusedMyOperation">Вы отклонили свою операцию</string>
     <string name="comingTransfer">Входящий перевод</string>
     <string name="amountThanks">%s спасибок</string>
 

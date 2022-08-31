@@ -58,7 +58,7 @@ class TransfersAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: TransfersViewHolder, position: Int) {
-        val status = dataSet[position].transaction_status.transactionStatus
+        val status = dataSet[position].transaction_status.id
         holder.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
         if(dataSet[position].sender.sender_tg_name != "anonymous" && dataSet[position].sender.sender_tg_name.equals(username)){
             // Ты отправитель
@@ -81,33 +81,50 @@ class TransfersAdapter(
                 holder.avatar = "${Consts.BASE_URL}${dataSet[position].recipient.recipient_photo}"
             }
 
-            if (status.equals("Одобрено")) {
+            if (status.equals("A")) {
                 holder.status.text = context.getString(R.string.occured)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_success))
                 holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_success))
 
                 holder.comingStatusTransaction = context.getString(R.string.occured)
 
-            } else if (status.equals("Отклонено")) {
+            } else if (status.equals("D")) {
+                // отклонен контролером
                 holder.status.text = context.getString(R.string.refused)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_error))
                 holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_error))
-
-
                 holder.descr_transaction_1 = context.getString(R.string.youWantedToSend)
-                holder.weRefusedYourOperation = true
-                holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
+                holder.weRefusedYourOperation = context.getString(R.string.weRefusedYourOperation)
+                holder.comingStatusTransaction = context.getString(R.string.operationWasRefused)
+                // Убираю причину отмены
+               // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
                 // Где мне брать причину отказа? Записывать в переменную ниже
                // holder.comingStatusTransaction = context.getString(R.string.on_approval)
-            } else {
+            } else if(status.equals("W")) {
                 holder.status.text = context.getString(R.string.on_approval)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_warning))
                 holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_warning))
 
                 holder.comingStatusTransaction = context.getString(R.string.on_approval)
-
+            } else if(status.equals("G")){
+                holder.status.text = context.getString(R.string.G)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_warning))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_warning))
+                holder.comingStatusTransaction = context.getString(R.string.G)
+            } else if(status.equals("R")){
+                holder.status.text = context.getString(R.string.occured)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_success))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_success))
+                holder.comingStatusTransaction = context.getString(R.string.occured)
+            } else if(status.equals("C")){
+                holder.status.text = context.getString(R.string.refused)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_error))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_error))
+                holder.descr_transaction_1 = context.getString(R.string.youWantedToSend)
+                holder.weRefusedYourOperation = context.getString(R.string.iRefusedMyOperation)
+                holder.comingStatusTransaction = context.getString(R.string.operationWasRefused)
+                //holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
             }
-
         }else{
             if(dataSet[position].sender.sender_tg_name == "anonymous") {
                 holder.descr_transaction_1 = context.getString(R.string.youGot)
@@ -133,21 +150,37 @@ class TransfersAdapter(
                 holder.comingStatusTransaction = context.getString(R.string.comingTransfer)
             }
 
-            if (status.equals("Одобрено")) {
+            if (status.equals("A")) {
                 holder.status.text = context.getString(R.string.occured)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_success))
                 holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_success))
-            } else if (status.equals("Отклонено")) {
+            } else if (status.equals("D")) {
+                // Отклонен контролером
+                holder.comingStatusTransaction = context.getString(R.string.operationWasRefused)
                 holder.status.text = context.getString(R.string.refused)
+                holder.weRefusedYourOperation = context.getString(R.string.weRefusedYourOperation)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_error))
                 holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_error))
 
-            } else {
-                holder.status.text = context.getString(R.string.on_approval)
+            } else if(status.equals("G")){
+                holder.status.text = context.getString(R.string.G)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_warning))
                 holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_warning))
+                holder.comingStatusTransaction = context.getString(R.string.G)
+            } else if(status.equals("R")){
+                holder.status.text = context.getString(R.string.occured)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_success))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_success))
+                holder.comingStatusTransaction = context.getString(R.string.occured)
+            } else if(status.equals("C")){
+                holder.status.text = context.getString(R.string.refused)
+                holder.status.setBackgroundColor(context.getColor(R.color.minor_error))
+                holder.statusCard.setCardBackgroundColor(context.getColor(R.color.minor_error))
+                holder.descr_transaction_1 = context.getString(R.string.youWantedToSend)
+                holder.weRefusedYourOperation = context.getString(R.string.iRefusedMyOperation)
+                holder.comingStatusTransaction = context.getString(R.string.operationWasRefused)
 
-
+                // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
             }
         }
 
@@ -178,7 +211,7 @@ class TransfersAdapter(
                 putString(STATUS_TRANSACTION, holder.comingStatusTransaction)
                 putString(LABEL_STATUS_TRANSACTION, holder.labelStatusTransaction)
                 putString(AMOUNT_THANKS, holder.valueTransfer.text.toString())
-                putBoolean(WE_REFUSED_YOUR_OPERATION, holder.weRefusedYourOperation)
+                putString(WE_REFUSED_YOUR_OPERATION, holder.weRefusedYourOperation)
 
             }
             v.findNavController().navigate(R.id.action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2, bundle)
@@ -225,7 +258,7 @@ class TransfersAdapter(
         var labelStatusTransaction: String = "null"
         var descr_transaction_1: String = "null"
         var comingStatusTransaction: String = "null"
-        var weRefusedYourOperation: Boolean = false
+        var weRefusedYourOperation: String? = null
         var avatar: String? = null
     }
 }

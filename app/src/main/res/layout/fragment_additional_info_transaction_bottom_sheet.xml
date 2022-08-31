@@ -84,7 +84,7 @@
                 app:tint="@color/minor_success" />
 
             <TextView
-                android:id="@+id/we_refused"
+                android:id="@+id/we_or_you_refused"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
