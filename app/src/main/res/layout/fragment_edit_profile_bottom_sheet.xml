@@ -210,8 +210,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14dp"
-                            android:textColor="@color/general_secondary"
-                            android:text="ООО Дима Малков"/>
+                            android:textColor="@color/general_secondary" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -241,8 +240,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
-                            android:textColor="@color/general_secondary"
-                            android:text="Департамент забытых данных"/>
+                            android:textColor="@color/general_secondary" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

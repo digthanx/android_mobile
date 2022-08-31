@@ -10,6 +10,8 @@ class RetrofitClient private constructor() {
 
     companion object {
         private var instance: ThanksApi? = null
+        private val base_url_develop = "http://176.99.6.251:8888"
+        private val base_url_product = "http://176.99.6.251:8889"
 
         fun getInstance(): ThanksApi? {
             if (instance == null) {
@@ -20,7 +22,7 @@ class RetrofitClient private constructor() {
                 httpClient.addInterceptor(logging)
 
                 val retrofit = Retrofit.Builder()
-                    .baseUrl("http://176.99.6.251:8888")
+                    .baseUrl("http://176.99.6.251:8889")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient.build())
                     .build()

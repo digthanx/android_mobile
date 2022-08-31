@@ -119,17 +119,17 @@ class ProfileFragment : Fragment() {
     }
 
     private fun addPhotoFromIntent() {
-        val cameraIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE).takeIf { intent ->
-            intent.resolveActivity(requireActivity().packageManager) != null
-        }
+//        val cameraIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE).takeIf { intent ->
+//            intent.resolveActivity(requireActivity().packageManager) != null
+//        }
 
         val galleryIntent = Intent(Intent.ACTION_PICK).apply { this.type = "image/*" }
 
         val intentChooser = Intent(Intent.ACTION_CHOOSER).apply {
             this.putExtra(Intent.EXTRA_INTENT, galleryIntent)
-            cameraIntent?.let { intent ->
-                this.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayListOf(intent).toTypedArray<Parcelable>())
-            }
+//            cameraIntent?.let { intent ->
+//                this.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayListOf(intent).toTypedArray<Parcelable>())
+//            }
             this.putExtra(Intent.EXTRA_TITLE, resources.getString(R.string.gallery_title))
         }
 
@@ -218,6 +218,8 @@ class ProfileFragment : Fragment() {
                     .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
                     .centerCrop()
                     .into(userAvatar)
+            }else{
+                binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
             }
             UserDataRepository.getInstance()?.profileId = it.profile.id
         }
