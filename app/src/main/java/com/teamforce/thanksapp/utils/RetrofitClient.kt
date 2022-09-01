@@ -22,7 +22,7 @@ class RetrofitClient private constructor() {
                 httpClient.addInterceptor(logging)
 
                 val retrofit = Retrofit.Builder()
-                    .baseUrl("http://176.99.6.251:8889")
+                    .baseUrl("http://176.99.6.251:8888")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient.build())
                     .build()

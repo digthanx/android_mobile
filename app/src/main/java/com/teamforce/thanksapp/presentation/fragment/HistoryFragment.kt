@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.ViewCompat.canScrollVertically
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.chip.ChipGroup
@@ -79,10 +81,15 @@ class HistoryFragment : Fragment() {
     private fun initViews() {
         viewModel = HistoryViewModel()
         viewModel.initViewModel()
-        swipeToRefresh = binding.swipeRefreshLayout
-        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
+//        swipeToRefresh = binding.swipeRefreshLayout
+//        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         recyclerView = binding.historyRv
         recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerView.layoutManager =  object : LinearLayoutManager(context){
+            override fun canScrollVertically(): Boolean { return false }
+        }
+
+
         chipGroup = binding.chipGroup
 
 
@@ -93,10 +100,10 @@ class HistoryFragment : Fragment() {
             Observer { isLoading ->
                 if (isLoading) {
                     recyclerView.visibility = View.GONE
-                    swipeToRefresh.isRefreshing = true
+//                    swipeToRefresh.isRefreshing = true
                 } else {
                     recyclerView.visibility = View.VISIBLE
-                    swipeToRefresh.isRefreshing = false
+//                    swipeToRefresh.isRefreshing = false
                 }
             }
         )
@@ -105,10 +112,10 @@ class HistoryFragment : Fragment() {
             refreshRecyclerView(checkedId)
         }
 
-        swipeToRefresh.setOnRefreshListener {
-            loadDataFromServer()
-            swipeToRefresh.isRefreshing = false
-        }
+//        swipeToRefresh.setOnRefreshListener {
+//            loadDataFromServer()
+//            swipeToRefresh.isRefreshing = false
+//        }
     }
 
     private fun loadDataFromServer(){
