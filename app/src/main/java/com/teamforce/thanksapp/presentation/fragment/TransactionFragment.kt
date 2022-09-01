@@ -335,6 +335,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                             }else{
                                 viewModel.sendCoinsWithImage(it, userId, count, reason, isAnon, imageFilePart!!)
                             }
+                            binding.sendCoinBtn.isClickable = false
+                            binding.sendCoinBtn.isEnabled = false
                         }
                     } catch (e: Exception) {
                         Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()

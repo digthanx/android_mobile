@@ -6,6 +6,8 @@ import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -112,10 +114,31 @@ class ProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-            val imageBitmap = data.createBitmapFromResult(requireActivity())
+            var imageBitmap = data.createBitmapFromResult(requireActivity())
+            // устранение проблемы поворота картинки
+//            if(imageBitmap?.width!! > imageBitmap.height){
+//                val matrix = Matrix()
+//                matrix.postRotate(90f)
+//                val newBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
+//                imageBitmap = newBitmap
+//            }
+//            val exif = ExifInterface(data.dataString.toString())
+//            val rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+//            val rotationIndegrees = exifToDegrees(rotation)
+//            val matrix = Matrix()
+//            if(rotation != 0) matrix.preRotate(rotationIndegrees)
+//            val newBitmap = Bitmap.createBitmap(imageBitmap!!, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
+
             val imageUri = data.data
             funURIToMultipart(imageUri!!, imageBitmap!!)
         }
+    }
+
+    private fun exifToDegrees(exifOrOrientation: Int): Float{
+        if (exifOrOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90f }
+        else if (exifOrOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180f }
+        else if (exifOrOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270f }
+        return 0f
     }
 
     private fun addPhotoFromIntent() {
@@ -140,10 +163,10 @@ class ProfileFragment : Fragment() {
     private fun  funURIToMultipart(imageURI: Uri, imageBitmap: Bitmap){
         // Хардовая вставка картинки с самого начала
         // Убрать как только сделаю обновление по свайпам
-//        Glide.with(this)
-//            .load(imageURI)
-//            .centerCrop()
-//            .into(userAvatar)
+        Glide.with(this)
+            .load(imageURI)
+            .centerCrop()
+            .into(userAvatar)
         val projection = arrayOf(MediaStore.Images.Media.DATA)
         val cursor: Cursor = requireContext().contentResolver.query(imageURI, projection, null, null, null)!!
         cursor.moveToFirst()
