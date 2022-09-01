@@ -17,6 +17,7 @@
 
     <style name="Theme.ThanksApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark">
         <item name="android:tint">@color/general_background</item>
+        <item name="android:textColor">@color/general_background</item>
     </style>
 
 

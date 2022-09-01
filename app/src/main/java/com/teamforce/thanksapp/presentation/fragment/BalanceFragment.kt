@@ -36,8 +36,7 @@ class BalanceFragment : Fragment() {
     private lateinit var cancelled: TextView
     private lateinit var frozen: TextView
     private lateinit var willBurn: TextView
-    private lateinit var sectionOne: MaterialCardView
-    private lateinit var sectionSecond: LinearLayout
+    private val wholeScreen: LinearLayout by lazy { binding.wholeScreen }
     private lateinit var swipeToRefresh: SwipeRefreshLayout
 
 
@@ -65,11 +64,9 @@ class BalanceFragment : Fragment() {
             Observer { isLoading ->
                 if (isLoading) {
                     swipeToRefresh.isRefreshing = true
-                    sectionOne.visibility = View.GONE
-                    sectionSecond.visibility = View.GONE
+                    wholeScreen.visibility = View.GONE
                 } else {
-                    sectionOne.visibility = View.VISIBLE
-                    sectionSecond.visibility = View.VISIBLE
+                    wholeScreen.visibility = View.VISIBLE
                     swipeToRefresh.isRefreshing = false
                 }
             }
@@ -164,8 +161,6 @@ class BalanceFragment : Fragment() {
         cancelled = binding.cancelledValueTv
         frozen = binding.frozenValueTv
         willBurn = binding.willBurnTv
-        sectionOne = binding.sectionOne
-        sectionSecond = binding.secondLinear
         swipeToRefresh = binding.swipeRefreshLayout
         swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
     }

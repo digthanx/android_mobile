@@ -26,7 +26,7 @@ object Consts {
     const val SHOULD_ME_GOTO_HISTORY = "ShouldMeGoToHistory"
 
     val MAIN = MainActivity()
-    const val BASE_URL: String = "http://176.99.6.251:8889"
+    const val BASE_URL: String = "http://176.99.6.251:8888"
 
     private const val SP_NAME = "com.teamforce.thanksapp"
     private const val SP_ARG_TELEGRAM = "Telegram"

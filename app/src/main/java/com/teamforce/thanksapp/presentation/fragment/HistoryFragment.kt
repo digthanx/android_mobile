@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.ViewCompat.canScrollVertically
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.chip.ChipGroup
@@ -83,6 +85,11 @@ class HistoryFragment : Fragment() {
         swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         recyclerView = binding.historyRv
         recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerView.layoutManager =  object : LinearLayoutManager(context){
+            override fun canScrollVertically(): Boolean { return false }
+        }
+
+
         chipGroup = binding.chipGroup
 
 
@@ -179,8 +186,7 @@ class HistoryFragment : Fragment() {
             R.id.chipReceived -> receivedTransactionsList
             R.id.chipSent -> sentTransactionsList
             else -> {
-                Toast.makeText(requireContext(), "Wrong chip", Toast.LENGTH_LONG).show()
-                emptyList()
+                allTransactionsList
             }
         }
         (recyclerView.adapter as HistoryAdapter).submitList(transactions)
