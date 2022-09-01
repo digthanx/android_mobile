@@ -1,15 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    tools:context=".presentation.fragment.FeedFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="125dp"
+        android:elevation="0dp"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -18,9 +19,12 @@
             android:layout_height="match_parent"
             android:elevation="0dp"
             android:fitsSystemWindows="true"
+            app:collapsedTitleTextColor="@color/general_background"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="32dp"
             app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded"
             app:expandedTitleTextColor="@color/white"
-            app:layout_scrollFlags="enterAlways">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -73,84 +77,86 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-
-    <com.google.android.material.card.MaterialCardView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/general_brand"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="4dp">
-
-        <com.google.android.material.card.MaterialCardView
-            style="@style/MyCardView"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="0dp">
-
-            <LinearLayout
+            android:layout_height="match_parent">
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                tools:context=".presentation.fragment.FeedFragment">
+                app:cardBackgroundColor="@color/general_brand"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="4dp">
 
-                <LinearLayout
-                    android:id="@+id/chipBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:orientation="horizontal"
-                    app:cardCornerRadius="15dp">
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chipGroup"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginHorizontal="20dp"
-                        android:background="@color/white"
-                        app:singleSelection="true">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipAllEvent"
-                            style="@style/MyChipsFeed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:text="@string/allEvent"/>
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipMineEvent"
-                            style="@style/MyChipsFeed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:text="@string/mineEvent" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipPublicEvent"
-                            style="@style/MyChipsFeed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:text="@string/publicEvent" />
-
-                    </com.google.android.material.chip.ChipGroup>
-                </LinearLayout>
-
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/swipeRefreshLayout"
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/MyCardView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:elevation="0dp">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/feed_rv"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/chipBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:orientation="horizontal"
+                            app:cardCornerRadius="15dp">
+
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chipGroup"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="20dp"
+                                android:background="@color/white"
+                                app:singleSelection="true">
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipAllEvent"
+                                    style="@style/MyChipsFeed"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checkable="true"
+                                    android:text="@string/allEvent"/>
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipMineEvent"
+                                    style="@style/MyChipsFeed"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checkable="true"
+                                    android:text="@string/mineEvent" />
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipPublicEvent"
+                                    style="@style/MyChipsFeed"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checkable="true"
+                                    android:text="@string/publicEvent" />
+
+                            </com.google.android.material.chip.ChipGroup>
+                        </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/feed_rv"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </com.google.android.material.card.MaterialCardView>
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

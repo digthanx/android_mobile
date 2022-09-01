@@ -63,19 +63,19 @@ class BalanceFragment : Fragment() {
             viewLifecycleOwner,
             Observer { isLoading ->
                 if (isLoading) {
-                   // swipeToRefresh.isRefreshing = true
+                    swipeToRefresh.isRefreshing = true
                     wholeScreen.visibility = View.GONE
                 } else {
                     wholeScreen.visibility = View.VISIBLE
-                   // swipeToRefresh.isRefreshing = false
+                    swipeToRefresh.isRefreshing = false
                 }
             }
         )
 
-       // swipeToRefresh.setOnRefreshListener {
-           // loadBalanceData()
-           // swipeToRefresh.isRefreshing = false
-       // }
+        swipeToRefresh.setOnRefreshListener {
+            loadBalanceData()
+            swipeToRefresh.isRefreshing = false
+        }
         val optionForProfileFragment = NavOptions.Builder()
             .setLaunchSingleTop(true)
             .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
@@ -161,8 +161,8 @@ class BalanceFragment : Fragment() {
         cancelled = binding.cancelledValueTv
         frozen = binding.frozenValueTv
         willBurn = binding.willBurnTv
-        //swipeToRefresh = binding.swipeRefreshLayout
-//        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
+        swipeToRefresh = binding.swipeRefreshLayout
+        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
     }
 
     companion object {

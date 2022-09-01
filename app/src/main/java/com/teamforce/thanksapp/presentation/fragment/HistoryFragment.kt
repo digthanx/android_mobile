@@ -81,8 +81,8 @@ class HistoryFragment : Fragment() {
     private fun initViews() {
         viewModel = HistoryViewModel()
         viewModel.initViewModel()
-//        swipeToRefresh = binding.swipeRefreshLayout
-//        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
+        swipeToRefresh = binding.swipeRefreshLayout
+        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         recyclerView = binding.historyRv
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.layoutManager =  object : LinearLayoutManager(context){
@@ -100,10 +100,10 @@ class HistoryFragment : Fragment() {
             Observer { isLoading ->
                 if (isLoading) {
                     recyclerView.visibility = View.GONE
-//                    swipeToRefresh.isRefreshing = true
+                    swipeToRefresh.isRefreshing = true
                 } else {
                     recyclerView.visibility = View.VISIBLE
-//                    swipeToRefresh.isRefreshing = false
+                    swipeToRefresh.isRefreshing = false
                 }
             }
         )
@@ -112,10 +112,10 @@ class HistoryFragment : Fragment() {
             refreshRecyclerView(checkedId)
         }
 
-//        swipeToRefresh.setOnRefreshListener {
-//            loadDataFromServer()
-//            swipeToRefresh.isRefreshing = false
-//        }
+        swipeToRefresh.setOnRefreshListener {
+            loadDataFromServer()
+            swipeToRefresh.isRefreshing = false
+        }
     }
 
     private fun loadDataFromServer(){
@@ -186,8 +186,7 @@ class HistoryFragment : Fragment() {
             R.id.chipReceived -> receivedTransactionsList
             R.id.chipSent -> sentTransactionsList
             else -> {
-                Toast.makeText(requireContext(), "Wrong chip", Toast.LENGTH_LONG).show()
-                emptyList()
+                allTransactionsList
             }
         }
         (recyclerView.adapter as HistoryAdapter).submitList(transactions)
