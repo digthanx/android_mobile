@@ -36,8 +36,7 @@ class BalanceFragment : Fragment() {
     private lateinit var cancelled: TextView
     private lateinit var frozen: TextView
     private lateinit var willBurn: TextView
-    private lateinit var sectionOne: MaterialCardView
-    private lateinit var sectionSecond: LinearLayout
+    private val wholeScreen: LinearLayout by lazy { binding.wholeScreen }
     private lateinit var swipeToRefresh: SwipeRefreshLayout
 
 
@@ -64,21 +63,19 @@ class BalanceFragment : Fragment() {
             viewLifecycleOwner,
             Observer { isLoading ->
                 if (isLoading) {
-                    swipeToRefresh.isRefreshing = true
-                    sectionOne.visibility = View.GONE
-                    sectionSecond.visibility = View.GONE
+                   // swipeToRefresh.isRefreshing = true
+                    wholeScreen.visibility = View.GONE
                 } else {
-                    sectionOne.visibility = View.VISIBLE
-                    sectionSecond.visibility = View.VISIBLE
-                    swipeToRefresh.isRefreshing = false
+                    wholeScreen.visibility = View.VISIBLE
+                   // swipeToRefresh.isRefreshing = false
                 }
             }
         )
 
-        swipeToRefresh.setOnRefreshListener {
-            loadBalanceData()
-            swipeToRefresh.isRefreshing = false
-        }
+       // swipeToRefresh.setOnRefreshListener {
+           // loadBalanceData()
+           // swipeToRefresh.isRefreshing = false
+       // }
         val optionForProfileFragment = NavOptions.Builder()
             .setLaunchSingleTop(true)
             .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
@@ -164,10 +161,8 @@ class BalanceFragment : Fragment() {
         cancelled = binding.cancelledValueTv
         frozen = binding.frozenValueTv
         willBurn = binding.willBurnTv
-        sectionOne = binding.sectionOne
-        sectionSecond = binding.secondLinear
-        swipeToRefresh = binding.swipeRefreshLayout
-        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
+        //swipeToRefresh = binding.swipeRefreshLayout
+//        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
     }
 
     companion object {

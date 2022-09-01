@@ -2,6 +2,7 @@
 <resources>
 
     <color name="general_brand">#F15929</color>
+    <color name="general_orange">#FF9900</color>
     <color name="general_brand_secondary">#FFF0D9</color>
     <color name="general_background">#FFFFFF</color>
     <color name="general_contrast">#212121</color>
