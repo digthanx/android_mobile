@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.presentation.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +39,8 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
     private var status_transaction: String? = null
     private var label_status_transaction: String? = null
     private var amount_thanks: String? = null
-    private var we_refused_your: Boolean? = null
+    private var we_refused_your: String? = null
+    private var photo_from_sender: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,8 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
             status_transaction = it.getString(STATUS_TRANSACTION)
             label_status_transaction = it.getString(LABEL_STATUS_TRANSACTION)
             amount_thanks = it.getString(AMOUNT_THANKS)
-            we_refused_your = it.getBoolean(WE_REFUSED_YOUR_OPERATION)
+            we_refused_your = it.getString(WE_REFUSED_YOUR_OPERATION)
+            photo_from_sender = it.getString("photo_from_sender")
         }
     }
 
@@ -78,16 +81,32 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
             labelStatusTransaction.text = label_status_transaction
             statusTransaction.text = status_transaction
         }
-        if(we_refused_your == true){
+        if(we_refused_your != null){
             binding.currencyTransaction.visibility = View.GONE
             binding.valueTransfer.visibility = View.GONE
-            binding.weRefused.visibility = View.VISIBLE
+            // Пока что вставлю из стринги для обоих случаев Операция была отменена
+           // binding.weOrYouRefused.setText(we_refused_your)
+            binding.weOrYouRefused.setText(context?.getString(R.string.operationWasRefused))
+            binding.weOrYouRefused.visibility = View.VISIBLE
         }
         if(!avatar.isNullOrEmpty()){
             Glide.with(this)
                 .load(avatar?.toUri())
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(binding.userAvatar)
+        }
+        if (!photo_from_sender.isNullOrEmpty()){
+            Log.d("Token", "${photo_from_sender}")
+            binding.photoTv.visibility = View.VISIBLE
+            binding.cardViewImg.visibility = View.VISIBLE
+            Glide.with(this)
+                .load(photo_from_sender)
+                .centerCrop()
+                .into(binding.senderImage)
+        }else{
+            binding.photoTv.visibility = View.GONE
+            binding.cardViewImg.visibility = View.GONE
+
         }
     }
 }

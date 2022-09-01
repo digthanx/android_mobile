@@ -156,17 +156,17 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     }
 
     private fun addPhotoFromIntent() {
-        val cameraIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE).takeIf { intent ->
-            intent.resolveActivity(requireActivity().packageManager) != null
-        }
+//        val cameraIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE).takeIf { intent ->
+//            intent.resolveActivity(requireActivity().packageManager) != null
+//        }
 
         val galleryIntent = Intent(Intent.ACTION_PICK).apply { this.type = "image/*" }
 
         val intentChooser = Intent(Intent.ACTION_CHOOSER).apply {
             this.putExtra(Intent.EXTRA_INTENT, galleryIntent)
-            cameraIntent?.let { intent ->
-                this.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayListOf(intent).toTypedArray<Parcelable>())
-            }
+//            cameraIntent?.let { intent ->
+//                this.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayListOf(intent).toTypedArray<Parcelable>())
+//            }
             this.putExtra(Intent.EXTRA_TITLE, resources.getString(R.string.gallery_title))
         }
 
@@ -335,6 +335,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                             }else{
                                 viewModel.sendCoinsWithImage(it, userId, count, reason, isAnon, imageFilePart!!)
                             }
+                            binding.sendCoinBtn.isClickable = false
+                            binding.sendCoinBtn.isEnabled = false
                         }
                     } catch (e: Exception) {
                         Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()

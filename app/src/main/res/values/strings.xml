@@ -39,7 +39,7 @@
     <string name="accept">Да</string>
     <string name="decline">Нет</string>
     <string name="whatEditInProfile">Что именно вы хотите отредактировать?</string>
-    <string name="photo">Аватар</string>
+    <string name="avatar">Аватар</string>
     <string name="stringData">Личную информацию</string>
     <!-- Edit Profile Bottom Sheet Fragment -->
     <string name="contacts">КОНТАКТЫ</string>
@@ -79,6 +79,7 @@
     <string name="tgName">\@%s</string>
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
+    <string name="G">Ожидает истечния периода отмены</string>
     <string name="sended_to">Перевод для %s</string>
     <string name="approved">Согласовано</string>
     <string name="on_approval">На согласовании</string>
@@ -92,6 +93,7 @@
     <string name="successfulCancel">Спасибки вернуться на ваш счет :)</string>
     <!-- Additional Info Bottom Sheet Dialog Fragment -->
     <string name="message">Сообщение</string>
+    <string name="photo">Фото</string>
     <string name="statusTransfer">Статус перевода</string>
     <string name="typeTransfer">Тип перевода</string>
     <string name="reasonOfRefusing">Причина отказа</string>
@@ -99,6 +101,8 @@
     <string name="youGot">Вы получили от</string>
     <string name="youWantedToSend">Вы хотели отправить</string>
     <string name="weRefusedYourOperation">Мы отклонили вашу операцию</string>
+    <string name="operationWasRefused">Операция была отменена</string>
+    <string name="iRefusedMyOperation">Вы отклонили свою операцию</string>
     <string name="comingTransfer">Входящий перевод</string>
     <string name="amountThanks">%s спасибок</string>
 
