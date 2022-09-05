@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_transactionFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_transactionFragment_to_listOfValuesFragment"
+            app:destination="@id/listOfValuesFragment" />
     </fragment>
     <fragment
         android:id="@+id/balanceFragment"
@@ -84,5 +87,14 @@
         <action
             android:id="@+id/action_editProfileBottomSheetFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listOfValuesFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.ListOfValuesFragment"
+        android:label="fragment_list_of_values"
+        tools:layout="@layout/fragment_list_of_values" >
+        <action
+            android:id="@+id/action_listOfValuesFragment_to_transactionFragment"
+            app:destination="@id/transactionFragment" />
     </fragment>
 </navigation>

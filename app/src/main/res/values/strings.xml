@@ -77,6 +77,7 @@
     <string name="addValues">Добавить ценность</string>
     <string name="choiceValues">Выберите ценность</string>
     <string name="choiceReceiver">Выберите получателя</string>
+    <string name="applyValues">Применить</string>
     <string name="empty">\"\"</string>
     <!-- item_user -->
     <string name="name">Name</string>

@@ -80,7 +80,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTransactionBinding.inflate(inflater, container, false)
         return binding.root
     }
