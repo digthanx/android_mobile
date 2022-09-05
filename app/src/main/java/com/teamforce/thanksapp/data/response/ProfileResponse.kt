@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.data.response
 
 import com.google.gson.annotations.SerializedName
+import com.teamforce.thanksapp.data.network.models.Contact
 
 data class ProfileResponse(
     @SerializedName("username")
@@ -27,10 +28,6 @@ data class ProfileResponse(
         @SerializedName("nickname") val nickname: String
     )
 
-    data class Contact(
-        val id: String,
-        val contact_type: String,
-        val contact_id: String
-    )
+
 }
 

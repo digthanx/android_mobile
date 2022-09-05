@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.model.domain.HistoryModel
 import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class HistoryAdapter(
@@ -49,8 +51,17 @@ class HistoryAdapter(
             val dateTime: LocalDateTime =
                 LocalDateTime.parse(getItem(position).data.get(0).updatedAt.replace("+03:00", ""))
             val title = dateTime.dayOfMonth.toString() + " " + getMonth(dateTime)
+            val result = dateTime.toString().subSequence(0, 10)
+            val today: LocalDate = LocalDate.now()
+            val yesterday: String = today.minusDays(1).format(DateTimeFormatter.ISO_DATE)
+            if(result == today.toString()) {
+                holder.date.text = "Сегодня"
+            } else if(result == yesterday){
+                holder.date.text = "Вчера"
+            }else{
+                holder.date.text = title
+            }
 
-            holder.date.text = title
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }

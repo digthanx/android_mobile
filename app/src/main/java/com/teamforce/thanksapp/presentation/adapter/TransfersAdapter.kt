@@ -97,9 +97,9 @@ class TransfersAdapter(
                 holder.weRefusedYourOperation = context.getString(R.string.weRefusedYourOperation)
                 holder.comingStatusTransaction = context.getString(R.string.operationWasRefused)
                 // Убираю причину отмены
-               // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
+                // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
                 // Где мне брать причину отказа? Записывать в переменную ниже
-               // holder.comingStatusTransaction = context.getString(R.string.on_approval)
+                // holder.comingStatusTransaction = context.getString(R.string.on_approval)
             } else if(status.equals("W")) {
                 holder.status.text = context.getString(R.string.on_approval)
                 holder.status.setBackgroundColor(context.getColor(R.color.minor_warning))
@@ -216,6 +216,7 @@ class TransfersAdapter(
             }
             v.findNavController().navigate(R.id.action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2, bundle)
         }
+
 
     }
 

@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.data.api
 
+import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
 import okhttp3.MultipartBody
@@ -108,5 +109,11 @@ interface ThanksApi {
         @Header("Authorization") token: String,
         @Body data: CreateContactRequest?,
     ): Call<CreateContactResponse>
+
+    @POST("/create-few-contacts/")
+    fun updateFewContact(
+        @Header("Authorization") token: String,
+        @Body data: List<Contact>?,
+    ): Call<UpdateFewContactsResponse>
 
 }
