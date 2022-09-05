@@ -53,17 +53,22 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentTransactionBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
-    private lateinit var viewModel: TransactionViewModel
-    private lateinit var usersInput: TextInputEditText
-    private lateinit var usersInputLayout: TextInputLayout
-    private lateinit var countEditText: EditText
-    private lateinit var reasonEditText: EditText
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var sendCoinsGroup: LinearLayout
-    private lateinit var availableCoins: TextView
-    private lateinit var chipGroup: ChipGroup
-    private lateinit var checkBoxIsAnon: SwitchMaterial
-    private lateinit var progressBar: ProgressBar
+    private var viewModel: TransactionViewModel = TransactionViewModel()
+    private val usersInput: TextInputEditText by lazy { binding.usersEt }
+    private val usersInputLayout: TextInputLayout by lazy { binding.textField }
+    private val countEditText: EditText by lazy { binding.countValueEt }
+    private val reasonEditText: EditText by lazy { binding.messageValueEt }
+    private val recyclerView: RecyclerView by lazy { binding.usersListRv }
+    private val sendCoinsGroup: LinearLayout by lazy { binding.sendCoinLinear }
+    private val availableCoins: TextView by lazy { binding.distributedValueTv }
+    private val chipGroup: ChipGroup by lazy { binding.chipGroup }
+    private val checkBoxIsAnon: SwitchMaterial by lazy { binding.isAnon }
+    private val progressBar: ProgressBar by lazy { binding.progressBar }
+    private val sendButton: Button by lazy { binding.sendCoinBtn }
+    private val checkBoxAddValues: SwitchMaterial by lazy { binding.addValues }
+    private val textInputLayoutAddValues: TextInputLayout by lazy { binding.textInputLayoutValue }
+    private val etAddValues: TextInputEditText by lazy { binding.etValue }
+
     private val imgCard: MaterialCardView by lazy { binding.showAttachedImgCard }
     private val detachImgBtn: ImageButton by lazy { binding.detachImgBtn }
     private val image: ImageView by lazy { binding.image }
@@ -75,7 +80,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTransactionBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -92,7 +97,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         dropDownMenuUserInput(usersInput)
         appealToDB()
         checkedChip()
-
+        openValuesEt()
         val token = UserDataRepository.getInstance()?.token
         if (token != null) {
             viewModel.loadUserBalance(token)
@@ -111,22 +116,26 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             imageFilePart = null
         }
 
+        etAddValues.setOnClickListener {
+            // Переход на список ценностей
+            Toast.makeText(requireContext(), "Сработал триггер на поле ввода", Toast.LENGTH_LONG).show()
+
+        }
     }
 
-    private fun initViews(view: View) {
-        val sendButton: Button = binding.sendCoinBtn
-        sendButton.setOnClickListener(this)
-        recyclerView = binding.usersListRv
-        sendCoinsGroup = binding.sendCoinLinear
-        countEditText = binding.countValueEt
-        reasonEditText = binding.messageValueEt
-        usersInputLayout = binding.textField
-        usersInput = binding.usersEt
-        availableCoins = binding.distributedValueTv
-        chipGroup = binding.chipGroup
-        checkBoxIsAnon = binding.isAnon
-        progressBar = binding.progressBar
+    private fun openValuesEt(){
+        checkBoxAddValues.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked){
+                textInputLayoutAddValues.visibility = View.VISIBLE
+            }else{
+                textInputLayoutAddValues.visibility = View.GONE
+            }
+        }
+    }
 
+
+    private fun initViews(view: View) {
+        sendButton.setOnClickListener(this)
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->
