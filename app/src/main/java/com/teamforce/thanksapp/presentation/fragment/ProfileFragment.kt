@@ -67,8 +67,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var userEmail: TextView
     private lateinit var userPhone: TextView
-    private var contactId_1: String? = null
-    private var contactId_2: String? = null
+    private var contactId_1: Int? = null
+    private var contactId_2: Int? = null
     private var contactValue_1: String? = null
     private var contactValue_2: String? = null
 
@@ -197,8 +197,13 @@ class ProfileFragment : Fragment() {
 
     private fun setData(){
         viewModel.profile.observe(viewLifecycleOwner){
-            userFio.text = String.format(requireContext().getString(R.string.userFio),
-                it.profile.surname ,it.profile.firstname, it.profile.middlename)
+            if(it.profile.middlename == "null"){
+                userFio.text = String.format(requireContext().getString(R.string.userFio),
+                    it.profile.surname ,it.profile.firstname, "")
+            }else{
+                userFio.text = String.format(requireContext().getString(R.string.userFio),
+                    it.profile.surname ,it.profile.firstname, it.profile.middlename)
+            }
 
             userTgName.text = String.format(
                 requireContext().getString(R.string.tgName), it.profile.tgName)
@@ -284,8 +289,8 @@ class ProfileFragment : Fragment() {
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
                 dialog.cancel()
                 val bundle = Bundle()
-                bundle.putString("contact_id_1", contactId_1)
-                bundle.putString("contact_id_2", contactId_2)
+                bundle.putInt("contact_id_1", contactId_1!!)
+                bundle.putInt("contact_id_2", contactId_2!!)
                 bundle.putString("contact_value_1", contactValue_1)
                 bundle.putString("contact_value_2", contactValue_2)
                 bundle.putString("company", companyUser.text.toString())

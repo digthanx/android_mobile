@@ -6,13 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.CreateContactRequest
 import com.teamforce.thanksapp.data.request.UpdateContactRequest
 import com.teamforce.thanksapp.data.request.UpdateProfileRequest
-import com.teamforce.thanksapp.data.response.CreateContactResponse
-import com.teamforce.thanksapp.data.response.ProfileResponse
-import com.teamforce.thanksapp.data.response.UpdateContactResponse
-import com.teamforce.thanksapp.data.response.UpdateProfileResponse
+import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -35,16 +33,6 @@ class EditProfileViewModel(): ViewModel(){
     val updateProfileError: LiveData<String> = _updateProfileError
 
 
-    private val _createContact = MutableLiveData<CreateContactResponse>()
-    val createContact: LiveData<CreateContactResponse> = _createContact
-    private val _createContactError = MutableLiveData<String>()
-    val createContactError: LiveData<String> = _createContactError
-
-    private val _updateContact = MutableLiveData<UpdateContactResponse>()
-    val updateContact: LiveData<UpdateContactResponse> = _updateContact
-    private val _updateContactError = MutableLiveData<String>()
-    val updateContactError: LiveData<String> = _updateContactError
-
     private val _isSuccessOperation = MutableLiveData<Boolean>()
     val isSuccessOperation: LiveData<Boolean> = _isSuccessOperation
 
@@ -54,6 +42,11 @@ class EditProfileViewModel(): ViewModel(){
     private val _profileError = MutableLiveData<String>()
     val profileError: LiveData<String> = _profileError
 
+
+    private val _updateFewContact = MutableLiveData<UpdateFewContactsResponse>()
+    val updateFewContact: LiveData<UpdateFewContactsResponse> = _updateFewContact
+    private val _updateFewContactError = MutableLiveData<String>()
+    val updateFewContactError: LiveData<String> = _updateFewContactError
 
 
     fun initViewModel() {
@@ -134,79 +127,38 @@ class EditProfileViewModel(): ViewModel(){
     }
 
 
-    fun loadCreateContact(token: String, contactId: String, contactType: String, profile: String) {
+
+    fun loadUpdateFewContact(token: String, listContacts: List<Contact>) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callCreateContactEndpoint(token, contactId, contactType, profile, Dispatchers.Default) }
+        viewModelScope.launch { callUpdateFewContactEndpoint(token, listContacts, Dispatchers.Default) }
     }
 
-    private suspend fun callCreateContactEndpoint(
+    private suspend fun callUpdateFewContactEndpoint(
         token: String,
-        contactId: String,
-        contactType: String,
-        profile: String,
+        listContacts: List<Contact>,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.createContact("Token $token",
-                CreateContactRequest(
-                contactId,
-                contactType,
-                profile))?.enqueue(object : Callback<CreateContactResponse> {
+            thanksApi?.updateFewContact("Token $token", listContacts)?.enqueue(object : Callback<UpdateFewContactsResponse> {
                 override fun onResponse(
-                    call: Call<CreateContactResponse>,
-                    response: Response<CreateContactResponse>
+                    call: Call<UpdateFewContactsResponse>,
+                    response: Response<UpdateFewContactsResponse>
                 ) {
                     _isLoading.postValue(false)
                     if (response.code() == 200) {
-                        _createContact.postValue(response.body())
+                        _updateFewContact.postValue(response.body())
                     } else {
-                        _createContactError.postValue(response.message() + " " + response.code())
+                        _updateFewContactError.postValue(response.message() + " " + response.code())
                     }
                 }
 
-                override fun onFailure(call: Call<CreateContactResponse>, t: Throwable) {
+                override fun onFailure(call: Call<UpdateFewContactsResponse>, t: Throwable) {
                     _isLoading.postValue(false)
-                    _createContactError.postValue(t.message)
+                    _updateFewContactError.postValue(t.message)
                 }
             })
         }
     }
 
 
-    fun loadUpdateContact(token: String, contactId: String, contactValue: String) {
-        _isLoading.postValue(true)
-        viewModelScope.launch { callUpdateContactEndpoint(token, contactId, contactValue, Dispatchers.Default) }
-    }
-
-    private suspend fun callUpdateContactEndpoint(
-        token: String,
-        contactId: String,
-        contactValue: String,
-        coroutineDispatcher: CoroutineDispatcher
-    ) {
-        withContext(coroutineDispatcher) {
-            thanksApi?.updateContact("Token $token",contactId, UpdateContactRequest(contactValue))?.enqueue(object : Callback<UpdateContactResponse> {
-                override fun onResponse(
-                    call: Call<UpdateContactResponse>,
-                    response: Response<UpdateContactResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _updateContact.postValue(response.body())
-                    } else {
-                        Log.d("Token", "Ошибка ${response.body()?.non_field_errors}")
-                        Log.d("Token", "Ошибка ${response.body()}")
-                        Log.d("Token", "Ошибка ${response.message()}")
-                        Log.d("Token", "Ошибка ${response.errorBody().toString()}")
-                        _updateContactError.postValue(response.message() + " " + response.code())
-                    }
-                }
-
-                override fun onFailure(call: Call<UpdateContactResponse>, t: Throwable) {
-                    _isLoading.postValue(false)
-                    _updateContactError.postValue(t.message)
-                }
-            })
-        }
-    }
 }
