@@ -42,9 +42,7 @@ class HistoryAdapter(
         return HistoryViewHolder(view)
     }
 
-    fun receive(){
 
-    }
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
         try {
