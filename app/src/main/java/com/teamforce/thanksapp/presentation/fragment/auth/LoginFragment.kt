@@ -56,26 +56,26 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
             setHelperLink()
         }
         innerEditTextCode.addTextChangedListener(object:  TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
+                }
 
-            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if(s?.trim()?.length == 4){
-                    if (UserDataRepository.getInstance()?.statusResponseAuth == "{status=Код отправлен в телеграм}") {
-                        UserDataRepository.getInstance()?.verifyCode = innerEditTextCode.text?.trim().toString()
-                        viewModel.verifyCodeTelegram(innerEditTextCode.text?.trim().toString())
-                    } else if (UserDataRepository.getInstance()?.statusResponseAuth == "{status=Код отправлен на указанную электронную почту}") {
-                        UserDataRepository.getInstance()?.verifyCode = innerEditTextCode.text?.trim().toString()
-                        Log.d("Token", "Я по почте захожу")
-                        viewModel.verifyCodeEmail(innerEditTextCode.text?.trim().toString())
-                    }else{
-                        Log.d("Token", "Ни один статус не прошел CheckCodeFragment OnClick")
+                override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if(s?.trim()?.length == 4){
+                        if (UserDataRepository.getInstance()?.statusResponseAuth == "{status=Код отправлен в телеграм}") {
+                            UserDataRepository.getInstance()?.verifyCode = innerEditTextCode.text?.trim().toString()
+                            viewModel.verifyCodeTelegram(innerEditTextCode.text?.trim().toString())
+                        } else if (UserDataRepository.getInstance()?.statusResponseAuth == "{status=Код отправлен на указанную электронную почту}") {
+                            UserDataRepository.getInstance()?.verifyCode = innerEditTextCode.text?.trim().toString()
+                            Log.d("Token", "Я по почте захожу")
+                            viewModel.verifyCodeEmail(innerEditTextCode.text?.trim().toString())
+                        }else{
+                            Log.d("Token", "Ни один статус не прошел CheckCodeFragment OnClick")
+                        }
                     }
                 }
-            }
 
-            override fun afterTextChanged(p0: Editable?) {
+                override fun afterTextChanged(p0: Editable?) {
 
             }
 

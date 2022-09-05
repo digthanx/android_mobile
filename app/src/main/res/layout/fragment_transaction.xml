@@ -53,7 +53,7 @@
                 android:visibility="visible"
                 android:paddingStart="@dimen/padding_x"
                 android:paddingEnd="@dimen/padding_x"
-                android:hint="Выберите получателя"
+                android:hint="@string/choiceReceiver"
                 android:paddingBottom="9dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:layout_constraintStart_toStartOf="parent"
@@ -396,9 +396,57 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:textColor="@color/general_contrast"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:layout_weight="1"
-                        android:text="Анонимно"/>
+                        android:text="@string/addValues"/>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/addValues"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"/>
+                </LinearLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_layout_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    style="@style/EditProfileTextInputLayout"
+                    app:endIconDrawable="@drawable/ic_tabler_chevron_right"
+                    app:endIconMode="custom"
+                    android:outlineProvider="none"
+                    app:strokeColor="@color/color20"
+                    app:strokeWidth="@dimen/stroke_size">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:background="@null"
+                        android:id="@+id/et_value"
+                        android:layout_width="match_parent"
+                        android:layout_margin="@dimen/margin_x"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:inputType="none"
+                        android:gravity="top"
+                        android:hint="@string/choiceValues"
+                        android:textAppearance="@style/Body1.Gray" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="16dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/general_contrast"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:text="@string/isAnon"/>
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/isAnon"
