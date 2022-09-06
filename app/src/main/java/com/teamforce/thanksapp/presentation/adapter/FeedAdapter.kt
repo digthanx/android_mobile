@@ -98,7 +98,7 @@ class FeedAdapter(
                     currentList[position].transaction.sender
                 )
             holder.descriptionFeed = context.getString(
-                R.string.someoneToSomeone
+                R.string.getFrom
             )
         } else if (!currentList[position].transaction.sender.equals(username)) {
             holder.senderAndReceiver.text =
@@ -110,7 +110,8 @@ class FeedAdapter(
                     currentList[position].transaction.sender
                 )
             holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
-            holder.descriptionFeed = context.getString(R.string.youFromSomeone)
+            holder.descriptionFeed = context.getString(R.string.youGetFrom)
+            // Я получатель
         } else {
             holder.senderAndReceiver.text =
                 String.format(
@@ -121,7 +122,8 @@ class FeedAdapter(
                     currentList[position].transaction.amount.substringBefore(".")
                 )
             holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
-            holder.descriptionFeed = context.getString(R.string.youToSomeone)
+            holder.descriptionFeed = context.getString(R.string.getFrom)
+            // Я отправитель
         }
 
         convertDataToNecessaryFormat(holder, position)
@@ -129,12 +131,11 @@ class FeedAdapter(
         holder.standardGroup.setOnClickListener { v ->
             val bundle = Bundle()
             bundle.apply {
-                // аву пока не передаю
                 putString(
                     Consts.AVATAR_USER,
                     "${Consts.BASE_URL}${currentList[position].transaction.recipient_photo}"
                 )
-                putString(Consts.DATE_TRANSACTION, holder.dateTime.toString())
+                putString(Consts.DATE_TRANSACTION, holder.dateTime.text.toString())
                 putString(Consts.DESCRIPTION_FEED, holder.descriptionFeed)
                 putString(Consts.SENDER_TG, currentList[position].transaction.sender)
                 putString(Consts.RECEIVER_TG, currentList[position].transaction.recipient)
@@ -146,7 +147,7 @@ class FeedAdapter(
 
             }
             v.findNavController()
-                .navigate(R.id.action_feedFragment_to_additionalInfoFeedItemFragment)
+                .navigate(R.id.action_feedFragment_to_additionalInfoFeedItemFragment, bundle)
         }
 
     }

@@ -33,6 +33,7 @@
             app:cardCornerRadius="8dp"
             app:cardBackgroundColor="@color/minor_success_secondary">
             <TextView
+                android:id="@+id/amount_thanks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -57,7 +58,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/description_transaction_who_sent"
+            android:id="@+id/description_transaction_who_received"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/general_brand"
@@ -67,12 +68,13 @@
             android:id="@+id/description_transaction_what_did"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
             android:textColor="@color/general_contrast"
             android:text=" получила от " />
 
 
         <TextView
-            android:id="@+id/description_transaction_who_received"
+            android:id="@+id/description_transaction_who_sent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" \@NyamaMDE"
