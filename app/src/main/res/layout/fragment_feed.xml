@@ -62,6 +62,14 @@
                         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
                 </com.google.android.material.card.MaterialCardView>
 
+                <TextView
+                    android:id="@+id/notif_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="123"/>
+
+
                 <ImageButton
                     android:id="@+id/notify"
                     android:layout_width="wrap_content"

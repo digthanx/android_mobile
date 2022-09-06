@@ -8,21 +8,26 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.card.MaterialCardView
+import com.teamforce.thanksapp.NotificationSharedViewModel
+import com.teamforce.thanksapp.NotificationStates
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import kotlin.random.Random
 
+@AndroidEntryPoint
 class BalanceFragment : Fragment() {
 
     private var _binding: FragmentBalanceBinding? = null
@@ -38,6 +43,8 @@ class BalanceFragment : Fragment() {
     private lateinit var willBurn: TextView
     private val wholeScreen: LinearLayout by lazy { binding.wholeScreen }
     private lateinit var swipeToRefresh: SwipeRefreshLayout
+
+    private val sharedViewModel: NotificationSharedViewModel by activityViewModels()
 
 
     override fun onCreateView(
@@ -85,11 +92,22 @@ class BalanceFragment : Fragment() {
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_balanceFragment_to_profileFragment, null, optionForProfileFragment )
+            findNavController().navigate(
+                R.id.action_balanceFragment_to_profileFragment,
+                null,
+                optionForProfileFragment
+            )
+        }
+
+
+        sharedViewModel.state.observe(viewLifecycleOwner) {
+            when (it) {
+                is NotificationStates.NotificationReceived -> binding.notifCounter.text = binding.notifCounter.text.toString() + "q"
+                else -> true
+            }
         }
 
     }
-
 
 
     private fun loadBalanceData(){

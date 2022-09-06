@@ -5,6 +5,7 @@ pluginManagement {
         mavenCentral()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -12,6 +13,7 @@ dependencyResolutionManagement {
         mavenCentral()
         mavenLocal()
     }
+
     versionCatalogs {
         libs {
             version('appcompat-v7', '28.0.0')

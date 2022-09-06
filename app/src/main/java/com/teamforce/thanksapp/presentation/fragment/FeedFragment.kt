@@ -7,21 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.teamforce.thanksapp.NotificationSharedViewModel
+import com.teamforce.thanksapp.NotificationStates
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
 import com.teamforce.thanksapp.presentation.adapter.FeedAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
+import kotlin.random.Random
 
-
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
 
     private var _binding: FragmentFeedBinding? = null
@@ -36,6 +42,9 @@ class FeedFragment : Fragment() {
     private var allFeedsList: List<FeedResponse> = emptyList()
     private var mineFeedsList: List<FeedResponse> = emptyList()
     private var publicFeedsList: List<FeedResponse> = emptyList()
+
+    private val sharedViewModel: NotificationSharedViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +77,15 @@ class FeedFragment : Fragment() {
             inflateRecyclerView()
             swipeToRefresh.isRefreshing = false
         }
+
+
+        sharedViewModel.state.observe(viewLifecycleOwner) {
+            when (it) {
+                is NotificationStates.NotificationReceived -> binding.notifCounter.text = binding.notifCounter.text.toString() + "1"
+                else -> true
+            }
+        }
+
     }
 
     private fun initView(){

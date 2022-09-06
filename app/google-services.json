@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "1097927147360",
-    "project_id": "thanksapp-teamforce",
-    "storage_bucket": "thanksapp-teamforce.appspot.com"
+    "project_number": "461379880531",
+    "project_id": "thanks-app-test",
+    "storage_bucket": "thanks-app-test.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1097927147360:android:52243ddeee449ddd892805",
+        "mobilesdk_app_id": "1:461379880531:android:a965852ccbc1f441b4e8a6",
         "android_client_info": {
           "package_name": "com.teamforce.thanksapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1097927147360-pstd1qae3f735crds844bf8s5j2jkeam.apps.googleusercontent.com",
+          "client_id": "461379880531-dbjba67gg311scrb97efedvqq4ka7dq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamforce.thanksapp",
+            "certificate_hash": "82afb89c897632862d78dbc9a86dd53a13d0d10b"
+          }
+        },
+        {
+          "client_id": "461379880531-3e05hmclfffu6oprfh0gbvkvn30lgpo4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDKfehzYt43tEhOHEwZpjVON2tPmCY68Iw"
+          "current_key": "AIzaSyC94OKcQ9CReGz6e6y3h8lkW8x8tDbH1TU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1097927147360-pstd1qae3f735crds844bf8s5j2jkeam.apps.googleusercontent.com",
+              "client_id": "461379880531-3e05hmclfffu6oprfh0gbvkvn30lgpo4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

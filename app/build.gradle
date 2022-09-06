@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -52,6 +53,8 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
+
     // Paging
     def paging_version = "3.1.1"
     implementation("androidx.paging:paging-runtime:$paging_version")
@@ -95,6 +98,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    //hilt
+    implementation 'com.google.dagger:hilt-android:2.40.5'
+    kapt 'com.google.dagger:hilt-android-compiler:2.40.5'
 
     /*   implementation(libs.CORE_KTX)
        implementation(libs.APP_STARTUP)
