@@ -82,6 +82,9 @@
     <!-- item_user -->
     <string name="name">Name</string>
     <string name="tgName">\@%s</string>
+    <!-- item_feed -->
+    <string name="dateTime">%s в %s</string>
+
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
     <string name="G">Ожидает истечния периода отмены</string>

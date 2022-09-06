@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_feedFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_additionalInfoFeedItemFragment"
+            app:destination="@id/additionalInfoFeedItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/transactionResultFragment"
@@ -96,5 +99,13 @@
         <action
             android:id="@+id/action_listOfValuesFragment_to_transactionFragment"
             app:destination="@id/transactionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/additionalInfoFeedItemFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.feedScreen.AdditionalInfoFeedItemFragment"
+        android:label="AdditionalInfoFeedItemFragment" >
+        <action
+            android:id="@+id/action_additionalInfoFeedItemFragment_to_feedFragment"
+            app:destination="@id/feedFragment" />
     </fragment>
 </navigation>

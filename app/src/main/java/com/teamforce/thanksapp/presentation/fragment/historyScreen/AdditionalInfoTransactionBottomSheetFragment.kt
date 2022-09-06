@@ -67,6 +67,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
         return binding.root
     }
 
+
     override fun getTheme(): Int  = R.style.AppBottomSheetDialogTheme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
