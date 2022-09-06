@@ -123,6 +123,35 @@ class FeedAdapter(
             holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
             holder.descriptionFeed = context.getString(R.string.youToSomeone)
         }
+
+        convertDataToNecessaryFormat(holder, position)
+
+        holder.standardGroup.setOnClickListener { v ->
+            val bundle = Bundle()
+            bundle.apply {
+                // аву пока не передаю
+                putString(
+                    Consts.AVATAR_USER,
+                    "${Consts.BASE_URL}${currentList[position].transaction.recipient_photo}"
+                )
+                putString(Consts.DATE_TRANSACTION, holder.dateTime.toString())
+                putString(Consts.DESCRIPTION_FEED, holder.descriptionFeed)
+                putString(Consts.SENDER_TG, currentList[position].transaction.sender)
+                putString(Consts.RECEIVER_TG, currentList[position].transaction.recipient)
+                putString(
+                    Consts.AMOUNT_THANKS,
+                    currentList[position].transaction.amount.substringBefore(".")
+                )
+
+
+            }
+            v.findNavController()
+                .navigate(R.id.action_feedFragment_to_additionalInfoFeedItemFragment)
+        }
+
+    }
+
+    private fun convertDataToNecessaryFormat(holder: FeedViewHolder, position: Int){
         try {
             val zdt: ZonedDateTime =
                 ZonedDateTime.parse(currentList[position].time, DateTimeFormatter.ISO_DATE_TIME)
@@ -151,29 +180,6 @@ class FeedAdapter(
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }
-        holder.standardGroup.setOnClickListener { v ->
-            val bundle = Bundle()
-            bundle.apply {
-                // аву пока не передаю
-                putString(
-                    Consts.AVATAR_USER,
-                    "${Consts.BASE_URL}${currentList[position].transaction.recipient_photo}"
-                )
-                putString(Consts.DATE_TRANSACTION, holder.dateTime.toString())
-                putString(Consts.DESCRIPTION_FEED, holder.descriptionFeed)
-                putString(Consts.SENDER_TG, currentList[position].transaction.sender)
-                putString(Consts.RECEIVER_TG, currentList[position].transaction.recipient)
-                putString(
-                    Consts.AMOUNT_THANKS,
-                    currentList[position].transaction.amount.substringBefore(".")
-                )
-
-
-            }
-            v.findNavController()
-                .navigate(R.id.action_feedFragment_to_additionalInfoFeedItemFragment)
-        }
-
     }
 
 
