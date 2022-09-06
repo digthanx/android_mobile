@@ -114,6 +114,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
+                            android:layout_marginBottom="10dp"
                             android:background="@color/general_background"
                             app:singleSelection="true">
 
@@ -125,10 +126,12 @@
                                 android:checkable="true"
                                 android:checked="true"
                                 android:text="@string/allHistory"
+                                app:checkedIconEnabled="true"
+                                android:background="@drawable/bottom_line_for_history_chips"
+                                app:checkedIcon="@drawable/bottom_line_for_history_chips"
                                 android:textStyle="bold"
                                 app:chipBackgroundColor="@color/white"
-                                app:chipStrokeColor="@color/chip_history_underline_color"
-                                app:chipStrokeWidth="1dp" />
+                                app:chipStrokeColor="@color/chip_history_underline_color" />
 
 
                             <com.google.android.material.chip.Chip
@@ -141,8 +144,7 @@
                                 android:textColor="@color/history_chip_text_color_state"
                                 android:textStyle="bold"
                                 app:chipBackgroundColor="@color/white"
-                                app:chipStrokeColor="@color/chip_history_underline_color"
-                                app:chipStrokeWidth="1dp" />
+                                app:chipStrokeColor="@color/chip_history_underline_color" />
 
                             <com.google.android.material.chip.Chip
                                 android:id="@+id/chipSent"
@@ -154,8 +156,7 @@
                                 android:textColor="@color/history_chip_text_color_state"
                                 android:textStyle="bold"
                                 app:chipBackgroundColor="@color/white"
-                                app:chipStrokeColor="@color/chip_history_underline_color"
-                                app:chipStrokeWidth="1dp" />
+                                app:chipStrokeColor="@color/chip_history_underline_color" />
 
                         </com.google.android.material.chip.ChipGroup>
 

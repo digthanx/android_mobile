@@ -162,9 +162,9 @@
         <item name="android:textColor">@color/history_chip_text_color_state</item>
         <item name="android:textStyle">bold</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.ChipsHistory</item>
+        <item name="selectableItemBackgroundBorderless">@drawable/bottom_line_for_history_chips</item>
         <item name="strokeColor">@color/black</item>
-        <item name="tabUnboundedRipple">true</item>
-        <item name="strokeWidth">2dp</item>
+        <item name="chipStrokeWidth">0dp</item>
     </style>
 
     <style name="MyChipsFeed" parent="Widget.MaterialComponents.Chip.Choice">

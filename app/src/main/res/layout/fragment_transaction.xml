@@ -296,6 +296,7 @@
                         android:layout_height="wrap_content"
                         android:checkable="true"
                         android:checked="true"
+                        android:layoutDirection="rtl"
                         style="@style/MyChipsOrange"
                         android:text="1" />
 
@@ -304,6 +305,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
+                        android:layoutDirection="rtl"
+
                         style="@style/MyChipsOrange"
                         android:text="5" />
 
@@ -312,6 +315,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
+                        android:layoutDirection="rtl"
                         style="@style/MyChipsOrange"
                         android:text="10" />
 
@@ -320,6 +324,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
+                        android:layoutDirection="rtl"
                         style="@style/MyChipsOrange"
                         android:text="25" />
 
