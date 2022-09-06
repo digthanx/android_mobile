@@ -136,7 +136,7 @@ class FeedFragment : Fragment() {
             Observer {
                 mineFeedsList = it
                Log.d("Token", "mineFeeds ${mineFeedsList}")
-                if (binding.chipGroup.checkedChipId == R.id.chipReceived) {
+                if (binding.chipGroup.checkedChipId == R.id.chipMineEvent) {
                     (binding.feedRv.adapter as FeedAdapter).submitList(mineFeedsList)
                 }
             }
@@ -147,7 +147,7 @@ class FeedFragment : Fragment() {
             Observer {
                 publicFeedsList = it
                 Log.d("Token", "publicFeeds ${publicFeedsList}")
-                if (binding.chipGroup.checkedChipId == R.id.chipSent) {
+                if (binding.chipGroup.checkedChipId == R.id.chipPublicEvent) {
                     (binding.feedRv.adapter as FeedAdapter).submitList(publicFeedsList)
                 }
             }
