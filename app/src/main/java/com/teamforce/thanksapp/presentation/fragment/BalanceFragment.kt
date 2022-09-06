@@ -16,7 +16,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.teamforce.thanksapp.NotificationSharedViewModel
-import com.teamforce.thanksapp.NotificationStates
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
@@ -25,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import kotlin.random.Random
 
 @AndroidEntryPoint
 class BalanceFragment : Fragment() {
@@ -101,10 +99,7 @@ class BalanceFragment : Fragment() {
 
 
         sharedViewModel.state.observe(viewLifecycleOwner) {
-            when (it) {
-                is NotificationStates.NotificationReceived -> binding.notifCounter.text = binding.notifCounter.text.toString() + "q"
-                else -> true
-            }
+            binding.notifCounter.text = it.toString()
         }
 
     }
