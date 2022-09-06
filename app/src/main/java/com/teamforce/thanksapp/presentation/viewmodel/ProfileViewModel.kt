@@ -3,11 +3,9 @@ package com.teamforce.thanksapp.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.*
 import com.teamforce.thanksapp.data.api.ThanksApi
-import com.teamforce.thanksapp.data.request.PutUserAvatarRequest
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
-import com.teamforce.thanksapp.data.response.UpdateProfileResponse
-import com.teamforce.thanksapp.presentation.fragment.ProfileFragment
+import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.*
 import okhttp3.MultipartBody

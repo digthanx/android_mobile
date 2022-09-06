@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.fragment
+package com.teamforce.thanksapp.presentation.fragment.profileScreen
 
 import android.Manifest
 import android.app.Activity
