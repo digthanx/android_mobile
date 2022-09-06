@@ -44,8 +44,8 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment"
-        android:label="Профиль"
-        tools:layout="@layout/fragment_profile" >
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_editProfileBottomSheetFragment"
             app:destination="@id/editProfileBottomSheetFragment" />
@@ -103,7 +103,7 @@
     <fragment
         android:id="@+id/additionalInfoFeedItemFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.feedScreen.AdditionalInfoFeedItemFragment"
-        android:label="AdditionalInfoFeedItemFragment" >
+        android:label="@string/detailOfTransaction">
         <action
             android:id="@+id/action_additionalInfoFeedItemFragment_to_feedFragment"
             app:destination="@id/feedFragment" />

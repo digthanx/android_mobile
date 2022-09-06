@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -88,7 +92,7 @@ class FeedAdapter(
         if (!currentList[position].transaction.sender.equals(username) &&
             !currentList[position].transaction.recipient.equals(username)
         ) {
-            holder.senderAndReceiver.text =
+            val spannable = SpannableStringBuilder(
                 String.format(
                     holder.view.context.getString(
                         R.string.someoneToSomeone
@@ -96,35 +100,69 @@ class FeedAdapter(
                     currentList[position].transaction.recipient,
                     currentList[position].transaction.amount.substringBefore("."),
                     currentList[position].transaction.sender
-                )
+                ))
+            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                0,currentList[position].transaction.recipient.length + 1,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                spannable.length - currentList[position].transaction.sender.length - 1,
+                spannable.length ,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.minor_success)),
+                currentList[position].transaction.recipient.length + 9,
+                spannable.length - currentList[position].transaction.sender.length - 4,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
             holder.descriptionFeed = context.getString(
                 R.string.getFrom
             )
+            holder.senderAndReceiver.text = spannable
         } else if (!currentList[position].transaction.sender.equals(username)) {
-            holder.senderAndReceiver.text =
+            val spannable = SpannableStringBuilder(
                 String.format(
                     holder.view.context.getString(
                         R.string.youFromSomeone
                     ),
                     currentList[position].transaction.amount.substringBefore("."),
                     currentList[position].transaction.sender
-                )
+                ))
+            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                spannable.length - currentList[position].transaction.sender.length - 1,
+                spannable.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.minor_success)),
+                 12,
+                spannable.length - currentList[position].transaction.sender.length - 4,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            holder.senderAndReceiver.text = spannable
             holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
             holder.descriptionFeed = context.getString(R.string.youGetFrom)
             // Я получатель
         } else {
-            holder.senderAndReceiver.text =
+            val spannable = SpannableStringBuilder(
                 String.format(
                     holder.view.context.getString(
                         R.string.youToSomeone
                     ),
                     currentList[position].transaction.recipient,
                     currentList[position].transaction.amount.substringBefore(".")
-                )
+                ))
+            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                0,currentList[position].transaction.recipient.length + 1,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.minor_success)),
+                currentList[position].transaction.recipient.length + 9,
+                spannable.length - 7,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            holder.senderAndReceiver.text = spannable
             holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
             holder.descriptionFeed = context.getString(R.string.getFrom)
             // Я отправитель
         }
+
+
 
         convertDataToNecessaryFormat(holder, position)
 
@@ -146,8 +184,17 @@ class FeedAdapter(
 
 
             }
+
+            val optionForProfileFragment = NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+                .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+                .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+                .setPopExitAnim(R.anim.bottom_in)
+                .build()
+
             v.findNavController()
-                .navigate(R.id.action_feedFragment_to_additionalInfoFeedItemFragment, bundle)
+                .navigate(R.id.action_feedFragment_to_additionalInfoFeedItemFragment, bundle, optionForProfileFragment)
         }
 
     }
