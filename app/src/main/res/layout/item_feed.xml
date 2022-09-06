@@ -14,6 +14,8 @@
             android:id="@+id/standard_group"
             android:visibility="visible"
             android:padding="20dp"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -31,9 +33,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:textSize="12sp"
-                android:text="null"
+                android:text="@string/dateTime"
                 app:layout_constraintStart_toEndOf="@+id/user_avatar"
                 app:layout_constraintTop_toTopOf="parent"/>
+
             <TextView
                 android:id="@+id/senderAndReceiver"
                 android:layout_width="match_parent"

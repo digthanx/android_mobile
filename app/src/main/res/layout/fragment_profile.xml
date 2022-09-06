@@ -17,7 +17,7 @@
             android:layout_height="0dp"
             android:backgroundTint="@color/general_background"
             android:orientation="vertical"
-            tools:context=".presentation.fragment.ProfileFragment">
+            tools:context=".presentation.fragment.profileScreen.ProfileFragment">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbarProfile"
