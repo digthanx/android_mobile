@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.fragment
+package com.teamforce.thanksapp.presentation.fragment.feedScreen
 
 import android.os.Bundle
 import android.util.Log

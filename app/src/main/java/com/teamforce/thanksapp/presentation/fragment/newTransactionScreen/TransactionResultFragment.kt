@@ -1,7 +1,6 @@
-package com.teamforce.thanksapp.presentation.fragment
+package com.teamforce.thanksapp.presentation.fragment.newTransactionScreen
 
 
-import android.app.Instrumentation
 import android.os.Bundle
 import android.view.*
 import androidx.core.net.toUri
@@ -15,9 +14,7 @@ import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
 import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_NAME
-import com.teamforce.thanksapp.utils.Consts.RECEIVER_SURNAME
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_TG
-import kotlinx.coroutines.withContext
 
 
 class TransactionResultFragment : Fragment() {

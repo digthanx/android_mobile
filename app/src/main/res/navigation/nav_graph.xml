@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/signFlowFragment"
-        android:name="com.teamforce.thanksapp.presentation.fragment.SignFlowFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.auth.SignFlowFragment"
         android:label="flow_fragment_sign"
         tools:layout="@layout/fragment_sign_flow" />
 
