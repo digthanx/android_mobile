@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.ViewCompat.canScrollVertically
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
@@ -18,8 +17,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.chip.ChipGroup
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentHistoryBinding
 import com.teamforce.thanksapp.model.domain.HistoryModel
@@ -37,7 +36,7 @@ class HistoryFragment : Fragment() {
     private lateinit var swipeToRefresh: SwipeRefreshLayout
     private lateinit var viewModel: HistoryViewModel
     private lateinit var recyclerView: RecyclerView
-    private lateinit var chipGroup: ChipGroup
+    private val tabGroup: TabLayout by lazy { binding.tabGroup }
     private var allTransactionsList: List<HistoryModel> = emptyList()
     private var receivedTransactionsList: List<HistoryModel> = emptyList()
     private var sentTransactionsList: List<HistoryModel> = emptyList()
@@ -90,9 +89,6 @@ class HistoryFragment : Fragment() {
         }
 
 
-        chipGroup = binding.chipGroup
-
-
         recyclerView.adapter = HistoryAdapter(username, requireContext(), viewModel)
 
         viewModel.isLoading.observe(
@@ -108,9 +104,20 @@ class HistoryFragment : Fragment() {
             }
         )
 
-        chipGroup.setOnCheckedChangeListener { _, checkedId ->
-            refreshRecyclerView(checkedId)
-        }
+        tabGroup.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                refreshRecyclerView(tab?.position?:0)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
 
         swipeToRefresh.setOnRefreshListener {
             loadDataFromServer()
@@ -134,7 +141,7 @@ class HistoryFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 allTransactionsList = sparseArrayToReversedList(it)
-                if (chipGroup.checkedChipId == R.id.chipAll) {
+                if (tabGroup.selectedTabPosition == 0) {
                     (recyclerView.adapter as HistoryAdapter).submitList(allTransactionsList)
                 }
             }
@@ -143,7 +150,7 @@ class HistoryFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 receivedTransactionsList = sparseArrayToReversedList(it)
-                if (chipGroup.checkedChipId == R.id.chipReceived) {
+                if (tabGroup.selectedTabPosition == 1) {
                     (recyclerView.adapter as HistoryAdapter).submitList(receivedTransactionsList)
                 }
             }
@@ -153,7 +160,7 @@ class HistoryFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 sentTransactionsList = sparseArrayToReversedList(it)
-                if (chipGroup.checkedChipId == R.id.chipSent) {
+                if (tabGroup.selectedTabPosition == 2) {
                     (recyclerView.adapter as HistoryAdapter).submitList(sentTransactionsList)
                 }
             }
@@ -182,9 +189,9 @@ class HistoryFragment : Fragment() {
 
     private fun refreshRecyclerView(checkedId: Int) {
         val transactions: List<HistoryModel> = when (checkedId) {
-            R.id.chipAll -> allTransactionsList
-            R.id.chipReceived -> receivedTransactionsList
-            R.id.chipSent -> sentTransactionsList
+            0 -> allTransactionsList
+            1 -> receivedTransactionsList
+            2 -> sentTransactionsList
             else -> {
                 allTransactionsList
             }

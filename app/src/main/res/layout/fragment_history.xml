@@ -109,56 +109,34 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/chipGroup"
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tabGroup"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
                             android:layout_marginBottom="10dp"
                             android:background="@color/general_background"
                             app:singleSelection="true">
 
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/chipAll"
-                                style="@style/MyChipsHistory"
+                            <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:checkable="true"
-                                android:checked="true"
-                                android:text="@string/allHistory"
-                                app:checkedIconEnabled="true"
-                                android:background="@drawable/bottom_line_for_history_chips"
-                                app:checkedIcon="@drawable/bottom_line_for_history_chips"
-                                android:textStyle="bold"
-                                app:chipBackgroundColor="@color/white"
-                                app:chipStrokeColor="@color/chip_history_underline_color" />
+                                android:text="@string/allHistory" />
 
-
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/chipReceived"
-                                style="@style/MyChipsHistory"
+                            <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:checkable="true"
                                 android:text="@string/received"
-                                android:textColor="@color/history_chip_text_color_state"
-                                android:textStyle="bold"
-                                app:chipBackgroundColor="@color/white"
-                                app:chipStrokeColor="@color/chip_history_underline_color" />
+                                android:textColor="@color/history_chip_text_color_state" />
 
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/chipSent"
-                                style="@style/MyChipsHistory"
+                            <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:checkable="true"
                                 android:text="@string/sended"
-                                android:textColor="@color/history_chip_text_color_state"
-                                android:textStyle="bold"
-                                app:chipBackgroundColor="@color/white"
-                                app:chipStrokeColor="@color/chip_history_underline_color" />
+                                android:textColor="@color/history_chip_text_color_state" />
 
-                        </com.google.android.material.chip.ChipGroup>
+                        </com.google.android.material.tabs.TabLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textField"
