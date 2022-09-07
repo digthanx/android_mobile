@@ -3,16 +3,15 @@ package com.teamforce.thanksapp.presentation.fragment.profileScreen
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.database.Cursor
-import android.graphics.Bitmap
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -31,7 +30,7 @@ import com.teamforce.thanksapp.utils.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.*
+import java.io.File
 
 
 class ProfileFragment : Fragment() {
@@ -45,14 +44,15 @@ class ProfileFragment : Fragment() {
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
-            if (isGranted) {
-                addPhotoFromIntent()
-            } else {
-                Toast.makeText(requireContext(), getString(R.string.grant_permission), Toast.LENGTH_SHORT)
+            if (!isGranted) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.grant_permission),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
-
 
     private lateinit var userTgName: TextView
     private lateinit var userAvatar: ImageView
@@ -81,13 +81,18 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
-
-
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.balanceFragment,
+                R.id.feedFragment,
+                R.id.transactionFragment,
+                R.id.historyFragment
+            )
+        )
 
         binding.toolbarProfile.setupWithNavController(navController, appBarConfiguration)
         initViews()
@@ -97,79 +102,41 @@ class ProfileFragment : Fragment() {
             showAlertDialogForExit()
         }
 
-        binding.editBtn.setOnClickListener{
+        binding.editBtn.setOnClickListener {
             showAlertDialogForEditProfile()
         }
         swipeToRefresh()
-
+        requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-            var imageBitmap = data.createBitmapFromResult(requireActivity())
-            // устранение проблемы поворота картинки
-//            if(imageBitmap?.width!! > imageBitmap.height){
-//                val matrix = Matrix()
-//                matrix.postRotate(90f)
-//                val newBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
-//                imageBitmap = newBitmap
-//            }
-//            val exif = ExifInterface(data.dataString.toString())
-//            val rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-//            val rotationIndegrees = exifToDegrees(rotation)
-//            val matrix = Matrix()
-//            if(rotation != 0) matrix.preRotate(rotationIndegrees)
-//            val newBitmap = Bitmap.createBitmap(imageBitmap!!, 0, 0, imageBitmap.width, imageBitmap.height, matrix, true)
-
-            val imageUri = data.data
-            funURIToMultipart(imageUri!!, imageBitmap!!)
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                Log.d(TAG, "${result.data?.data}:")
+                val path = getPath(requireContext(), result.data?.data!!)
+                val imageUri = result.data!!.data
+                if (imageUri != null && path != null)
+                    uriToMultipart(imageUri, path)
+            }
         }
-    }
-
-    private fun exifToDegrees(exifOrOrientation: Int): Float{
-        if (exifOrOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90f }
-        else if (exifOrOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180f }
-        else if (exifOrOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270f }
-        return 0f
-    }
 
     private fun addPhotoFromIntent() {
-//        val cameraIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE).takeIf { intent ->
-//            intent.resolveActivity(requireActivity().packageManager) != null
-//        }
-
-        val galleryIntent = Intent(Intent.ACTION_PICK).apply { this.type = "image/*" }
-
-        val intentChooser = Intent(Intent.ACTION_CHOOSER).apply {
-            this.putExtra(Intent.EXTRA_INTENT, galleryIntent)
-//            cameraIntent?.let { intent ->
-//                this.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayListOf(intent).toTypedArray<Parcelable>())
-//            }
-            this.putExtra(Intent.EXTRA_TITLE, resources.getString(R.string.gallery_title))
-        }
-
-        startActivityForResult(intentChooser, CODE_IMG_GALLERY)
+        val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
+        pickIntent.type = "image/*"
+        resultLauncher.launch(pickIntent)
     }
 
 
-    private fun  funURIToMultipart(imageURI: Uri, imageBitmap: Bitmap){
+    private fun uriToMultipart(imageURI: Uri, filePath: String) {
         // Хардовая вставка картинки с самого начала
         // Убрать как только сделаю обновление по свайпам
         Glide.with(this)
             .load(imageURI)
             .centerCrop()
             .into(userAvatar)
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor: Cursor = requireContext().contentResolver.query(imageURI, projection, null, null, null)!!
-        cursor.moveToFirst()
-        val columnIndex: Int = cursor.getColumnIndex(projection[0])
-        val filePath: String = cursor.getString(columnIndex)
-        cursor.close()
-        val file: File = File(filePath)
-        val stream = ByteArrayOutputStream()
-        val file2 = imageBitmap.compress(Bitmap.CompressFormat.JPEG,100 , stream)
-        val requestFile: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), stream.toByteArray())
+        val file = File(filePath)
+        val requestFile: RequestBody =
+            RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
         UserDataRepository.getInstance()?.token.let { token ->
             UserDataRepository.getInstance()?.profileId.let { id ->
@@ -177,9 +144,6 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-
-
-
 
      private fun requestData(){
          val token = UserDataRepository.getInstance()?.token
@@ -244,8 +208,6 @@ class ProfileFragment : Fragment() {
             }
             UserDataRepository.getInstance()?.profileId = it.profile.id
         }
-
-
     }
 
     private fun swipeToRefresh(){
@@ -277,6 +239,8 @@ class ProfileFragment : Fragment() {
             .setNegativeButton(resources.getString(R.string.avatar)) { dialog, which ->
                 dialog.cancel()
                 //loadImage.launch("image/*")
+                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+
                 addPhotoFromIntent()
             }
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
@@ -335,13 +299,6 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
-
-        private const val CODE_IMG_GALLERY = 111
-        private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
-
         const val TAG = "ProfileFragment"
-
-        @JvmStatic
-        fun newInstance() = ProfileFragment()
     }
 }

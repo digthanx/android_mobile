@@ -3,10 +3,9 @@ package com.teamforce.thanksapp.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.*
 import com.teamforce.thanksapp.data.api.ThanksApi
-import com.teamforce.thanksapp.data.request.PutUserAvatarRequest
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
-import com.teamforce.thanksapp.data.response.UpdateProfileResponse
+import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.*
 import okhttp3.MultipartBody
@@ -96,6 +95,7 @@ class ProfileViewModel() : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<PutUserAvatarResponse>, t: Throwable) {
+                    Log.d(ProfileFragment.TAG, "onFailure: $t")
                     _isLoading.postValue(false)
                     _profileError.postValue(t.message)
                 }
