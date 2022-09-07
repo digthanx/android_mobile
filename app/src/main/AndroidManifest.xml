@@ -4,9 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <application
         android:name=".ThanksApplication"
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/app_icon"

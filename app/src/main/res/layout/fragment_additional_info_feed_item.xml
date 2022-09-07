@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Theme.ThanksApp.PopupOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/general_brand"
+        android:elevation="0dp"
+        app:navigationIconTint="@color/general_background"
+        app:titleTextColor="@color/white">
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <LinearLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:layout_marginEnd="32dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/user_avatar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginBottom="12dp"
+                android:src="@drawable/ic_anon_avatar" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/minor_success_secondary">
+                <TextView
+                    android:id="@+id/amount_thanks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:textColor="@color/minor_success"
+                    android:text="150 спасибок"/>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/date_transaction_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="Сегодня в 12:30" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/description_transaction_who_received"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/general_brand"
+                android:text="\@AnnaKim_TF" />
+
+            <TextView
+                android:id="@+id/description_transaction_what_did"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:textColor="@color/general_contrast"
+                android:text=" получила от " />
+
+
+            <TextView
+                android:id="@+id/description_transaction_who_sent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" \@NyamaMDE"
+                android:textColor="@color/general_brand" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>

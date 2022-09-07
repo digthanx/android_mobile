@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.fragment
+package com.teamforce.thanksapp.presentation.fragment.newTransactionScreen
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

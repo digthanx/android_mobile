@@ -82,6 +82,9 @@
     <!-- item_user -->
     <string name="name">Name</string>
     <string name="tgName">\@%s</string>
+    <!-- item_feed -->
+    <string name="dateTime">%s в %s</string>
+
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
     <string name="G">Ожидает истечния периода отмены</string>
@@ -114,12 +117,17 @@
     <!--Utils -->
     <string name="OK">Ок</string>
     <!--Лента событий -->
-    <string name="someoneToSomeone">%s получил %s спасибок от %s</string>
-    <string name="youFromSomeone">Вы получили %s спасибок от %s</string>
-    <string name="youToSomeone">%s получил %s спасибок от вас</string>
+    <string name="someoneToSomeone">\@%s получил %s спасибок от \@%s</string>
+    <string name="getFrom">получил от</string>
+    <string name="youFromSomeone">Вы получили %s спасибок от \@%s</string>
+    <string name="youGetFrom"> получили от </string>
+    <string name="youToSomeone">\@%s получил %s спасибок от вас</string>
     <string name="allEvent">Все</string>
     <string name="mineEvent">Мои</string>
     <string name="publicEvent">Публичные</string>
+    <!-- Additional Info Feed Fragment -->
+    <string name="you">Вы</string>
+    <string name="fromYou">Вас</string>
     <!-- Utils -->
     <string name="yesterday">Вчера</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
@@ -128,6 +136,8 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="detailOfTransaction">Детали транзакции</string>
+    <string name="profile">Профиль</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

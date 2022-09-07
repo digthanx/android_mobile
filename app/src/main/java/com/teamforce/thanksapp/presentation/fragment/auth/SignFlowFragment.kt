@@ -1,6 +1,7 @@
-package com.teamforce.thanksapp.presentation.fragment
+package com.teamforce.thanksapp.presentation.fragment.auth
 
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.presentation.fragment.BaseFlowFragment
 
 
 class SignFlowFragment : BaseFlowFragment(

@@ -36,7 +36,9 @@ import com.teamforce.thanksapp.utils.Consts.REASON_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.STATUS_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.WE_REFUSED_YOUR_OPERATION
 import com.teamforce.thanksapp.utils.UserDataRepository
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class TransfersAdapter(
@@ -184,17 +186,8 @@ class TransfersAdapter(
             }
         }
 
-        try {
-            val dateTime: String =
-                LocalDateTime.
-                parse(dataSet[position].updatedAt.
-                replace("+03:00", "")).
-                format(DateTimeFormatter.ofPattern( "dd.MM.y HH:mm"))
-            holder.dateGetInfo = dateTime
+        convertDataToNecessaryFormat(holder, position)
 
-        } catch (e: Exception) {
-            Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
-        }
         holder.view.tag = dataSet[position]
         holder.photoFromSender = dataSet[position].photo
         holder.standardGroup.setOnClickListener { v ->
@@ -218,6 +211,34 @@ class TransfersAdapter(
         }
 
 
+    }
+
+    private fun convertDataToNecessaryFormat(holder: TransfersViewHolder, position: Int){
+        try {
+            val dateTime: String =
+                LocalDateTime.
+                parse(dataSet[position].updatedAt.
+                replace("+03:00", "")).
+                format(DateTimeFormatter.ofPattern( "dd.MM.y HH:mm"))
+            var date = dateTime.subSequence(0, 10)
+            val time = dateTime.subSequence(11, 16)
+            val today: LocalDate = LocalDate.now()
+            val yesterday: String = today.minusDays(1).format(DateTimeFormatter.ISO_DATE)
+            val todayString = LocalDate.parse(today.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .format(DateTimeFormatter.ofPattern("dd.MM.y"))
+            val yesterdayString = LocalDate.parse(yesterday, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .format(DateTimeFormatter.ofPattern("dd.MM.y"))
+
+            if(date == todayString) {
+                date = "Сегодня"
+            } else if(date == yesterdayString){
+                date = "Вчера"
+            }
+            holder.dateGetInfo = String.format(context.getString(R.string.dateTime), date, time)
+
+        } catch (e: Exception) {
+            Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
+        }
     }
 
     private fun showAlertDialogForCancelTransaction(idTransaction: Int){
@@ -261,5 +282,6 @@ class TransfersAdapter(
         var comingStatusTransaction: String = "null"
         var weRefusedYourOperation: String? = null
         var avatar: String? = null
+        var date: String = ""
     }
 }

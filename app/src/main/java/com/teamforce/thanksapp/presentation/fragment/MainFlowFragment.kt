@@ -37,53 +37,12 @@ class MainFlowFragment : BaseFlowFragment(
         binding.bottomNavigation.setupWithNavController(navController)
 
 
-        val option = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(R.anim.slide_in_right)
-            .setExitAnim(R.anim.slide_out_left)
-            .setPopEnterAnim(R.anim.slide_in_left)
-            .setPopExitAnim(R.anim.slide_out_right)
-            .setPopUpTo(navController.graph.startDestinationId, false)
-            .build()
-
-        val optionFeed = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(R.anim.to_right_in)
-            .setExitAnim(R.anim.to_left_out)
-            .setPopEnterAnim(R.anim.to_left_in)
-            .setPopExitAnim(R.anim.to_right_out)
-
-            .setPopUpTo(navController.graph.startDestinationId, false)
-            .build()
-
-        val optionHistory = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(R.anim.to_left_in)
-            .setExitAnim(R.anim.to_right_out)
-            .setPopEnterAnim(R.anim.to_right_in)
-            .setPopExitAnim(R.anim.to_left_out)
-
-            .setPopUpTo(navController.graph.startDestinationId, false)
-            .build()
-
-
-
-
         val optionForTransaction = NavOptions.Builder()
             .setLaunchSingleTop(true)
             .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
             .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
             .setPopEnterAnim(com.google.android.material.R.anim.abc_fade_in)
             .setPopExitAnim(com.google.android.material.R.anim.abc_fade_out)
-            .build()
-
-        val optionForProfileFragment = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.bottom_in)
-            .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
 
 //        binding.profile.setOnClickListener{
