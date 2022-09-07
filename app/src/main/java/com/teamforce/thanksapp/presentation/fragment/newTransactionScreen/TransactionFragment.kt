@@ -135,6 +135,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
         etAddValues.setOnClickListener {
             // Переход на список ценностей
+            findNavController().navigate(R.id.action_transactionFragment_to_listOfValuesFragment)
             Toast.makeText(requireContext(), "Сработал триггер на поле ввода", Toast.LENGTH_LONG).show()
 
         }

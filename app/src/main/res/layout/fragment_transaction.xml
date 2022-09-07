@@ -421,7 +421,6 @@
                     style="@style/EditProfileTextInputLayout"
                     app:endIconDrawable="@drawable/ic_tabler_chevron_right"
                     app:endIconMode="custom"
-                    android:outlineProvider="none"
                     app:strokeColor="@color/color20"
                     app:strokeWidth="@dimen/stroke_size">
 
