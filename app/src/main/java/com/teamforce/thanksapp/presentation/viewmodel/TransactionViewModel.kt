@@ -12,6 +12,7 @@ import com.teamforce.thanksapp.data.request.UsersListRequest
 import com.teamforce.thanksapp.data.response.BalanceResponse
 import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
+import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.*
 import okhttp3.MediaType
@@ -39,10 +40,46 @@ class TransactionViewModel : ViewModel() {
     private val _balanceError = MutableLiveData<String>()
     val balanceError: LiveData<String> = _balanceError
 
+    private val _tags = MutableLiveData<List<TagModel>>()
+    val tags: LiveData<List<TagModel>> = _tags
+    private val _tagsError = MutableLiveData<String>()
+    val tagsError: LiveData<String> = _tagsError
+
     fun initViewModel() {
         thanksApi = RetrofitClient.getInstance()
     }
 
+
+    fun loadTags(token: String) {
+        _isLoading.postValue(true)
+        viewModelScope.launch { callTagsEndpoint(token, Dispatchers.Default) }
+    }
+
+    private suspend fun callTagsEndpoint(
+        token: String,
+        coroutineDispatcher: CoroutineDispatcher
+    ) {
+        withContext(coroutineDispatcher) {
+            thanksApi?.getTags("Token $token")?.enqueue(object : Callback<List<TagModel>> {
+                override fun onResponse(
+                    call: Call<List<TagModel>>,
+                    response: Response<List<TagModel>>
+                ) {
+                    _isLoading.postValue(false)
+                    if (response.code() == 200) {
+                        _tags.postValue(response.body())
+                    } else {
+                        _tagsError.postValue(response.message() + " " + response.code())
+                    }
+                }
+
+                override fun onFailure(call: Call<List<TagModel>>, t: Throwable) {
+                    _isLoading.postValue(false)
+                    _tagsError.postValue(t.message)
+                }
+            })
+        }
+    }
 
 
     fun loadUserBalance(token: String) {

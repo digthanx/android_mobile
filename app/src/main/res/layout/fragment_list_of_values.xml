@@ -1,52 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.fragment.newTransactionScreen.ListOfValuesFragment">
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarTransaction"
-        style="@style/Theme.ThanksApp.PopupOverlay"
+    app:cardBackgroundColor="@color/general_background"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="0dp">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/general_brand"
-        android:elevation="0dp"
-        app:layout_collapseMode="pin"
-        app:layout_scrollFlags="enterAlways"
-        app:titleTextColor="@color/white">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".presentation.fragment.newTransactionScreen.ListOfValuesFragment">
 
-
-        <ImageButton
-            android:id="@+id/notify"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/values_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/add_values_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_values_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
             android:backgroundTint="@color/general_brand"
-            android:clickable="true"
-            android:focusable="true"
+            android:elegantTextHeight="true"
+            android:elevation="20dp"
+            android:paddingVertical="17dp"
+            android:text="@string/applyValues"
             android:visibility="gone"
-            app:tint="@color/general_background"
-            android:src="@drawable/ic__cross_red"/>
-    </com.google.android.material.appbar.MaterialToolbar>
+            app:cornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/values_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/add_values_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:elevation="20dp"
-        android:layout_marginHorizontal="16dp"
-        android:text="@string/applyValues"
-        app:cornerRadius="12dp"
-        android:backgroundTint="@color/general_brand"
-        android:paddingVertical="17dp" />
+    </LinearLayout>
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+

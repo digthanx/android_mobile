@@ -394,6 +394,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="visible"
                     android:paddingHorizontal="16dp"
                     android:orientation="horizontal">
                     <TextView
@@ -421,7 +422,6 @@
                     style="@style/EditProfileTextInputLayout"
                     app:endIconDrawable="@drawable/ic_tabler_chevron_right"
                     app:endIconMode="custom"
-                    android:outlineProvider="none"
                     app:strokeColor="@color/color20"
                     app:strokeWidth="@dimen/stroke_size">
 

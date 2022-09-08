@@ -198,10 +198,38 @@
         <item name="boxCornerRadiusTopStart">10dp</item>
         <item name="boxCornerRadiusTopEnd">10dp</item>
         <item name="android:layout_marginBottom">8dp</item>
+        <item name="hintEnabled">false</item>
         <item name="boxStrokeWidth">0.5dp</item>
         <item name="boxStrokeColor">@color/general_color_grey</item>
        <item name="hintTextColor">@color/general_contrast</item>
     </style>
 
+    <style name="TabTextSize">
+        <item name="android:textSize">12sp</item>
+        <item name="actionBarTabTextStyle">@style/TextSize</item>
+    </style>
+
+    <style name="TextSize">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="FullscreenDialogTheme" parent="Theme.MaterialComponents.Light.DialogWhenLarge">
+        <item name="android:buttonBarPositiveButtonStyle">@style/ButtonDialog</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/general_brand</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Design.BottomSheetDialog</item>
+    </style>
+
+    <style name="ButtonDialog" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="backgroundTint">@color/general_brand</item>
+        <item name="elevation">20dp</item>
+        <item name="android:paddingTop">17dp</item>
+        <item name="android:paddingBottom">17dp</item>
+        <item name="android:paddingEnd">80dp</item>
+        <item name="android:paddingStart">80dp</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
 
 </resources>
