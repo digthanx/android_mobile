@@ -17,6 +17,7 @@ class ValuesAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var onValueItemClickListener: ((TagModel) -> Unit)? = null
+    var listCheckedValues: MutableList<TagModel> = mutableListOf()
 
     class ValueEnabledViewHolder(val binding: ItemValueEnabledBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -52,14 +53,14 @@ class ValuesAdapter(
                 holder.checkIcon.visibility = View.VISIBLE
                 holder.cardImage.strokeWidth = 8f
                 holder.cardImage.imageTintList = context.getColorStateList(R.color.color_feed_item_orange)
+                listCheckedValues.add(dataSet[position])
             }else{
                 holder.checkIcon.visibility = View.GONE
                 holder.cardImage.strokeWidth = 0f
                 holder.cardImage.imageTintList = context.getColorStateList(R.color.color_feed_item_black)
-
+                listCheckedValues.remove(dataSet[position])
                 // holder.cardImage.setStrokeColorResource(context.getColor(R.color.minor_info_secondary))
             }
-
         }
 
     }

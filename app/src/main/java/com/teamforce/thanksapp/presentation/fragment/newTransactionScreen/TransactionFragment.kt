@@ -88,6 +88,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private val checkBoxAddValues: SwitchMaterial by lazy { binding.addValues }
     private val textInputLayoutAddValues: TextInputLayout by lazy { binding.textInputLayoutValue }
     private val etAddValues: TextInputEditText by lazy { binding.etValue }
+    private var listValues: List<TagModel> = listOf()
+    private var listCheckedValues: MutableList<TagModel> = mutableListOf()
 
     private val imgCard: MaterialCardView by lazy { binding.showAttachedImgCard }
     private val detachImgBtn: ImageButton by lazy { binding.detachImgBtn }
@@ -115,6 +117,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         viewModel.initViewModel()
         initViews(view)
         dropDownMenuUserInput(usersInput)
+        loadValuesFromDB()
+        setValuesFromDb()
         appealToDB()
         checkedChip()
         openValuesEt()
@@ -137,24 +141,43 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             imageFilePart = null
         }
 
-//        etAddValues.setOnClickListener {
-//            // Переход на список ценностей
-//
-//           // findNavController().navigate(R.id.action_transactionFragment_to_listOfValuesFragment4)
-//            var dialog = AlertDialog.Builder(context)
-//            var inflater = requireActivity().layoutInflater
-//            var newListValues = inflater.inflate(R.layout.fragment_list_of_values, null)
-//            var rv = newListValues.findViewById<RecyclerView>(R.id.values_rv)
-//            val list: List<TagModel> = listOf(TagModel(0, "Name0"))
-//            //rv.adapter = ValuesAdapter()
-//            dialog.setView(newListValues)
-//                .setPositiveButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
-//                    dialog.cancel()
-//                })
-//            dialog.show()
-//        }
+        etAddValues.setOnClickListener {
+            createDialog(listValues)
+           // findNavController().navigate(R.id.action_transactionFragment_to_listOfValuesFragment4)
+
         requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
 
+    }
+
+
+    }
+
+    private fun loadValuesFromDB(){
+        UserDataRepository.getInstance()?.token?.let { token ->
+            viewModel.loadTags(token)
+        }
+    }
+    private fun setValuesFromDb(){
+        viewModel.tags.observe(viewLifecycleOwner) {
+            listValues = it
+        }
+    }
+    private fun createDialog(list: List<TagModel>){
+        val dialog = AlertDialog.Builder(context)
+        val inflater = requireActivity().layoutInflater
+        val newListValues = inflater.inflate(R.layout.fragment_list_of_values, null)
+        val recyclerViewDialog = newListValues.findViewById<RecyclerView>(R.id.values_rv)
+//        val list1: List<TagModel> = listOf(TagModel(0, "Name0"),
+//            TagModel(1, "Name2"))
+        val adapter = ValuesAdapter(list, requireContext())
+        recyclerViewDialog.adapter = adapter
+        dialog.setView(newListValues)
+            .setPositiveButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
+                listCheckedValues = adapter.listCheckedValues
+                Log.d("Token", " Список выбранных ценностей ${listCheckedValues}")
+                dialog.cancel()
+            })
+        dialog.show()
     }
 
     private fun openValuesEt(){
