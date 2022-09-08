@@ -1,39 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:cardBackgroundColor="@color/general_background"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="0dp">
 
-    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".presentation.fragment.newTransactionScreen.ListOfValuesFragment">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/Theme.ThanksApp.PopupOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/general_brand"
-            android:elevation="0dp"
-            app:layout_collapseMode="pin"
-            app:layout_scrollFlags="enterAlways"
-            app:titleTextColor="@color/white">
-
-
-            <ImageButton
-                android:id="@+id/notify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:backgroundTint="@color/general_brand"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic__cross_red"
-                android:visibility="gone"
-                app:tint="@color/general_background" />
-        </com.google.android.material.appbar.MaterialToolbar>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -48,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/add_values_btn"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,13 +38,14 @@
             android:id="@+id/add_values_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
             android:backgroundTint="@color/general_brand"
             android:elegantTextHeight="true"
             android:elevation="20dp"
             android:paddingVertical="17dp"
             android:text="@string/applyValues"
+            android:visibility="gone"
             app:cornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -72,4 +53,6 @@
 
 
     </LinearLayout>
-</ScrollView>
+
+</com.google.android.material.card.MaterialCardView>
+

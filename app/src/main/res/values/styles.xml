@@ -213,4 +213,23 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="FullscreenDialogTheme" parent="Theme.MaterialComponents.Light.DialogWhenLarge">
+        <item name="android:buttonBarPositiveButtonStyle">@style/ButtonDialog</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/general_brand</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Design.BottomSheetDialog</item>
+    </style>
+
+    <style name="ButtonDialog" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="backgroundTint">@color/general_brand</item>
+        <item name="elevation">20dp</item>
+        <item name="android:paddingTop">17dp</item>
+        <item name="android:paddingBottom">17dp</item>
+        <item name="android:paddingEnd">80dp</item>
+        <item name="android:paddingStart">80dp</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
 </resources>

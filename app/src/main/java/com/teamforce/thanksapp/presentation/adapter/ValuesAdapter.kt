@@ -25,6 +25,7 @@ class ValuesAdapter(
         val mainBody = binding.mainContent
         val checkIcon = binding.checkIcon
         val cardImage = binding.cardImageValue
+        val cardMainView = binding.cardMainView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ValueEnabledViewHolder {
@@ -44,13 +45,10 @@ class ValuesAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val myHolder: ValueEnabledViewHolder = (holder as ValueEnabledViewHolder)
         myHolder.name.text = dataSet[position].name
-        myHolder.mainBody.setOnClickListener {
-            Log.d("Token", "Клик сработал")
+        myHolder.cardMainView.setOnClickListener {
             dataSet[position].enabled = !dataSet[position].enabled
             holder.cardImage.imageTintList = context.getColorStateList(R.color.color_feed_item_orange)
-            if(dataSet[position].enabled){
-                Log.d("Token", "Клик сработал")
-                holder.checkIcon.visibility = View.VISIBLE
+            if(dataSet[position].enabled){ holder.checkIcon.visibility = View.VISIBLE
                 holder.cardImage.strokeWidth = 8f
                 holder.cardImage.imageTintList = context.getColorStateList(R.color.color_feed_item_orange)
                 listCheckedValues.add(dataSet[position])
@@ -59,7 +57,6 @@ class ValuesAdapter(
                 holder.cardImage.strokeWidth = 0f
                 holder.cardImage.imageTintList = context.getColorStateList(R.color.color_feed_item_black)
                 listCheckedValues.remove(dataSet[position])
-                // holder.cardImage.setStrokeColorResource(context.getColor(R.color.minor_info_secondary))
             }
         }
 

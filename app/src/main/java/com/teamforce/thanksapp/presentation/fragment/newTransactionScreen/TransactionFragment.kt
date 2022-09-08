@@ -5,14 +5,12 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.database.Cursor
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,12 +42,10 @@ import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragme
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
-import com.teamforce.thanksapp.utils.createBitmapFromResult
 import com.teamforce.thanksapp.utils.getPath
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 
@@ -163,21 +159,36 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         }
     }
     private fun createDialog(list: List<TagModel>){
-        val dialog = AlertDialog.Builder(context)
+        val builderDialog = AlertDialog.Builder(context, R.style.FullscreenDialogTheme)
         val inflater = requireActivity().layoutInflater
         val newListValues = inflater.inflate(R.layout.fragment_list_of_values, null)
         val recyclerViewDialog = newListValues.findViewById<RecyclerView>(R.id.values_rv)
+        val btnApplyValues = newListValues.findViewById<MaterialButton>(R.id.add_values_btn)
 //        val list1: List<TagModel> = listOf(TagModel(0, "Name0"),
 //            TagModel(1, "Name2"))
         val adapter = ValuesAdapter(list, requireContext())
         recyclerViewDialog.adapter = adapter
-        dialog.setView(newListValues)
+        builderDialog.setView(newListValues)
             .setPositiveButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
                 listCheckedValues = adapter.listCheckedValues
                 Log.d("Token", " Список выбранных ценностей ${listCheckedValues}")
                 dialog.cancel()
             })
+            .setNeutralButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
+                dialog.cancel()
+            })
+
+        val dialog = builderDialog.create()
+
         dialog.show()
+        val neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+        neutralButton.visibility = View.GONE
+        val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        val parent: LinearLayout = positiveButton.parent as LinearLayout
+        parent.gravity = Gravity.CENTER_HORIZONTAL
+        val leftSpacer = parent.getChildAt(1)
+        leftSpacer.visibility = View.GONE
+
     }
 
     private fun openValuesEt(){

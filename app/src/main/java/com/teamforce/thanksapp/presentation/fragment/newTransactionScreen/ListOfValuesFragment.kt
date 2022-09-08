@@ -33,7 +33,10 @@ class ListOfValuesFragment : DialogFragment() {
     private val viewModel = ListOfValuesViewModel()
 
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState)
 
+    }
 
 
 
@@ -47,9 +50,6 @@ class ListOfValuesFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
-        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         viewModel.initViewModel()
         loadData()
         showLoadingProgress()
