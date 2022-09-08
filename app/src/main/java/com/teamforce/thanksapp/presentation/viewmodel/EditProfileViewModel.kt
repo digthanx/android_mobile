@@ -7,11 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.network.models.Contact
-import com.teamforce.thanksapp.data.request.CreateContactRequest
-import com.teamforce.thanksapp.data.request.UpdateContactRequest
 import com.teamforce.thanksapp.data.request.UpdateProfileRequest
-import com.teamforce.thanksapp.data.response.*
-import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.data.response.ProfileResponse
+import com.teamforce.thanksapp.data.response.UpdateFewContactsResponse
+import com.teamforce.thanksapp.data.response.UpdateProfileResponse
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,11 +20,15 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class EditProfileViewModel(): ViewModel(){
+@HiltViewModel
+class EditProfileViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+) : ViewModel() {
 
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -47,13 +52,6 @@ class EditProfileViewModel(): ViewModel(){
     val updateFewContact: LiveData<UpdateFewContactsResponse> = _updateFewContact
     private val _updateFewContactError = MutableLiveData<String>()
     val updateFewContactError: LiveData<String> = _updateFewContactError
-
-
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
-
-
 
     fun loadUserProfile(token: String) {
         _isLoading.postValue(true)

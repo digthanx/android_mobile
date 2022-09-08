@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -27,18 +28,19 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
-
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
-    private val viewModel = ProfileViewModel()
+    private val viewModel : ProfileViewModel by viewModels()
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -138,15 +140,15 @@ class ProfileFragment : Fragment() {
         val requestFile: RequestBody =
             RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
-        UserDataRepository.getInstance()?.token.let { token ->
-            UserDataRepository.getInstance()?.profileId.let { id ->
+        viewModel.userDataRepository.token.let { token ->
+            viewModel.userDataRepository.profileId.let { id ->
                 viewModel.loadUpdateAvatarUserProfile(token!!, id!!, body)
             }
         }
     }
 
      private fun requestData(){
-         val token = UserDataRepository.getInstance()?.token
+         val token = viewModel.userDataRepository.token
          if (token != null) {
              viewModel.loadUserProfile(token)
          }
@@ -206,7 +208,7 @@ class ProfileFragment : Fragment() {
             }else{
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
             }
-            UserDataRepository.getInstance()?.profileId = it.profile.id
+            viewModel.userDataRepository.profileId = it.profile.id
         }
     }
 
@@ -226,7 +228,7 @@ class ProfileFragment : Fragment() {
             }
             .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
                 dialog.cancel()
-                UserDataRepository.getInstance()?.logout(requireContext())
+                viewModel.userDataRepository.logout()
                 activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
             }
             .show()
@@ -277,7 +279,6 @@ class ProfileFragment : Fragment() {
         information = binding.information
         placeJob = binding.placeJob
 
-        viewModel.initViewModel()
 
         viewModel.isLoading.observe(
             viewLifecycleOwner,

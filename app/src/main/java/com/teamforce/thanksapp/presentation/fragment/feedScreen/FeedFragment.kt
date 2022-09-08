@@ -2,11 +2,12 @@ package com.teamforce.thanksapp.presentation.fragment.feedScreen
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -19,17 +20,16 @@ import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
 import com.teamforce.thanksapp.presentation.adapter.FeedAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
-import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
 
     private var _binding: FragmentFeedBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
-    private var viewModel: FeedViewModel = FeedViewModel()
+    private val viewModel: FeedViewModel by viewModels()
 
-    private val username: String = UserDataRepository.getInstance()?.username.toString()
 
     private lateinit var navController: NavController
     private lateinit var swipeToRefresh: SwipeRefreshLayout
@@ -78,14 +78,14 @@ class FeedFragment : Fragment() {
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
-        viewModel.initViewModel()
-        binding.feedRv.adapter = FeedAdapter(username, requireContext())
+        binding.feedRv.adapter =
+            FeedAdapter(viewModel.userDataRepository.username.toString(), requireContext())
     }
 
 
-    private fun inflateRecyclerView(){
-        UserDataRepository.getInstance()?.token?.let{ token ->
-            UserDataRepository.getInstance()?.username?.let { username ->
+    private fun inflateRecyclerView() {
+        viewModel.userDataRepository.token?.let { token ->
+            viewModel.userDataRepository.username?.let { username ->
                 viewModel.loadFeedsList(token = token, user = username)
             }
         }

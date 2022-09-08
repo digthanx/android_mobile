@@ -12,18 +12,26 @@ import com.teamforce.thanksapp.data.request.UsersListRequest
 import com.teamforce.thanksapp.data.response.BalanceResponse
 import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
-import com.teamforce.thanksapp.utils.RetrofitClient
-import kotlinx.coroutines.*
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class TransactionViewModel : ViewModel() {
+@HiltViewModel
+class TransactionViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _users = MutableLiveData<List<UserBean>>()
@@ -38,12 +46,6 @@ class TransactionViewModel : ViewModel() {
     val balance: LiveData<BalanceResponse> = _balance
     private val _balanceError = MutableLiveData<String>()
     val balanceError: LiveData<String> = _balanceError
-
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
-
-
 
     fun loadUserBalance(token: String) {
         _isLoading.postValue(true)

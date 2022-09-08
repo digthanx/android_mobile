@@ -1,11 +1,12 @@
 package com.teamforce.thanksapp.presentation.fragment.feedScreen
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -14,7 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
-import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoTransactionBottomSheetBinding
+import com.teamforce.thanksapp.presentation.viewmodel.AdditionalInfoFeedItemViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
 
@@ -23,7 +24,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     private var _binding: FragmentAdditionalInfoFeedItemBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
-
+    val viewModel: AdditionalInfoFeedItemViewModel by viewModels()
 
     private var dateTransaction: String? = null
     private var avatarReceiver: String? = null
@@ -31,7 +32,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private var senderTg: String? = null
     private var receiverTg: String? = null
     private var amount: String? = null
-    private val username = UserDataRepository.getInstance()?.username
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,13 +61,13 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
         with(binding){
             dateTransactionTv.text = dateTransaction
-            if(senderTg?.equals(username) == true){
+            if(senderTg?.equals(viewModel.userDataRepository.username) == true){
                 descriptionTransactionWhoSent.text = context?.getString(R.string.fromYou)
             }else{
                 descriptionTransactionWhoSent.text = context?.getString(
                     R.string.tgName)?.let { String.format(it, senderTg) }
             }
-            if(receiverTg?.equals(username) == true){
+            if(receiverTg?.equals(viewModel.userDataRepository.username) == true){
                 descriptionTransactionWhoReceived.text = context?.getString(R.string.you)
             }else{
                 descriptionTransactionWhoReceived.text = context?.getString(

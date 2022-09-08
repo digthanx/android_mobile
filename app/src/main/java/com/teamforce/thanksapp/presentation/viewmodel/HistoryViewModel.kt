@@ -13,7 +13,8 @@ import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.UserTransactionsResponse
 import com.teamforce.thanksapp.model.domain.HistoryModel
-import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,10 +23,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class HistoryViewModel : ViewModel() {
+@HiltViewModel
+class HistoryViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _allTransactions = MutableLiveData<SparseArray<HistoryModel>>()
@@ -46,10 +51,6 @@ class HistoryViewModel : ViewModel() {
     val cancelTransaction: LiveData<CancelTransactionResponse> = _cancelTransaction
     private val _cancelTransactionError = MutableLiveData<String>()
     val cancelTransactionError: LiveData<String> = _cancelTransactionError
-
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
 
     fun loadTransactionsList(token: String, user: String) {
         _isLoading.postValue(true)

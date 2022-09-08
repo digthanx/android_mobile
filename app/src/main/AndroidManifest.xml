@@ -8,6 +8,7 @@
 
 
     <application
+        android:name=".ThanksApplication"
         android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:hardwareAccelerated="true"

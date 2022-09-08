@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -25,8 +26,9 @@ import com.teamforce.thanksapp.model.domain.HistoryModel
 import com.teamforce.thanksapp.presentation.adapter.HistoryAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class HistoryFragment : Fragment() {
 
 
@@ -34,15 +36,13 @@ class HistoryFragment : Fragment() {
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
     private lateinit var swipeToRefresh: SwipeRefreshLayout
-    private lateinit var viewModel: HistoryViewModel
+    private val viewModel: HistoryViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
     private val tabGroup: TabLayout by lazy { binding.tabGroup }
     private var allTransactionsList: List<HistoryModel> = emptyList()
     private var receivedTransactionsList: List<HistoryModel> = emptyList()
     private var sentTransactionsList: List<HistoryModel> = emptyList()
 
-
-    private val username: String = UserDataRepository.getInstance()?.username.toString()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,8 +78,6 @@ class HistoryFragment : Fragment() {
     }
 
     private fun initViews() {
-        viewModel = HistoryViewModel()
-        viewModel.initViewModel()
         swipeToRefresh = binding.swipeRefreshLayout
         swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         recyclerView = binding.historyRv
@@ -89,7 +87,7 @@ class HistoryFragment : Fragment() {
         }
 
 
-        recyclerView.adapter = HistoryAdapter(username, requireContext(), viewModel)
+        recyclerView.adapter = HistoryAdapter(viewModel.userDataRepository.username.toString(), requireContext(), viewModel)
 
         viewModel.isLoading.observe(
             viewLifecycleOwner,
@@ -126,8 +124,8 @@ class HistoryFragment : Fragment() {
     }
 
     private fun loadDataFromServer(){
-        UserDataRepository.getInstance()?.token?.let { token ->
-            UserDataRepository.getInstance()?.username?.let { username ->
+        viewModel.userDataRepository.token?.let { token ->
+            viewModel.userDataRepository.username?.let { username ->
                 viewModel.loadTransactionsList(
                     token,
                     username

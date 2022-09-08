@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -39,19 +40,21 @@ import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.createBitmapFromResult
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-
+@AndroidEntryPoint
 class TransactionFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentTransactionBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
-    private var viewModel: TransactionViewModel = TransactionViewModel()
+    private val viewModel: TransactionViewModel by viewModels()
+
     private val usersInput: TextInputEditText by lazy { binding.usersEt }
     private val usersInputLayout: TextInputLayout by lazy { binding.textField }
     private val countEditText: EditText by lazy { binding.countValueEt }
@@ -89,19 +92,17 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
         binding.toolbarTransaction.setupWithNavController(navController, appBarConfiguration)
         shouldMeGoToHistoryFragment()
-        viewModel = TransactionViewModel()
-        viewModel.initViewModel()
         initViews(view)
         dropDownMenuUserInput(usersInput)
         appealToDB()
         checkedChip()
         openValuesEt()
-        val token = UserDataRepository.getInstance()?.token
+        val token = viewModel.userDataRepository.token
         if (token != null) {
             viewModel.loadUserBalance(token)
         }
-        viewModel.balance.observe(viewLifecycleOwner){
-            UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
+        viewModel.balance.observe(viewLifecycleOwner) {
+            viewModel.userDataRepository.leastCoins = it.distribute.amount
             availableCoins.text = it.distribute.amount.toString()
         }
 
@@ -248,11 +249,11 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             // TODO Возможно стоит будет оптимизировать вызов списка пользователей
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.trim().length > 0 && count > before && s.toString() != user?.tgName) {
-                    UserDataRepository.getInstance()?.token?.let {
+                    viewModel.userDataRepository.token?.let {
                         viewModel.loadUsersList(s.toString(), it)
                     }
                 }else if(usersInput.text?.trim().toString().isEmpty()){
-                    UserDataRepository.getInstance()?.token?.let {
+                    viewModel.userDataRepository.token?.let {
                         viewModel.loadUsersListWithoutInput("true", it)
                     }
                 } else {
@@ -266,7 +267,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             override fun afterTextChanged(s: Editable) {}
         })
         if(usersInput.text?.trim().toString().isEmpty()){
-            UserDataRepository.getInstance()?.token?.let {
+            viewModel.userDataRepository.token?.let {
                 viewModel.loadUsersListWithoutInput("true", it)
             }
         }
@@ -336,7 +337,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                 if (userId != -1 && countText.isNotEmpty() && reason.isNotEmpty()) {
                     try {
                         val count: Int = Integer.valueOf(countText)
-                        UserDataRepository.getInstance()?.token?.let {
+                        viewModel.userDataRepository.token?.let {
                             if (imageFilePart == null){
                                 viewModel.sendCoins(it, userId, count, reason, isAnon)
                             }else{

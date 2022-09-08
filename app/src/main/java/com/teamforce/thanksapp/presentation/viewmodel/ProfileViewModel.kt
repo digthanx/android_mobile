@@ -6,18 +6,21 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
-import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
+import javax.inject.Inject
 
-class ProfileViewModel() : ViewModel() {
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _profile = MutableLiveData<ProfileResponse>()
@@ -30,12 +33,6 @@ class ProfileViewModel() : ViewModel() {
     private val _imageUriError = MutableLiveData<String>()
     val imageUriError: LiveData<String> = _imageUriError
 
-
-
-
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
 
     fun loadUserProfile(token: String) {
         _isLoading.postValue(true)

@@ -1,11 +1,12 @@
 package com.teamforce.thanksapp.presentation.fragment.profileScreen
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.teamforce.thanksapp.R
@@ -14,14 +15,15 @@ import com.teamforce.thanksapp.databinding.FragmentEditProfileBottomSheetBinding
 import com.teamforce.thanksapp.presentation.viewmodel.EditProfileViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class EditProfileBottomSheetFragment : Fragment() {
 
     private var _binding: FragmentEditProfileBottomSheetBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
-    private val viewModel = EditProfileViewModel()
+    private val viewModel: EditProfileViewModel by viewModels()
 
     private val header by lazy { binding.header }
 
@@ -69,7 +71,6 @@ class EditProfileBottomSheetFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initViewModel()
         loadDataFromServer()
         writeData()
         logicalSaveData()
@@ -79,7 +80,7 @@ class EditProfileBottomSheetFragment : Fragment() {
     }
 
     private fun loadDataFromServer() {
-        UserDataRepository.getInstance()?.token?.let {
+        viewModel.userDataRepository.token?.let {
             viewModel.loadUserProfile(it)
         }
     }
@@ -155,8 +156,8 @@ class EditProfileBottomSheetFragment : Fragment() {
             } else {
                 middleName = binding.middleEt.text?.trim().toString()
             }
-            UserDataRepository.getInstance()?.token?.let { token ->
-                UserDataRepository.getInstance()?.profileId?.let { profileId ->
+            viewModel.userDataRepository.token?.let { token ->
+                viewModel.userDataRepository.profileId?.let { profileId ->
                     viewModel.loadUpdateProfile(
                         token, profileId,
                         firstName = firstName,
@@ -171,7 +172,7 @@ class EditProfileBottomSheetFragment : Fragment() {
                     listContact.add(emailContact!!)
                     listContact.add(phoneContact!!)
 
-                    UserDataRepository.getInstance()?.token?.let {
+                    viewModel.userDataRepository.token?.let {
                         viewModel.loadUpdateFewContact(it, listContact)
                     }
                 }
@@ -181,5 +182,10 @@ class EditProfileBottomSheetFragment : Fragment() {
 
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

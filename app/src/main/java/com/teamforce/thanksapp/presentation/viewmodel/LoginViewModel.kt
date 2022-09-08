@@ -5,14 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.AuthorizationRequest
 import com.teamforce.thanksapp.data.request.VerificationRequest
 import com.teamforce.thanksapp.data.response.VerificationResponse
 import com.teamforce.thanksapp.model.domain.UserData
-import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,10 +19,14 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-object LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _isSuccessAuth = MutableLiveData<Boolean>()
@@ -42,15 +45,12 @@ object LoginViewModel : ViewModel() {
 
 
     fun logout(){
+        userDataRepository.logout()
         xId = null
         xEmail = null
         xCode = null
         token = null
         telegramOrEmail = null
-    }
-
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
     }
 
     fun authorizeUser(telegramIdOrEmail: String) {
@@ -80,7 +80,7 @@ object LoginViewModel : ViewModel() {
                                 xEmail = response.headers().get("X-Email")
 
                             }
-                            UserDataRepository.getInstance()?.statusResponseAuth = response.body().toString()
+                            userDataRepository.statusResponseAuth = response.body().toString()
                             xCode = response.headers().get("X-Code")
                             _isSuccessAuth.postValue(true)
                         } else {
