@@ -204,5 +204,13 @@
        <item name="hintTextColor">@color/general_contrast</item>
     </style>
 
+    <style name="TabTextSize">
+        <item name="android:textSize">12sp</item>
+        <item name="actionBarTabTextStyle">@style/TextSize</item>
+    </style>
+
+    <style name="TextSize">
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>

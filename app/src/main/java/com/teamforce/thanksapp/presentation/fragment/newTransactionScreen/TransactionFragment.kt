@@ -2,6 +2,8 @@ package com.teamforce.thanksapp.presentation.fragment.newTransactionScreen
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -35,7 +37,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.databinding.FragmentTransactionBinding
+import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
+import com.teamforce.thanksapp.presentation.adapter.ValuesAdapter
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
@@ -133,12 +137,22 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             imageFilePart = null
         }
 
-        etAddValues.setOnClickListener {
-            // Переход на список ценностей
-            findNavController().navigate(R.id.action_transactionFragment_to_listOfValuesFragment)
-            Toast.makeText(requireContext(), "Сработал триггер на поле ввода", Toast.LENGTH_LONG).show()
-
-        }
+//        etAddValues.setOnClickListener {
+//            // Переход на список ценностей
+//
+//           // findNavController().navigate(R.id.action_transactionFragment_to_listOfValuesFragment4)
+//            var dialog = AlertDialog.Builder(context)
+//            var inflater = requireActivity().layoutInflater
+//            var newListValues = inflater.inflate(R.layout.fragment_list_of_values, null)
+//            var rv = newListValues.findViewById<RecyclerView>(R.id.values_rv)
+//            val list: List<TagModel> = listOf(TagModel(0, "Name0"))
+//            //rv.adapter = ValuesAdapter()
+//            dialog.setView(newListValues)
+//                .setPositiveButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
+//                    dialog.cancel()
+//                })
+//            dialog.show()
+//        }
         requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
 
     }
@@ -194,29 +208,6 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         resultLauncher.launch(pickIntent)
     }
 
-
-//    private fun  funURIToMultipart(imageURI: Uri, imageBitmap: Bitmap) {
-//
-//        val projection = arrayOf(MediaStore.Images.Media.DATA)
-//        val cursor: Cursor =
-//            requireContext().contentResolver.query(imageURI, projection, null, null, null)!!
-//        cursor.moveToFirst()
-//        val columnIndex: Int = cursor.getColumnIndex(projection[0])
-//        val filePath: String = cursor.getString(columnIndex)
-//        cursor.close()
-//        val file: File = File(filePath)
-//        val stream = ByteArrayOutputStream()
-//        val file2 = imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-//        val requestFile: RequestBody =
-//            RequestBody.create(MediaType.parse("multipart/form-data"), stream.toByteArray())
-//        val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
-//        imageFilePart = body
-////        UserDataRepository.getInstance()?.token.let { token ->
-////            UserDataRepository.getInstance()?.profileId.let { id ->
-////                viewModel.loadUpdateAvatarUserProfile(token!!, id!!, body)
-////            }
-////        }
-//    }
 
     private fun uriToMultipart(imageURI: Uri, filePath: String) {
         // Хардовая вставка картинки с самого начала

@@ -1,25 +1,28 @@
 package com.teamforce.thanksapp.presentation.fragment.newTransactionScreen
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentListOfValuesBinding
-import com.teamforce.thanksapp.databinding.FragmentTransactionBinding
-import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
 import com.teamforce.thanksapp.presentation.adapter.ValuesAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.ListOfValuesViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
 
 
-class ListOfValuesFragment : Fragment() {
+class ListOfValuesFragment : DialogFragment() {
 
     private var _binding: FragmentListOfValuesBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
@@ -28,6 +31,10 @@ class ListOfValuesFragment : Fragment() {
     private val applyValuesBtn: MaterialButton by lazy { binding.addValuesBtn }
     private val progressBar: ProgressBar by lazy { binding.progressBar }
     private val viewModel = ListOfValuesViewModel()
+
+
+
+
 
 
     override fun onCreateView(
@@ -40,12 +47,15 @@ class ListOfValuesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         viewModel.initViewModel()
         loadData()
         showLoadingProgress()
         setDataFromServer()
         applyValuesBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_listOfValuesFragment_to_transactionFragment)
+            findNavController().navigate(R.id.action_listOfValuesFragment4_to_transactionFragment)
         }
     }
 
