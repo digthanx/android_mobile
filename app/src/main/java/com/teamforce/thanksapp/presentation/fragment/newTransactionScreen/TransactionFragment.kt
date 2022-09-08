@@ -334,6 +334,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
             if (it) {
                 Toast.makeText(requireContext(), "Success!", Toast.LENGTH_LONG).show()
+                Log.d("Token", " Юзер для передачи данных в результат ${user}")
                 showResultTransaction(
                     amountThanks = Integer.valueOf(countEditText.text.toString()),
                     receiverTg = user?.tgName.toString(),
