@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_historyFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_historyFragment_to_notificationsFragment"
+            app:destination="@id/notificationsFragment"/>
     </fragment>
     <fragment
         android:id="@+id/transactionFragment"
@@ -40,6 +43,9 @@
         <action
             android:id="@+id/action_balanceFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_balanceFragment_to_notificationsFragment"
+            app:destination="@id/notificationsFragment"/>
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -61,6 +67,10 @@
         <action
             android:id="@+id/action_feedFragment_to_additionalInfoFeedItemFragment"
             app:destination="@id/additionalInfoFeedItemFragment" />
+
+        <action
+            android:id="@+id/action_feedFragment_to_notificationsFragment"
+            app:destination="@id/notificationsFragment"/>
     </fragment>
     <fragment
         android:id="@+id/transactionResultFragment"
@@ -108,4 +118,8 @@
             android:id="@+id/action_additionalInfoFeedItemFragment_to_feedFragment"
             app:destination="@id/feedFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.notifications.NotificationsFragment"
+        android:label="NotificationsFragment" />
 </navigation>

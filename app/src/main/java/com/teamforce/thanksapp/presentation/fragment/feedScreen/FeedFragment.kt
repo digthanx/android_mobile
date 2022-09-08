@@ -22,6 +22,8 @@ import com.teamforce.thanksapp.databinding.FragmentFeedBinding
 import com.teamforce.thanksapp.presentation.adapter.FeedAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.gone
+import com.teamforce.thanksapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -68,16 +70,34 @@ class FeedFragment : Fragment() {
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_profileFragment, null, optionForProfileFragment )
+            findNavController().navigate(
+                R.id.action_feedFragment_to_profileFragment,
+                null,
+                optionForProfileFragment
+            )
         }
         swipeToRefresh.setOnRefreshListener {
             inflateRecyclerView()
             swipeToRefresh.isRefreshing = false
         }
 
+        sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
+            if (notificationsCount == 0) {
+                binding.apply {
+                    activeNotifyLayout.gone()
+                    notify.visible()
+                }
+            } else {
+                binding.apply {
+                    activeNotifyLayout.visible()
+                    notify.gone()
+                    notifyBadge.text = notificationsCount.toString()
+                }
+            }
+        }
 
-        sharedViewModel.state.observe(viewLifecycleOwner) {
-            binding.notifCounter.text = it.toString()
+        binding.notifyLayout.setOnClickListener {
+            findNavController().navigate(R.id.action_feedFragment_to_notificationsFragment)
         }
 
     }

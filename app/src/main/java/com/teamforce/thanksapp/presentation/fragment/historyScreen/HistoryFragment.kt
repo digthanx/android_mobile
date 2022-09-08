@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -19,12 +20,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.teamforce.thanksapp.NotificationSharedViewModel
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentHistoryBinding
 import com.teamforce.thanksapp.model.domain.HistoryModel
 import com.teamforce.thanksapp.presentation.adapter.HistoryAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.gone
+import com.teamforce.thanksapp.utils.visible
 
 
 class HistoryFragment : Fragment() {
@@ -40,6 +44,8 @@ class HistoryFragment : Fragment() {
     private var allTransactionsList: List<HistoryModel> = emptyList()
     private var receivedTransactionsList: List<HistoryModel> = emptyList()
     private var sentTransactionsList: List<HistoryModel> = emptyList()
+
+    private val sharedViewModel: NotificationSharedViewModel by activityViewModels()
 
 
     private val username: String = UserDataRepository.getInstance()?.username.toString()
@@ -73,7 +79,30 @@ class HistoryFragment : Fragment() {
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_historyFragment_to_profileFragment, null, optionForProfileFragment )
+            findNavController().navigate(
+                R.id.action_historyFragment_to_profileFragment,
+                null,
+                optionForProfileFragment
+            )
+        }
+
+        binding.notifyLayout.setOnClickListener {
+            findNavController().navigate(R.id.action_historyFragment_to_notificationsFragment)
+        }
+
+        sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
+            if (notificationsCount == 0) {
+                binding.apply {
+                    activeNotifyLayout.gone()
+                    notify.visible()
+                }
+            } else {
+                binding.apply {
+                    activeNotifyLayout.visible()
+                    notify.gone()
+                    notifyBadge.text = notificationsCount.toString()
+                }
+            }
         }
     }
 

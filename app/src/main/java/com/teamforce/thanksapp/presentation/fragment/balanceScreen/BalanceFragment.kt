@@ -9,7 +9,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -20,6 +19,8 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.gone
+import com.teamforce.thanksapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -65,17 +66,16 @@ class BalanceFragment : Fragment() {
         loadBalanceData()
         setBalanceData()
         viewModel.isLoading.observe(
-            viewLifecycleOwner,
-            Observer { isLoading ->
-                if (isLoading) {
-                    swipeToRefresh.isRefreshing = true
-                    wholeScreen.visibility = View.GONE
-                } else {
-                    wholeScreen.visibility = View.VISIBLE
-                    swipeToRefresh.isRefreshing = false
-                }
+            viewLifecycleOwner
+        ) { isLoading ->
+            if (isLoading) {
+                swipeToRefresh.isRefreshing = true
+                wholeScreen.visibility = View.GONE
+            } else {
+                wholeScreen.visibility = View.VISIBLE
+                swipeToRefresh.isRefreshing = false
             }
-        )
+        }
 
         swipeToRefresh.setOnRefreshListener {
             loadBalanceData()
@@ -97,9 +97,27 @@ class BalanceFragment : Fragment() {
             )
         }
 
+        binding.notifyLayout.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_balanceFragment_to_notificationsFragment,
+                null,
+                optionForProfileFragment
+            )
+        }
 
-        sharedViewModel.state.observe(viewLifecycleOwner) {
-            binding.notifCounter.text = it.toString()
+        sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
+            if (notificationsCount == 0) {
+                binding.apply {
+                    activeNotifyLayout.gone()
+                    notify.visible()
+                }
+            } else {
+                binding.apply {
+                    activeNotifyLayout.visible()
+                    notify.gone()
+                    notifyBadge.text = notificationsCount.toString()
+                }
+            }
         }
 
     }
