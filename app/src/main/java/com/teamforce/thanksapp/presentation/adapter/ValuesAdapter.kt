@@ -47,7 +47,6 @@ class ValuesAdapter(
         myHolder.name.text = dataSet[position].name
         myHolder.cardMainView.setOnClickListener {
             dataSet[position].enabled = !dataSet[position].enabled
-            holder.cardImage.imageTintList = context.getColorStateList(R.color.color_feed_item_orange)
             if(dataSet[position].enabled){ holder.checkIcon.visibility = View.VISIBLE
                 holder.cardImage.strokeWidth = 8f
                 holder.cardImage.imageTintList = context.getColorStateList(R.color.color_feed_item_orange)

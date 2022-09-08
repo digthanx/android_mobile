@@ -188,6 +188,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         parent.gravity = Gravity.CENTER_HORIZONTAL
         val leftSpacer = parent.getChildAt(1)
         leftSpacer.visibility = View.GONE
+        // Дальше нужно по полученному списку показать чипсы и тд
 
     }
 
