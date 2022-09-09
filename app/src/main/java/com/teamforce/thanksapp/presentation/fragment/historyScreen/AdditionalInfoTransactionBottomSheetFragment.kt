@@ -107,7 +107,6 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
         }else{
             binding.photoTv.visibility = View.GONE
             binding.cardViewImg.visibility = View.GONE
-
         }
     }
 }

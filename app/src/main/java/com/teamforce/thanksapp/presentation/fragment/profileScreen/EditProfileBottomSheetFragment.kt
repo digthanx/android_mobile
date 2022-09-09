@@ -38,8 +38,7 @@ class EditProfileBottomSheetFragment : Fragment() {
     private val companyTv by lazy { binding.companyValueTv }
     private val departmentTv by lazy { binding.departmentValueTv }
 
-    private var contactId_1: Int? = null
-    private var contactId_2: Int? = null
+
     private var contactValue_1Email: String? = null
     private var contactValue_2Phone: String? = null
     private var company: String? = null
@@ -52,8 +51,6 @@ class EditProfileBottomSheetFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            contactId_1 = it.getInt("contact_id_1")
-            contactId_2 = it.getInt("contact_id_2")
             contactValue_1Email = it.getString("contact_value_1")
             contactValue_2Phone = it.getString("contact_value_2")
             company = it.getString("company")

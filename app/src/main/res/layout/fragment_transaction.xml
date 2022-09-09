@@ -1,481 +1,490 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".presentation.fragment.newTransactionScreen.TransactionFragment">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarTransaction"
+        style="@style/Theme.ThanksApp.PopupOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/general_brand"
+        android:elevation="0dp"
+        app:layout_collapseMode="pin"
+        app:layout_scrollFlags="enterAlways"
+        app:titleTextColor="@color/white">
+
+
+        <ImageButton
+            android:id="@+id/notify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:backgroundTint="@color/general_brand"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic__cross_red"
+            android:visibility="gone"
+            app:tint="@color/general_background" />
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarTransaction"
-            style="@style/Theme.ThanksApp.PopupOverlay"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/general_brand"
-            android:elevation="0dp"
-            app:layout_collapseMode="pin"
-            app:layout_scrollFlags="enterAlways"
-            app:titleTextColor="@color/white">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_x"
+            android:focusable="false"
+            android:hint="@string/choiceReceiver"
+            android:paddingStart="@dimen/padding_x"
+            android:paddingEnd="@dimen/padding_x"
+            android:paddingBottom="9dp"
+            android:visibility="visible"
+            app:boxCornerRadiusBottomEnd="15dp"
+            app:boxCornerRadiusBottomStart="15dp"
+            app:boxCornerRadiusTopEnd="15dp"
+            app:boxCornerRadiusTopStart="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-
-            <ImageButton
-                android:id="@+id/notify"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/users_et"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:backgroundTint="@color/general_brand"
-                android:clickable="true"
-                android:focusable="true"
-                android:visibility="gone"
-                app:tint="@color/general_background"
-                android:src="@drawable/ic__cross_red"/>
-        </com.google.android.material.appbar.MaterialToolbar>
+                android:lines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/users_list_rv" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/users_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textField" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <LinearLayout
+            android:id="@+id/send_coin_linear"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_x"
-                android:focusable="false"
-                app:boxCornerRadiusTopStart="15dp"
-                app:boxCornerRadiusTopEnd="15dp"
-                app:boxCornerRadiusBottomStart="15dp"
-                app:boxCornerRadiusBottomEnd="15dp"
-                android:visibility="visible"
-                android:paddingStart="@dimen/padding_x"
-                android:paddingEnd="@dimen/padding_x"
-                android:hint="@string/choiceReceiver"
-                android:paddingBottom="9dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/users_et"
-                    android:lines="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/users_list_rv"
-                android:visibility="gone" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/users_list_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:visibility="visible"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textField"/>
-
-
-
-            <LinearLayout
-                android:id="@+id/send_coin_linear"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:cardCornerRadius="16dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginHorizontal="16dp"
-                    app:cardBackgroundColor="@color/general_background_black_gray">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="end"
-                        android:layout_gravity="end">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentBottom="true"
-                            android:src="@drawable/ic_big_currency">
-
-                        </ImageView>
-                    </RelativeLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="5dp"
-                        android:layout_marginStart="25dp">
-
-
-                        <TextView
-                            android:id="@+id/distributed_label_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Доступно: "
-                            android:textSize="14sp"
-                            android:layout_marginBottom="10dp"
-                            android:textColor="@color/white"
-                            app:layout_constraintBottom_toBottomOf="@+id/distributed_value_tv"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"/>
-
-                        <TextView
-                            android:id="@+id/distributed_value_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:textSize="23sp"
-                            android:text="3027"
-                            app:layout_constraintTop_toBottomOf="@id/distributed_label_tv"
-                            app:layout_constraintStart_toStartOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/currency"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginStart="3dp"
-                            android:src="@drawable/ic_currency"
-                            android:text="D"
-                            app:layout_constraintTop_toBottomOf="@id/distributed_label_tv"
-                            app:layout_constraintStart_toEndOf="@+id/distributed_value_tv" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </com.google.android.material.card.MaterialCardView>
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="25dp"
+                app:cardBackgroundColor="@color/general_background_black_gray"
+                app:cardCornerRadius="16dp">
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingHorizontal="8dp"
-                    android:gravity="center">
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/receiver"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="5dp"
-                        android:layout_marginHorizontal="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_marginVertical="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_marginBottom="15dp"
-                            android:layout_marginVertical="12dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:gravity="end">
 
-                            <com.google.android.material.imageview.ShapeableImageView
-                                android:id="@+id/receiver_avatar"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/ic_anon_avatar"
-                                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:src="@drawable/ic_big_currency">
 
-                            <TextView
-                                android:id="@+id/receiver_name_label_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="20dp"
-                                android:text="Дмитрий"
-                                android:textStyle="bold"
-                                android:textAppearance="@style/Body2"
-                                app:layout_constraintStart_toEndOf="@+id/receiver_avatar"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/receiver_surname_label_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="Малков"
-                                android:textStyle="bold"
-                                android:textAppearance="@style/Body2"
-                                app:layout_constraintStart_toEndOf="@+id/receiver_name_label_tv"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/receiver_tg_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="20dp"
-                                android:layout_marginTop="3dp"
-                                android:text="/@NyamaMDE"
-                                android:textSize="12sp"
-                                app:layout_constraintStart_toEndOf="@id/receiver_avatar"
-                                app:layout_constraintTop_toBottomOf="@+id/receiver_name_label_tv" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </com.google.android.material.card.MaterialCardView>
+                    </ImageView>
                 </RelativeLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_gravity="center">
-                    <EditText
-                        android:background="@null"
-                        android:id="@+id/count_value_et"
-                        android:layout_width="wrap_content"
-                        android:minWidth="40dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:textSize="54sp"
-                        android:text="1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
-                    <ImageView
-                        android:id="@+id/currency2"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        app:tint="@color/black"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginTop="5dp"
-                        android:src="@drawable/ic_currency"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/count_value_et" />
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginStart="25dp">
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/black"
-                        app:layout_constraintStart_toStartOf="@+id/count_value_et"
-                        app:layout_constraintEnd_toEndOf="@+id/currency2"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        />
+
+                    <TextView
+                        android:id="@+id/distributed_label_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="Доступно: "
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/distributed_value_tv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/distributed_value_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3027"
+                        android:textColor="@color/white"
+                        android:textSize="23sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/distributed_label_tv" />
+
+                    <ImageView
+                        android:id="@+id/currency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_currency"
+                        android:text="D"
+                        android:textColor="@color/white"
+                        app:layout_constraintStart_toEndOf="@+id/distributed_value_tv"
+                        app:layout_constraintTop_toBottomOf="@id/distributed_label_tv" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.chip.ChipGroup
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="40dp"
-                    android:layout_gravity="center"
-                    android:id="@+id/chipGroup"
-                    app:singleSelection="true">
+            </com.google.android.material.card.MaterialCardView>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipOne"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:checked="true"
-                        android:layoutDirection="rtl"
-                        style="@style/MyChipsOrange"
-                        android:text="1" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipFive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:layoutDirection="rtl"
-
-                        style="@style/MyChipsOrange"
-                        android:text="5" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipTen"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:layoutDirection="rtl"
-                        style="@style/MyChipsOrange"
-                        android:text="10" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipTwentyFive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:layoutDirection="rtl"
-                        style="@style/MyChipsOrange"
-                        android:text="25" />
-
-                </com.google.android.material.chip.ChipGroup>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:paddingHorizontal="8dp">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/reason_value"
+                    android:id="@+id/receiver"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:outlineProvider="none"
-                    app:cardCornerRadius="@dimen/round_corner_xlarge"
-                    app:strokeColor="@color/color20"
-                    app:strokeWidth="@dimen/stroke_size">
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginVertical="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="5dp">
 
-                    <EditText
-                        android:background="@null"
-                        android:id="@+id/message_value_et"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_margin="@dimen/margin_x"
-                        android:layout_height="78dp"
-                        android:gravity="top"
-                        android:hint="@string/reason_transaction"
-                        android:textAppearance="@style/Body1.Gray" />
-                </com.google.android.material.card.MaterialCardView>
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="12dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginBottom="15dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/show_attached_img_card"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:visibility="gone"
-                    android:layout_marginStart="16dp"
-                    app:cardCornerRadius="16dp">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <ImageView
-                            android:id="@+id/image"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_launcher_background"/>
-                        <ImageButton
-                            android:id="@+id/detach_img_btn"
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/receiver_avatar"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_anon_avatar"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+                        <TextView
+                            android:id="@+id/receiver_name_label_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="55dp"
-                            android:layout_marginBottom="50dp"
-                            android:backgroundTint="@color/transparent"
-                            android:src="@drawable/ic_cross_white"/>
-                    </RelativeLayout>
+                            android:layout_marginStart="20dp"
+                            android:text="Дмитрий"
+                            android:textAppearance="@style/Body2"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@+id/receiver_avatar"
+                            app:layout_constraintTop_toTopOf="parent" />
 
+                        <TextView
+                            android:id="@+id/receiver_surname_label_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="Малков"
+                            android:textAppearance="@style/Body2"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@+id/receiver_name_label_tv"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/receiver_tg_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="3dp"
+                            android:text="/@NyamaMDE"
+                            android:textSize="12sp"
+                            app:layout_constraintStart_toEndOf="@id/receiver_avatar"
+                            app:layout_constraintTop_toBottomOf="@+id/receiver_name_label_tv" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
+            </RelativeLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/attach_image_btn"
-                    android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp">
+
+                <EditText
+                    android:id="@+id/count_value_et"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/NotFilledButton"
-                    android:layout_marginVertical="16dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:text="@string/addPhoto"
-                    app:icon="@drawable/ic_attach"
-                    app:iconGravity="textStart"
-                    android:paddingVertical="17dp" />
+                    android:background="@null"
+                    android:inputType="number"
+                    android:minWidth="40dp"
+                    android:text="1"
+                    android:textColor="@color/black"
+                    android:textSize="54sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/currency2"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ic_currency"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/count_value_et"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/black" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/currency2"
+                    app:layout_constraintStart_toStartOf="@+id/count_value_et" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="40dp"
+                android:layout_weight="1"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipOne"
+                    style="@style/MyChipsOrange"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="16dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textColor="@color/general_contrast"
-                        android:textSize="16sp"
-                        android:layout_weight="1"
-                        android:text="@string/addValues"/>
+                    android:checkable="true"
+                    android:checked="true"
+                    android:layoutDirection="rtl"
+                    android:text="1" />
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/addValues"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"/>
-                </LinearLayout>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipFive"
+                    style="@style/MyChipsOrange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
 
+                    android:layoutDirection="rtl"
+                    android:text="5" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_layout_value"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTen"
+                    style="@style/MyChipsOrange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:layoutDirection="rtl"
+                    android:text="10" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTwentyFive"
+                    style="@style/MyChipsOrange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:layoutDirection="rtl"
+                    android:text="25" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/reason_value"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:outlineProvider="none"
+                app:cardCornerRadius="@dimen/round_corner_xlarge"
+                app:strokeColor="@color/color20"
+                app:strokeWidth="@dimen/stroke_size">
+
+                <EditText
+                    android:id="@+id/message_value_et"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    style="@style/EditProfileTextInputLayout"
-                    app:endIconDrawable="@drawable/ic_tabler_chevron_right"
-                    app:endIconMode="custom"
-                    android:outlineProvider="none"
-                    app:strokeColor="@color/color20"
-                    app:strokeWidth="@dimen/stroke_size">
+                    android:layout_height="78dp"
+                    android:layout_margin="@dimen/margin_x"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:hint="@string/reason_transaction"
+                    android:textAppearance="@style/Body1.Gray" />
+            </com.google.android.material.card.MaterialCardView>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:background="@null"
-                        android:id="@+id/et_value"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/show_attached_img_card"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="16dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/image"
                         android:layout_width="match_parent"
-                        android:layout_margin="@dimen/margin_x"
                         android:layout_height="match_parent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:inputType="none"
-                        android:gravity="top"
-                        android:hint="@string/choiceValues"
-                        android:textAppearance="@style/Body1.Gray" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:src="@drawable/ic_launcher_background" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="16dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textColor="@color/general_contrast"
-                        android:textSize="16sp"
-                        android:layout_weight="1"
-                        android:text="@string/isAnon"/>
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/isAnon"
+                    <ImageButton
+                        android:id="@+id/detach_img_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:layout_gravity="end"/>
-                </LinearLayout>
+                        android:layout_marginStart="55dp"
+                        android:layout_marginBottom="50dp"
+                        android:backgroundTint="@color/transparent"
+                        android:src="@drawable/ic_cross_white" />
+                </RelativeLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/send_coin_btn"
-                    android:layout_width="match_parent"
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/attach_image_btn"
+                style="@style/NotFilledButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="16dp"
+                android:paddingVertical="17dp"
+                android:text="@string/addPhoto"
+                app:icon="@drawable/ic_attach"
+                app:iconGravity="textStart" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="44dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:text="@string/send"
-                    app:cornerRadius="12dp"
-                    android:backgroundTint="@color/general_brand"
-                    android:paddingVertical="17dp" />
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="@string/addValues"
+                    android:textColor="@color/general_contrast"
+                    android:textSize="16sp" />
 
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/addValues"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end" />
             </LinearLayout>
 
 
-        </LinearLayout>
-    </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_value"
+                style="@style/EditProfileTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:endIconDrawable="@drawable/ic_tabler_chevron_right"
+                app:endIconMode="custom"
+                app:strokeColor="@color/color20"
+                app:strokeWidth="@dimen/stroke_size">
 
-</ScrollView>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/margin_x"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="top"
+                    android:hint="@string/choiceValues"
+                    android:inputType="none"
+                    android:textAppearance="@style/Body1.Gray" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="@string/isAnon"
+                    android:textColor="@color/general_contrast"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/isAnon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:checked="true" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/send_coin_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="44dp"
+                android:backgroundTint="@color/general_brand"
+                android:paddingVertical="17dp"
+                android:text="@string/send"
+                app:cornerRadius="12dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
+
+

@@ -3,6 +3,7 @@ package com.teamforce.thanksapp.data.api
 import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
+import com.teamforce.thanksapp.model.domain.TagModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -97,23 +98,14 @@ interface ThanksApi {
         @Body data: UpdateProfileRequest
     ): Call<UpdateProfileResponse>
 
-    @PUT("/update-contact-by-user/{id}/")
-    fun updateContact(
-        @Header("Authorization") token: String,
-        @Path("id") contactId: String,
-        @Body data: UpdateContactRequest,
-    ): Call<UpdateContactResponse>
-
-    @POST("/create-contact-by-user/")
-    fun createContact(
-        @Header("Authorization") token: String,
-        @Body data: CreateContactRequest?,
-    ): Call<CreateContactResponse>
-
     @POST("/create-few-contacts/")
     fun updateFewContact(
         @Header("Authorization") token: String,
         @Body data: List<Contact>?,
     ): Call<UpdateFewContactsResponse>
 
+    @GET("/tags/")
+    fun getTags(
+        @Header("Authorization") token: String
+    ): Call<List<TagModel>>
 }

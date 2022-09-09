@@ -5,9 +5,9 @@ import com.teamforce.thanksapp.presentation.activity.MainActivity
 object Consts {
     const val AMOUNT_THANKS = "amount_thanks"
     const val DESCRIPTION_OF_TRANSACTION = "descriptionOfTransaction"
-    const val RECEIVER_TG = "receiverOfTransaction"
-    const val RECEIVER_NAME = "receiverOfTransaction"
-    const val RECEIVER_SURNAME = "receiverOfTransaction"
+    const val RECEIVER_TG = "receiverTG"
+    const val RECEIVER_NAME = "receiverName"
+    const val RECEIVER_SURNAME = "receiverSurname"
     const val BUNDLE_TG_OR_EMAIL = "telegramOrEmail"
     const val BUNDLE_EMAIL = "bundleEmail"
     const val LINK_TO_BOT = "https://t.me/DigitalRefBot"
@@ -26,6 +26,7 @@ object Consts {
     const val SHOULD_ME_GOTO_HISTORY = "ShouldMeGoToHistory"
     const val SENDER_TG = "senderTg"
     const val DESCRIPTION_FEED = "descriptionFeed"
+    const val PHOTO_TRANSACTION = "photoFeed"
 
     val MAIN = MainActivity()
     const val BASE_URL: String = "http://176.99.6.251:8888"
