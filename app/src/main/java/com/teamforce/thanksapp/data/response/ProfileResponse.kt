@@ -5,7 +5,7 @@ import com.teamforce.thanksapp.data.network.models.Contact
 
 data class ProfileResponse(
     @SerializedName("username")
-    val username: String,
+    val username: String?,
     @SerializedName("profile")
     val profile: ProfileBean,
 ){
@@ -15,17 +15,17 @@ data class ProfileResponse(
         @SerializedName("contacts")
         val contacts: List<Contact>,
         @SerializedName("organization")
-        val organization: String,
+        val organization: String?,
         @SerializedName("department")
-        val department: String,
-        @SerializedName("tg_id") val tgId: String,
-        @SerializedName("tg_name") val tgName: String,
+        val department: String?,
+        @SerializedName("tg_id") val tgId: String?,
+        @SerializedName("tg_name") val tgName: String?,
         @SerializedName("photo") val photo: String?,
-        @SerializedName("hired_at") val hiredAt: String,
-        @SerializedName("surname") val surname: String,
-        @SerializedName("first_name") val firstname: String,
-        @SerializedName("middle_name") val middlename: String,
-        @SerializedName("nickname") val nickname: String
+        @SerializedName("hired_at") val hiredAt: String?,
+        @SerializedName("surname") val surname: String?,
+        @SerializedName("first_name") val firstname: String?,
+        @SerializedName("middle_name") val middlename: String?,
+        @SerializedName("nickname") val nickname: String?
     )
 
 

@@ -14,6 +14,7 @@ import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
 import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_NAME
+import com.teamforce.thanksapp.utils.Consts.RECEIVER_SURNAME
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_TG
 
 
@@ -35,6 +36,7 @@ class TransactionResultFragment : Fragment() {
             receiverTg = it.getString(RECEIVER_TG)
             receiverName = it.getString(RECEIVER_NAME)
             receiverPhoto = it.getString(AVATAR_USER)
+            receiverSurname = it.getString(RECEIVER_SURNAME)
         }
     }
 

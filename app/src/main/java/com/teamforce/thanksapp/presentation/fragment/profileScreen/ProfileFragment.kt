@@ -81,7 +81,7 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navController = findNavController()
@@ -246,8 +246,6 @@ class ProfileFragment : Fragment() {
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
                 dialog.cancel()
                 val bundle = Bundle()
-                bundle.putInt("contact_id_1", contactId_1!!)
-                bundle.putInt("contact_id_2", contactId_2!!)
                 bundle.putString("contact_value_1", contactValue_1)
                 bundle.putString("contact_value_2", contactValue_2)
                 bundle.putString("company", companyUser.text.toString())

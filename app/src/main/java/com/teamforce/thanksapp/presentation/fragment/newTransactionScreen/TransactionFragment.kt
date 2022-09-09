@@ -2,19 +2,20 @@ package com.teamforce.thanksapp.presentation.fragment.newTransactionScreen
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
-import android.database.Cursor
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -34,15 +35,17 @@ import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.databinding.FragmentTransactionBinding
+import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
+import com.teamforce.thanksapp.presentation.adapter.ValuesAdapter
+import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
-import com.teamforce.thanksapp.utils.createBitmapFromResult
+import com.teamforce.thanksapp.utils.getPath
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 
@@ -52,6 +55,21 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
     private var viewModel: TransactionViewModel = TransactionViewModel()
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (!isGranted) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.grant_permission),
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        }
+
     private val usersInput: TextInputEditText by lazy { binding.usersEt }
     private val usersInputLayout: TextInputLayout by lazy { binding.textField }
     private val countEditText: EditText by lazy { binding.countValueEt }
@@ -66,6 +84,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private val checkBoxAddValues: SwitchMaterial by lazy { binding.addValues }
     private val textInputLayoutAddValues: TextInputLayout by lazy { binding.textInputLayoutValue }
     private val etAddValues: TextInputEditText by lazy { binding.etValue }
+    private var listValues: List<TagModel> = listOf()
+    private var listCheckedValues: MutableList<TagModel> = mutableListOf()
 
     private val imgCard: MaterialCardView by lazy { binding.showAttachedImgCard }
     private val detachImgBtn: ImageButton by lazy { binding.detachImgBtn }
@@ -93,6 +113,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         viewModel.initViewModel()
         initViews(view)
         dropDownMenuUserInput(usersInput)
+        loadValuesFromDB()
+        setValuesFromDb()
         appealToDB()
         checkedChip()
         openValuesEt()
@@ -106,6 +128,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         }
 
         attachImageBtn.setOnClickListener {
+            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             addPhotoFromIntent()
         }
 
@@ -115,10 +138,58 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         }
 
         etAddValues.setOnClickListener {
-            // Переход на список ценностей
-            Toast.makeText(requireContext(), "Сработал триггер на поле ввода", Toast.LENGTH_LONG).show()
+            createDialog(listValues)
+           // findNavController().navigate(R.id.action_transactionFragment_to_listOfValuesFragment4)
 
+        requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+
+    }
+
+
+    }
+
+    private fun loadValuesFromDB(){
+        UserDataRepository.getInstance()?.token?.let { token ->
+            viewModel.loadTags(token)
         }
+    }
+    private fun setValuesFromDb(){
+        viewModel.tags.observe(viewLifecycleOwner) {
+            listValues = it
+        }
+    }
+    private fun createDialog(list: List<TagModel>){
+        val builderDialog = AlertDialog.Builder(context, R.style.FullscreenDialogTheme)
+        val inflater = requireActivity().layoutInflater
+        val newListValues = inflater.inflate(R.layout.fragment_list_of_values, null)
+        val recyclerViewDialog = newListValues.findViewById<RecyclerView>(R.id.values_rv)
+        val btnApplyValues = newListValues.findViewById<MaterialButton>(R.id.add_values_btn)
+//        val list1: List<TagModel> = listOf(TagModel(0, "Name0"),
+//            TagModel(1, "Name2"))
+        val adapter = ValuesAdapter(list, requireContext())
+        recyclerViewDialog.adapter = adapter
+        builderDialog.setView(newListValues)
+            .setPositiveButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
+                listCheckedValues = adapter.listCheckedValues
+                Log.d("Token", " Список выбранных ценностей ${listCheckedValues}")
+                dialog.cancel()
+            })
+            .setNeutralButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
+                dialog.cancel()
+            })
+
+        val dialog = builderDialog.create()
+
+        dialog.show()
+        val neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+        neutralButton.visibility = View.GONE
+        val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        val parent: LinearLayout = positiveButton.parent as LinearLayout
+        parent.gravity = Gravity.CENTER_HORIZONTAL
+        val leftSpacer = parent.getChildAt(1)
+        leftSpacer.visibility = View.GONE
+        // Дальше нужно по полученному списку показать чипсы и тд
+
     }
 
     private fun openValuesEt(){
@@ -148,60 +219,43 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-            val imageBitmap = data.createBitmapFromResult(requireActivity())
-            val imageUri = data.data
-            imgCard.visibility = View.VISIBLE
-            Glide.with(this)
-                .load(imageBitmap)
-                .centerCrop()
-                .into(image)
-            funURIToMultipart(imageUri!!, imageBitmap!!)
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                Log.d(ProfileFragment.TAG, "${result.data?.data}:")
+                val path = getPath(requireContext(), result.data?.data!!)
+                val imageUri = result.data!!.data
+                if (imageUri != null && path != null){
+                    imgCard.visibility = View.VISIBLE
+                    Glide.with(this)
+                        .load(imageUri)
+                        .centerCrop()
+                        .into(image)
+                    uriToMultipart(imageUri, path)
+                }
+
+            }
         }
-    }
 
     private fun addPhotoFromIntent() {
-//        val cameraIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE).takeIf { intent ->
-//            intent.resolveActivity(requireActivity().packageManager) != null
-//        }
-
-        val galleryIntent = Intent(Intent.ACTION_PICK).apply { this.type = "image/*" }
-
-        val intentChooser = Intent(Intent.ACTION_CHOOSER).apply {
-            this.putExtra(Intent.EXTRA_INTENT, galleryIntent)
-//            cameraIntent?.let { intent ->
-//                this.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayListOf(intent).toTypedArray<Parcelable>())
-//            }
-            this.putExtra(Intent.EXTRA_TITLE, resources.getString(R.string.gallery_title))
-        }
-
-        startActivityForResult(intentChooser, CODE_IMG_GALLERY)
+        val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
+        pickIntent.type = "image/*"
+        resultLauncher.launch(pickIntent)
     }
 
 
-    private fun  funURIToMultipart(imageURI: Uri, imageBitmap: Bitmap) {
-
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor: Cursor =
-            requireContext().contentResolver.query(imageURI, projection, null, null, null)!!
-        cursor.moveToFirst()
-        val columnIndex: Int = cursor.getColumnIndex(projection[0])
-        val filePath: String = cursor.getString(columnIndex)
-        cursor.close()
-        val file: File = File(filePath)
-        val stream = ByteArrayOutputStream()
-        val file2 = imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+    private fun uriToMultipart(imageURI: Uri, filePath: String) {
+        // Хардовая вставка картинки с самого начала
+        // Убрать как только сделаю обновление по свайпам
+        Glide.with(this)
+            .load(imageURI)
+            .centerCrop()
+            .into(binding.image)
+        val file = File(filePath)
         val requestFile: RequestBody =
-            RequestBody.create(MediaType.parse("multipart/form-data"), stream.toByteArray())
+            RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
         imageFilePart = body
-//        UserDataRepository.getInstance()?.token.let { token ->
-//            UserDataRepository.getInstance()?.profileId.let { id ->
-//                viewModel.loadUpdateAvatarUserProfile(token!!, id!!, body)
-//            }
-//        }
     }
 
     private fun shouldMeGoToHistoryFragment(){
@@ -280,6 +334,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
             if (it) {
                 Toast.makeText(requireContext(), "Success!", Toast.LENGTH_LONG).show()
+                Log.d("Token", " Юзер для передачи данных в результат ${user}")
                 showResultTransaction(
                     amountThanks = Integer.valueOf(countEditText.text.toString()),
                     receiverTg = user?.tgName.toString(),

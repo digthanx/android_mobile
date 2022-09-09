@@ -70,6 +70,8 @@ class FeedAdapter(
         val likesBtn: MaterialButton = binding.likeBtn
         val dislikesBtn: MaterialButton = binding.dislikeBtn
         val commentBtn: MaterialButton = binding.commentBtn
+        var reason: String? = null
+        var photo: String? = null
         val standardGroup = binding.standardGroup
         var descriptionFeed = ""
         var date = ""
@@ -163,9 +165,9 @@ class FeedAdapter(
         }
 
 
-
+        holder.reason = currentList[position].transaction.reason
+        holder.photo = currentList[position].transaction.photo
         convertDataToNecessaryFormat(holder, position)
-
         holder.standardGroup.setOnClickListener { v ->
             val bundle = Bundle()
             bundle.apply {
@@ -177,6 +179,8 @@ class FeedAdapter(
                 putString(Consts.DESCRIPTION_FEED, holder.descriptionFeed)
                 putString(Consts.SENDER_TG, currentList[position].transaction.sender)
                 putString(Consts.RECEIVER_TG, currentList[position].transaction.recipient)
+                putString(Consts.PHOTO_TRANSACTION, currentList[position].transaction.photo)
+                putString(Consts.REASON_TRANSACTION, currentList[position].transaction.reason)
                 putString(
                     Consts.AMOUNT_THANKS,
                     currentList[position].transaction.amount.substringBefore(".")
@@ -223,7 +227,6 @@ class FeedAdapter(
                 holder.date = date.toString()
             }
             holder.time = time.toString()
-            Log.d("Token", " Вчера ${holder.date}")
             holder.dateTime.text = String.format(context.getString(R.string.dateTime), holder.date, holder.time)
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
