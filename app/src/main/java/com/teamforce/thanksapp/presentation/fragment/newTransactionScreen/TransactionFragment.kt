@@ -42,10 +42,8 @@ import com.teamforce.thanksapp.presentation.adapter.ValuesAdapter
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
-import com.teamforce.thanksapp.utils.UserDataRepository
-import com.teamforce.thanksapp.utils.createBitmapFromResult
-import dagger.hilt.android.AndroidEntryPoint
 import com.teamforce.thanksapp.utils.getPath
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -150,7 +148,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     }
 
     private fun loadValuesFromDB(){
-        UserDataRepository.getInstance()?.token?.let { token ->
+        viewModel.userDataRepository.token?.let { token ->
             viewModel.loadTags(token)
         }
     }

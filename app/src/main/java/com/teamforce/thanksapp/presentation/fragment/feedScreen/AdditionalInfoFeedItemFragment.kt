@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -72,14 +71,14 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
         with(binding) {
             dateTransactionTv.text = dateTransaction
-            if (senderTg?.equals(username) == true) {
+            if (senderTg?.equals(viewModel.userDataRepository.username) == true) {
                 descriptionTransactionWhoSent.text = context?.getString(R.string.fromYou)
             } else {
                 descriptionTransactionWhoSent.text = context?.getString(
                     R.string.tgName
                 )?.let { String.format(it, senderTg) }
             }
-            if (receiverTg?.equals(username) == true) {
+            if (receiverTg?.equals(viewModel.userDataRepository.username) == true) {
                 descriptionTransactionWhoReceived.text = context?.getString(R.string.you)
             } else {
                 descriptionTransactionWhoReceived.text = context?.getString(

@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,8 +16,13 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class ListOfValuesViewModel : ViewModel() {
+@HiltViewModel
+class ListOfValuesViewModel @Inject constructor(
+    val userDataRepository: UserDataRepository
+
+) : ViewModel() {
 
     private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
@@ -25,10 +32,6 @@ class ListOfValuesViewModel : ViewModel() {
     val tags: LiveData<List<TagModel>> = _tags
     private val _tagsError = MutableLiveData<String>()
     val tagsError: LiveData<String> = _tagsError
-
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
 
     fun loadTags(token: String) {
         _isLoading.postValue(true)

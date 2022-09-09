@@ -1,6 +1,5 @@
 package com.teamforce.thanksapp.presentation.fragment.newTransactionScreen
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,20 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentListOfValuesBinding
 import com.teamforce.thanksapp.presentation.adapter.ValuesAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.ListOfValuesViewModel
-import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ListOfValuesFragment : DialogFragment() {
 
     private var _binding: FragmentListOfValuesBinding? = null
@@ -30,15 +27,13 @@ class ListOfValuesFragment : DialogFragment() {
     private val recyclerView: RecyclerView by lazy { binding.valuesRv }
     private val applyValuesBtn: MaterialButton by lazy { binding.addValuesBtn }
     private val progressBar: ProgressBar by lazy { binding.progressBar }
-    private val viewModel = ListOfValuesViewModel()
+    private val viewModel: ListOfValuesViewModel by viewModels()
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState)
 
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +45,6 @@ class ListOfValuesFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initViewModel()
         loadData()
         showLoadingProgress()
         setDataFromServer()
@@ -60,34 +54,32 @@ class ListOfValuesFragment : DialogFragment() {
     }
 
     private fun loadData() {
-        UserDataRepository.getInstance()?.token?.let { token ->
+        viewModel.userDataRepository.token?.let { token ->
             viewModel.loadTags(token)
         }
     }
 
     private fun showLoadingProgress() {
         viewModel.isLoading.observe(
-            viewLifecycleOwner,
-            Observer { isLoading ->
-                if (isLoading) {
-                    recyclerView.visibility = View.GONE
-                    progressBar.visibility = View.VISIBLE
-                } else {
-                    recyclerView.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
-                }
+            viewLifecycleOwner
+        ) { isLoading ->
+            if (isLoading) {
+                recyclerView.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
+            } else {
+                recyclerView.visibility = View.VISIBLE
+                progressBar.visibility = View.GONE
             }
-        )
+        }
     }
 
     private fun setDataFromServer(){
         viewModel.tags.observe(
-            viewLifecycleOwner,
-            Observer {
-                recyclerView.visibility = View.VISIBLE
-                recyclerView.adapter = ValuesAdapter(it, requireContext())
-            }
-        )
+            viewLifecycleOwner
+        ) {
+            recyclerView.visibility = View.VISIBLE
+            recyclerView.adapter = ValuesAdapter(it, requireContext())
+        }
     }
 
 
