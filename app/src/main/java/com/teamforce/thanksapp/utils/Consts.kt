@@ -26,6 +26,7 @@ object Consts {
     const val SHOULD_ME_GOTO_HISTORY = "ShouldMeGoToHistory"
     const val SENDER_TG = "senderTg"
     const val DESCRIPTION_FEED = "descriptionFeed"
+    const val PHOTO_TRANSACTION = "photoFeed"
 
     val MAIN = MainActivity()
     const val BASE_URL: String = "http://176.99.6.251:8888"
