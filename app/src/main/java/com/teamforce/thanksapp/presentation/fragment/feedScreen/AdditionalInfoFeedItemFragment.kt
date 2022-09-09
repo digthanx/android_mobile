@@ -17,8 +17,9 @@ import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
 import com.teamforce.thanksapp.presentation.viewmodel.AdditionalInfoFeedItemViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AdditionalInfoFeedItemFragment : Fragment() {
 
     private var _binding: FragmentAdditionalInfoFeedItemBinding? = null
