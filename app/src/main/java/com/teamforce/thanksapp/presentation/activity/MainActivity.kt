@@ -40,18 +40,18 @@ class MainActivity : AppCompatActivity(), IMainAction {
         setContentView(binding.root)
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
         val prefs: SharedPreferences = getSharedPreferences("com.teamforce.thanksapp", MODE_PRIVATE)
-        val restoredText = prefs.getString("Token", null)
-        Log.d("Token", "Token ${restoredText}")
-        if (restoredText != null) {
-            UserDataRepository.getInstance()?.token = restoredText
+        val restoredToken = prefs.getString("Token", null)
+        val restoredUsername = prefs.getString("Username", null)
+        if (restoredToken != null) {
+            UserDataRepository.getInstance()?.token = restoredToken
+            UserDataRepository.getInstance()?.username = restoredUsername
             viewModel.initViewModel()
-            viewModel.loadUserProfile(restoredText)
+            viewModel.loadUserProfile(restoredToken)
             viewModel.profile.observe(
                 this,
                 Observer {
                     if(it.profile.tgName != "null"){
                         UserDataRepository.getInstance()?.username = it.profile.tgName
-                        Log.d("Token", "Имя пользователя ------- ${it.profile.tgName}")
                     }
                 }
             )

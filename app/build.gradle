@@ -52,6 +52,11 @@ android {
 }
 
 dependencies {
+
+    // Library from Rozov
+    // reflection-based flavor
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.6'
+
     // Paging
     def paging_version = "3.1.1"
     implementation("androidx.paging:paging-runtime:$paging_version")

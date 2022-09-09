@@ -79,6 +79,8 @@
     <string name="choiceReceiver">Выберите получателя</string>
     <string name="applyValues">Применить</string>
     <string name="values">Ценности</string>
+    <string name="addedSomeValues">Добавлено %s ценности.Добавить еще?</string>
+    <string name="addedOneValue">Добавлена %s ценность.Добавить еще?</string>
     <string name="empty">\"\"</string>
     <!-- item_user -->
     <string name="name">Name</string>

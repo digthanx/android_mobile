@@ -49,7 +49,7 @@ class MainFlowFragment : BaseFlowFragment(
 //            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
 //        }
 
-        binding.bottomNavigation.menu.getItem(1).isChecked = true
+        binding.bottomNavigation.menu.getItem(0).isChecked = true
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.balanceFragment -> {

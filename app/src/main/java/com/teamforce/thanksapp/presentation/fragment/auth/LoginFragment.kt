@@ -36,6 +36,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
     private lateinit var helperLink: TextView
     private lateinit var helperText: TextView
     private var dataBundle: Bundle? = null
+    private var username: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -129,7 +130,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
     }
 
     private fun finishLogin(authtoken: String?, telegram: String?) {
-        UserDataRepository.getInstance()?.saveCredentials(requireContext(), authtoken, telegram)
+        UserDataRepository.getInstance()?.saveCredentials(requireContext(), authtoken, telegram, username)
         Log.d("Token", "цукпукп")
         findNavController().navigate(R.id.action_loginFragment_to_mainFlowFragment)
     }
@@ -194,6 +195,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         if (v?.id == R.id.get_code_btn) {
             UserDataRepository.getInstance()?.username = innerEditTextUserName.text.toString()
             UserDataRepository.getInstance()?.email = innerEditTextUserName.text.toString()
+            username = innerEditTextUserName.text.toString()
             viewModel.authorizeUser(innerEditTextUserName.text.toString())
         }
     }
