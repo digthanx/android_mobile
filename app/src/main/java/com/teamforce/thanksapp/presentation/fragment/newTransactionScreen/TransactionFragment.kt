@@ -13,12 +13,10 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -101,7 +99,6 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     private var user: UserBean? = null
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navController = findNavController()
@@ -144,10 +141,21 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         }
 
         etAddValues.setOnClickListener {
-            createDialog(listValues)
+            clearTags()
+            createDialog(listValues, listCheckedValues)
         }
 
 
+    }
+
+    private fun clearTags() {
+        tagsChipGroup.removeAllViews()
+        etAddValues.setText("")
+    }
+
+    private fun clearTagsWithListOfCheckedTags(){
+        clearTags()
+        listCheckedValues.clear()
     }
 
     private fun setTags(tagList: MutableList<TagModel>) {
@@ -156,12 +164,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             val tagName = tagList[i].name
             val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
                 .inflate(R.layout.chip_tag_example, tagsChipGroup, false) as Chip
-            with(chip){
+            with(chip) {
                 setText(tagName)
                 setEnsureMinTouchTargetSize(true)
                 minimumWidth = 0
                 setOnCloseIconClickListener {
-                    val anim = AlphaAnimation(1f,0f)
+                    val anim = AlphaAnimation(1f, 0f)
                     anim.duration = 250
                     anim.setAnimationListener(object : Animation.AnimationListener {
                         override fun onAnimationRepeat(animation: Animation?) {}
@@ -184,14 +192,20 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         }
     }
 
-    private fun setTextInValuesEditText(){
-        if(listCheckedValues.size > 0){
-            etAddValues.setText(String.format(
-                requireContext().getString(R.string.addedSomeValues), listCheckedValues.size))
-        }else if(listCheckedValues.size == 1){
-            etAddValues.setText(String.format(
-                requireContext().getString(R.string.addedOneValue), listCheckedValues.size))
-        }else{
+    private fun setTextInValuesEditText() {
+        if (listCheckedValues.size > 0) {
+            etAddValues.setText(
+                String.format(
+                    requireContext().getString(R.string.addedSomeValues), listCheckedValues.size
+                )
+            )
+        } else if (listCheckedValues.size == 1) {
+            etAddValues.setText(
+                String.format(
+                    requireContext().getString(R.string.addedOneValue), listCheckedValues.size
+                )
+            )
+        } else {
             etAddValues.setText("")
         }
     }
@@ -208,12 +222,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         }
     }
 
-    private fun createDialog(list: List<TagModel>) {
+    private fun createDialog(list: List<TagModel>, listOfCheckedValues: MutableList<TagModel>) {
         val builderDialog = AlertDialog.Builder(context, R.style.FullscreenDialogTheme)
         val inflater = requireActivity().layoutInflater
         val newListValues = inflater.inflate(R.layout.fragment_list_of_values, null)
         val recyclerViewDialog = newListValues.findViewById<RecyclerView>(R.id.values_rv)
-        val adapter = ValuesAdapter(list, requireContext())
+        val adapter = ValuesAdapter(list, listCheckedValues, requireContext())
         recyclerViewDialog.adapter = adapter
         builderDialog.setView(newListValues)
             .setPositiveButton(
@@ -250,11 +264,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 textInputLayoutAddValues.visibility = View.VISIBLE
             } else {
                 textInputLayoutAddValues.visibility = View.GONE
-                for(i in listCheckedValues.indices){
-
-                }
-                listCheckedValues.clear()
-                tagsChipGroup.clearCheck()
+                clearTagsWithListOfCheckedTags()
             }
         }
     }
