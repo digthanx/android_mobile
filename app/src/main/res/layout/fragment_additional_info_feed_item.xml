@@ -25,16 +25,13 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginEnd="32dp"
-            android:gravity="end"
-            android:orientation="horizontal">
+            android:layout_marginEnd="32dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/user_avatar"
@@ -42,7 +39,12 @@
                 android:layout_height="70dp"
                 android:layout_marginTop="27dp"
                 android:layout_marginBottom="12dp"
+                android:layout_marginStart="30dp"
                 android:src="@drawable/ic_anon_avatar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
             <com.google.android.material.card.MaterialCardView
@@ -50,7 +52,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="5dp"
                 app:cardBackgroundColor="@color/minor_success_secondary"
+                app:layout_constraintStart_toEndOf="@id/user_avatar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:cardCornerRadius="8dp">
 
                 <TextView
@@ -58,10 +64,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="150 спасибок"
                     android:textColor="@color/minor_success" />
             </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <TextView
@@ -106,6 +111,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
             android:orientation="vertical">
 
             <TextView

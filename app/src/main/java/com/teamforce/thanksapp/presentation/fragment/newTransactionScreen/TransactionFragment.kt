@@ -154,17 +154,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         for (i in tagList.indices) {
             val tagModel = tagList[i]
             val tagName = tagList[i].name
-            val chip: Chip = Chip(requireContext())
+            val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
+                .inflate(R.layout.chip_tag_example, tagsChipGroup, false) as Chip
             with(chip){
                 setText(tagName)
-                closeIcon = getDrawable(requireContext(), R.drawable.ic__cross_red)
-                setCloseIconTintResource(R.color.general_brand)
-                setChipBackgroundColorResource(R.color.general_brand_secondary)
-                setTextColor(requireContext().getColor(R.color.general_brand))
-                setPadding(0, 0, 0, 0)
-                width = ViewGroup.LayoutParams.WRAP_CONTENT
-                setTextSize(10f)
-                setCloseIconVisible(true)
+                setEnsureMinTouchTargetSize(true)
+                minimumWidth = 0
                 setOnCloseIconClickListener {
                     val anim = AlphaAnimation(1f,0f)
                     anim.duration = 250
