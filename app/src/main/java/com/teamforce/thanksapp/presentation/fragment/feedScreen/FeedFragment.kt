@@ -42,6 +42,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        swipeToRefresh.isRefreshing = true
         inflateRecyclerView()
         getListsFromDb()
         binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
