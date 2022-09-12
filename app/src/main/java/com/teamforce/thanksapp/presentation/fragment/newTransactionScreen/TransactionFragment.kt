@@ -90,6 +90,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     private val tagsChipGroup: ChipGroup by lazy { binding.tagsChipGroup }
     private var listValues: List<TagModel> = listOf()
     private var listCheckedValues: MutableList<TagModel> = mutableListOf()
+    private var listCheckedIdTags: MutableList<Int> = mutableListOf()
 
     private val imgCard: MaterialCardView by lazy { binding.showAttachedImgCard }
     private val detachImgBtn: ImageButton by lazy { binding.detachImgBtn }
@@ -146,6 +147,13 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         }
 
 
+    }
+
+    private fun tagsToIdTags(){
+        listCheckedValues.forEach{
+            listCheckedIdTags.add(it.id)
+        }
+        Log.d("Token", "Список id tags ${listCheckedIdTags}")
     }
 
     private fun clearTags() {
@@ -458,12 +466,21 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 true -> true
                 else -> false
             }
+            tagsToIdTags()
             if (userId != -1 && countText.isNotEmpty() && reason.isNotEmpty()) {
                 try {
                     val count: Int = Integer.valueOf(countText)
                     UserDataRepository.getInstance()?.token?.let {
                         if (imageFilePart == null) {
-                            viewModel.sendCoins(it, userId, count, reason, isAnon)
+                            //viewModel.sendCoins(it, userId, count, reason, isAnon)
+                            viewModel.sendCoins(
+                                it,
+                                userId,
+                                count,
+                                reason,
+                                isAnon,
+                                listCheckedIdTags
+                            )
                         } else {
                             viewModel.sendCoinsWithImage(
                                 it,
@@ -471,7 +488,8 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                                 count,
                                 reason,
                                 isAnon,
-                                imageFilePart!!
+                                imageFilePart,
+                                listCheckedIdTags
                             )
                         }
                         binding.sendCoinBtn.isClickable = false

@@ -53,11 +53,12 @@ interface ThanksApi {
     @POST("/send-coins/")
     fun sendCoinsWithImage(
         @Header("Authorization") token: String,
-        @Part photo: MultipartBody.Part,
+        @Part photo: MultipartBody.Part?,
         @Part("recipient") recipient: RequestBody,
         @Part("amount") amount: RequestBody,
         @Part("reason") reason: RequestBody,
         @Part("is_anonymous") is_anonymous: RequestBody,
+        @Part("tags_list") tags_list: RequestBody?
     ): Call<SendCoinsResponse>
 
     @GET("/user/transactions/")

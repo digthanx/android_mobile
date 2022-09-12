@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.SendCoinsRequest
 import com.teamforce.thanksapp.data.request.UserListWithoutInputRequest
@@ -21,6 +22,7 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.Normalizer
 
 class TransactionViewModel : ViewModel() {
 
@@ -151,10 +153,10 @@ class TransactionViewModel : ViewModel() {
 
 
 
-    fun sendCoins(token: String, recipient: Int, amount: Int, reason: String, isAnon: Boolean) {
+    fun sendCoins(token: String, recipient: Int, amount: Int, reason: String, isAnon: Boolean, list: MutableList<Int>?) {
         _isLoading.postValue(true)
         viewModelScope.launch {
-            callSendCoinsEndpoint(token, recipient, amount, reason, isAnon, Dispatchers.Default)
+            callSendCoinsEndpoint(token, recipient, amount, reason, isAnon, list, Dispatchers.Default)
         }
     }
 
@@ -165,10 +167,11 @@ class TransactionViewModel : ViewModel() {
         amount: Int,
         reason: String,
         isAnon: Boolean,
+        list: MutableList<Int>?,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.sendCoins("Token $token", SendCoinsRequest(recipient, amount, reason, isAnon))
+            thanksApi?.sendCoins("Token $token", SendCoinsRequest(recipient, amount, reason, isAnon, list))
                 ?.enqueue(object : Callback<SendCoinsResponse> {
                     override fun onResponse(
                         call: Call<SendCoinsResponse>,
@@ -197,12 +200,14 @@ class TransactionViewModel : ViewModel() {
     fun sendCoinsWithImage(token: String, recipient: Int, amount: Int,
                            reason: String,
                            isAnon: Boolean,
-                           imageFilePart: MultipartBody.Part) {
+                           imageFilePart: MultipartBody.Part?,
+                           listOfTagsCheckedValues: MutableList<Int>? ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             callSendCoinsWithImageEndpoint(token, recipient, amount,
                 reason, isAnon,
                 imageFilePart,
+                listOfTagsCheckedValues,
                 Dispatchers.Default)
         }
     }
@@ -214,7 +219,8 @@ class TransactionViewModel : ViewModel() {
         amount: Int,
         reason: String,
         isAnon: Boolean,
-        imageFilePart: MultipartBody.Part,
+        imageFilePart: MultipartBody.Part?,
+        listOfTagsCheckedValues: MutableList<Int>?,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
@@ -222,7 +228,9 @@ class TransactionViewModel : ViewModel() {
             val amountB = RequestBody.create(MediaType.parse("multipart/form-data"), amount.toString())
             val reasonB = RequestBody.create(MediaType.parse("multipart/form-data"), reason.toString())
             val isAnonB = RequestBody.create(MediaType.parse("multipart/form-data"), isAnon.toString())
-            thanksApi?.sendCoinsWithImage("Token $token", imageFilePart, recipientB, amountB, reasonB, isAnonB)
+            val isList = RequestBody.create(MultipartBody.FORM, Gson().toJson(listOfTagsCheckedValues))
+
+            thanksApi?.sendCoinsWithImage("Token $token", imageFilePart, recipientB, amountB, reasonB, isAnonB, isList)
                 ?.enqueue(object : Callback<SendCoinsResponse> {
                     override fun onResponse(
                         call: Call<SendCoinsResponse>,
