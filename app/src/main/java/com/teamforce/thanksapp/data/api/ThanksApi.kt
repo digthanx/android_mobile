@@ -58,7 +58,7 @@ interface ThanksApi {
         @Part("amount") amount: RequestBody,
         @Part("reason") reason: RequestBody,
         @Part("is_anonymous") is_anonymous: RequestBody,
-        @Part("tags_list") tags_list: RequestBody?
+        @Part("tags") tags: RequestBody?
     ): Call<SendCoinsResponse>
 
     @GET("/user/transactions/")

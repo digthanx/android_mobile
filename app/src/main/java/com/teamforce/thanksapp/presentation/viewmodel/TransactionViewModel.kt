@@ -155,8 +155,13 @@ class TransactionViewModel : ViewModel() {
 
     fun sendCoins(token: String, recipient: Int, amount: Int, reason: String, isAnon: Boolean, list: MutableList<Int>?) {
         _isLoading.postValue(true)
+        val string = list.toString()
+            .filter { it.isDigit() }
+            .replace("", " ")
+            .removeSurrounding(" ")
+        val tags = RequestBody.create(MediaType.parse("multipart/form-data"), string)
         viewModelScope.launch {
-            callSendCoinsEndpoint(token, recipient, amount, reason, isAnon, list, Dispatchers.Default)
+            callSendCoinsEndpoint(token, recipient, amount, reason, isAnon, tags, Dispatchers.Default)
         }
     }
 
@@ -167,11 +172,11 @@ class TransactionViewModel : ViewModel() {
         amount: Int,
         reason: String,
         isAnon: Boolean,
-        list: MutableList<Int>?,
+        tags: RequestBody?,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.sendCoins("Token $token", SendCoinsRequest(recipient, amount, reason, isAnon, list))
+            thanksApi?.sendCoins("Token $token", SendCoinsRequest(recipient, amount, reason, isAnon, tags))
                 ?.enqueue(object : Callback<SendCoinsResponse> {
                     override fun onResponse(
                         call: Call<SendCoinsResponse>,
@@ -228,9 +233,14 @@ class TransactionViewModel : ViewModel() {
             val amountB = RequestBody.create(MediaType.parse("multipart/form-data"), amount.toString())
             val reasonB = RequestBody.create(MediaType.parse("multipart/form-data"), reason.toString())
             val isAnonB = RequestBody.create(MediaType.parse("multipart/form-data"), isAnon.toString())
-            val isList = RequestBody.create(MultipartBody.FORM, Gson().toJson(listOfTagsCheckedValues))
+            val string = listOfTagsCheckedValues.toString()
+                .filter { it.isDigit() }
+                .replace("", " ")
+                .removeSurrounding(" ")
+            val tags = RequestBody.create(MediaType.parse("multipart/form-data"), string)
 
-            thanksApi?.sendCoinsWithImage("Token $token", imageFilePart, recipientB, amountB, reasonB, isAnonB, isList)
+
+            thanksApi?.sendCoinsWithImage("Token $token", imageFilePart, recipientB, amountB, reasonB, isAnonB, tags)
                 ?.enqueue(object : Callback<SendCoinsResponse> {
                     override fun onResponse(
                         call: Call<SendCoinsResponse>,

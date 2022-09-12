@@ -473,12 +473,13 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                     UserDataRepository.getInstance()?.token?.let {
                         if (imageFilePart == null) {
                             //viewModel.sendCoins(it, userId, count, reason, isAnon)
-                            viewModel.sendCoins(
+                            viewModel.sendCoinsWithImage(
                                 it,
                                 userId,
                                 count,
                                 reason,
                                 isAnon,
+                                null,
                                 listCheckedIdTags
                             )
                         } else {
