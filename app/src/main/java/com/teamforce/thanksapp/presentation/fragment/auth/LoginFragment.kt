@@ -195,7 +195,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         if (v?.id == R.id.get_code_btn) {
             UserDataRepository.getInstance()?.username = innerEditTextUserName.text.toString()
             UserDataRepository.getInstance()?.email = innerEditTextUserName.text.toString()
-            username = innerEditTextUserName.text.toString()
+            username = innerEditTextUserName.text.toString().trim()
             viewModel.authorizeUser(innerEditTextUserName.text.toString())
         }
     }

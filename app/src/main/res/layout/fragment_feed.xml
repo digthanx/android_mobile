@@ -115,7 +115,8 @@
                                 android:id="@+id/chipGroup"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_marginHorizontal="20dp"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginVertical="5dp"
                                 android:background="@color/white"
                                 app:singleSelection="true">
 
@@ -124,6 +125,7 @@
                                     style="@style/MyChipsFeed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
                                     android:checkable="true"
                                     android:checked="true"
                                     android:text="@string/allEvent"/>
@@ -141,6 +143,7 @@
                                     style="@style/MyChipsFeed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginEnd="10dp"
                                     android:checkable="true"
                                     android:text="@string/publicEvent" />
 
