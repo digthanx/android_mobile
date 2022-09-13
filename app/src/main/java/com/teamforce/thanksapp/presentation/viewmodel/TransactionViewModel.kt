@@ -151,57 +151,6 @@ class TransactionViewModel : ViewModel() {
         }
     }
 
-
-
-    fun sendCoins(token: String, recipient: Int, amount: Int, reason: String, isAnon: Boolean, list: MutableList<Int>?) {
-        _isLoading.postValue(true)
-        val string = list.toString()
-            .filter { it.isDigit() }
-            .replace("", " ")
-            .removeSurrounding(" ")
-        val tags = RequestBody.create(MediaType.parse("multipart/form-data"), string)
-        viewModelScope.launch {
-            callSendCoinsEndpoint(token, recipient, amount, reason, isAnon, tags, Dispatchers.Default)
-        }
-    }
-
-
-    private suspend fun callSendCoinsEndpoint(
-        token: String,
-        recipient: Int,
-        amount: Int,
-        reason: String,
-        isAnon: Boolean,
-        tags: RequestBody?,
-        dispatcher: CoroutineDispatcher
-    ) {
-        withContext(dispatcher) {
-            thanksApi?.sendCoins("Token $token", SendCoinsRequest(recipient, amount, reason, isAnon, tags))
-                ?.enqueue(object : Callback<SendCoinsResponse> {
-                    override fun onResponse(
-                        call: Call<SendCoinsResponse>,
-                        response: Response<SendCoinsResponse>
-                    ) {
-                        _isSuccessOperation.postValue(false)
-                        _isLoading.postValue(false)
-                        if (response.code() == 201) {
-                            _isSuccessOperation.postValue(true)
-                        } else if(response.code() == 400) {
-                            _sendCoinsError.postValue(response.message() + " " + response.code())
-                        }else{
-                            _sendCoinsError.postValue(response.message() + " " + response.code())
-                        }
-                    }
-
-                    override fun onFailure(call: Call<SendCoinsResponse>, t: Throwable) {
-                        _isLoading.postValue(false)
-                        _sendCoinsError.postValue(t.message)
-                    }
-                })
-        }
-    }
-
-
     fun sendCoinsWithImage(token: String, recipient: Int, amount: Int,
                            reason: String,
                            isAnon: Boolean,

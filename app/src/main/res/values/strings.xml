@@ -102,9 +102,10 @@
     <string name="sended">Отправлено</string>
     <string name="cancelTransaction">Отменить перевод?</string>
     <string name="successfulCancel">Спасибки вернуться на ваш счет :)</string>
+    <string name="setTag">#%s</string>
     <!-- Additional Info Bottom Sheet Dialog Fragment -->
     <string name="message">Сообщение</string>
-    <string name="photo">Фото</string>
+    <string name="photo">Фотография</string>
     <string name="statusTransfer">Статус перевода</string>
     <string name="typeTransfer">Тип перевода</string>
     <string name="reasonOfRefusing">Причина отказа</string>

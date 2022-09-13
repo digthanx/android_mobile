@@ -171,7 +171,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             val tagModel = tagList[i]
             val tagName = tagList[i].name
             val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
-                .inflate(R.layout.chip_tag_example, tagsChipGroup, false) as Chip
+                .inflate(R.layout.chip_tag_example_transaction_tag, tagsChipGroup, false) as Chip
             with(chip) {
                 setText(tagName)
                 setEnsureMinTouchTargetSize(true)
@@ -471,8 +471,6 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 try {
                     val count: Int = Integer.valueOf(countText)
                     UserDataRepository.getInstance()?.token?.let {
-                        if (imageFilePart == null) {
-                            //viewModel.sendCoins(it, userId, count, reason, isAnon)
                             viewModel.sendCoinsWithImage(
                                 it,
                                 userId,
@@ -482,17 +480,6 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                                 null,
                                 listCheckedIdTags
                             )
-                        } else {
-                            viewModel.sendCoinsWithImage(
-                                it,
-                                userId,
-                                count,
-                                reason,
-                                isAnon,
-                                imageFilePart,
-                                listCheckedIdTags
-                            )
-                        }
                         binding.sendCoinBtn.isClickable = false
                         binding.sendCoinBtn.isEnabled = false
                     }
