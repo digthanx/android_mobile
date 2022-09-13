@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.data.response
 
 import com.google.gson.annotations.SerializedName
+import com.teamforce.thanksapp.model.domain.TagModel
 
 data class FeedResponse(
     val id: Int,
@@ -30,6 +31,7 @@ data class FeedResponse(
         @SerializedName("is_anonymous")
         val is_anon: Boolean,
         val reason: String,
-        val photo: String?
+        val photo: String?,
+        val tags: List<TagModel>
     )
 }

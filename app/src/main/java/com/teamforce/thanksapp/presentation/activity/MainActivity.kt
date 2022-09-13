@@ -1,10 +1,7 @@
 package com.teamforce.thanksapp.presentation.activity
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.method.TextKeyListener.clear
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -12,13 +9,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ActivityMainBinding
-import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), IMainAction {
 

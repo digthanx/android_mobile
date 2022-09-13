@@ -226,6 +226,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
 
     private fun setValuesFromDb() {
         viewModel.tags.observe(viewLifecycleOwner) {
+            Log.d("Token", " Вывод тегов ${it}")
             listValues = it
         }
     }

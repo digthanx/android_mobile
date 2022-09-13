@@ -90,7 +90,7 @@
 
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
-    <string name="G">Ожидает истечния периода отмены</string>
+    <string name="G">Ожидает истечения периода отмены</string>
     <string name="sended_to">Перевод для %s</string>
     <string name="approved">Согласовано</string>
     <string name="on_approval">На согласовании</string>
@@ -101,7 +101,7 @@
     <string name="received">Получено</string>
     <string name="sended">Отправлено</string>
     <string name="cancelTransaction">Отменить перевод?</string>
-    <string name="successfulCancel">Спасибки вернуться на ваш счет :)</string>
+    <string name="successfulCancel">Спасибки вернутся на ваш счет :)</string>
     <string name="setTag">#%s</string>
     <!-- Additional Info Bottom Sheet Dialog Fragment -->
     <string name="message">Сообщение</string>

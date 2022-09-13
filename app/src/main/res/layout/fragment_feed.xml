@@ -150,11 +150,11 @@
                             </com.google.android.material.chip.ChipGroup>
                         </LinearLayout>
 
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/feed_rv"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/feed_rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

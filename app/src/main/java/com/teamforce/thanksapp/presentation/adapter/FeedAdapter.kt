@@ -168,7 +168,7 @@ class FeedAdapter(
             // Я отправитель
         }
 
-            //setTags(holder.chipGroup, currentList[position].transaction.)
+            setTags(holder.chipGroup, currentList[position].transaction.tags)
 
 
         holder.reason = currentList[position].transaction.reason
@@ -215,7 +215,7 @@ class FeedAdapter(
             val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
                 .inflate(R.layout.chip_tag_example_in_history_transaction, tagsChipGroup, false) as Chip
             with(chip) {
-                setText(String.format(context.getString(R.string.setTag), tagName))
+                text = String.format(context.getString(R.string.setTag), tagName)
                 setEnsureMinTouchTargetSize(true)
                 minimumWidth = 0
             }

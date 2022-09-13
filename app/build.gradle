@@ -9,6 +9,16 @@ plugins {
 android {
     compileSdk 32
 
+//    signingConfigs {
+//        release {
+//
+//            keyAlias 'thanksapp_release'
+//            keyPassword 'hiiamNyamailikecode'
+//            storeFile file('C:\\Users\\dimam\\Desktop\\MobileDeveloper\\android_mobile\\key\\NyamaKey.jks')
+//            storePassword 'hiiamNyamailikecode'
+//        }
+//    }
+
     defaultConfig {
         applicationId "com.teamforce.thanksapp"
         minSdk 23
@@ -21,6 +31,7 @@ android {
 
     buildTypes {
         release {
+            //signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -28,8 +39,8 @@ android {
 
     buildFeatures {
         viewBinding = true
-       dataBinding = true
-      //  compose = true
+        dataBinding = true
+        //  compose = true
     }
 
     composeOptions {
@@ -46,11 +57,11 @@ android {
         jvmTarget = '11'
     }
 
-    viewBinding{
+    viewBinding {
         enabled = true
     }
-}
 
+}
 dependencies {
 
     // Library from Rozov
