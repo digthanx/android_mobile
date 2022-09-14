@@ -17,12 +17,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserTransactionsResponse
 import com.teamforce.thanksapp.databinding.ItemTransferBinding
+import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
@@ -38,7 +40,6 @@ import com.teamforce.thanksapp.utils.Consts.WE_REFUSED_YOUR_OPERATION
 import com.teamforce.thanksapp.utils.UserDataRepository
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class TransfersAdapter(
@@ -186,6 +187,8 @@ class TransfersAdapter(
             }
         }
 
+        setTags(holder.chipGroup, dataSet[position].tags)
+
         convertDataToNecessaryFormat(holder, position)
 
         holder.view.tag = dataSet[position]
@@ -211,6 +214,21 @@ class TransfersAdapter(
         }
 
 
+    }
+
+    private fun setTags(tagsChipGroup: ChipGroup,tagList: List<TagModel>){
+        for (i in tagList.indices) {
+            val tagName = tagList[i].name
+            val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
+                .inflate(R.layout.chip_tag_example_in_history_transaction, tagsChipGroup, false) as Chip
+            with(chip) {
+                setText(String.format(context.getString(R.string.setTag), tagName))
+                setEnsureMinTouchTargetSize(true)
+                minimumWidth = 0
+            }
+
+            tagsChipGroup.addView(chip)
+        }
     }
 
     private fun convertDataToNecessaryFormat(holder: TransfersViewHolder, position: Int){
@@ -272,6 +290,7 @@ class TransfersAdapter(
         val statusCard: MaterialCardView = binding.statusCard
         val btnRefusedTransaction: ImageButton = binding.refuseTransactionBtn
         var standardGroup: ConstraintLayout = binding.standardGroup
+        val chipGroup: ChipGroup = binding.chipGroup
         var photoFromSender: String? = null
 
         val view: View = binding.root

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical">
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/Theme.ThanksApp.PopupOverlay"
@@ -25,40 +25,48 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:paddingHorizontal="16dp"
         android:orientation="vertical">
-        <LinearLayout
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:gravity="end"
-            android:layout_marginEnd="32dp"
-            android:orientation="horizontal">
-            <ImageView
+            android:layout_marginEnd="32dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/user_avatar"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginTop="27dp"
                 android:layout_marginBottom="12dp"
-                android:src="@drawable/ic_anon_avatar" />
+                android:layout_marginStart="30dp"
+                android:src="@drawable/ic_anon_avatar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                app:cardCornerRadius="8dp"
-                app:cardBackgroundColor="@color/minor_success_secondary">
+                android:layout_marginEnd="5dp"
+                app:cardBackgroundColor="@color/minor_success_secondary"
+                app:layout_constraintStart_toEndOf="@id/user_avatar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardCornerRadius="8dp">
+
                 <TextView
                     android:id="@+id/amount_thanks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:textColor="@color/minor_success"
-                    android:text="150 спасибок"/>
+                    android:textColor="@color/minor_success" />
             </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <TextView
@@ -78,16 +86,16 @@
                 android:id="@+id/description_transaction_who_received"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/general_brand"
-                android:text="\@AnnaKim_TF" />
+                android:text="\@AnnaKim_TF"
+                android:textColor="@color/general_brand" />
 
             <TextView
                 android:id="@+id/description_transaction_what_did"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:textColor="@color/general_contrast"
-                android:text=" получила от " />
+                android:text=" получила от "
+                android:textColor="@color/general_contrast" />
 
 
             <TextView
@@ -97,12 +105,15 @@
                 android:text=" \@NyamaMDE"
                 android:textColor="@color/general_brand" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/linear_info"
-            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -129,15 +140,16 @@
                 android:id="@+id/card_view_img"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                app:cardCornerRadius="12dp"
-                android:visibility="gone"
+                android:layout_gravity="start"
                 android:layout_marginBottom="21dp"
-                android:layout_gravity="start">
+                android:visibility="gone"
+                app:cardCornerRadius="12dp">
+
                 <ImageView
                     android:id="@+id/sender_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_launcher_background"/>
+                    android:src="@drawable/ic_launcher_background" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
@@ -163,10 +175,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
-
-
 
 
 </LinearLayout>

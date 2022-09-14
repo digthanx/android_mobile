@@ -17,13 +17,14 @@ class UserDataRepository private constructor() {
     var email: String? = null
     var profileId: String? = null
 
-    fun saveCredentials(context: Context, authtoken: String?, telegram: String?) {
-        savePreferences(context, authtoken, telegram)
+    fun saveCredentials(context: Context, authtoken: String?, telegram: String?, userName: String?) {
+        savePreferences(context, authtoken, telegram, username)
         token = authtoken
+        username = userName
     }
 
     fun logout(context: Context) {
-        savePreferences(context, null, null)
+        savePreferences(context, null, null, null)
         token = null
         leastCoins = null
         username = null
@@ -35,11 +36,12 @@ class UserDataRepository private constructor() {
         LoginViewModel.logout()
     }
 
-    private fun savePreferences(context: Context, authtoken: String?, telegram: String?) {
+    private fun savePreferences(context: Context, authtoken: String?, telegram: String?, username: String?) {
         val prefs: SharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = prefs.edit()
         editor.putString(SP_ARG_TELEGRAM, telegram)
         editor.putString(SP_ARG_TOKEN, authtoken)
+        editor.putString(SP_ARG_USERNAME, username)
         editor.apply()
     }
 
@@ -47,6 +49,7 @@ class UserDataRepository private constructor() {
         private const val SP_NAME = "com.teamforce.thanksapp"
         private const val SP_ARG_TELEGRAM = "Telegram"
         private const val SP_ARG_TOKEN = "Token"
+        private const val SP_ARG_USERNAME = "Username"
         private var instance: UserDataRepository? = null
 
         fun getInstance(): UserDataRepository? {

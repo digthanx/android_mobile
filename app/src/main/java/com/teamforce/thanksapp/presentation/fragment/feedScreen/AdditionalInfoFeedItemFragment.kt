@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
 import com.teamforce.thanksapp.utils.Consts
@@ -93,6 +95,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         if (!avatarReceiver?.contains("null")!!) {
             Glide.with(this)
                 .load(avatarReceiver?.toUri())
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .centerCrop()
                 .into(binding.userAvatar)
         }

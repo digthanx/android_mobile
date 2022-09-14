@@ -1,15 +1,12 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
 import android.util.Log
-import android.util.SparseArray
-import androidx.core.util.containsKey
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.response.FeedResponse
-import com.teamforce.thanksapp.model.domain.HistoryModel
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +15,6 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDateTime
 
 class FeedViewModel: ViewModel() {
     private var thanksApi: ThanksApi? = null

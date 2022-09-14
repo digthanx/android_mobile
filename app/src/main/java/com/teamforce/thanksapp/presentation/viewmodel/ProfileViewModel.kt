@@ -1,19 +1,23 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.utils.RetrofitClient
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
 
 class ProfileViewModel() : ViewModel() {
 
@@ -29,8 +33,6 @@ class ProfileViewModel() : ViewModel() {
     val imageUri: LiveData<PutUserAvatarResponse> = _imageUri
     private val _imageUriError = MutableLiveData<String>()
     val imageUriError: LiveData<String> = _imageUriError
-
-
 
 
     fun initViewModel() {
@@ -69,9 +71,20 @@ class ProfileViewModel() : ViewModel() {
     }
 
 
-    fun loadUpdateAvatarUserProfile(token: String, userId: String, imageFilePart: MultipartBody.Part) {
+    fun loadUpdateAvatarUserProfile(
+        token: String,
+        userId: String,
+        imageFilePart: MultipartBody.Part
+    ) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callUpdateAvatarProfileEndpoint(token, userId = userId, imageFilePart, Dispatchers.Default) }
+        viewModelScope.launch {
+            callUpdateAvatarProfileEndpoint(
+                token,
+                userId = userId,
+                imageFilePart,
+                Dispatchers.Default
+            )
+        }
     }
 
     private suspend fun callUpdateAvatarProfileEndpoint(
@@ -81,25 +94,26 @@ class ProfileViewModel() : ViewModel() {
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.putUserAvatar("Token $token", userId = userId, imageFilePart)?.enqueue(object : Callback<PutUserAvatarResponse> {
-                override fun onResponse(
-                    call: Call<PutUserAvatarResponse>,
-                    response: Response<PutUserAvatarResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _imageUri.postValue(response.body())
-                    } else {
-                        _imageUriError.postValue(response.message() + " " + response.code())
+            thanksApi?.putUserAvatar("Token $token", userId = userId, imageFilePart)
+                ?.enqueue(object : Callback<PutUserAvatarResponse> {
+                    override fun onResponse(
+                        call: Call<PutUserAvatarResponse>,
+                        response: Response<PutUserAvatarResponse>
+                    ) {
+                        _isLoading.postValue(false)
+                        if (response.code() == 200) {
+                            _imageUri.postValue(response.body())
+                        } else {
+                            _imageUriError.postValue(response.message() + " " + response.code())
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<PutUserAvatarResponse>, t: Throwable) {
-                    Log.d(ProfileFragment.TAG, "onFailure: $t")
-                    _isLoading.postValue(false)
-                    _profileError.postValue(t.message)
-                }
-            })
+                    override fun onFailure(call: Call<PutUserAvatarResponse>, t: Throwable) {
+                        Log.d(ProfileFragment.TAG, "onFailure: $t")
+                        _isLoading.postValue(false)
+                        _profileError.postValue(t.message)
+                    }
+                })
         }
     }
 

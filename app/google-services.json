@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1097927147360:android:52243ddeee449ddd892805",
         "android_client_info": {
-          "package_name": "com.teamforce.thanksapp"
+          "package_name": "com.teamforce.thanksapp.debug"
         }
       },
       "oauth_client": [

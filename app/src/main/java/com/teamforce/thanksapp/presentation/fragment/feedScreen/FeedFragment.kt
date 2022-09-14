@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
@@ -22,10 +23,10 @@ import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
 
 
-class FeedFragment : Fragment() {
+class FeedFragment : Fragment(R.layout.fragment_feed) {
 
-    private var _binding: FragmentFeedBinding? = null
-    private val binding get() = checkNotNull(_binding) { "Binding is null" }
+    // reflection API and ViewBinding.bind are used under the hood
+    private val binding: FragmentFeedBinding by viewBinding()
 
     private var viewModel: FeedViewModel = FeedViewModel()
 
@@ -37,17 +38,11 @@ class FeedFragment : Fragment() {
     private var mineFeedsList: List<FeedResponse> = emptyList()
     private var publicFeedsList: List<FeedResponse> = emptyList()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentFeedBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        swipeToRefresh.isRefreshing = true
         inflateRecyclerView()
         getListsFromDb()
         binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -93,9 +88,7 @@ class FeedFragment : Fragment() {
 
     private fun refreshRecyclerView(checkedId: Int) {
         val feeds: List<FeedResponse> = when (checkedId) {
-            R.id.chipAllEvent -> {
-                allFeedsList
-            }
+            R.id.chipAllEvent -> allFeedsList
             R.id.chipMineEvent -> mineFeedsList
             R.id.chipPublicEvent -> publicFeedsList
             else -> {
@@ -116,7 +109,6 @@ class FeedFragment : Fragment() {
                     swipeToRefresh.isRefreshing = true
                 } else {
                     binding.feedRv.visibility = View.VISIBLE
-                    binding.chipAllEvent.isChecked = true
                     swipeToRefresh.isRefreshing = false
                 }
             }

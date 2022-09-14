@@ -24,9 +24,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.ItemFeedBinding
+import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.utils.Consts
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -70,6 +73,7 @@ class FeedAdapter(
         val likesBtn: MaterialButton = binding.likeBtn
         val dislikesBtn: MaterialButton = binding.dislikeBtn
         val commentBtn: MaterialButton = binding.commentBtn
+        val chipGroup: ChipGroup = binding.chipGroup
         var reason: String? = null
         var photo: String? = null
         val standardGroup = binding.standardGroup
@@ -164,6 +168,8 @@ class FeedAdapter(
             // Я отправитель
         }
 
+            setTags(holder.chipGroup, currentList[position].transaction.tags)
+
 
         holder.reason = currentList[position].transaction.reason
         holder.photo = currentList[position].transaction.photo
@@ -202,6 +208,22 @@ class FeedAdapter(
         }
 
     }
+
+    private fun setTags(tagsChipGroup: ChipGroup, tagList: List<TagModel>){
+        for (i in tagList.indices) {
+            val tagName = tagList[i].name
+            val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
+                .inflate(R.layout.chip_tag_example_in_history_transaction, tagsChipGroup, false) as Chip
+            with(chip) {
+                text = String.format(context.getString(R.string.setTag), tagName)
+                setEnsureMinTouchTargetSize(true)
+                minimumWidth = 0
+            }
+
+            tagsChipGroup.addView(chip)
+        }
+    }
+
 
     private fun convertDataToNecessaryFormat(holder: FeedViewHolder, position: Int){
         try {

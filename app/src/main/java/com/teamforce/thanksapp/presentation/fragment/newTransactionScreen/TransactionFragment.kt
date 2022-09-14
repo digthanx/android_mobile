@@ -13,7 +13,8 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
@@ -24,9 +25,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -49,10 +52,10 @@ import okhttp3.RequestBody
 import java.io.File
 
 
-class TransactionFragment : Fragment(), View.OnClickListener {
+class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClickListener {
 
-    private var _binding: FragmentTransactionBinding? = null
-    private val binding get() = checkNotNull(_binding) { "Binding is null" }
+    // reflection API and ViewBinding.bind are used under the hood
+    private val binding: FragmentTransactionBinding by viewBinding()
 
     private var viewModel: TransactionViewModel = TransactionViewModel()
 
@@ -77,15 +80,17 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private val recyclerView: RecyclerView by lazy { binding.usersListRv }
     private val sendCoinsGroup: LinearLayout by lazy { binding.sendCoinLinear }
     private val availableCoins: TextView by lazy { binding.distributedValueTv }
-    private val chipGroup: ChipGroup by lazy { binding.chipGroup }
+    private val chipGroup: ChipGroup by lazy { binding.chipGroupThanks }
     private val checkBoxIsAnon: SwitchMaterial by lazy { binding.isAnon }
     private val progressBar: ProgressBar by lazy { binding.progressBar }
     private val sendButton: Button by lazy { binding.sendCoinBtn }
     private val checkBoxAddValues: SwitchMaterial by lazy { binding.addValues }
     private val textInputLayoutAddValues: TextInputLayout by lazy { binding.textInputLayoutValue }
     private val etAddValues: TextInputEditText by lazy { binding.etValue }
+    private val tagsChipGroup: ChipGroup by lazy { binding.tagsChipGroup }
     private var listValues: List<TagModel> = listOf()
     private var listCheckedValues: MutableList<TagModel> = mutableListOf()
+    private var listCheckedIdTags: MutableList<Int> = mutableListOf()
 
     private val imgCard: MaterialCardView by lazy { binding.showAttachedImgCard }
     private val detachImgBtn: ImageButton by lazy { binding.detachImgBtn }
@@ -94,19 +99,18 @@ class TransactionFragment : Fragment(), View.OnClickListener {
     private var imageFilePart: MultipartBody.Part? = null
     private var user: UserBean? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentTransactionBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.balanceFragment,
+                R.id.feedFragment,
+                R.id.transactionFragment,
+                R.id.historyFragment
+            )
+        )
         binding.toolbarTransaction.setupWithNavController(navController, appBarConfiguration)
         shouldMeGoToHistoryFragment()
         viewModel = TransactionViewModel()
@@ -122,7 +126,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         if (token != null) {
             viewModel.loadUserBalance(token)
         }
-        viewModel.balance.observe(viewLifecycleOwner){
+        viewModel.balance.observe(viewLifecycleOwner) {
             UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
             availableCoins.text = it.distribute.amount.toString()
         }
@@ -138,45 +142,116 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         }
 
         etAddValues.setOnClickListener {
-            createDialog(listValues)
-           // findNavController().navigate(R.id.action_transactionFragment_to_listOfValuesFragment4)
-
-        requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-
-    }
+            clearTags()
+            createDialog(listValues, listCheckedValues)
+        }
 
 
     }
 
-    private fun loadValuesFromDB(){
+    private fun tagsToIdTags(){
+        listCheckedValues.forEach{
+            listCheckedIdTags.add(it.id)
+        }
+        Log.d("Token", "Список id tags ${listCheckedIdTags}")
+    }
+
+    private fun clearTags() {
+        tagsChipGroup.removeAllViews()
+        etAddValues.setText("")
+    }
+
+    private fun clearTagsWithListOfCheckedTags(){
+        clearTags()
+        listCheckedValues.clear()
+    }
+
+    private fun setTags(tagList: MutableList<TagModel>) {
+        for (i in tagList.indices) {
+            val tagModel = tagList[i]
+            val tagName = tagList[i].name
+            val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
+                .inflate(R.layout.chip_tag_example_transaction_tag, tagsChipGroup, false) as Chip
+            with(chip) {
+                setText(tagName)
+                setEnsureMinTouchTargetSize(true)
+                minimumWidth = 0
+                setOnCloseIconClickListener {
+                    val anim = AlphaAnimation(1f, 0f)
+                    anim.duration = 250
+                    anim.setAnimationListener(object : Animation.AnimationListener {
+                        override fun onAnimationRepeat(animation: Animation?) {}
+
+                        override fun onAnimationEnd(animation: Animation?) {
+                            tagsChipGroup.removeView(it)
+                        }
+
+                        override fun onAnimationStart(animation: Animation?) {}
+                    })
+
+                    it.startAnimation(anim)
+                    tagList.remove(tagModel)
+                    setTextInValuesEditText()
+                }
+            }
+
+            tagsChipGroup.addView(chip)
+            setTextInValuesEditText()
+        }
+    }
+
+    private fun setTextInValuesEditText() {
+        if (listCheckedValues.size > 0) {
+            etAddValues.setText(
+                String.format(
+                    requireContext().getString(R.string.addedSomeValues), listCheckedValues.size
+                )
+            )
+        } else if (listCheckedValues.size == 1) {
+            etAddValues.setText(
+                String.format(
+                    requireContext().getString(R.string.addedOneValue), listCheckedValues.size
+                )
+            )
+        } else {
+            etAddValues.setText("")
+        }
+    }
+
+    private fun loadValuesFromDB() {
         UserDataRepository.getInstance()?.token?.let { token ->
             viewModel.loadTags(token)
         }
     }
-    private fun setValuesFromDb(){
+
+    private fun setValuesFromDb() {
         viewModel.tags.observe(viewLifecycleOwner) {
+            Log.d("Token", " Вывод тегов ${it}")
             listValues = it
         }
     }
-    private fun createDialog(list: List<TagModel>){
+
+    private fun createDialog(list: List<TagModel>, listOfCheckedValues: MutableList<TagModel>) {
         val builderDialog = AlertDialog.Builder(context, R.style.FullscreenDialogTheme)
         val inflater = requireActivity().layoutInflater
         val newListValues = inflater.inflate(R.layout.fragment_list_of_values, null)
         val recyclerViewDialog = newListValues.findViewById<RecyclerView>(R.id.values_rv)
-        val btnApplyValues = newListValues.findViewById<MaterialButton>(R.id.add_values_btn)
-//        val list1: List<TagModel> = listOf(TagModel(0, "Name0"),
-//            TagModel(1, "Name2"))
-        val adapter = ValuesAdapter(list, requireContext())
+        val adapter = ValuesAdapter(list, listCheckedValues, requireContext())
         recyclerViewDialog.adapter = adapter
         builderDialog.setView(newListValues)
-            .setPositiveButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
-                listCheckedValues = adapter.listCheckedValues
-                Log.d("Token", " Список выбранных ценностей ${listCheckedValues}")
-                dialog.cancel()
-            })
-            .setNeutralButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
-                dialog.cancel()
-            })
+            .setPositiveButton(
+                getString(R.string.applyValues),
+                DialogInterface.OnClickListener { dialog, which ->
+                    listCheckedValues = adapter.listCheckedValues
+                    setTags(listCheckedValues)
+                    Log.d("Token", " Список выбранных ценностей ${listCheckedValues}")
+                    dialog.cancel()
+                })
+            .setNeutralButton(
+                getString(R.string.applyValues),
+                DialogInterface.OnClickListener { dialog, which ->
+                    dialog.cancel()
+                })
 
         val dialog = builderDialog.create()
 
@@ -192,12 +267,13 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
     }
 
-    private fun openValuesEt(){
+    private fun openValuesEt() {
         checkBoxAddValues.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 textInputLayoutAddValues.visibility = View.VISIBLE
-            }else{
+            } else {
                 textInputLayoutAddValues.visibility = View.GONE
+                clearTagsWithListOfCheckedTags()
             }
         }
     }
@@ -225,7 +301,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                 Log.d(ProfileFragment.TAG, "${result.data?.data}:")
                 val path = getPath(requireContext(), result.data?.data!!)
                 val imageUri = result.data!!.data
-                if (imageUri != null && path != null){
+                if (imageUri != null && path != null) {
                     imgCard.visibility = View.VISIBLE
                     Glide.with(this)
                         .load(imageUri)
@@ -258,19 +334,19 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         imageFilePart = body
     }
 
-    private fun shouldMeGoToHistoryFragment(){
+    private fun shouldMeGoToHistoryFragment() {
         val bool = arguments?.getBoolean(Consts.SHOULD_ME_GOTO_HISTORY, false)
         bool?.let {
-            if(it){
+            if (it) {
                 findNavController().navigate(R.id.action_transactionFragment_to_historyFragment)
             }
         }
     }
 
-    fun checkedChip(){
+    fun checkedChip() {
         Log.d("Token", "i'm inner chip function")
         chipGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId){
+            when (checkedId) {
                 R.id.chipOne -> {
                     Log.d("Token", "i'm inner chip one")
                     countEditText.setText("1")
@@ -294,10 +370,9 @@ class TransactionFragment : Fragment(), View.OnClickListener {
         }
 
 
-
     }
 
-    fun dropDownMenuUserInput(userInput: TextInputEditText){
+    fun dropDownMenuUserInput(userInput: TextInputEditText) {
         userInput.addTextChangedListener(object : TextWatcher {
             // TODO Возможно стоит будет оптимизировать вызов списка пользователей
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -305,7 +380,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
                     UserDataRepository.getInstance()?.token?.let {
                         viewModel.loadUsersList(s.toString(), it)
                     }
-                }else if(usersInput.text?.trim().toString().isEmpty()){
+                } else if (usersInput.text?.trim().toString().isEmpty()) {
                     UserDataRepository.getInstance()?.token?.let {
                         viewModel.loadUsersListWithoutInput("true", it)
                     }
@@ -319,14 +394,14 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
             override fun afterTextChanged(s: Editable) {}
         })
-        if(usersInput.text?.trim().toString().isEmpty()){
+        if (usersInput.text?.trim().toString().isEmpty()) {
             UserDataRepository.getInstance()?.token?.let {
                 viewModel.loadUsersListWithoutInput("true", it)
             }
         }
     }
 
-    fun appealToDB(){
+    fun appealToDB() {
         viewModel.users.observe(viewLifecycleOwner) {
             recyclerView.visibility = View.VISIBLE
             recyclerView.adapter = UsersAdapter(it, this)
@@ -348,13 +423,17 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             sendCoinsGroup.visibility = View.GONE
             usersInputLayout.visibility = View.VISIBLE
             //Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-            val snack = Snackbar.make(requireView(), requireContext().resources.getString(R.string.unsuccessfulSendCoins), Snackbar.LENGTH_LONG)
-                snack.setTextMaxLines(3)
+            val snack = Snackbar.make(
+                requireView(),
+                requireContext().resources.getString(R.string.unsuccessfulSendCoins),
+                Snackbar.LENGTH_LONG
+            )
+            snack.setTextMaxLines(3)
                 .setTextColor(context?.getColor(R.color.white)!!)
-                .setAction(context?.getString(R.string.OK)!!){
+                .setAction(context?.getString(R.string.OK)!!) {
                     snack.dismiss()
                 }
-                snack.show()
+            snack.show()
         }
 
         viewModel.usersLoadingError.observe(viewLifecycleOwner) {
@@ -368,8 +447,8 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             recyclerView.visibility = View.GONE
             user = v.tag as UserBean
             usersInputLayout.visibility = View.GONE
-            with(binding){
-                if(!user?.photo.isNullOrEmpty()){
+            with(binding) {
+                if (!user?.photo.isNullOrEmpty()) {
                     Glide.with(v)
                         .load("${Consts.BASE_URL}/media/${user?.photo}".toUri())
                         .centerCrop()
@@ -384,33 +463,40 @@ class TransactionFragment : Fragment(), View.OnClickListener {
             val userId = user?.userId ?: -1
             val countText = countEditText.text.toString()
             val reason = reasonEditText.text.toString()
-            val isAnon = when(checkBoxIsAnon.isChecked){
+            val isAnon = when (checkBoxIsAnon.isChecked) {
                 true -> true
                 else -> false
             }
-                if (userId != -1 && countText.isNotEmpty() && reason.isNotEmpty()) {
-                    try {
-                        val count: Int = Integer.valueOf(countText)
-                        UserDataRepository.getInstance()?.token?.let {
-                            if (imageFilePart == null){
-                                viewModel.sendCoins(it, userId, count, reason, isAnon)
-                            }else{
-                                viewModel.sendCoinsWithImage(it, userId, count, reason, isAnon, imageFilePart!!)
-                            }
-                            binding.sendCoinBtn.isClickable = false
-                            binding.sendCoinBtn.isEnabled = false
-                        }
-                    } catch (e: Exception) {
-                        Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
-                        //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()
+            tagsToIdTags()
+            if (userId != -1 && countText.isNotEmpty() && reason.isNotEmpty()) {
+                try {
+                    val count: Int = Integer.valueOf(countText)
+                    UserDataRepository.getInstance()?.token?.let {
+                            viewModel.sendCoinsWithImage(
+                                it,
+                                userId,
+                                count,
+                                reason,
+                                isAnon,
+                                null,
+                                listCheckedIdTags
+                            )
+                        binding.sendCoinBtn.isClickable = false
+                        binding.sendCoinBtn.isEnabled = false
                     }
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+                    //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()
                 }
             }
         }
+    }
 
 
-    private fun showResultTransaction(amountThanks: Int, receiverTg: String, receiverName: String,
-                                      receiverSurname: String, photo: String){
+    private fun showResultTransaction(
+        amountThanks: Int, receiverTg: String, receiverName: String,
+        receiverSurname: String, photo: String
+    ) {
         usersInputLayout.editText?.setText("")
         countEditText.setText(R.string.empty)
         reasonEditText.setText(R.string.empty)
@@ -435,7 +521,7 @@ class TransactionFragment : Fragment(), View.OnClickListener {
 
     }
 
-    companion object{
+    companion object {
         private const val CODE_IMG_GALLERY = 111
         private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
     }

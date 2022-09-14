@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.network.models.Contact
-import com.teamforce.thanksapp.data.request.CreateContactRequest
-import com.teamforce.thanksapp.data.request.UpdateContactRequest
 import com.teamforce.thanksapp.data.request.UpdateProfileRequest
-import com.teamforce.thanksapp.data.response.*
+import com.teamforce.thanksapp.data.response.ProfileResponse
+import com.teamforce.thanksapp.data.response.UpdateFewContactsResponse
+import com.teamforce.thanksapp.data.response.UpdateProfileResponse
 import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
