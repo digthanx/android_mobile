@@ -23,6 +23,8 @@ data class FeedResponse(
         val id: Int,
         val sender: String,
         val recipient: String,
+        val sender_id: Int,
+        val recipient_id: Int,
         val recipient_photo: String?,
         val recipient_first_name: String,
         val recipient_surname: String,

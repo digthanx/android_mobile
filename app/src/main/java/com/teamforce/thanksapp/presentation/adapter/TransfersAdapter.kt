@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -191,6 +192,31 @@ class TransfersAdapter(
 
         convertDataToNecessaryFormat(holder, position)
 
+        if(dataSet[position].sender.sender_tg_name != "anonymous" && dataSet[position].sender.sender_tg_name.equals(username)){
+            holder.userId = dataSet[position].recipient_id
+        }else{
+            holder.userId = dataSet[position].sender_id
+        }
+        holder.tgNameUser.setOnClickListener {
+            val bundle: Bundle = Bundle()
+            holder.userId?.let {
+                bundle.putInt("userId", it)
+            }
+
+            val optionForProfileFragment = NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+                .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+                .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+                .setPopExitAnim(R.anim.bottom_in)
+                .build()
+
+            it.findNavController().navigate(
+                R.id.action_historyFragment_to_someonesProfileFragment,
+                bundle, optionForProfileFragment)
+
+        }
+
         holder.view.tag = dataSet[position]
         holder.photoFromSender = dataSet[position].photo
         holder.standardGroup.setOnClickListener { v ->
@@ -208,7 +234,7 @@ class TransfersAdapter(
                 putString(LABEL_STATUS_TRANSACTION, holder.labelStatusTransaction)
                 putString(AMOUNT_THANKS, holder.valueTransfer.text.toString())
                 putString(WE_REFUSED_YOUR_OPERATION, holder.weRefusedYourOperation)
-
+                putInt("userId", holder.userId?:0)
             }
             v.findNavController().navigate(R.id.action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2, bundle)
         }
@@ -292,6 +318,7 @@ class TransfersAdapter(
         var standardGroup: ConstraintLayout = binding.standardGroup
         val chipGroup: ChipGroup = binding.chipGroup
         var photoFromSender: String? = null
+        var userId: Int? = null
 
         val view: View = binding.root
         var dateGetInfo: String = "null"

@@ -46,6 +46,7 @@
     <string name="avatar">Аватар</string>
     <string name="stringData">Личную информацию</string>
     <string name="exit">Выйти</string>
+    <string name="close">Закрыть</string>
     <!-- Edit Profile Bottom Sheet Fragment -->
     <string name="contacts">КОНТАКТЫ</string>
     <string name="save">Сохранить</string>

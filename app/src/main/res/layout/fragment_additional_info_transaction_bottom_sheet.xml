@@ -19,7 +19,9 @@
             android:layout_height="70dp"
             android:layout_marginTop="27dp"
             android:layout_marginBottom="12dp"
-            android:src="@drawable/ic_anon_avatar" />
+            android:src="@drawable/ic_anon_avatar"
+            android:clickable="true"
+            android:focusable="true"/>
 
         <TextView
             android:id="@+id/date_transaction_tv"
@@ -45,6 +47,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" \@AnnaKim_TF"
+                android:clickable="true"
+                android:focusable="true"
                 android:textColor="@color/general_brand" />
         </LinearLayout>
 

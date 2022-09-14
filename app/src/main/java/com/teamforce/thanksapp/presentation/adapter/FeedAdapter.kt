@@ -1,11 +1,15 @@
 package com.teamforce.thanksapp.presentation.adapter
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
@@ -81,11 +85,22 @@ class FeedAdapter(
         var date = ""
         var time = ""
         val view: View = binding.root
+        var userId: Int? = null
+        var clickReceiver: ClickableSpan? = null
+        var clickSender: ClickableSpan? = null
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
+        holder.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance()
+        holder.clickReceiver =
+            transactionToReceiver(holder, position, currentList[position].transaction.recipient_id)
+
+        holder.clickSender =
+            transactionToSender(holder, position, currentList[position].transaction.sender_id)
+
         if (!currentList[position].transaction.recipient_photo.isNullOrEmpty()) {
             Glide.with(context)
                 .load("${Consts.BASE_URL}${currentList[position].transaction.recipient_photo}".toUri())
@@ -107,10 +122,18 @@ class FeedAdapter(
                     currentList[position].transaction.amount.substringBefore("."),
                     currentList[position].transaction.sender
                 ))
+            // Клик по получателю
+            spannable.setSpan(holder.clickReceiver, 0, currentList[position].transaction.recipient.length,
+            Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
                 0,currentList[position].transaction.recipient.length + 1,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                spannable.length - currentList[position].transaction.sender.length - 1,
+                spannable.length ,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            // Клик по отправителю
+            spannable.setSpan(holder.clickSender,
                 spannable.length - currentList[position].transaction.sender.length - 1,
                 spannable.length ,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE)
@@ -136,6 +159,11 @@ class FeedAdapter(
                 spannable.length - currentList[position].transaction.sender.length - 1,
                 spannable.length,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            // Клик по отправителю
+            spannable.setSpan(holder.clickSender,
+                spannable.length - currentList[position].transaction.sender.length - 1,
+                spannable.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.minor_success)),
                  12,
                 spannable.length - currentList[position].transaction.sender.length - 4,
@@ -155,6 +183,10 @@ class FeedAdapter(
                     currentList[position].transaction.amount.substringBefore(".")
                 ))
             spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                0,currentList[position].transaction.recipient.length + 1,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            // Клик по получателю
+            spannable.setSpan(holder.clickReceiver,
                 0,currentList[position].transaction.recipient.length + 1,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.minor_success)),
@@ -207,6 +239,52 @@ class FeedAdapter(
                 .navigate(R.id.action_feedFragment_to_additionalInfoFeedItemFragment, bundle, optionForAdditionalInfoFeedFragment)
         }
 
+    }
+
+    private fun transactionToReceiver(holder: FeedViewHolder, position: Int, receiverId: Int): ClickableSpan{
+        val clickableSpanReceive = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                val bundle: Bundle = Bundle()
+                holder.userId = receiverId
+                holder.userId?.let {
+                    bundle.putInt("userId", it)
+                }
+
+                val optionForProfileFragment = NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+                    .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+                    .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+                    .setPopExitAnim(R.anim.bottom_in)
+                    .build()
+                view.findNavController()
+                    .navigate(R.id.action_feedFragment_to_someonesProfileFragment, bundle, optionForProfileFragment)
+            }
+        }
+        return  clickableSpanReceive
+    }
+
+    private fun transactionToSender(holder: FeedViewHolder, position: Int, senderId: Int): ClickableSpan{
+        val clickableSpanSender = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                val bundle: Bundle = Bundle()
+                holder.userId = senderId
+                holder.userId?.let {
+                    bundle.putInt("userId", it)
+                }
+
+                val optionForProfileFragment = NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+                    .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+                    .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+                    .setPopExitAnim(R.anim.bottom_in)
+                    .build()
+                view.findNavController()
+                    .navigate(R.id.action_feedFragment_to_someonesProfileFragment, bundle, optionForProfileFragment)
+            }
+        }
+        return clickableSpanSender
     }
 
     private fun setTags(tagsChipGroup: ChipGroup, tagList: List<TagModel>){

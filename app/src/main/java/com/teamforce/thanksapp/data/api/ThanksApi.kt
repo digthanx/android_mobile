@@ -109,4 +109,10 @@ interface ThanksApi {
     fun getTags(
         @Header("Authorization") token: String
     ): Call<List<TagModel>>
+
+    @GET("/profile/{user_id}/")
+    fun getAnotherProfile(
+        @Header("Authorization") token: String,
+        @Path("user_id") user_Id: Int
+    ): Call<ProfileResponse>
 }

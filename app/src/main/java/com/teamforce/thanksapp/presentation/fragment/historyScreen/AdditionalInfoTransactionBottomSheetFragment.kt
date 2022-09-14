@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
@@ -41,6 +42,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
     private var amount_thanks: String? = null
     private var we_refused_your: String? = null
     private var photo_from_sender: String? = null
+    private var userId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +58,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
             amount_thanks = it.getString(AMOUNT_THANKS)
             we_refused_your = it.getString(WE_REFUSED_YOUR_OPERATION)
             photo_from_sender = it.getString("photo_from_sender")
+            userId = it.getInt("userId")
         }
     }
 
@@ -108,5 +111,23 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
             binding.photoTv.visibility = View.GONE
             binding.cardViewImg.visibility = View.GONE
         }
+
+        binding.descriptionTransactionWho.setOnClickListener {
+            transactionToSomeonesProfile(userId)
+        }
+
+        binding.userAvatar.setOnClickListener {
+            transactionToSomeonesProfile(userId)
+        }
+
+    }
+
+    private fun transactionToSomeonesProfile(userId: Int?){
+        val bundle = Bundle()
+        userId?.let {
+            bundle.putInt("userId", it)
+        }
+        findNavController()
+            .navigate(R.id.action_additionalInfoTransactionBottomSheetFragment2_to_someonesProfileFragment, bundle)
     }
 }
