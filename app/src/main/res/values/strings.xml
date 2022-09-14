@@ -25,6 +25,7 @@
     <string name="auth">Авторизация</string>
     <!-- Profile Fragment -->
     <string name="username_label">ФИО</string>
+    <string name="greeting_label">Привет, %s!</string>
     <string name="legal_label">Юр.Лицо</string>
     <string name="department_label">Подразделение</string>
     <string name="position_label">Должность</string>
@@ -37,6 +38,7 @@
     <string name="userFio">%s %s %s</string>
     <string name="placeJob">Место работы</string>
     <string name="contactInformation">Контактные данные</string>
+    <string name="information">Информация</string>
     <string name="wouldYouLikeToExit">Выйти из профиля?</string>
     <string name="accept">Да</string>
     <string name="decline">Нет</string>
