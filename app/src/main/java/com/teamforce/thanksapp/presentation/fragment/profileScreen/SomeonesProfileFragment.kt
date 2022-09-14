@@ -9,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.net.toUri
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -42,6 +44,7 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
     private val companyUser: TextView by lazy { binding.companyValueTv }
     private val positionUser: TextView by lazy { binding.positionValueTv }
     private val closeBtn: MaterialButton by lazy { binding.closeBtn }
+    private val progressBar: ProgressBar by lazy { binding.progressBar }
 
     private var userId: Int? = null
 
@@ -58,8 +61,28 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.initViewModel()
+
         requestData()
         setData()
+    }
+
+    private fun initViews(){
+        viewModel.isLoading.observe(
+            viewLifecycleOwner,
+            Observer { isLoading ->
+                if (isLoading) {
+                    binding.header.visibility = View.GONE
+                    binding.information.visibility = View.GONE
+                    binding.placeJob.visibility = View.GONE
+                    progressBar.visibility = View.VISIBLE
+                } else {
+                    binding.header.visibility = View.VISIBLE
+                    binding.information.visibility = View.VISIBLE
+                    binding.placeJob.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                }
+            }
+        )
     }
 
     private fun requestData(){

@@ -478,7 +478,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                                 count,
                                 reason,
                                 isAnon,
-                                null,
+                                imageFilePart,
                                 listCheckedIdTags
                             )
                         binding.sendCoinBtn.isClickable = false
