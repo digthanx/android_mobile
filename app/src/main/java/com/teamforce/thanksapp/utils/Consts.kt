@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.utils
 
+import com.teamforce.thanksapp.BuildConfig
 import com.teamforce.thanksapp.presentation.activity.MainActivity
 
 object Consts {
@@ -19,7 +20,7 @@ object Consts {
     const val DESCRIPTION_TRANSACTION_2_WHO = "description-transaction_2_who"
     const val DESCRIPTION_TRANSACTION_3_AMOUNT = "description-transaction_2_who_3_amount"
     const val REASON_TRANSACTION = "reason-transaction"
-    const val STATUS_TRANSACTION = "satus-transaction"
+    const val STATUS_TRANSACTION = "status-transaction"
     const val LABEL_STATUS_TRANSACTION = "label-status-transaction"
     const val WE_REFUSED_YOUR_OPERATION = "we-refused_your_operation"
     const val AVATAR_USER = "user-avatar"
@@ -29,9 +30,11 @@ object Consts {
     const val PHOTO_TRANSACTION = "photoFeed"
 
     val MAIN = MainActivity()
-    const val BASE_URL: String = "http://176.99.6.251:8888"
+    var BASE_URL: String = BuildConfig.URL_PORT
 
     private const val SP_NAME = "com.teamforce.thanksapp"
+    const val packageNameProd = "com.teamforce.thanksappProd"
+    const val packageNameDev = "com.teamforce.thanksapp"
     private const val SP_ARG_TELEGRAM = "Telegram"
     private const val SP_ARG_TOKEN = "Token"
 

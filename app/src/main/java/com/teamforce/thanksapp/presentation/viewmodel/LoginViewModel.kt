@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.AuthorizationRequest
 import com.teamforce.thanksapp.data.request.VerificationRequest
@@ -41,7 +40,7 @@ object LoginViewModel : ViewModel() {
     private var telegramOrEmail: String? = null
 
 
-    fun logout(){
+    fun logout() {
         xId = null
         xEmail = null
         xCode = null
@@ -73,14 +72,17 @@ object LoginViewModel : ViewModel() {
                         _isLoading.postValue(false)
                         if (response.code() == 200) {
                             Log.d("Token", "Status запроса: ${response.body().toString()}")
-                            if (response.body().toString() == "{status=Код отправлен в телеграм}"){
+                            if (response.body().toString() == "{status=Код отправлен в телеграм}") {
                                 xId = response.headers().get("X-Telegram")
                             }
-                            if(response.body().toString() == "{status=Код отправлен на указанную электронную почту}"){
+                            if (response.body()
+                                    .toString() == "{status=Код отправлен на указанную электронную почту}"
+                            ) {
                                 xEmail = response.headers().get("X-Email")
 
                             }
-                            UserDataRepository.getInstance()?.statusResponseAuth = response.body().toString()
+                            UserDataRepository.getInstance()?.statusResponseAuth =
+                                response.body().toString()
                             xCode = response.headers().get("X-Code")
                             _isSuccessAuth.postValue(true)
                         } else {
@@ -179,7 +181,6 @@ object LoginViewModel : ViewModel() {
                 })
         }
     }
-
 
 
 }

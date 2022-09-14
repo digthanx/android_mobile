@@ -29,11 +29,18 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
         release {
             //signingConfig signingConfigs.release
+            buildConfigField "String", "URL_PORT", "\"http://176.99.6.251:8889\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        getByName("debug"){
+            applicationIdSuffix = ".debug"
+            buildConfigField "String", "URL_PORT", "\"http://176.99.6.251:8888\""
+            manifestPlaceholders = [appName: "Debug"]
         }
     }
 

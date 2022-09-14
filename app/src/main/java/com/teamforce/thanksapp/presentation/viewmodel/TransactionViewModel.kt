@@ -5,9 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.teamforce.thanksapp.data.api.ThanksApi
-import com.teamforce.thanksapp.data.request.SendCoinsRequest
 import com.teamforce.thanksapp.data.request.UserListWithoutInputRequest
 import com.teamforce.thanksapp.data.request.UsersListRequest
 import com.teamforce.thanksapp.data.response.BalanceResponse
@@ -15,14 +13,16 @@ import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.utils.RetrofitClient
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.Normalizer
 
 class TransactionViewModel : ViewModel() {
 
@@ -116,7 +116,6 @@ class TransactionViewModel : ViewModel() {
     }
 
 
-
     fun loadUsersList(username: String, token: String) {
         _isLoading.postValue(true)
         viewModelScope.launch { callUsersListEndpoint(username, token, Dispatchers.Default) }
@@ -151,18 +150,22 @@ class TransactionViewModel : ViewModel() {
         }
     }
 
-    fun sendCoinsWithImage(token: String, recipient: Int, amount: Int,
-                           reason: String,
-                           isAnon: Boolean,
-                           imageFilePart: MultipartBody.Part?,
-                           listOfTagsCheckedValues: MutableList<Int>? ) {
+    fun sendCoinsWithImage(
+        token: String, recipient: Int, amount: Int,
+        reason: String,
+        isAnon: Boolean,
+        imageFilePart: MultipartBody.Part?,
+        listOfTagsCheckedValues: MutableList<Int>?
+    ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
-            callSendCoinsWithImageEndpoint(token, recipient, amount,
+            callSendCoinsWithImageEndpoint(
+                token, recipient, amount,
                 reason, isAnon,
                 imageFilePart,
                 listOfTagsCheckedValues,
-                Dispatchers.Default)
+                Dispatchers.Default
+            )
         }
     }
 
@@ -178,10 +181,14 @@ class TransactionViewModel : ViewModel() {
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            val recipientB = RequestBody.create(MediaType.parse("multipart/form-data"), recipient.toString())
-            val amountB = RequestBody.create(MediaType.parse("multipart/form-data"), amount.toString())
-            val reasonB = RequestBody.create(MediaType.parse("multipart/form-data"), reason.toString())
-            val isAnonB = RequestBody.create(MediaType.parse("multipart/form-data"), isAnon.toString())
+            val recipientB =
+                RequestBody.create(MediaType.parse("multipart/form-data"), recipient.toString())
+            val amountB =
+                RequestBody.create(MediaType.parse("multipart/form-data"), amount.toString())
+            val reasonB =
+                RequestBody.create(MediaType.parse("multipart/form-data"), reason.toString())
+            val isAnonB =
+                RequestBody.create(MediaType.parse("multipart/form-data"), isAnon.toString())
             val string = listOfTagsCheckedValues.toString()
                 .filter { it.isDigit() }
                 .replace("", " ")
@@ -189,7 +196,15 @@ class TransactionViewModel : ViewModel() {
             val tags = RequestBody.create(MediaType.parse("multipart/form-data"), string)
 
 
-            thanksApi?.sendCoinsWithImage("Token $token", imageFilePart, recipientB, amountB, reasonB, isAnonB, tags)
+            thanksApi?.sendCoinsWithImage(
+                "Token $token",
+                imageFilePart,
+                recipientB,
+                amountB,
+                reasonB,
+                isAnonB,
+                tags
+            )
                 ?.enqueue(object : Callback<SendCoinsResponse> {
                     override fun onResponse(
                         call: Call<SendCoinsResponse>,
@@ -200,9 +215,9 @@ class TransactionViewModel : ViewModel() {
                         if (response.code() == 201) {
                             Log.d("Token", "Успешный перевод средств")
                             _isSuccessOperation.postValue(true)
-                        } else if(response.code() == 400) {
+                        } else if (response.code() == 400) {
                             _sendCoinsError.postValue(response.message() + " " + response.code())
-                        }else{
+                        } else {
                             _sendCoinsError.postValue(response.message() + " " + response.code())
                         }
                     }
@@ -217,7 +232,13 @@ class TransactionViewModel : ViewModel() {
 
     fun loadUsersListWithoutInput(get_users: String, token: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callUsersListWithoutInputEndpoint(get_users, token, Dispatchers.Default) }
+        viewModelScope.launch {
+            callUsersListWithoutInputEndpoint(
+                get_users,
+                token,
+                Dispatchers.Default
+            )
+        }
     }
 
     private suspend fun callUsersListWithoutInputEndpoint(
@@ -226,8 +247,10 @@ class TransactionViewModel : ViewModel() {
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getUsersWithoutInput("Token $token",
-                get_users = UserListWithoutInputRequest(get_users))
+            thanksApi?.getUsersWithoutInput(
+                "Token $token",
+                get_users = UserListWithoutInputRequest(get_users)
+            )
                 ?.enqueue(object : Callback<List<UserBean>> {
                     override fun onResponse(
                         call: Call<List<UserBean>>,
@@ -249,7 +272,6 @@ class TransactionViewModel : ViewModel() {
                 })
         }
     }
-
 
 
 }
