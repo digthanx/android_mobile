@@ -187,7 +187,7 @@ class TransfersAdapter(
             }
         }
 
-        setTags(holder.chipGroup, dataSet[position].tags)
+        dataSet[position].tags?.let { setTags(holder.chipGroup, it) }
 
         convertDataToNecessaryFormat(holder, position)
 

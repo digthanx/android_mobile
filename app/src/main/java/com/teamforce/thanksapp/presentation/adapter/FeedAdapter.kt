@@ -168,7 +168,7 @@ class FeedAdapter(
             // Я отправитель
         }
 
-            setTags(holder.chipGroup, currentList[position].transaction.tags)
+        currentList[position].transaction.tags?.let { setTags(holder.chipGroup, it) }
 
 
         holder.reason = currentList[position].transaction.reason

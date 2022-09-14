@@ -22,6 +22,7 @@
             android:layout_gravity="center"
             android:visibility="gone" />
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/values_rv"
             android:layout_width="match_parent"

@@ -14,7 +14,7 @@ class UserTransactionsResponse(
     @SerializedName("expire_to_cancel") val expireToCancel: String,
     val amount: String,
     @SerializedName("can_user_cancel") val canUserCancel: Boolean,
-    @SerializedName("tags") val tags : List<TagModel>,
+    @SerializedName("tags") val tags : List<TagModel>?,
     @SerializedName("created_at") val createdAt: String,
     @SerializedName("updated_at") val updatedAt: String,
     val reason: String,

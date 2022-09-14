@@ -48,13 +48,14 @@ class TransactionResultFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.amount.text = "- $amountThanks"
         binding.receiverTgName.text  = receiverTg
         binding.receiverNameLabelTv.text  = receiverName
         binding.receiverSurnameLabelTv.text  = receiverSurname
-        if(receiverPhoto.isNullOrEmpty()){
+        if(!receiverPhoto?.contains("null")!!){
             Glide.with(view)
                 .load(receiverPhoto?.toUri())
                 .centerCrop()

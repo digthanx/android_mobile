@@ -68,6 +68,7 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
             findNavController().navigate(R.id.action_editProfileBottomSheetFragment_to_profileFragment)
         }
     }
+    
 
     private fun loadDataFromServer() {
         UserDataRepository.getInstance()?.token?.let {
