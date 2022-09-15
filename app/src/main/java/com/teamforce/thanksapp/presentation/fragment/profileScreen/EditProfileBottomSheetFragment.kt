@@ -26,17 +26,7 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
 
     private val viewModel = EditProfileViewModel()
 
-    private val header by lazy { binding.header }
 
-    private val avatarUser by lazy { binding.userAvatar }
-    private val surnameEt by lazy { binding.surnameEt }
-    private val firstNameEt by lazy { binding.firstEt }
-    private val middleEt by lazy { binding.middleEt }
-    private val emailEt by lazy { binding.emailEt }
-    private val phoneEt by lazy { binding.phoneEt }
-    private val companyTv by lazy { binding.companyValueTv }
-    private val greetingUserTv: TextView by lazy { binding.greetingUserTv }
-    private val positionTv: TextView by lazy { binding.positionValueTv }
 
 
 
@@ -64,7 +54,7 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
         loadDataFromServer()
         writeData()
         logicalSaveData()
-        header.setOnClickListener {
+        binding.header.setOnClickListener {
             findNavController().navigate(R.id.action_editProfileBottomSheetFragment_to_profileFragment)
         }
     }
@@ -78,12 +68,12 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
 
     private fun writeData() {
         viewModel.profile.observe(viewLifecycleOwner) {
-            greetingUserTv.text = greeting
-            positionTv.text = it.profile.jobTitle
-            surnameEt.setText(it.profile.surname)
-            firstNameEt.setText(it.profile.firstname)
-            middleEt.setText(it.profile.middlename)
-            companyTv.setText(it.profile.organization)
+            binding.greetingUserTv.text = greeting
+            binding.positionValueTv.text = it.profile.jobTitle
+            binding.surnameEt.setText(it.profile.surname)
+            binding.firstEt.setText(it.profile.firstname)
+            binding.middleEt.setText(it.profile.middlename)
+            binding.companyValueTv.setText(it.profile.organization)
 
             if(it.profile.jobTitle.isNullOrEmpty()){
                 binding.positionValueTv.visibility = View.GONE
@@ -97,28 +87,28 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
                 Glide.with(this)
                     .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
                     .centerCrop()
-                    .into(avatarUser)
+                    .into(binding.userAvatar)
             }
             if (it.profile.contacts.size == 1) {
                 if (it.profile.contacts[0].contact_type == "@") {
-                    emailEt.setText(it.profile.contacts[0].contact_id)
+                    binding.emailEt.setText(it.profile.contacts[0].contact_id)
                     emailContact = it.profile.contacts[0]
                     phoneContact = Contact(null, "P", "")
                 } else {
-                    phoneEt.setText(it.profile.contacts[0].contact_id)
+                    binding.phoneEt.setText(it.profile.contacts[0].contact_id)
                     phoneContact = it.profile.contacts[0]
                     emailContact = Contact(null, "@", "")
 
                 }
             } else if (it.profile.contacts.size == 2) {
                 if (it.profile.contacts[0].contact_type == "@") {
-                    emailEt.setText(it.profile.contacts[0].contact_id)
-                    phoneEt.setText(it.profile.contacts[1].contact_id)
+                    binding.emailEt.setText(it.profile.contacts[0].contact_id)
+                    binding.phoneEt.setText(it.profile.contacts[1].contact_id)
                     emailContact = it.profile.contacts[0]
                     phoneContact = it.profile.contacts[1]
                 } else {
-                    emailEt.setText(it.profile.contacts[1].contact_id)
-                    phoneEt.setText(it.profile.contacts[0].contact_id)
+                    binding.emailEt.setText(it.profile.contacts[1].contact_id)
+                    binding.phoneEt.setText(it.profile.contacts[0].contact_id)
                     emailContact = it.profile.contacts[1]
                     phoneContact = it.profile.contacts[0]
                 }
@@ -135,21 +125,24 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
 
 
         binding.btnSaveChanges.setOnClickListener {
-            if (binding.firstEt.text?.trim().toString() == "") {
-                firstName = null
-            } else {
-                firstName = binding.firstEt.text?.trim().toString()
-            }
-            if (binding.surnameEt.text?.trim().toString() == "") {
-                surname = null
-            } else {
-                surname = binding.surnameEt.text?.trim().toString()
-            }
-            if (binding.middleEt.text?.trim().toString() == "") {
-                middleName = null
-            } else {
-                middleName = binding.middleEt.text?.trim().toString()
-            }
+//            if (binding.firstEt.text?.trim().toString() == "") {
+//                firstName = null
+//            } else {
+//                firstName = binding.firstEt.text?.trim().toString()
+//            }
+//            if (binding.surnameEt.text?.trim().toString() == "") {
+//                surname = null
+//            } else {
+//                surname = binding.surnameEt.text?.trim().toString()
+//            }
+//            if (binding.middleEt.text?.trim().toString() == "") {
+//                middleName = null
+//            } else {
+//                middleName = binding.middleEt.text?.trim().toString()
+//            }
+            firstName = binding.firstEt.text?.trim().toString()
+            surname = binding.surnameEt.text?.trim().toString()
+            middleName = binding.middleEt.text?.trim().toString()
             UserDataRepository.getInstance()?.token?.let { token ->
                 UserDataRepository.getInstance()?.profileId?.let { profileId ->
                     viewModel.loadUpdateProfile(
@@ -161,8 +154,8 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
                         nickname = null
                     )
                     val listContact: MutableList<Contact> = mutableListOf<Contact>()
-                    emailContact?.contact_id = emailEt.text.toString()
-                    phoneContact?.contact_id = phoneEt.text.toString()
+                    emailContact?.contact_id = binding.emailEt.text.toString()
+                    phoneContact?.contact_id = binding.phoneEt.text.toString()
                     listContact.add(emailContact!!)
                     listContact.add(phoneContact!!)
 
