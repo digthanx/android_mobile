@@ -401,7 +401,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
             if (it) {
                 Toast.makeText(requireContext(), "Success!", Toast.LENGTH_LONG).show()
-                Log.d("Token", " Юзер для передачи данных в результат ${user}")
+               // Log.d("Token", " Юзер для передачи данных в результат ${user}")
                 showResultTransaction(
                     amountThanks = Integer.valueOf(binding.countValueEt.text.toString()),
                     receiverTg = user?.tgName.toString(),
@@ -412,14 +412,18 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             }
         }
         viewModel.sendCoinsError.observe(viewLifecycleOwner) {
-            binding.sendCoinLinear.visibility = View.GONE
-            binding.textField.visibility = View.VISIBLE
+//            binding.sendCoinLinear.visibility = View.GONE
+//            binding.textField.visibility = View.VISIBLE
+            binding.messageValueEt.setText("")
+            binding.countValueEt.setText("")
             //Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
             val snack = Snackbar.make(
                 requireView(),
-                requireContext().resources.getString(R.string.unsuccessfulSendCoins),
+                it,
                 Snackbar.LENGTH_LONG
             )
+            binding.sendCoinBtn.isClickable = true
+            binding.sendCoinBtn.isEnabled = true
             snack.setTextMaxLines(3)
                 .setTextColor(context?.getColor(R.color.white)!!)
                 .setAction(context?.getString(R.string.OK)!!) {
@@ -480,6 +484,18 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
                     //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()
                 }
+            }else{
+                val snack = Snackbar.make(
+                    requireView(),
+                    requireContext().resources.getString(R.string.unsuccessfulSendCoins),
+                    Snackbar.LENGTH_LONG
+                )
+                snack.setTextMaxLines(3)
+                    .setTextColor(context?.getColor(R.color.white)!!)
+                    .setAction(context?.getString(R.string.OK)!!) {
+                        snack.dismiss()
+                    }
+                snack.show()
             }
         }
     }
