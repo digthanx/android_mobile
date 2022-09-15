@@ -18,6 +18,8 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.activityNavController
+import com.teamforce.thanksapp.utils.navigateSafely
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -84,7 +86,7 @@ class BalanceFragment : Fragment() {
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_balanceFragment_to_profileFragment, null, optionForProfileFragment )
+            findNavController().navigate(R.id.action_balanceFragment_to_profileGraph, null, optionForProfileFragment )
         }
 
     }

@@ -57,7 +57,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_profileFragment, null, optionForProfileFragment )
+            findNavController().navigate(R.id.action_feedFragment_to_profileGraph, null, optionForProfileFragment )
         }
         swipeToRefresh.setOnRefreshListener {
             inflateRecyclerView()
