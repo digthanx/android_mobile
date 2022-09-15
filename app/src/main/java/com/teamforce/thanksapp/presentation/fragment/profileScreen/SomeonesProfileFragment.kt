@@ -5,24 +5,18 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.databinding.FragmentSomeonesProfileBinding
-import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.presentation.viewmodel.SomeonesProfileViewModel
-import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
 
 
@@ -40,7 +34,7 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
     private val userMiddleName: TextView by lazy { binding.middleNameValueTv }
     private val userEmail: TextView by lazy { binding.emailValueTv }
     private val userPhone: TextView by lazy { binding.mobileValueTv }
-    private val greetingUser: TextView by lazy { binding.greetingUserTv }
+    private val userTgName: TextView by lazy { binding.userTgName }
     private val companyUser: TextView by lazy { binding.companyValueTv }
     private val positionUser: TextView by lazy { binding.positionValueTv }
     private val closeBtn: MaterialButton by lazy { binding.closeBtn }
@@ -100,9 +94,7 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
             userMiddleName.text = it.profile.middlename
             companyUser.text = it.profile.organization
             positionUser.text = it.profile.jobTitle
-            UserDataRepository.getInstance()?.username?.let {
-                greetingUser(it)
-            }
+            userTgName.text = it.profile.tgName
             if(it.profile.contacts.size == 1){
                 if(it.profile.contacts[0].contact_type == "@"){
                     userEmail.text = it.profile.contacts[0].contact_id
@@ -130,16 +122,5 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
 
 
         }
-    }
-
-    private fun greetingUser(username: String){
-        val spannable = SpannableStringBuilder(
-            String.format(requireContext().getString(R.string.greeting_label), username)
-        )
-        spannable.setSpan(
-            ForegroundColorSpan(requireContext().getColor(R.color.general_brand)),
-            7, spannable.length - 1,
-            Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-        greetingUser.text = spannable
     }
 }

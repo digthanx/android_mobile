@@ -104,6 +104,9 @@
         <action
             android:id="@+id/action_additionalInfoFeedItemFragment_to_feedFragment"
             app:destination="@id/feedFragment" />
+        <action
+            android:id="@+id/action_additionalInfoFeedItemFragment_to_someonesProfileFragment2"
+            app:destination="@id/someonesProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/someonesProfileFragment"
@@ -118,5 +121,8 @@
         <action
             android:id="@+id/action_someonesProfileFragment_to_additionalInfoTransactionBottomSheetFragment2"
             app:destination="@id/additionalInfoTransactionBottomSheetFragment2" />
+        <action
+            android:id="@+id/action_someonesProfileFragment_to_additionalInfoFeedItemFragment"
+            app:destination="@id/additionalInfoFeedItemFragment" />
     </fragment>
 </navigation>

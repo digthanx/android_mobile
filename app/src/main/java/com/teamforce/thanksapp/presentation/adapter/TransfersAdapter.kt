@@ -191,31 +191,7 @@ class TransfersAdapter(
         dataSet[position].tags?.let { setTags(holder.chipGroup, it) }
 
         convertDataToNecessaryFormat(holder, position)
-
-        if(dataSet[position].sender.sender_tg_name != "anonymous" && dataSet[position].sender.sender_tg_name.equals(username)){
-            holder.userId = dataSet[position].recipient_id
-        }else{
-            holder.userId = dataSet[position].sender_id
-        }
-        holder.tgNameUser.setOnClickListener {
-            val bundle: Bundle = Bundle()
-            holder.userId?.let {
-                bundle.putInt("userId", it)
-            }
-
-            val optionForProfileFragment = NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-                .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-                .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-                .setPopExitAnim(R.anim.bottom_in)
-                .build()
-
-            it.findNavController().navigate(
-                R.id.action_historyFragment_to_someonesProfileFragment,
-                bundle, optionForProfileFragment)
-
-        }
+        transactionToAnotherProfile(holder, position)
 
         holder.view.tag = dataSet[position]
         holder.photoFromSender = dataSet[position].photo
@@ -234,12 +210,46 @@ class TransfersAdapter(
                 putString(LABEL_STATUS_TRANSACTION, holder.labelStatusTransaction)
                 putString(AMOUNT_THANKS, holder.valueTransfer.text.toString())
                 putString(WE_REFUSED_YOUR_OPERATION, holder.weRefusedYourOperation)
-                putInt("userId", holder.userId?:0)
+                dataSet[position].recipient_id?.let{
+                    putInt("userIdReceiver", it)
+                }
+                dataSet[position].sender_id?.let{
+                    putInt("userIdSender", it)
+                }
+
             }
             v.findNavController().navigate(R.id.action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2, bundle)
         }
 
 
+    }
+
+    private fun transactionToAnotherProfile(holder: TransfersViewHolder, position: Int){
+        if(dataSet[position].sender.sender_tg_name.equals(username)){
+            holder.userId = dataSet[position].recipient_id
+        }else if((dataSet[position].sender.sender_tg_name != "anonymous" && dataSet[position].recipient.recipient_tg_name.equals(username))){
+            holder.userId = dataSet[position].sender_id
+        }
+        val optionForProfileFragment = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+            .setPopExitAnim(R.anim.bottom_in)
+            .build()
+
+        holder.tgNameUser.setOnClickListener { view ->
+            val bundle: Bundle = Bundle()
+            if(holder.userId != 0){
+                holder.userId?.let {
+                    bundle.putInt("userId", it)
+                    view.findNavController().navigate(
+                        R.id.action_historyFragment_to_someonesProfileFragment,
+                        bundle, optionForProfileFragment)
+                }
+            }
+
+        }
     }
 
     private fun setTags(tagsChipGroup: ChipGroup,tagList: List<TagModel>){

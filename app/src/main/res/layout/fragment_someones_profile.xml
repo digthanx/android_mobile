@@ -57,7 +57,7 @@
                         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
                     <TextView
-                        android:id="@+id/greeting_user_tv"
+                        android:id="@+id/user_tg_name"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="24dp"

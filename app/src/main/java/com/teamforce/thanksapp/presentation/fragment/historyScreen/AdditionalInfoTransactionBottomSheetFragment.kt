@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -124,10 +125,19 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
 
     private fun transactionToSomeonesProfile(userId: Int?){
         val bundle = Bundle()
-        userId?.let {
-            bundle.putInt("userId", it)
+        val optionForProfileFragment = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+            .setPopExitAnim(R.anim.bottom_in)
+            .build()
+        if(userId != 0){
+            userId?.let {
+                bundle.putInt("userId", it)
+                findNavController()
+                    .navigate(R.id.action_additionalInfoTransactionBottomSheetFragment2_to_someonesProfileFragment, bundle, optionForProfileFragment)
+            }
         }
-        findNavController()
-            .navigate(R.id.action_additionalInfoTransactionBottomSheetFragment2_to_someonesProfileFragment, bundle)
     }
 }

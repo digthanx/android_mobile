@@ -6,9 +6,9 @@ import com.teamforce.thanksapp.model.domain.TagModel
 class UserTransactionsResponse(
     val id: Int,
     val sender: Sender,
-    val sender_id: Int,
+    val sender_id: Int?,
     val recipient: Recipient,
-    val recipient_id: Int,
+    val recipient_id: Int?,
     val transaction_status: TransactionStatus,
     @SerializedName("transaction_class") val transactionClass: TransactionClass,
     @SerializedName("expire_to_cancel") val expireToCancel: String,
