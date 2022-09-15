@@ -73,7 +73,7 @@ class HistoryFragment : Fragment() {
             .setPopUpTo(navController.graph.startDestinationId, false)
             .build()
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_historyFragment_to_profileFragment, null, optionForProfileFragment )
+            findNavController().navigate(R.id.action_historyFragment_to_profileGraph, null, optionForProfileFragment )
         }
     }
 

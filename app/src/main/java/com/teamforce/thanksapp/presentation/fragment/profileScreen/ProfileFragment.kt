@@ -9,7 +9,9 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -17,7 +19,10 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -25,6 +30,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
@@ -41,6 +47,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentProfileBinding by viewBinding()
 
+//        private val viewModel = ViewModelProvider(this, SavedStateViewModelFactory())
+//            .get(ProfileViewModel::class.java)
     private val viewModel = ProfileViewModel()
 
     private val requestPermissionLauncher =
@@ -56,21 +64,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     .show()
             }
         }
-
-    private val userAvatar: ImageView by lazy { binding.userAvatar }
-    private val userName: TextView by lazy { binding.firstNameValueTv }
-    private val userSurname: TextView by lazy { binding.surnameValueTv }
-    private val userMiddleName: TextView by lazy { binding.middleNameValueTv }
-    private val userEmail: TextView by lazy { binding.emailValueTv }
-    private val userPhone: TextView by lazy { binding.mobileValueTv }
-    private val greetingUser: TextView by lazy { binding.greetingUserTv }
-
-
-    private val companyUser: TextView by lazy { binding.companyValueTv }
-    private val positionUser: TextView by lazy { binding.positionValueTv }
-    private val roleUser: TextView by lazy { binding.roleValueTv }
-    private val swipeToRefresh: SwipeRefreshLayout by lazy { binding.swipeRefreshLayout }
-    private val allContent: LinearLayout by lazy { binding.allContent }
 
 
     private var contactId_1: Int? = null
@@ -96,6 +89,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
+
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
@@ -120,7 +114,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         Glide.with(this)
             .load(imageURI)
             .centerCrop()
-            .into(userAvatar)
+            .into(binding.userAvatar)
         val file = File(filePath)
         val requestFile: RequestBody =
             RequestBody.create(MediaType.parse("multipart/form-data"), file)
@@ -141,11 +135,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun setData(){
         viewModel.profile.observe(viewLifecycleOwner){
-            userName.text = it.profile.firstname
-            userSurname.text = it.profile.surname
-            userMiddleName.text = it.profile.middlename
-            companyUser.text = it.profile.organization
-            positionUser.text = it.profile.jobTitle
+            //userName.text = it.profile.firstname
+            binding.firstNameValueTv.text = it.profile.firstname
+            binding.surnameValueTv.text = it.profile.surname
+            binding.middleNameValueTv.text = it.profile.middlename
+            binding.companyValueTv.text = it.profile.organization
+            binding.positionValueTv.text = it.profile.jobTitle
             if(it.profile.jobTitle.isNullOrEmpty()){
                 binding.positionValueTv.visibility = View.GONE
                 binding.positionLabelTv.visibility = View.GONE
@@ -165,27 +160,27 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
             if(it.profile.contacts.size == 1){
                 if(it.profile.contacts[0].contact_type == "@"){
-                    userEmail.text = it.profile.contacts[0].contact_id
+                    binding.emailValueTv.text = it.profile.contacts[0].contact_id
                     contactId_1 = it.profile.contacts[0].id
                     contactValue_1 = it.profile.contacts[0].contact_id
                 }else{
-                    userPhone.text = it.profile.contacts[0].contact_id
+                    binding.mobileValueTv.text = it.profile.contacts[0].contact_id
                     contactId_2 = it.profile.contacts[0].id
                     contactValue_2 = it.profile.contacts[0].contact_id
                 }
             }else if(it.profile.contacts.size == 2){
                 if(it.profile.contacts[0].contact_type == "@"){
-                    userEmail.text = it.profile.contacts[0].contact_id
+                    binding.emailValueTv.text = it.profile.contacts[0].contact_id
                     contactId_1 = it.profile.contacts[0].id
-                    userPhone.text = it.profile.contacts[1].contact_id
+                    binding.mobileValueTv.text = it.profile.contacts[1].contact_id
                     contactId_2 = it.profile.contacts[1].id
                     contactValue_1 = it.profile.contacts[0].contact_id
                     contactValue_2 = it.profile.contacts[1].contact_id
 
                 }else{
-                    userEmail.text = it.profile.contacts[1].contact_id
+                    binding.emailValueTv.text = it.profile.contacts[1].contact_id
                     contactId_1 = it.profile.contacts[1].id
-                    userPhone.text = it.profile.contacts[0].contact_id
+                    binding.mobileValueTv.text = it.profile.contacts[0].contact_id
                     contactId_2 = it.profile.contacts[0].id
                     contactValue_1 = it.profile.contacts[1].contact_id
                     contactValue_2 = it.profile.contacts[0].contact_id
@@ -196,9 +191,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 Glide.with(this)
                     .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
                     .centerCrop()
-                    .into(userAvatar)
+                    .into(binding.userAvatar)
             }else {
-                userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+                binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
             }
 
             UserDataRepository.getInstance()?.profileId = it.profile.id
@@ -213,13 +208,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             ForegroundColorSpan(requireContext().getColor(R.color.general_brand)),
             7, spannable.length - 1,
             Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-        greetingUser.text = spannable
+        binding.greetingUserTv.text = spannable
     }
 
     private fun swipeToRefresh(){
-        swipeToRefresh.setOnRefreshListener {
+        binding.swipeRefreshLayout.setOnRefreshListener {
             requestData()
-            swipeToRefresh.isRefreshing = false
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
@@ -254,7 +249,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 val bundle = Bundle()
                 bundle.putString("contact_value_1", contactValue_1)
                 bundle.putString("contact_value_2", contactValue_2)
-                bundle.putString("greeting", greetingUser.text.toString())
+                bundle.putString("greeting", binding.greetingUserTv.text.toString())
                 findNavController().navigate(R.id.action_profileFragment_to_editProfileBottomSheetFragment, bundle)
             }
             .show()
@@ -263,18 +258,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
 
     private fun initViews() {
-        swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
+        binding.swipeRefreshLayout.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         viewModel.initViewModel()
 
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->
                 if (isLoading) {
-                    allContent.visibility = View.GONE
-                    swipeToRefresh.isRefreshing = true
+                    binding.allContent.visibility = View.GONE
+                    binding.swipeRefreshLayout.isRefreshing = true
                 } else {
-                    allContent.visibility = View.VISIBLE
-                    swipeToRefresh.isRefreshing = false
+                    binding.allContent.visibility = View.VISIBLE
+                    binding.swipeRefreshLayout.isRefreshing = false
 
                 }
             }
