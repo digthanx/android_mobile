@@ -1,11 +1,15 @@
 package com.teamforce.thanksapp.presentation.adapter
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
@@ -81,11 +85,22 @@ class FeedAdapter(
         var date = ""
         var time = ""
         val view: View = binding.root
+        var userId: Int? = null
+        var clickReceiver: ClickableSpan? = null
+        var clickSender: ClickableSpan? = null
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
+        holder.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance()
+        holder.clickReceiver =
+            transactionToReceiver(holder, position, currentList[position].transaction.recipient_id)
+
+        holder.clickSender =
+            transactionToSender(holder, position, currentList[position].transaction.sender_id)
+
         if (!currentList[position].transaction.recipient_photo.isNullOrEmpty()) {
             Glide.with(context)
                 .load("${Consts.BASE_URL}${currentList[position].transaction.recipient_photo}".toUri())
@@ -106,15 +121,33 @@ class FeedAdapter(
                     currentList[position].transaction.recipient,
                     currentList[position].transaction.amount.substringBefore("."),
                     currentList[position].transaction.sender
-                ))
-            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
-                0,currentList[position].transaction.recipient.length + 1,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                )
+            )
+            // Клик по получателю
+            spannable.setSpan(
+                holder.clickReceiver, 0, currentList[position].transaction.recipient.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            spannable.setSpan(
+                ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                0, currentList[position].transaction.recipient.length + 1,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            spannable.setSpan(
+                ForegroundColorSpan(context.getColor(R.color.general_brand)),
                 spannable.length - currentList[position].transaction.sender.length - 1,
-                spannable.length ,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.minor_success)),
+                spannable.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            // Клик по отправителю
+            spannable.setSpan(
+                holder.clickSender,
+                spannable.length - currentList[position].transaction.sender.length - 1,
+                spannable.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            spannable.setSpan(
+                ForegroundColorSpan(context.getColor(R.color.minor_success)),
                 currentList[position].transaction.recipient.length + 9,
                 spannable.length - currentList[position].transaction.sender.length - 4,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
@@ -131,13 +164,24 @@ class FeedAdapter(
                     ),
                     currentList[position].transaction.amount.substringBefore("."),
                     currentList[position].transaction.sender
-                ))
-            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                )
+            )
+            spannable.setSpan(
+                ForegroundColorSpan(context.getColor(R.color.general_brand)),
                 spannable.length - currentList[position].transaction.sender.length - 1,
                 spannable.length,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.minor_success)),
-                 12,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            // Клик по отправителю
+            spannable.setSpan(
+                holder.clickSender,
+                spannable.length - currentList[position].transaction.sender.length - 1,
+                spannable.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            spannable.setSpan(
+                ForegroundColorSpan(context.getColor(R.color.minor_success)),
+                12,
                 spannable.length - currentList[position].transaction.sender.length - 4,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
@@ -153,11 +197,21 @@ class FeedAdapter(
                     ),
                     currentList[position].transaction.recipient,
                     currentList[position].transaction.amount.substringBefore(".")
-                ))
-            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.general_brand)),
-                0,currentList[position].transaction.recipient.length + 1,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            spannable.setSpan(ForegroundColorSpan(context.getColor(R.color.minor_success)),
+                )
+            )
+            spannable.setSpan(
+                ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                0, currentList[position].transaction.recipient.length + 1,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            // Клик по получателю
+            spannable.setSpan(
+                holder.clickReceiver,
+                0, currentList[position].transaction.recipient.length + 1,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            spannable.setSpan(
+                ForegroundColorSpan(context.getColor(R.color.minor_success)),
                 currentList[position].transaction.recipient.length + 9,
                 spannable.length - 7,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
@@ -168,7 +222,7 @@ class FeedAdapter(
             // Я отправитель
         }
 
-            setTags(holder.chipGroup, currentList[position].transaction.tags)
+        currentList[position].transaction.tags?.let { setTags(holder.chipGroup, it) }
 
 
         holder.reason = currentList[position].transaction.reason
@@ -191,6 +245,13 @@ class FeedAdapter(
                     Consts.AMOUNT_THANKS,
                     currentList[position].transaction.amount.substringBefore(".")
                 )
+                currentList[position].transaction.recipient_id?.let {
+                    this.putInt("userIdReceiver", it)
+                }
+
+                currentList[position].transaction.sender_id?.let {
+                    this.putInt("userIdSender", it)
+                }
 
 
             }
@@ -204,16 +265,98 @@ class FeedAdapter(
                 .build()
 
             v.findNavController()
-                .navigate(R.id.action_feedFragment_to_additionalInfoFeedItemFragment, bundle, optionForAdditionalInfoFeedFragment)
+                .navigate(
+                    R.id.action_feedFragment_to_additionalInfoFeedItemFragment,
+                    bundle,
+                    optionForAdditionalInfoFeedFragment
+                )
         }
 
     }
 
-    private fun setTags(tagsChipGroup: ChipGroup, tagList: List<TagModel>){
+    private fun transactionToReceiver(
+        holder: FeedViewHolder,
+        position: Int,
+        receiverId: Int?
+    ): ClickableSpan {
+        val clickableSpanReceive = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                val bundle: Bundle = Bundle()
+                holder.userId = receiverId
+
+                val optionForProfileFragment = NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+                    .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+                    .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+                    .setPopExitAnim(R.anim.bottom_in)
+                    .build()
+
+                if (holder.userId != 0) {
+                    holder.userId?.let {
+                        bundle.putInt("userId", it)
+                        view.findNavController()
+                            .navigate(
+                                R.id.action_feedFragment_to_someonesProfileFragment,
+                                bundle,
+                                optionForProfileFragment
+                            )
+                    }
+
+                }
+
+
+            }
+        }
+        return clickableSpanReceive
+    }
+
+    private fun transactionToSender(
+        holder: FeedViewHolder,
+        position: Int,
+        senderId: Int?
+    ): ClickableSpan {
+        val clickableSpanSender = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                val bundle: Bundle = Bundle()
+                holder.userId = senderId
+
+                val optionForProfileFragment = NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+                    .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+                    .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+                    .setPopExitAnim(R.anim.bottom_in)
+                    .build()
+
+                if (holder.userId != 0) {
+                    holder.userId?.let {
+                        bundle.putInt("userId", it)
+                        view.findNavController()
+                            .navigate(
+                                R.id.action_feedFragment_to_someonesProfileFragment,
+                                bundle,
+                                optionForProfileFragment
+                            )
+                    }
+
+                }
+
+
+            }
+        }
+        return clickableSpanSender
+    }
+
+    private fun setTags(tagsChipGroup: ChipGroup, tagList: List<TagModel>) {
         for (i in tagList.indices) {
             val tagName = tagList[i].name
             val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
-                .inflate(R.layout.chip_tag_example_in_history_transaction, tagsChipGroup, false) as Chip
+                .inflate(
+                    R.layout.chip_tag_example_in_history_transaction,
+                    tagsChipGroup,
+                    false
+                ) as Chip
             with(chip) {
                 text = String.format(context.getString(R.string.setTag), tagName)
                 setEnsureMinTouchTargetSize(true)
@@ -225,7 +368,7 @@ class FeedAdapter(
     }
 
 
-    private fun convertDataToNecessaryFormat(holder: FeedViewHolder, position: Int){
+    private fun convertDataToNecessaryFormat(holder: FeedViewHolder, position: Int) {
         try {
             val zdt: ZonedDateTime =
                 ZonedDateTime.parse(currentList[position].time, DateTimeFormatter.ISO_DATE_TIME)
@@ -236,20 +379,23 @@ class FeedAdapter(
             val time = dateTime?.subSequence(11, 16)
             val today: LocalDate = LocalDate.now()
             val yesterday: String = today.minusDays(1).format(DateTimeFormatter.ISO_DATE)
-            val todayString = LocalDate.parse(today.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                .format(DateTimeFormatter.ofPattern("dd.MM.y"))
-            val yesterdayString = LocalDate.parse(yesterday, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                .format(DateTimeFormatter.ofPattern("dd.MM.y"))
+            val todayString =
+                LocalDate.parse(today.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .format(DateTimeFormatter.ofPattern("dd.MM.y"))
+            val yesterdayString =
+                LocalDate.parse(yesterday, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .format(DateTimeFormatter.ofPattern("dd.MM.y"))
 
-            if(date == todayString) {
+            if (date == todayString) {
                 holder.date = "Сегодня"
-            } else if(date == yesterdayString){
+            } else if (date == yesterdayString) {
                 holder.date = "Вчера"
-            }else{
+            } else {
                 holder.date = date.toString()
             }
             holder.time = time.toString()
-            holder.dateTime.text = String.format(context.getString(R.string.dateTime), holder.date, holder.time)
+            holder.dateTime.text =
+                String.format(context.getString(R.string.dateTime), holder.date, holder.time)
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }

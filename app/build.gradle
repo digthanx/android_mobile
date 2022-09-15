@@ -7,6 +7,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\dimam\\Desktop\\MobileDeveloper\\android_mobile\\key\\NyamaKey.jks')
+            storePassword 'hiiamNyamailikecode'
+            keyAlias 'thanksapp-release'
+            keyPassword 'hiiamNyamailikecode'
+        }
+    }
     compileSdk 32
 
 //    signingConfigs {
@@ -35,6 +43,7 @@ android {
             //signingConfig signingConfigs.release
             buildConfigField "String", "URL_PORT", "\"http://176.99.6.251:8889\""
             minifyEnabled false
+            manifestPlaceholders = [appName: "ThanksApp"]
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         getByName("debug"){

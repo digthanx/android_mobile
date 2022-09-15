@@ -5,11 +5,13 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,9 +19,8 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -33,10 +34,12 @@ import okhttp3.RequestBody
 import java.io.File
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
-    private var _binding: FragmentProfileBinding? = null
-    private val binding get() = checkNotNull(_binding) { "Binding is null" }
+
+
+    // reflection API and ViewBinding.bind are used under the hood
+    private val binding: FragmentProfileBinding by viewBinding()
 
     private val viewModel = ProfileViewModel()
 
@@ -54,47 +57,31 @@ class ProfileFragment : Fragment() {
             }
         }
 
-    private lateinit var userTgName: TextView
-    private lateinit var userAvatar: ImageView
-    private lateinit var userFio: TextView
+    private val userAvatar: ImageView by lazy { binding.userAvatar }
+    private val userName: TextView by lazy { binding.firstNameValueTv }
+    private val userSurname: TextView by lazy { binding.surnameValueTv }
+    private val userMiddleName: TextView by lazy { binding.middleNameValueTv }
+    private val userEmail: TextView by lazy { binding.emailValueTv }
+    private val userPhone: TextView by lazy { binding.mobileValueTv }
+    private val greetingUser: TextView by lazy { binding.greetingUserTv }
 
-    private lateinit var userEmail: TextView
-    private lateinit var userPhone: TextView
+
+    private val companyUser: TextView by lazy { binding.companyValueTv }
+    private val positionUser: TextView by lazy { binding.positionValueTv }
+    private val roleUser: TextView by lazy { binding.roleValueTv }
+    private val swipeToRefresh: SwipeRefreshLayout by lazy { binding.swipeRefreshLayout }
+    private val allContent: LinearLayout by lazy { binding.allContent }
+
+
     private var contactId_1: Int? = null
     private var contactId_2: Int? = null
     private var contactValue_1: String? = null
     private var contactValue_2: String? = null
 
-    private lateinit var companyUser: TextView
-    private lateinit var departmentUser: TextView
-    private lateinit var hiredAt: TextView
-    private lateinit var header: MaterialCardView
-    private lateinit var information: MaterialCardView
-    private lateinit var placeJob: MaterialCardView
-    private lateinit var swipeToRefresh: SwipeRefreshLayout
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.balanceFragment,
-                R.id.feedFragment,
-                R.id.transactionFragment,
-                R.id.historyFragment
-            )
-        )
-
-        binding.toolbarProfile.setupWithNavController(navController, appBarConfiguration)
         initViews()
         requestData()
         setData()
@@ -154,16 +141,27 @@ class ProfileFragment : Fragment() {
 
     private fun setData(){
         viewModel.profile.observe(viewLifecycleOwner){
-            if(it.profile.middlename == "null"){
-                userFio.text = String.format(requireContext().getString(R.string.userFio),
-                    it.profile.surname ,it.profile.firstname, "")
+            userName.text = it.profile.firstname
+            userSurname.text = it.profile.surname
+            userMiddleName.text = it.profile.middlename
+            companyUser.text = it.profile.organization
+            positionUser.text = it.profile.jobTitle
+            if(it.profile.jobTitle.isNullOrEmpty()){
+                binding.positionValueTv.visibility = View.GONE
+                binding.positionLabelTv.visibility = View.GONE
             }else{
-                userFio.text = String.format(requireContext().getString(R.string.userFio),
-                    it.profile.surname ,it.profile.firstname, it.profile.middlename)
+                binding.positionValueTv.visibility = View.VISIBLE
+                binding.positionLabelTv.visibility = View.VISIBLE
             }
+            greetingUser(it.profile.firstname.toString())
+//            if(it.profile.middlename == "null"){
+//                userFio.text = String.format(requireContext().getString(R.string.userFio),
+//                    it.profile.surname ,it.profile.firstname, "")
+//            }else{
+//                userFio.text = String.format(requireContext().getString(R.string.userFio),
+//                    it.profile.surname ,it.profile.firstname, it.profile.middlename)
+//            }
 
-            userTgName.text = String.format(
-                requireContext().getString(R.string.tgName), it.profile.tgName)
 
             if(it.profile.contacts.size == 1){
                 if(it.profile.contacts[0].contact_type == "@"){
@@ -194,20 +192,28 @@ class ProfileFragment : Fragment() {
                 }
             }
 
-
-            companyUser.text = it.profile.organization
-            departmentUser.text = it.profile.department
-            hiredAt.text = it.profile.hiredAt
             if(!it.profile.photo.isNullOrEmpty()){
                 Glide.with(this)
                     .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
                     .centerCrop()
                     .into(userAvatar)
-            }else{
-                binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+            }else {
+                userAvatar.setImageResource(R.drawable.ic_anon_avatar)
             }
+
             UserDataRepository.getInstance()?.profileId = it.profile.id
         }
+    }
+
+    private fun greetingUser(username: String){
+        val spannable = SpannableStringBuilder(
+            String.format(requireContext().getString(R.string.greeting_label), username)
+        )
+        spannable.setSpan(
+            ForegroundColorSpan(requireContext().getColor(R.color.general_brand)),
+            7, spannable.length - 1,
+            Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        greetingUser.text = spannable
     }
 
     private fun swipeToRefresh(){
@@ -248,8 +254,7 @@ class ProfileFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putString("contact_value_1", contactValue_1)
                 bundle.putString("contact_value_2", contactValue_2)
-                bundle.putString("company", companyUser.text.toString())
-                bundle.putString("department", departmentUser.text.toString())
+                bundle.putString("greeting", greetingUser.text.toString())
                 findNavController().navigate(R.id.action_profileFragment_to_editProfileBottomSheetFragment, bundle)
             }
             .show()
@@ -258,37 +263,17 @@ class ProfileFragment : Fragment() {
 
 
     private fun initViews() {
-        swipeToRefresh = binding.swipeRefreshLayout
         swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
-        userTgName = binding.userTelegramId
-        userAvatar = binding.userAvatar
-        userFio = binding.userFio
-
-        userEmail = binding.emailValueTv
-        userPhone = binding.mobileValueTv
-
-        companyUser = binding.companyValueTv
-        departmentUser = binding.departmentValueTv
-        hiredAt = binding.dateStartValueTv
-
-        header = binding.header
-        information = binding.information
-        placeJob = binding.placeJob
-
         viewModel.initViewModel()
 
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->
                 if (isLoading) {
-                    header.visibility = View.GONE
-                    information.visibility = View.GONE
-                    placeJob.visibility = View.GONE
+                    allContent.visibility = View.GONE
                     swipeToRefresh.isRefreshing = true
                 } else {
-                    header.visibility = View.VISIBLE
-                    information.visibility = View.VISIBLE
-                    placeJob.visibility = View.VISIBLE
+                    allContent.visibility = View.VISIBLE
                     swipeToRefresh.isRefreshing = false
 
                 }

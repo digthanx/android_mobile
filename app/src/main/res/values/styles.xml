@@ -22,8 +22,8 @@
     </style>
 
     <style name="Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="android:textColor">@color/color1</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/general_contrast</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">0.05</item>
     </style>
 

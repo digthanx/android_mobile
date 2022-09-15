@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_historyFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_historyFragment_to_someonesProfileFragment"
+            app:destination="@id/someonesProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/transactionFragment"
@@ -58,6 +61,9 @@
         <action
             android:id="@+id/action_feedFragment_to_additionalInfoFeedItemFragment"
             app:destination="@id/additionalInfoFeedItemFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_someonesProfileFragment"
+            app:destination="@id/someonesProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/transactionResultFragment"
@@ -79,6 +85,9 @@
         <action
             android:id="@+id/action_additionalInfoTransactionBottomSheetFragment2_to_historyFragment"
             app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_additionalInfoTransactionBottomSheetFragment2_to_someonesProfileFragment"
+            app:destination="@id/someonesProfileFragment" />
     </dialog>
     <fragment
         android:id="@+id/editProfileBottomSheetFragment"
@@ -95,5 +104,25 @@
         <action
             android:id="@+id/action_additionalInfoFeedItemFragment_to_feedFragment"
             app:destination="@id/feedFragment" />
+        <action
+            android:id="@+id/action_additionalInfoFeedItemFragment_to_someonesProfileFragment2"
+            app:destination="@id/someonesProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/someonesProfileFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.profileScreen.SomeonesProfileFragment"
+        android:label="SomeonesProfileFragment" >
+        <action
+            android:id="@+id/action_someonesProfileFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_someonesProfileFragment_to_feedFragment"
+            app:destination="@id/feedFragment" />
+        <action
+            android:id="@+id/action_someonesProfileFragment_to_additionalInfoTransactionBottomSheetFragment2"
+            app:destination="@id/additionalInfoTransactionBottomSheetFragment2" />
+        <action
+            android:id="@+id/action_someonesProfileFragment_to_additionalInfoFeedItemFragment"
+            app:destination="@id/additionalInfoFeedItemFragment" />
     </fragment>
 </navigation>

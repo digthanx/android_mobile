@@ -19,7 +19,9 @@
             android:layout_height="70dp"
             android:layout_marginTop="27dp"
             android:layout_marginBottom="12dp"
-            android:src="@drawable/ic_anon_avatar" />
+            android:src="@drawable/ic_anon_avatar"
+            android:clickable="true"
+            android:focusable="true"/>
 
         <TextView
             android:id="@+id/date_transaction_tv"
@@ -45,6 +47,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" \@AnnaKim_TF"
+                android:clickable="true"
+                android:focusable="true"
                 android:textColor="@color/general_brand" />
         </LinearLayout>
 
@@ -161,18 +165,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
+            android:layout_marginTop="26dp"
             android:layout_marginBottom="7dp"
             android:letterSpacing="0.05"
             android:text="@string/photo"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_img"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_marginTop="7dp"
             app:cardCornerRadius="12dp"
             android:visibility="gone"
             android:layout_marginBottom="21dp"

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
@@ -41,6 +43,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
     private var amount_thanks: String? = null
     private var we_refused_your: String? = null
     private var photo_from_sender: String? = null
+    private var userId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +59,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
             amount_thanks = it.getString(AMOUNT_THANKS)
             we_refused_your = it.getString(WE_REFUSED_YOUR_OPERATION)
             photo_from_sender = it.getString("photo_from_sender")
+            userId = it.getInt("userId")
         }
     }
 
@@ -107,6 +111,33 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
         }else{
             binding.photoTv.visibility = View.GONE
             binding.cardViewImg.visibility = View.GONE
+        }
+
+        binding.descriptionTransactionWho.setOnClickListener {
+            transactionToSomeonesProfile(userId)
+        }
+
+        binding.userAvatar.setOnClickListener {
+            transactionToSomeonesProfile(userId)
+        }
+
+    }
+
+    private fun transactionToSomeonesProfile(userId: Int?){
+        val bundle = Bundle()
+        val optionForProfileFragment = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+            .setPopExitAnim(R.anim.bottom_in)
+            .build()
+        if(userId != 0){
+            userId?.let {
+                bundle.putInt("userId", it)
+                findNavController()
+                    .navigate(R.id.action_additionalInfoTransactionBottomSheetFragment2_to_someonesProfileFragment, bundle, optionForProfileFragment)
+            }
         }
     }
 }

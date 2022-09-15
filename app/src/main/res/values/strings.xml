@@ -25,22 +25,28 @@
     <string name="auth">Авторизация</string>
     <!-- Profile Fragment -->
     <string name="username_label">ФИО</string>
+    <string name="greeting_label">Привет, %s!</string>
     <string name="legal_label">Юр.Лицо</string>
     <string name="department_label">Подразделение</string>
+    <string name="position_label">Должность</string>
     <string name="hired_label">Дата начала работы</string>
+    <string name="role_label">Роль</string>
     <string name="mobile_label">Мобильный номер</string>
     <string name="email_label">Корпоративная почта</string>
     <string name="company_label">Компания</string>
-    <string name="lastAuth">Последний вход сегодня %s</string>
+    <string name="lastAuth">Последний вход %s в %s</string>
     <string name="userFio">%s %s %s</string>
-    <string name="placeJob">МЕСТО РАБОТЫ</string>
-    <string name="information">ИНФОРМАЦИЯ</string>
+    <string name="placeJob">Место работы</string>
+    <string name="contactInformation">Контактные данные</string>
+    <string name="information">Информация</string>
     <string name="wouldYouLikeToExit">Выйти из профиля?</string>
     <string name="accept">Да</string>
     <string name="decline">Нет</string>
     <string name="whatEditInProfile">Что именно вы хотите отредактировать?</string>
     <string name="avatar">Аватар</string>
     <string name="stringData">Личную информацию</string>
+    <string name="exit">Выйти</string>
+    <string name="close">Закрыть</string>
     <!-- Edit Profile Bottom Sheet Fragment -->
     <string name="contacts">КОНТАКТЫ</string>
     <string name="save">Сохранить</string>

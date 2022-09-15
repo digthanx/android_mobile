@@ -25,7 +25,8 @@ data class ProfileResponse(
         @SerializedName("surname") val surname: String?,
         @SerializedName("first_name") val firstname: String?,
         @SerializedName("middle_name") val middlename: String?,
-        @SerializedName("nickname") val nickname: String?
+        @SerializedName("nickname") val nickname: String?,
+        @SerializedName("job_title") val jobTitle: String?
     )
 
 

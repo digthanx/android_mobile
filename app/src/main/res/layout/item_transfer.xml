@@ -28,6 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
+            android:clickable="true"
+            android:focusable="true"
             android:text="\@Somebody"
             android:textAppearance="@style/Body2"
             app:layout_constraintStart_toEndOf="@id/transfer_icon_iv"

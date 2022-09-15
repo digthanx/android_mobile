@@ -11,13 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <LinearLayout
             android:id="@+id/all_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/general_background"
             android:orientation="vertical"
-            tools:context=".presentation.fragment.profileScreen.ProfileFragment">
+            tools:context=".presentation.fragment.profileScreen.SomeonesProfileFragment">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/users_list_rv" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/header"
@@ -45,7 +57,7 @@
                         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
                     <TextView
-                        android:id="@+id/greeting_user_tv"
+                        android:id="@+id/user_tg_name"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="24dp"
@@ -56,16 +68,6 @@
                         app:layout_constraintStart_toStartOf="@id/user_avatar"
                         app:layout_constraintTop_toBottomOf="@id/user_avatar" />
 
-
-                    <ImageButton
-                        android:id="@+id/edit_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:background="@color/white"
-                        android:src="@drawable/ic_edit"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -278,14 +280,15 @@
                 android:visibility="gone" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/exit_btn"
+                android:id="@+id/close_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="44dp"
+                android:visibility="gone"
                 android:backgroundTint="@color/general_brand_secondary"
                 android:paddingVertical="17dp"
-                android:text="@string/exit"
+                android:text="@string/close"
                 android:textColor="@color/general_brand"
                 app:cornerRadius="12dp" />
 
@@ -294,4 +297,3 @@
 
     </ScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-

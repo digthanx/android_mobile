@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -34,6 +36,8 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private var photo: String? = null
     private var reason: String? = null
     private val username = UserDataRepository.getInstance()?.username
+    private var userIdReceiver: Int? = null
+    private var userIdSender: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +50,8 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             amount = it.getString(Consts.AMOUNT_THANKS)
             photo = it.getString(Consts.PHOTO_TRANSACTION)
             reason = it.getString(Consts.REASON_TRANSACTION)
+            userIdReceiver = it.getInt("userIdReceiver")
+            userIdSender = it.getInt("userIdSender")
         }
     }
 
@@ -111,5 +117,41 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             binding.photoTv.visibility = View.GONE
             binding.cardViewImg.visibility = View.GONE
         }
+
+
+        binding.descriptionTransactionWhoReceived.setOnClickListener {
+            if(userIdReceiver != 0){
+                userIdReceiver?.let {
+                    transactionToAnotherProfile(it)
+                }
+            }
+
+        }
+
+        binding.descriptionTransactionWhoSent.setOnClickListener {
+            if(userIdSender != 0){
+                userIdSender?.let {
+                    transactionToAnotherProfile(it)
+                }
+            }
+
+        }
+    }
+
+    private fun transactionToAnotherProfile(userId: Int){
+        val bundle: Bundle = Bundle()
+        val optionForProfileFragment = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
+            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
+            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
+            .setPopExitAnim(R.anim.bottom_in)
+            .build()
+
+        bundle.putInt("userId", userId)
+        findNavController().navigate(
+            R.id.action_additionalInfoFeedItemFragment_to_someonesProfileFragment2,
+            bundle, optionForProfileFragment
+        )
     }
 }
