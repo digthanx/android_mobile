@@ -40,12 +40,14 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.initViewModel()
-
+        initViews()
         requestData()
         setData()
+        swipeToRefresh()
     }
 
     private fun initViews(){
+        binding.swipeRefreshLayout.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->
@@ -62,6 +64,13 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
                 }
             }
         )
+    }
+
+    private fun swipeToRefresh(){
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            requestData()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun requestData(){
