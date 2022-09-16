@@ -8,8 +8,8 @@ class OptionsTransaction {
         .setLaunchSingleTop(true)
         .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
         .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-        .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-        .setPopExitAnim(R.anim.bottom_in)
+        .setPopEnterAnim(com.google.android.material.R.anim.abc_fade_in)
+        .setPopExitAnim(com.google.android.material.R.anim.abc_fade_out)
         .build()
 
     val optionForTransaction = NavOptions.Builder()
@@ -33,4 +33,21 @@ class OptionsTransaction {
         .setPopEnterAnim(com.google.android.material.R.anim.abc_fade_in)
         .setPopExitAnim(com.google.android.material.R.anim.abc_fade_out)
         .build()
+
+    val optionForEditProfile = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_in_right)
+        .setExitAnim(R.anim.slide_out_left)
+        .setPopEnterAnim(R.anim.slide_in_left)
+        .setPopExitAnim(R.anim.slide_out_right)
+        .build()
+
+    val optionForProfileFromEditProfile = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_in_left)
+        .setExitAnim(R.anim.slide_out_right)
+        .setPopEnterAnim(R.anim.slide_in_right)
+        .setPopExitAnim(R.anim.slide_out_left)
+        .build()
+
+
+
 }

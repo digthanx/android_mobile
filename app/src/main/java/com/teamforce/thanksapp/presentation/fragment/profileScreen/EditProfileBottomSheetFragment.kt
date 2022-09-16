@@ -18,6 +18,7 @@ import com.teamforce.thanksapp.databinding.FragmentEditProfileBottomSheetBinding
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.EditProfileViewModel
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 
 
@@ -184,7 +185,11 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
                     viewModel.loadUpdateFewContact(token, listContact)
 
                 }
-                findNavController().navigate(R.id.action_editProfileBottomSheetFragment_to_profileFragment)
+                findNavController().navigate(
+                    R.id.action_editProfileBottomSheetFragment_to_profileFragment,
+                    null,
+                    OptionsTransaction().optionForProfileFromEditProfile
+                )
 
             }
 
