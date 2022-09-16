@@ -13,7 +13,6 @@ class OptionsTransaction {
         .build()
 
     val optionForTransaction = NavOptions.Builder()
-        .setLaunchSingleTop(true)
         .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
         .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
         .setPopEnterAnim(com.google.android.material.R.anim.abc_fade_in)

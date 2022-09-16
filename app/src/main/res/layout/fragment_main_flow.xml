@@ -9,7 +9,6 @@
     tools:context=".presentation.fragment.MainFlowFragment"
     android:orientation="vertical">
 
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_main"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -24,7 +23,7 @@
         android:id="@+id/bottomAppBar"
         style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
         app:hideOnScroll="true">
 
@@ -34,7 +33,7 @@
             android:background="@color/transparent"
             android:layout_width="match_parent"
             android:layout_marginEnd="16dp"
-            android:layout_height="64dp"
+            android:layout_height="?attr/actionBarSize"
             app:menu="@menu/bottom_navigation_menu" />
 
     </com.google.android.material.bottomappbar.BottomAppBar>

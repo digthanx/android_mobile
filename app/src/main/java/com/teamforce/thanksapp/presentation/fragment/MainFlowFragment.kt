@@ -69,7 +69,25 @@ class MainFlowFragment : BaseFlowFragment(
         })
 
         binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
-            return@OnItemReselectedListener
+            when (item.itemId) {
+                R.id.balanceFragment -> {
+                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.feedFragment -> {
+                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.transactionFragment -> {
+                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.historyFragment -> {
+                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+            }
+            true
         })
     }
 
