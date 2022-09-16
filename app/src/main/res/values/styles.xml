@@ -239,5 +239,10 @@
         <item name="cornerRadius">12dp</item>
     </style>
 
+    <style name="myFAB" parent="ShapeAppearanceOverlay.Material3.FloatingActionButton">
+        <item name="background">@drawable/gradient_drawable</item>
+        <item name="android:background">@drawable/gradient_drawable</item>
+    </style>
+
 
 </resources>

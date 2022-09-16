@@ -30,17 +30,22 @@ class MainFlowFragment : BaseFlowFragment(
     }
 
     override fun setupNavigation(navController: NavController) {
-        // binding.bottomNavigation.setupWithNavController(navController)
+         binding.bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.background = null
 //        binding.navView.setupWithNavController(navController)
 
         // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
-        binding.bottomNavigation.setupWithNavController(navController)
+       // binding.bottomNavigation.setupWithNavController(navController)
 
 //        binding.profile.setOnClickListener{
 //            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
 //        }
 
-        binding.bottomNavigation.menu.getItem(0).isChecked = true
+        binding.fab.setOnClickListener {
+            navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+        }
+
+        binding.bottomNavigation.menu.getItem(1).isChecked = true
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.balanceFragment -> {
