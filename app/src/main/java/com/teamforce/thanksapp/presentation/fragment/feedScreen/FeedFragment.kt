@@ -15,11 +15,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
 import com.teamforce.thanksapp.presentation.adapter.FeedAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 
 
@@ -48,20 +50,28 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
             refreshRecyclerView(checkedId)
         }
-        val optionForProfileFragment = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.bottom_in)
-            .setPopUpTo(navController.graph.startDestinationId, false)
-            .build()
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_profileGraph, null, optionForProfileFragment )
+            findNavController().navigate(
+                R.id.action_feedFragment_to_profileGraph, null,
+                OptionsTransaction().optionForProfileFragment )
         }
         swipeToRefresh.setOnRefreshListener {
             inflateRecyclerView()
             swipeToRefresh.isRefreshing = false
+        }
+
+        binding.notify.setOnClickListener {
+            val snack = Snackbar.make(
+                requireView(),
+                requireContext().resources.getString(R.string.joke),
+                Snackbar.LENGTH_LONG
+            )
+            snack.setTextMaxLines(3)
+                .setTextColor(context?.getColor(R.color.white)!!)
+                .setAction(context?.getString(R.string.OK)!!) {
+                    snack.dismiss()
+                }
+            snack.show()
         }
     }
 

@@ -250,7 +250,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 bundle.putString("contact_value_1", contactValue_1)
                 bundle.putString("contact_value_2", contactValue_2)
                 bundle.putString("greeting", binding.greetingUserTv.text.toString())
-                findNavController().navigate(R.id.action_profileFragment_to_editProfileBottomSheetFragment, bundle)
+                findNavController().navigate(
+                    R.id.action_profileFragment_to_editProfileBottomSheetFragment,
+                    bundle,
+                OptionsTransaction().optionForEditProfile)
             }
             .show()
     }

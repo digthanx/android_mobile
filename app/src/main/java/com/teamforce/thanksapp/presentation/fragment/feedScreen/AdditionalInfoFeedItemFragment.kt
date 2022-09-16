@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 
 
@@ -140,18 +141,10 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     private fun transactionToAnotherProfile(userId: Int){
         val bundle: Bundle = Bundle()
-        val optionForProfileFragment = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.bottom_in)
-            .build()
-
         bundle.putInt("userId", userId)
         findNavController().navigate(
             R.id.action_additionalInfoFeedItemFragment_to_someonesProfileFragment2,
-            bundle, optionForProfileFragment
+            bundle, OptionsTransaction().optionForProfileFragment
         )
     }
 }

@@ -16,12 +16,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -31,11 +33,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.databinding.FragmentTransactionBinding
@@ -45,6 +44,7 @@ import com.teamforce.thanksapp.presentation.adapter.ValuesAdapter
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.getPath
 import okhttp3.MediaType
@@ -518,16 +518,10 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         bundle.putString(Consts.RECEIVER_NAME, receiverName.trim())
         bundle.putString(Consts.RECEIVER_SURNAME, receiverSurname.trim())
         bundle.putString(Consts.AVATAR_USER, photo)
-        val optionForResult = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(R.anim.bottom_out)
-            .setPopEnterAnim(com.google.android.material.R.anim.abc_fade_in)
-            .setPopExitAnim(com.google.android.material.R.anim.abc_fade_out)
-            .build()
         findNavController().navigate(
             R.id.action_transactionFragment_to_transactionResultFragment,
             bundle,
-            optionForResult
+            OptionsTransaction().optionForResult
         )
 
     }

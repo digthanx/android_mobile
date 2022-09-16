@@ -14,9 +14,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.snackbar.Snackbar
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.activityNavController
 import com.teamforce.thanksapp.utils.navigateSafely
@@ -60,6 +62,19 @@ class BalanceFragment : Fragment() {
         initViews(view)
         loadBalanceData()
         setBalanceData()
+        binding.notify.setOnClickListener {
+            val snack = Snackbar.make(
+                requireView(),
+                requireContext().resources.getString(R.string.joke),
+                Snackbar.LENGTH_LONG
+            )
+            snack.setTextMaxLines(3)
+                .setTextColor(context?.getColor(R.color.white)!!)
+                .setAction(context?.getString(R.string.OK)!!) {
+                    snack.dismiss()
+                }
+            snack.show()
+        }
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->
@@ -77,16 +92,10 @@ class BalanceFragment : Fragment() {
             loadBalanceData()
             swipeToRefresh.isRefreshing = false
         }
-        val optionForProfileFragment = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.bottom_in)
-            .setPopUpTo(navController.graph.startDestinationId, false)
-            .build()
+
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_balanceFragment_to_profileGraph, null, optionForProfileFragment )
+            findNavController().navigate(R.id.action_balanceFragment_to_profileGraph,
+                null, OptionsTransaction().optionForProfileFragment )
         }
 
     }

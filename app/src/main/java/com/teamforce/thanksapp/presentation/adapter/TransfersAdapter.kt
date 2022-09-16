@@ -38,6 +38,7 @@ import com.teamforce.thanksapp.utils.Consts.LABEL_STATUS_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.REASON_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.STATUS_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.WE_REFUSED_YOUR_OPERATION
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -230,13 +231,6 @@ class TransfersAdapter(
         }else if((dataSet[position].sender.sender_tg_name != "anonymous" && dataSet[position].recipient.recipient_tg_name.equals(username))){
             holder.userId = dataSet[position].sender_id
         }
-        val optionForProfileFragment = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.bottom_in)
-            .build()
 
         holder.tgNameUser.setOnClickListener { view ->
             val bundle: Bundle = Bundle()
@@ -245,7 +239,7 @@ class TransfersAdapter(
                     bundle.putInt("userId", it)
                     view.findNavController().navigate(
                         R.id.action_historyFragment_to_someonesProfileFragment,
-                        bundle, optionForProfileFragment)
+                        bundle, OptionsTransaction().optionForProfileFragment)
                 }
             }
 
