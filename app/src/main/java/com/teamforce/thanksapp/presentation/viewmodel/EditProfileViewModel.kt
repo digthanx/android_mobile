@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -114,7 +115,10 @@ class EditProfileViewModel(): ViewModel(){
                         Log.d("Token", "${response.body()}")
                         _updateProfile.postValue(response.body())
                     } else {
-                        _updateProfileError.postValue(response.message() + " " + response.code())
+                        val jArrayError = JSONArray(response.errorBody()!!.string())
+                        _updateProfileError.postValue(
+                            jArrayError.toString()
+                                .subSequence(2, jArrayError.toString().length - 2).toString())
                     }
                 }
 

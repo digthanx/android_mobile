@@ -8,6 +8,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
@@ -73,21 +74,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             }
         }
 
-    private val usersInput: TextInputEditText by lazy { binding.usersEt }
-    private val usersInputLayout: TextInputLayout by lazy { binding.textField }
-    private val countEditText: EditText by lazy { binding.countValueEt }
-    private val reasonEditText: EditText by lazy { binding.messageValueEt }
-    private val recyclerView: RecyclerView by lazy { binding.usersListRv }
-    private val sendCoinsGroup: LinearLayout by lazy { binding.sendCoinLinear }
-    private val availableCoins: TextView by lazy { binding.distributedValueTv }
-    private val chipGroup: ChipGroup by lazy { binding.chipGroupThanks }
-    private val checkBoxIsAnon: SwitchMaterial by lazy { binding.isAnon }
-    private val progressBar: ProgressBar by lazy { binding.progressBar }
-    private val sendButton: Button by lazy { binding.sendCoinBtn }
-    private val checkBoxAddValues: SwitchMaterial by lazy { binding.addValues }
-    private val textInputLayoutAddValues: TextInputLayout by lazy { binding.textInputLayoutValue }
-    private val etAddValues: TextInputEditText by lazy { binding.etValue }
-    private val tagsChipGroup: ChipGroup by lazy { binding.tagsChipGroup }
+
     private var listValues: List<TagModel> = listOf()
     private var listCheckedValues: MutableList<TagModel> = mutableListOf()
     private var listCheckedIdTags: MutableList<Int> = mutableListOf()
@@ -116,7 +103,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         viewModel = TransactionViewModel()
         viewModel.initViewModel()
         initViews(view)
-        dropDownMenuUserInput(usersInput)
+        dropDownMenuUserInput(binding.usersEt)
         loadValuesFromDB()
         setValuesFromDb()
         appealToDB()
@@ -128,7 +115,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         }
         viewModel.balance.observe(viewLifecycleOwner) {
             UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
-            availableCoins.text = it.distribute.amount.toString()
+            binding.distributedValueTv.text = it.distribute.amount.toString()
         }
 
         attachImageBtn.setOnClickListener {
@@ -140,28 +127,33 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             imgCard.visibility = View.GONE
             imageFilePart = null
         }
-
-        etAddValues.setOnClickListener {
+        binding.etValue.inputType = InputType.TYPE_NULL
+        binding.etValue.setOnClickListener {
             clearTags()
             createDialog(listValues, listCheckedValues)
         }
-
+        binding.etValue.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                clearTags()
+                createDialog(listValues, listCheckedValues)
+            }
+        }
 
     }
 
-    private fun tagsToIdTags(){
-        listCheckedValues.forEach{
+    private fun tagsToIdTags() {
+        listCheckedValues.forEach {
             listCheckedIdTags.add(it.id)
         }
         Log.d("Token", "Список id tags ${listCheckedIdTags}")
     }
 
     private fun clearTags() {
-        tagsChipGroup.removeAllViews()
-        etAddValues.setText("")
+        binding.tagsChipGroup.removeAllViews()
+        binding.etValue.setText("")
     }
 
-    private fun clearTagsWithListOfCheckedTags(){
+    private fun clearTagsWithListOfCheckedTags() {
         clearTags()
         listCheckedValues.clear()
     }
@@ -170,8 +162,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         for (i in tagList.indices) {
             val tagModel = tagList[i]
             val tagName = tagList[i].name
-            val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
-                .inflate(R.layout.chip_tag_example_transaction_tag, tagsChipGroup, false) as Chip
+            val chip: Chip = LayoutInflater.from(binding.tagsChipGroup.context)
+                .inflate(
+                    R.layout.chip_tag_example_transaction_tag,
+                    binding.tagsChipGroup,
+                    false
+                ) as Chip
             with(chip) {
                 setText(tagName)
                 setEnsureMinTouchTargetSize(true)
@@ -183,7 +179,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                         override fun onAnimationRepeat(animation: Animation?) {}
 
                         override fun onAnimationEnd(animation: Animation?) {
-                            tagsChipGroup.removeView(it)
+                            binding.tagsChipGroup.removeView(it)
                         }
 
                         override fun onAnimationStart(animation: Animation?) {}
@@ -195,26 +191,26 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 }
             }
 
-            tagsChipGroup.addView(chip)
+            binding.tagsChipGroup.addView(chip)
             setTextInValuesEditText()
         }
     }
 
     private fun setTextInValuesEditText() {
         if (listCheckedValues.size > 0) {
-            etAddValues.setText(
+            binding.etValue.setText(
                 String.format(
                     requireContext().getString(R.string.addedSomeValues), listCheckedValues.size
                 )
             )
         } else if (listCheckedValues.size == 1) {
-            etAddValues.setText(
+            binding.etValue.setText(
                 String.format(
                     requireContext().getString(R.string.addedOneValue), listCheckedValues.size
                 )
             )
         } else {
-            etAddValues.setText("")
+            binding.etValue.setText("")
         }
     }
 
@@ -263,16 +259,14 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         parent.gravity = Gravity.CENTER_HORIZONTAL
         val leftSpacer = parent.getChildAt(1)
         leftSpacer.visibility = View.GONE
-        // Дальше нужно по полученному списку показать чипсы и тд
-
     }
 
     private fun openValuesEt() {
-        checkBoxAddValues.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.addValues.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                textInputLayoutAddValues.visibility = View.VISIBLE
+                binding.textInputLayoutValue.visibility = View.VISIBLE
             } else {
-                textInputLayoutAddValues.visibility = View.GONE
+                binding.textInputLayoutValue.visibility = View.GONE
                 clearTagsWithListOfCheckedTags()
             }
         }
@@ -280,17 +274,18 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
 
 
     private fun initViews(view: View) {
-        sendButton.setOnClickListener(this)
+        binding.sendCoinBtn.setOnClickListener(this)
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->
                 if (isLoading) {
-                    recyclerView.visibility = View.GONE
-                    progressBar.visibility = View.VISIBLE
+                    binding.usersListRv.visibility = View.GONE
+                    binding.progressBar.visibility = View.VISIBLE
                 } else {
-                    recyclerView.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
+                    binding.usersListRv.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
                 }
+
             }
         )
     }
@@ -345,25 +340,25 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
 
     fun checkedChip() {
         Log.d("Token", "i'm inner chip function")
-        chipGroup.setOnCheckedChangeListener { group, checkedId ->
+        binding.chipGroupThanks.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 R.id.chipOne -> {
                     Log.d("Token", "i'm inner chip one")
-                    countEditText.setText("1")
+                    binding.countValueEt.setText("1")
                 }
                 R.id.chipFive -> {
                     binding.chipFive.apply {
-                        countEditText.setText("5")
+                        binding.countValueEt.setText("5")
                     }
                 }
                 R.id.chipTen -> {
                     binding.chipTen.apply {
-                        countEditText.setText("10")
+                        binding.countValueEt.setText("10")
                     }
                 }
                 R.id.chipTwentyFive -> {
                     binding.chipTwentyFive.apply {
-                        countEditText.setText("25")
+                        binding.countValueEt.setText("25")
                     }
                 }
             }
@@ -380,12 +375,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                     UserDataRepository.getInstance()?.token?.let {
                         viewModel.loadUsersList(s.toString(), it)
                     }
-                } else if (usersInput.text?.trim().toString().isEmpty()) {
+                } else if (binding.usersEt.text?.trim().toString().isEmpty()) {
                     UserDataRepository.getInstance()?.token?.let {
                         viewModel.loadUsersListWithoutInput("true", it)
                     }
                 } else {
-                    recyclerView.visibility = View.GONE
+                    binding.usersListRv.visibility = View.GONE
                 }
             }
 
@@ -394,7 +389,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
 
             override fun afterTextChanged(s: Editable) {}
         })
-        if (usersInput.text?.trim().toString().isEmpty()) {
+        if (binding.usersEt.text?.trim().toString().isEmpty()) {
             UserDataRepository.getInstance()?.token?.let {
                 viewModel.loadUsersListWithoutInput("true", it)
             }
@@ -403,15 +398,15 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
 
     fun appealToDB() {
         viewModel.users.observe(viewLifecycleOwner) {
-            recyclerView.visibility = View.VISIBLE
-            recyclerView.adapter = UsersAdapter(it, this)
+            binding.usersListRv.visibility = View.VISIBLE
+            binding.usersListRv.adapter = UsersAdapter(it, this)
         }
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
             if (it) {
                 Toast.makeText(requireContext(), "Success!", Toast.LENGTH_LONG).show()
-                Log.d("Token", " Юзер для передачи данных в результат ${user}")
+                // Log.d("Token", " Юзер для передачи данных в результат ${user}")
                 showResultTransaction(
-                    amountThanks = Integer.valueOf(countEditText.text.toString()),
+                    amountThanks = Integer.valueOf(binding.countValueEt.text.toString()),
                     receiverTg = user?.tgName.toString(),
                     receiverName = user?.firstname.toString(),
                     receiverSurname = user?.surname.toString(),
@@ -420,14 +415,18 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             }
         }
         viewModel.sendCoinsError.observe(viewLifecycleOwner) {
-            sendCoinsGroup.visibility = View.GONE
-            usersInputLayout.visibility = View.VISIBLE
+//            binding.sendCoinLinear.visibility = View.GONE
+//            binding.textField.visibility = View.VISIBLE
+            binding.messageValueEt.setText("")
+            binding.countValueEt.setText("")
             //Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
             val snack = Snackbar.make(
                 requireView(),
-                requireContext().resources.getString(R.string.unsuccessfulSendCoins),
+                it,
                 Snackbar.LENGTH_LONG
             )
+            binding.sendCoinBtn.isClickable = true
+            binding.sendCoinBtn.isEnabled = true
             snack.setTextMaxLines(3)
                 .setTextColor(context?.getColor(R.color.white)!!)
                 .setAction(context?.getString(R.string.OK)!!) {
@@ -444,9 +443,9 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     override fun onClick(v: View?) {
         Log.d("Token", " View id -  ${v?.id}")
         if (v?.id == R.id.user_item) {
-            recyclerView.visibility = View.GONE
+            binding.usersListRv.visibility = View.GONE
             user = v.tag as UserBean
-            usersInputLayout.visibility = View.GONE
+            binding.textField.visibility = View.GONE
             with(binding) {
                 if (!user?.photo.isNullOrEmpty()) {
                     Glide.with(v)
@@ -458,12 +457,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 receiverNameLabelTv.text = user?.firstname
                 receiverSurnameLabelTv.text = user?.surname
             }
-            sendCoinsGroup.visibility = View.VISIBLE
+            binding.sendCoinLinear.visibility = View.VISIBLE
         } else if (v?.id == R.id.send_coin_btn) {
             val userId = user?.userId ?: -1
-            val countText = countEditText.text.toString()
-            val reason = reasonEditText.text.toString()
-            val isAnon = when (checkBoxIsAnon.isChecked) {
+            val countText = binding.countValueEt.text.toString()
+            val reason = binding.messageValueEt.text.toString()
+            val isAnon = when (binding.isAnon.isChecked) {
                 true -> true
                 else -> false
             }
@@ -472,15 +471,15 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 try {
                     val count: Int = Integer.valueOf(countText)
                     UserDataRepository.getInstance()?.token?.let {
-                            viewModel.sendCoinsWithImage(
-                                it,
-                                userId,
-                                count,
-                                reason,
-                                isAnon,
-                                imageFilePart,
-                                listCheckedIdTags
-                            )
+                        viewModel.sendCoinsWithImage(
+                            it,
+                            userId,
+                            count,
+                            reason,
+                            isAnon,
+                            imageFilePart,
+                            listCheckedIdTags
+                        )
                         binding.sendCoinBtn.isClickable = false
                         binding.sendCoinBtn.isEnabled = false
                     }
@@ -488,6 +487,18 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
                     //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()
                 }
+            } else {
+                val snack = Snackbar.make(
+                    requireView(),
+                    requireContext().resources.getString(R.string.unsuccessfulSendCoins),
+                    Snackbar.LENGTH_LONG
+                )
+                snack.setTextMaxLines(3)
+                    .setTextColor(context?.getColor(R.color.white)!!)
+                    .setAction(context?.getString(R.string.OK)!!) {
+                        snack.dismiss()
+                    }
+                snack.show()
             }
         }
     }
@@ -497,10 +508,10 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         amountThanks: Int, receiverTg: String, receiverName: String,
         receiverSurname: String, photo: String
     ) {
-        usersInputLayout.editText?.setText("")
-        countEditText.setText(R.string.empty)
-        reasonEditText.setText(R.string.empty)
-        sendCoinsGroup.visibility = View.GONE
+        binding.textField.editText?.setText("")
+        binding.countValueEt.setText(R.string.empty)
+        binding.messageValueEt.setText(R.string.empty)
+        binding.sendCoinLinear.visibility = View.GONE
         val bundle = Bundle()
         bundle.putInt(Consts.AMOUNT_THANKS, amountThanks)
         bundle.putString(Consts.RECEIVER_TG, receiverTg.trim())

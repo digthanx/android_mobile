@@ -20,9 +20,12 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class TransactionViewModel : ViewModel() {
 
@@ -216,9 +219,12 @@ class TransactionViewModel : ViewModel() {
                             Log.d("Token", "Успешный перевод средств")
                             _isSuccessOperation.postValue(true)
                         } else if (response.code() == 400) {
-                            _sendCoinsError.postValue(response.message() + " " + response.code())
+                            val jArrayError = JSONArray(response.errorBody()!!.string())
+                           // _sendCoinsError.postValue(response.message() + " " + response.code())
+                            _sendCoinsError.postValue(jArrayError.toString().subSequence(2, jArrayError.toString().length - 2).toString())
                         } else {
-                            _sendCoinsError.postValue(response.message() + " " + response.code())
+                            val jArrayError = JSONArray(response.errorBody()!!.string())
+                            _sendCoinsError.postValue(jArrayError.toString().subSequence(2, jArrayError.toString().length - 2).toString())
                         }
                     }
 

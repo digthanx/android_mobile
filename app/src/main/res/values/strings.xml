@@ -78,7 +78,7 @@
     <string name="send">Перевести</string>
     <string name="addPhoto">Добавить фото</string>
     <string name="reason_transaction">Причина перевода</string>
-    <string name="unsuccessfulSendCoins">Нельзя переводить больше 50% от суммы доступной для перевода</string>
+    <string name="unsuccessfulSendCoins">Кол-во спасибок и причина перевода - обязательные поля</string>
     <string name="isAnon">Анонимно</string>
     <string name="addValues">Добавить ценность</string>
     <string name="choiceValues">Выберите ценность</string>
