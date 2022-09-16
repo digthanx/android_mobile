@@ -74,6 +74,7 @@
     <string name="will_burn_after">Сгорят через \u200b %s день</string>
     <string name="will_burn_after_2">Сгорят через %s дня</string>
     <string name="will_burn_after_3">Сгорят через %s дней</string>
+    <string name="joke">Мы ценим ваше любопытство и в будущих обновлениях обязательно сюда что-нибудь добавим &#128522;</string>
     <!-- Транзакция фрагмент -->
     <string name="send">Перевести</string>
     <string name="addPhoto">Добавить фото</string>

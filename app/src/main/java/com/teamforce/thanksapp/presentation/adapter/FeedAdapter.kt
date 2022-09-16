@@ -277,14 +277,6 @@ class FeedAdapter(
                 val bundle: Bundle = Bundle()
                 holder.userId = receiverId
 
-                val optionForProfileFragment = NavOptions.Builder()
-                    .setLaunchSingleTop(true)
-                    .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-                    .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-                    .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-                    .setPopExitAnim(R.anim.bottom_in)
-                    .build()
-
                 if (holder.userId != 0) {
                     holder.userId?.let {
                         bundle.putInt("userId", it)
@@ -292,7 +284,7 @@ class FeedAdapter(
                             .navigate(
                                 R.id.action_feedFragment_to_someonesProfileFragment,
                                 bundle,
-                                optionForProfileFragment
+                                OptionsTransaction().optionForProfileFragment
                             )
                     }
 

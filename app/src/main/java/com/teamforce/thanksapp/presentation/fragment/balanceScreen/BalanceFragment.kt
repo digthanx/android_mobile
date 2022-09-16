@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.snackbar.Snackbar
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
@@ -61,6 +62,19 @@ class BalanceFragment : Fragment() {
         initViews(view)
         loadBalanceData()
         setBalanceData()
+        binding.notify.setOnClickListener {
+            val snack = Snackbar.make(
+                requireView(),
+                requireContext().resources.getString(R.string.joke),
+                Snackbar.LENGTH_LONG
+            )
+            snack.setTextMaxLines(3)
+                .setTextColor(context?.getColor(R.color.white)!!)
+                .setAction(context?.getString(R.string.OK)!!) {
+                    snack.dismiss()
+                }
+            snack.show()
+        }
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->

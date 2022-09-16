@@ -55,9 +55,6 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
         writeData()
         listenerErrors()
         logicalSaveData()
-        binding.header.setOnClickListener {
-            findNavController().navigate(R.id.action_editProfileBottomSheetFragment_to_profileFragment)
-        }
     }
 
 

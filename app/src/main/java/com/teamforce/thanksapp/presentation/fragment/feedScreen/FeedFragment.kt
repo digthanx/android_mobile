@@ -15,6 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
@@ -57,6 +58,20 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         swipeToRefresh.setOnRefreshListener {
             inflateRecyclerView()
             swipeToRefresh.isRefreshing = false
+        }
+
+        binding.notify.setOnClickListener {
+            val snack = Snackbar.make(
+                requireView(),
+                requireContext().resources.getString(R.string.joke),
+                Snackbar.LENGTH_LONG
+            )
+            snack.setTextMaxLines(3)
+                .setTextColor(context?.getColor(R.color.white)!!)
+                .setAction(context?.getString(R.string.OK)!!) {
+                    snack.dismiss()
+                }
+            snack.show()
         }
     }
 

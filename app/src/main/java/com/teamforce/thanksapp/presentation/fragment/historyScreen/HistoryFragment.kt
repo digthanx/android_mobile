@@ -68,6 +68,19 @@ class HistoryFragment : Fragment() {
             findNavController().navigate(R.id.action_historyFragment_to_profileGraph,
                 null, OptionsTransaction().optionForProfileFragment )
         }
+        binding.notify.setOnClickListener {
+            val snack = Snackbar.make(
+                requireView(),
+                requireContext().resources.getString(R.string.joke),
+                Snackbar.LENGTH_LONG
+            )
+            snack.setTextMaxLines(3)
+                .setTextColor(context?.getColor(R.color.white)!!)
+                .setAction(context?.getString(R.string.OK)!!) {
+                    snack.dismiss()
+                }
+            snack.show()
+        }
     }
 
     private fun initViews() {
