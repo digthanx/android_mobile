@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -24,6 +23,7 @@ import com.teamforce.thanksapp.databinding.FragmentHistoryBinding
 import com.teamforce.thanksapp.model.domain.HistoryModel
 import com.teamforce.thanksapp.presentation.adapter.HistoryAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 
 
@@ -64,16 +64,9 @@ class HistoryFragment : Fragment() {
         loadDataFromServer()
         setDataWithChip(view)
 
-        val optionForProfileFragment = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.bottom_in)
-            .setPopUpTo(navController.graph.startDestinationId, false)
-            .build()
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_historyFragment_to_profileGraph, null, optionForProfileFragment )
+            findNavController().navigate(R.id.action_historyFragment_to_profileGraph,
+                null, OptionsTransaction().optionForProfileFragment )
         }
     }
 

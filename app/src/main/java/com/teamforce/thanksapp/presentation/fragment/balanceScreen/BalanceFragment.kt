@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.activityNavController
 import com.teamforce.thanksapp.utils.navigateSafely
@@ -77,16 +78,10 @@ class BalanceFragment : Fragment() {
             loadBalanceData()
             swipeToRefresh.isRefreshing = false
         }
-        val optionForProfileFragment = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.bottom_in)
-            .setPopUpTo(navController.graph.startDestinationId, false)
-            .build()
+
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_balanceFragment_to_profileGraph, null, optionForProfileFragment )
+            findNavController().navigate(R.id.action_balanceFragment_to_profileGraph,
+                null, OptionsTransaction().optionForProfileFragment )
         }
 
     }

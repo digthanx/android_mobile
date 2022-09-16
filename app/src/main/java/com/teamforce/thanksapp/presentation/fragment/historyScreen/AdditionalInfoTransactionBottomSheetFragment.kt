@@ -24,6 +24,7 @@ import com.teamforce.thanksapp.utils.Consts.LABEL_STATUS_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.REASON_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.STATUS_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.WE_REFUSED_YOUR_OPERATION
+import com.teamforce.thanksapp.utils.OptionsTransaction
 
 
 class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment() {
@@ -125,18 +126,13 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
 
     private fun transactionToSomeonesProfile(userId: Int?){
         val bundle = Bundle()
-        val optionForProfileFragment = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(androidx.appcompat.R.anim.abc_slide_in_bottom)
-            .setPopExitAnim(R.anim.bottom_in)
-            .build()
         if(userId != 0){
             userId?.let {
                 bundle.putInt("userId", it)
                 findNavController()
-                    .navigate(R.id.action_additionalInfoTransactionBottomSheetFragment2_to_someonesProfileFragment, bundle, optionForProfileFragment)
+                    .navigate(
+                        R.id.action_additionalInfoTransactionBottomSheetFragment2_to_someonesProfileFragment,
+                        bundle, OptionsTransaction().optionForProfileFragment)
             }
         }
     }

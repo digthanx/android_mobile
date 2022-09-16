@@ -35,6 +35,7 @@ import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.ItemFeedBinding
 import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -256,19 +257,11 @@ class FeedAdapter(
 
             }
 
-            val optionForAdditionalInfoFeedFragment = NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-                .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-                .setPopEnterAnim(com.google.android.material.R.anim.abc_fade_in)
-                .setPopExitAnim(com.google.android.material.R.anim.abc_fade_out)
-                .build()
-
             v.findNavController()
                 .navigate(
                     R.id.action_feedFragment_to_additionalInfoFeedItemFragment,
                     bundle,
-                    optionForAdditionalInfoFeedFragment
+                    OptionsTransaction().optionForAdditionalInfoFeedFragment
                 )
         }
 
