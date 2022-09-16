@@ -57,7 +57,8 @@ class ValuesAdapter(
         }
         myHolder.cardMainView.setOnClickListener {
             dataSet[position].enabled = !dataSet[position].enabled
-            if(!listCheckedValues.contains(dataSet[position])){ holder.checkIcon.visibility = View.VISIBLE
+            if(!listCheckedValues.contains(dataSet[position])){
+                holder.checkIcon.visibility = View.VISIBLE
                 holder.cardImage.strokeWidth = 8f
                 holder.cardImage.imageTintList = context.getColorStateList(R.color.color_feed_item_orange)
                 listCheckedValues.add(dataSet[position])

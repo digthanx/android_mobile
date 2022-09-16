@@ -133,7 +133,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             createDialog(listValues, listCheckedValues)
         }
         binding.etValue.setOnFocusChangeListener { v, hasFocus ->
-            if(hasFocus){
+            if (hasFocus) {
                 clearTags()
                 createDialog(listValues, listCheckedValues)
             }
@@ -141,8 +141,8 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
 
     }
 
-    private fun tagsToIdTags(){
-        listCheckedValues.forEach{
+    private fun tagsToIdTags() {
+        listCheckedValues.forEach {
             listCheckedIdTags.add(it.id)
         }
         Log.d("Token", "Список id tags ${listCheckedIdTags}")
@@ -153,7 +153,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         binding.etValue.setText("")
     }
 
-    private fun clearTagsWithListOfCheckedTags(){
+    private fun clearTagsWithListOfCheckedTags() {
         clearTags()
         listCheckedValues.clear()
     }
@@ -163,7 +163,11 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             val tagModel = tagList[i]
             val tagName = tagList[i].name
             val chip: Chip = LayoutInflater.from(binding.tagsChipGroup.context)
-                .inflate(R.layout.chip_tag_example_transaction_tag, binding.tagsChipGroup, false) as Chip
+                .inflate(
+                    R.layout.chip_tag_example_transaction_tag,
+                    binding.tagsChipGroup,
+                    false
+                ) as Chip
             with(chip) {
                 setText(tagName)
                 setEnsureMinTouchTargetSize(true)
@@ -255,8 +259,6 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         parent.gravity = Gravity.CENTER_HORIZONTAL
         val leftSpacer = parent.getChildAt(1)
         leftSpacer.visibility = View.GONE
-        // Дальше нужно по полученному списку показать чипсы и тд
-
     }
 
     private fun openValuesEt() {
@@ -283,6 +285,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                     binding.usersListRv.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
                 }
+
             }
         )
     }
@@ -401,7 +404,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
             if (it) {
                 Toast.makeText(requireContext(), "Success!", Toast.LENGTH_LONG).show()
-               // Log.d("Token", " Юзер для передачи данных в результат ${user}")
+                // Log.d("Token", " Юзер для передачи данных в результат ${user}")
                 showResultTransaction(
                     amountThanks = Integer.valueOf(binding.countValueEt.text.toString()),
                     receiverTg = user?.tgName.toString(),
@@ -468,15 +471,15 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 try {
                     val count: Int = Integer.valueOf(countText)
                     UserDataRepository.getInstance()?.token?.let {
-                            viewModel.sendCoinsWithImage(
-                                it,
-                                userId,
-                                count,
-                                reason,
-                                isAnon,
-                                imageFilePart,
-                                listCheckedIdTags
-                            )
+                        viewModel.sendCoinsWithImage(
+                            it,
+                            userId,
+                            count,
+                            reason,
+                            isAnon,
+                            imageFilePart,
+                            listCheckedIdTags
+                        )
                         binding.sendCoinBtn.isClickable = false
                         binding.sendCoinBtn.isEnabled = false
                     }
@@ -484,7 +487,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
                     //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()
                 }
-            }else{
+            } else {
                 val snack = Snackbar.make(
                     requireView(),
                     requireContext().resources.getString(R.string.unsuccessfulSendCoins),

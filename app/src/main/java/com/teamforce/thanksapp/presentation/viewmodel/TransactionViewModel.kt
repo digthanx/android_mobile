@@ -221,11 +221,10 @@ class TransactionViewModel : ViewModel() {
                         } else if (response.code() == 400) {
                             val jArrayError = JSONArray(response.errorBody()!!.string())
                            // _sendCoinsError.postValue(response.message() + " " + response.code())
-                            _sendCoinsError.postValue(jArrayError.toString() + " " + response.code())
+                            _sendCoinsError.postValue(jArrayError.toString().subSequence(2, jArrayError.toString().length - 2).toString())
                         } else {
-                            val jArrayError = JSONArray(response.errorBody()!!.string()
-                                .subSequence(2, response.errorBody()!!.string().length - 2))
-                            _sendCoinsError.postValue(jArrayError.toString() + " " + response.code())
+                            val jArrayError = JSONArray(response.errorBody()!!.string())
+                            _sendCoinsError.postValue(jArrayError.toString().subSequence(2, jArrayError.toString().length - 2).toString())
                         }
                     }
 

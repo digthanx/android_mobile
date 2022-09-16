@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.presentation.fragment.profileScreen
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.databinding.FragmentEditProfileBottomSheetBinding
@@ -25,9 +27,6 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
     private val binding: FragmentEditProfileBottomSheetBinding by viewBinding()
 
     private val viewModel = EditProfileViewModel()
-
-
-
 
 
     private var contactValue_1Email: String? = null
@@ -53,12 +52,13 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
         viewModel.initViewModel()
         loadDataFromServer()
         writeData()
+        listenerErrors()
         logicalSaveData()
         binding.header.setOnClickListener {
             findNavController().navigate(R.id.action_editProfileBottomSheetFragment_to_profileFragment)
         }
     }
-    
+
 
     private fun loadDataFromServer() {
         UserDataRepository.getInstance()?.token?.let {
@@ -75,10 +75,10 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
             binding.middleEt.setText(it.profile.middlename)
             binding.companyValueTv.setText(it.profile.organization)
 
-            if(it.profile.jobTitle.isNullOrEmpty()){
+            if (it.profile.jobTitle.isNullOrEmpty()) {
                 binding.positionValueTv.visibility = View.GONE
                 binding.positionLabelTv.visibility = View.GONE
-            }else{
+            } else {
                 binding.positionValueTv.visibility = View.VISIBLE
                 binding.positionLabelTv.visibility = View.VISIBLE
             }
@@ -112,9 +112,29 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
                     emailContact = it.profile.contacts[1]
                     phoneContact = it.profile.contacts[0]
                 }
+            }else{
+                phoneContact = Contact(null, "P", "")
+                emailContact = Contact(null, "@", "")
             }
 
         }
+    }
+
+    private fun listenerErrors(){
+        viewModel.profileError.observe(viewLifecycleOwner){
+            val snack = Snackbar.make(
+                requireView(),
+                it,
+                Snackbar.LENGTH_LONG
+            )
+            snack.setTextMaxLines(3)
+                .setTextColor(context?.getColor(R.color.white)!!)
+                .setAction(context?.getString(R.string.OK)!!) {
+                    snack.dismiss()
+                }
+            snack.show()
+        }
+
     }
 
     private fun logicalSaveData() {
@@ -156,12 +176,13 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
                     val listContact: MutableList<Contact> = mutableListOf<Contact>()
                     emailContact?.contact_id = binding.emailEt.text.toString()
                     phoneContact?.contact_id = binding.phoneEt.text.toString()
-                    listContact.add(emailContact!!)
-                    listContact.add(phoneContact!!)
+                    Log.d("Errori", "${binding.emailEt.text.toString()}")
+                    Log.d("Errori", "${emailContact?.contact_id}")
+                    emailContact?.let { listContact.add(it) }
+                    phoneContact?.let { listContact.add(it) }
 
-                    UserDataRepository.getInstance()?.token?.let {
-                        viewModel.loadUpdateFewContact(it, listContact)
-                    }
+                    viewModel.loadUpdateFewContact(token, listContact)
+
                 }
                 findNavController().navigate(R.id.action_editProfileBottomSheetFragment_to_profileFragment)
 
