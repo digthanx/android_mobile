@@ -17,13 +17,8 @@
 
 
     <item
-        android:bottom="5dp"
-        android:left="5dp"
-        android:right="5dp"
-        android:top="5dp">
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/ic_send_new_transaction"/>
+       android:gravity="center"
+        android:drawable="@drawable/ic_send_vector">
     </item>
 
 
