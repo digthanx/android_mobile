@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoTransactionBottomSheetBinding
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
 import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.DATE_TRANSACTION
@@ -102,11 +103,11 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
                 .into(binding.userAvatar)
         }
         if (!photo_from_sender.isNullOrEmpty()){
-            Log.d("Token", "${photo_from_sender}")
+            Log.d("Token", "${Consts.BASE_URL}${photo_from_sender}")
             binding.photoTv.visibility = View.VISIBLE
             binding.cardViewImg.visibility = View.VISIBLE
             Glide.with(this)
-                .load(photo_from_sender)
+                .load("${Consts.BASE_URL}${photo_from_sender}")
                 .centerCrop()
                 .into(binding.senderImage)
         }else{

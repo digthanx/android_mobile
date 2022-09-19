@@ -8,6 +8,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
@@ -39,6 +42,15 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.balanceFragment,
+                R.id.feedFragment,
+                R.id.historyFragment
+            )
+        )
+        binding.toolbarTransaction.setupWithNavController(navController, appBarConfiguration)
         viewModel.initViewModel()
         initViews()
         requestData()

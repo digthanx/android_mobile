@@ -7,13 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
@@ -55,26 +59,22 @@ class BalanceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.balanceFragment,
+                R.id.feedFragment,
+                R.id.transactionFragment,
+                R.id.historyFragment
+            )
+        )
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
+        setupNavigation(navController)
         initViews(view)
         loadBalanceData()
         setBalanceData()
-        binding.notify.setOnClickListener {
-            val snack = Snackbar.make(
-                requireView(),
-                requireContext().resources.getString(R.string.joke),
-                Snackbar.LENGTH_LONG
-            )
-            snack.setTextMaxLines(3)
-                .setTextColor(context?.getColor(R.color.white)!!)
-                .setAction(context?.getString(R.string.OK)!!) {
-                    snack.dismiss()
-                }
-            snack.show()
-        }
+        displaySnack()
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->
@@ -94,29 +94,165 @@ class BalanceFragment : Fragment() {
         }
 
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_balanceFragment_to_profileGraph,
-                null, OptionsTransaction().optionForProfileFragment )
+            findNavController().navigate(
+                R.id.action_balanceFragment_to_profileGraph,
+                null, OptionsTransaction().optionForProfileFragment
+            )
         }
 
     }
 
+    private fun displaySnack(){
+        binding.notify.setOnClickListener {
+            binding.fab.hide()
+            val snack = Snackbar.make(
+                binding.fab.rootView,
+                requireContext().resources.getString(R.string.joke),
+                Snackbar.LENGTH_LONG
+            )
+            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
+                override fun onShown(transientBottomBar: Snackbar?) {
+                    super.onShown(transientBottomBar)
+                }
+
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    super.onDismissed(transientBottomBar, event)
+                    if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
+                        binding.fab.show()
+                    }
+                }
+            })
+            snack.setTextMaxLines(3)
+                .setTextColor(context?.getColor(R.color.white)!!)
+                .setAction(context?.getString(R.string.OK)!!) {
+                    snack.dismiss()
+                }
+            snack.show()
+
+        }
+    }
+
+    private fun setupNavigation(navController: NavController) {
+        binding.bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.background = null
+//        binding.navView.setupWithNavController(navController)
+
+        // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
+        // binding.bottomNavigation.setupWithNavController(navController)
+
+//        binding.profile.setOnClickListener{
+//            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
+//        }
+
+        binding.fab.setOnClickListener {
+            navController.navigate(
+                R.id.transactionFragment,
+                null,
+                OptionsTransaction().optionForTransaction
+            )
+        }
+
+        binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.balanceFragment -> {
+                    navController.navigate(
+                        R.id.balanceFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
+                    return@OnItemSelectedListener true
+                }
+                R.id.feedFragment -> {
+                    navController.navigate(
+                        R.id.feedFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
+                    return@OnItemSelectedListener true
+                }
+                R.id.transactionFragment -> {
+                    navController.navigate(
+                        R.id.transactionFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
+                    return@OnItemSelectedListener true
+                }
+                R.id.historyFragment -> {
+                    navController.navigate(
+                        R.id.historyFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
+                    return@OnItemSelectedListener true
+                }
+            }
+            true
+        })
+
+        binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
+            when (item.itemId) {
+                R.id.balanceFragment -> {
+                    navController.navigate(
+                        R.id.balanceFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
+                    return@OnItemReselectedListener
+                }
+                R.id.feedFragment -> {
+                    navController.navigate(
+                        R.id.feedFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
+                    return@OnItemReselectedListener
+                }
+                R.id.transactionFragment -> {
+                    navController.navigate(
+                        R.id.transactionFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
+                    return@OnItemReselectedListener
+                }
+                R.id.historyFragment -> {
+                    navController.navigate(
+                        R.id.historyFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
+                    return@OnItemReselectedListener
+                }
+            }
+            true
+        })
+    }
 
 
-    private fun loadBalanceData(){
+    private fun loadBalanceData() {
         UserDataRepository.getInstance()?.token?.let {
             viewModel.loadUserBalance(it)
         }
     }
 
-    private fun setBalanceData(){
+    private fun setBalanceData() {
         viewModel.balance.observe(viewLifecycleOwner) {
             UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
             count.text = it.income.amount.toString()
-            distributed.text = String.format(getString(R.string.spaceWithContent), it.income.sended.toString())
+            distributed.text =
+                String.format(getString(R.string.spaceWithContent), it.income.sended.toString())
             leastCount.text = it.distribute.amount.toString()
-            leastDistribute.text = String.format(getString(R.string.spaceWithContent), it.distribute.sended.toString())
-            cancelled.text = String.format(getString(R.string.spaceWithContent), it.distribute.cancelled.toString())
-            frozen.text =  String.format(getString(R.string.spaceWithContent), it.income.frozen.toString())
+            leastDistribute.text = String.format(
+                getString(R.string.spaceWithContent),
+                it.distribute.sended.toString()
+            )
+            cancelled.text = String.format(
+                getString(R.string.spaceWithContent),
+                it.distribute.cancelled.toString()
+            )
+            frozen.text =
+                String.format(getString(R.string.spaceWithContent), it.income.frozen.toString())
             Log.d("Token", "Распределено ${it.distribute}")
             try {
                 val dateTime: LocalDate =

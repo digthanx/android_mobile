@@ -15,6 +15,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
@@ -59,20 +61,90 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             inflateRecyclerView()
             swipeToRefresh.isRefreshing = false
         }
+        displaySnack()
+    }
 
+    private fun displaySnack(){
         binding.notify.setOnClickListener {
+            binding.fab.hide()
             val snack = Snackbar.make(
-                requireView(),
+                binding.fab.rootView,
                 requireContext().resources.getString(R.string.joke),
                 Snackbar.LENGTH_LONG
             )
+            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
+                override fun onShown(transientBottomBar: Snackbar?) {
+                    super.onShown(transientBottomBar)
+                }
+
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    super.onDismissed(transientBottomBar, event)
+                    if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
+                        binding.fab.show()
+                    }
+                }
+            })
             snack.setTextMaxLines(3)
                 .setTextColor(context?.getColor(R.color.white)!!)
                 .setAction(context?.getString(R.string.OK)!!) {
                     snack.dismiss()
                 }
             snack.show()
+
         }
+    }
+
+    private fun setupNavigation(navController: NavController) {
+        binding.bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.background = null
+        binding.fab.setOnClickListener {
+            navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+        }
+
+        binding.bottomNavigation.menu.getItem(0).isChecked = true
+        binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.balanceFragment -> {
+                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemSelectedListener true
+                }
+                R.id.feedFragment -> {
+                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemSelectedListener true
+                }
+                R.id.transactionFragment -> {
+                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemSelectedListener true
+                }
+                R.id.historyFragment -> {
+                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemSelectedListener true
+                }
+            }
+            true
+        })
+
+        binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
+            when (item.itemId) {
+                R.id.balanceFragment -> {
+                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.feedFragment -> {
+                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.transactionFragment -> {
+                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.historyFragment -> {
+                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+            }
+            true
+        })
     }
 
     private fun initView(){
@@ -83,6 +155,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
+        setupNavigation(navController)
         viewModel.initViewModel()
         binding.feedRv.adapter = FeedAdapter(username, requireContext())
     }

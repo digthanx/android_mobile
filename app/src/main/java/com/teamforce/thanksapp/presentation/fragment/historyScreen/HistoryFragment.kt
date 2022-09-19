@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -16,6 +18,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.teamforce.thanksapp.R
@@ -33,10 +38,10 @@ class HistoryFragment : Fragment() {
     private var _binding: FragmentHistoryBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
+
     private lateinit var swipeToRefresh: SwipeRefreshLayout
     private lateinit var viewModel: HistoryViewModel
     private lateinit var recyclerView: RecyclerView
-    private val tabGroup: TabLayout by lazy { binding.tabGroup }
     private var allTransactionsList: List<HistoryModel> = emptyList()
     private var receivedTransactionsList: List<HistoryModel> = emptyList()
     private var sentTransactionsList: List<HistoryModel> = emptyList()
@@ -60,6 +65,7 @@ class HistoryFragment : Fragment() {
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
+        setupNavigation(navController)
         initViews()
         loadDataFromServer()
         setDataWithChip(view)
@@ -68,19 +74,91 @@ class HistoryFragment : Fragment() {
             findNavController().navigate(R.id.action_historyFragment_to_profileGraph,
                 null, OptionsTransaction().optionForProfileFragment )
         }
+        displaySnack()
+
+    }
+
+    private fun displaySnack(){
         binding.notify.setOnClickListener {
+            binding.fab.hide()
             val snack = Snackbar.make(
-                requireView(),
+                binding.fab.rootView,
                 requireContext().resources.getString(R.string.joke),
                 Snackbar.LENGTH_LONG
             )
+            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
+                override fun onShown(transientBottomBar: Snackbar?) {
+                    super.onShown(transientBottomBar)
+                }
+
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    super.onDismissed(transientBottomBar, event)
+                    if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
+                        binding.fab.show()
+                    }
+                }
+            })
             snack.setTextMaxLines(3)
                 .setTextColor(context?.getColor(R.color.white)!!)
                 .setAction(context?.getString(R.string.OK)!!) {
                     snack.dismiss()
                 }
             snack.show()
+
         }
+    }
+
+    private fun setupNavigation(navController: NavController) {
+        binding.bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.background = null
+
+        binding.fab.setOnClickListener {
+            navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+        }
+
+        binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.balanceFragment -> {
+                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemSelectedListener true
+                }
+                R.id.feedFragment -> {
+                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemSelectedListener true
+                }
+                R.id.transactionFragment -> {
+                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemSelectedListener true
+                }
+                R.id.historyFragment -> {
+                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemSelectedListener true
+                }
+            }
+            true
+        })
+
+        binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
+            when (item.itemId) {
+                R.id.balanceFragment -> {
+                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.feedFragment -> {
+                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.transactionFragment -> {
+                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.historyFragment -> {
+                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+            }
+            true
+        })
     }
 
     private fun initViews() {
@@ -110,7 +188,7 @@ class HistoryFragment : Fragment() {
             }
         )
 
-        tabGroup.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        binding.tabGroup.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 refreshRecyclerView(tab?.position?:0)
             }
@@ -147,7 +225,7 @@ class HistoryFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 allTransactionsList = sparseArrayToReversedList(it)
-                if (tabGroup.selectedTabPosition == 0) {
+                if (binding.tabGroup.selectedTabPosition == 0) {
                     (recyclerView.adapter as HistoryAdapter).submitList(allTransactionsList)
                 }
             }
@@ -156,7 +234,7 @@ class HistoryFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 receivedTransactionsList = sparseArrayToReversedList(it)
-                if (tabGroup.selectedTabPosition == 1) {
+                if (binding.tabGroup.selectedTabPosition == 1) {
                     (recyclerView.adapter as HistoryAdapter).submitList(receivedTransactionsList)
                 }
             }
@@ -166,7 +244,7 @@ class HistoryFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 sentTransactionsList = sparseArrayToReversedList(it)
-                if (tabGroup.selectedTabPosition == 2) {
+                if (binding.tabGroup.selectedTabPosition == 2) {
                     (recyclerView.adapter as HistoryAdapter).submitList(sentTransactionsList)
                 }
             }

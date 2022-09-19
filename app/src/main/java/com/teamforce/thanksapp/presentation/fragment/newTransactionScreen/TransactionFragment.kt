@@ -16,23 +16,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
+import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.teamforce.thanksapp.R
@@ -79,10 +77,6 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     private var listCheckedValues: MutableList<TagModel> = mutableListOf()
     private var listCheckedIdTags: MutableList<Int> = mutableListOf()
 
-    private val imgCard: MaterialCardView by lazy { binding.showAttachedImgCard }
-    private val detachImgBtn: ImageButton by lazy { binding.detachImgBtn }
-    private val image: ImageView by lazy { binding.image }
-    private val attachImageBtn: MaterialButton by lazy { binding.attachImageBtn }
     private var imageFilePart: MultipartBody.Part? = null
     private var user: UserBean? = null
 
@@ -94,7 +88,6 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             setOf(
                 R.id.balanceFragment,
                 R.id.feedFragment,
-                R.id.transactionFragment,
                 R.id.historyFragment
             )
         )
@@ -118,13 +111,13 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             binding.distributedValueTv.text = it.distribute.amount.toString()
         }
 
-        attachImageBtn.setOnClickListener {
+        binding.attachImageBtn.setOnClickListener {
             requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             addPhotoFromIntent()
         }
 
-        detachImgBtn.setOnClickListener {
-            imgCard.visibility = View.GONE
+        binding.detachImgBtn.setOnClickListener {
+            binding.showAttachedImgCard.visibility = View.GONE
             imageFilePart = null
         }
         binding.etValue.inputType = InputType.TYPE_NULL
@@ -297,11 +290,11 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 val path = getPath(requireContext(), result.data?.data!!)
                 val imageUri = result.data!!.data
                 if (imageUri != null && path != null) {
-                    imgCard.visibility = View.VISIBLE
+                    binding.showAttachedImgCard.visibility = View.VISIBLE
                     Glide.with(this)
                         .load(imageUri)
                         .centerCrop()
-                        .into(image)
+                        .into(binding.image)
                     uriToMultipart(imageUri, path)
                 }
 

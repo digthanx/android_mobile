@@ -97,7 +97,7 @@
     <fragment
         android:id="@+id/someonesProfileFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.profileScreen.SomeonesProfileFragment"
-        android:label="SomeonesProfileFragment" >
+        android:label="@string/someonesProfile">
         <action
             android:id="@+id/action_someonesProfileFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
