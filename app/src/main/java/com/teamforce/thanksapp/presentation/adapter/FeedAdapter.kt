@@ -1,13 +1,13 @@
 package com.teamforce.thanksapp.presentation.adapter
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
@@ -89,6 +89,8 @@ class FeedAdapter(
         var userId: Int? = null
         var clickReceiver: ClickableSpan? = null
         var clickSender: ClickableSpan? = null
+        var buttonLikeBackgroundColorAnim: ValueAnimator? = null
+        var buttonDislikeBackgroundColorAnim: ValueAnimator? = null
 
     }
 
@@ -229,6 +231,17 @@ class FeedAdapter(
         holder.reason = currentList[position].transaction.reason
         holder.photo = currentList[position].transaction.photo
         convertDataToNecessaryFormat(holder, position)
+
+        holder.likesBtn.setOnClickListener {
+            updatesLikesLook(holder)
+
+        }
+
+        holder.dislikesBtn.setOnClickListener {
+            updatesDislikesLook(holder)
+        }
+
+
         holder.standardGroup.setOnClickListener { v ->
             val bundle = Bundle()
             bundle.apply {
@@ -256,7 +269,6 @@ class FeedAdapter(
 
 
             }
-
             v.findNavController()
                 .navigate(
                     R.id.action_feedFragment_to_additionalInfoFeedItemFragment,
@@ -264,6 +276,71 @@ class FeedAdapter(
                     OptionsTransaction().optionForAdditionalInfoFeedFragment
                 )
         }
+
+    }
+
+    @SuppressLint("Recycle")
+    private fun updatesLikesLook(holder: FeedViewHolder) {
+        if (holder.buttonLikeBackgroundColorAnim != null) {
+            // reverse the color
+            holder.buttonLikeBackgroundColorAnim!!.reverse()
+            // reset for next time click
+            holder.buttonLikeBackgroundColorAnim = null
+            // add your code here to remove from database
+        } else {
+            holder.buttonDislikeBackgroundColorAnim?.reverse()
+            holder.buttonDislikeBackgroundColorAnim = null
+            // create a color value animator
+            holder.buttonLikeBackgroundColorAnim = ValueAnimator.ofObject(
+                ArgbEvaluator(),
+                context.getColor(R.color.minor_info_secondary),
+                context.getColor(R.color.minor_success_secondary)
+            )
+            holder.buttonLikeBackgroundColorAnim?.duration = 250L
+            // add a update listener for the animator.
+            holder.buttonLikeBackgroundColorAnim?.addUpdateListener {
+                holder.likesBtn.setBackgroundColor(it.getAnimatedValue() as Int)
+            }
+            // you can also set a delay before start
+            //buttonColorAnim.setStartDelay(2000); // 2 seconds
+            // start the animator..
+            holder.buttonLikeBackgroundColorAnim?.start()
+            // add your code here to add to database
+        }
+
+        // Set Default view button // first time this will be null
+
+    }
+
+    @SuppressLint("Recycle")
+    private fun updatesDislikesLook(holder: FeedViewHolder) {
+        if (holder.buttonDislikeBackgroundColorAnim != null) {
+            // reverse the color
+            holder.buttonDislikeBackgroundColorAnim!!.reverse()
+            // reset for next time click
+            holder.buttonDislikeBackgroundColorAnim = null
+            // add your code here to remove from database
+        } else {
+            holder.buttonLikeBackgroundColorAnim?.reverse()
+            holder.buttonLikeBackgroundColorAnim = null
+            // create a color value animator
+            holder.buttonDislikeBackgroundColorAnim = ValueAnimator.ofObject(
+                ArgbEvaluator(),
+                context.getColor(R.color.minor_info_secondary),
+                context.getColor(R.color.minor_error_secondary)
+            )
+            // add a update listener for the animator.
+            holder.buttonDislikeBackgroundColorAnim?.addUpdateListener {
+                holder.dislikesBtn.setBackgroundColor(it.getAnimatedValue() as Int)
+            }
+            // you can also set a delay before start
+            //buttonColorAnim.setStartDelay(2000); // 2 seconds
+            // start the animator..
+            holder.buttonDislikeBackgroundColorAnim?.start()
+            // add your code here to add to database
+        }
+
+        // Set Default view button // first time this will be null
 
     }
 
