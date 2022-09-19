@@ -94,9 +94,11 @@ class FeedAdapter(
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+   // @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
+        holder.likesBtn.text = (currentList[position].transaction.likes?.get(0)?.counter?: 0).toString()
+        holder.dislikesBtn.text = (currentList[position].transaction.likes?.get(1)?.counter?: 0).toString()
         holder.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance()
         holder.clickReceiver =
             transactionToReceiver(holder, position, currentList[position].transaction.recipient_id)
@@ -233,12 +235,12 @@ class FeedAdapter(
         convertDataToNecessaryFormat(holder, position)
 
         holder.likesBtn.setOnClickListener {
-            updatesLikesLook(holder)
+            updatesLikesLook(holder, position)
 
         }
 
         holder.dislikesBtn.setOnClickListener {
-            updatesDislikesLook(holder)
+            updatesDislikesLook(holder, position)
         }
 
 
@@ -280,16 +282,28 @@ class FeedAdapter(
     }
 
     @SuppressLint("Recycle")
-    private fun updatesLikesLook(holder: FeedViewHolder) {
+    private fun updatesLikesLook(holder: FeedViewHolder, position: Int) {
         if (holder.buttonLikeBackgroundColorAnim != null) {
             // reverse the color
             holder.buttonLikeBackgroundColorAnim!!.reverse()
+            if (currentList[position].transaction.likes?.get(0)?.counter != null){
+                holder.likesBtn.text = currentList[position].transaction.likes?.get(0)?.counter?.minus(1).toString()
+            }else{
+                holder.likesBtn.text = "0"
+            }
             // reset for next time click
             holder.buttonLikeBackgroundColorAnim = null
             // add your code here to remove from database
         } else {
+            // change counter dislike
+            if(holder.buttonDislikeBackgroundColorAnim != null){
+                holder.dislikesBtn.text = (currentList[position].transaction.likes?.get(1)?.counter)?.minus(1).toString()
+                holder.buttonDislikeBackgroundColorAnim = null
+                holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
+            }
             holder.buttonDislikeBackgroundColorAnim?.reverse()
-            holder.buttonDislikeBackgroundColorAnim = null
+            // change counter like
+            holder.likesBtn.text = ((currentList[position].transaction.likes?.get(0)?.counter?: 0).plus(1)).toString()
             // create a color value animator
             holder.buttonLikeBackgroundColorAnim = ValueAnimator.ofObject(
                 ArgbEvaluator(),
@@ -313,16 +327,28 @@ class FeedAdapter(
     }
 
     @SuppressLint("Recycle")
-    private fun updatesDislikesLook(holder: FeedViewHolder) {
+    private fun updatesDislikesLook(holder: FeedViewHolder, position: Int) {
         if (holder.buttonDislikeBackgroundColorAnim != null) {
             // reverse the color
             holder.buttonDislikeBackgroundColorAnim!!.reverse()
+            if(currentList[position].transaction.likes?.get(1)?.counter != null){
+                holder.dislikesBtn.text = (currentList[position].transaction.likes?.get(1)?.counter)?.minus(1).toString()
+            }else{
+                holder.dislikesBtn.text = "0"
+            }
             // reset for next time click
             holder.buttonDislikeBackgroundColorAnim = null
             // add your code here to remove from database
         } else {
+            // change counter like
+            if(holder.buttonLikeBackgroundColorAnim != null){
+                holder.likesBtn.text = currentList[position].transaction.likes?.get(0)?.counter?.minus(1).toString()
+                holder.buttonLikeBackgroundColorAnim = null
+                holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
+            }
             holder.buttonLikeBackgroundColorAnim?.reverse()
-            holder.buttonLikeBackgroundColorAnim = null
+            //change counter dislike
+            holder.dislikesBtn.text = ((currentList[position].transaction.likes?.get(1)?.counter?: 0).plus(1)).toString()
             // create a color value animator
             holder.buttonDislikeBackgroundColorAnim = ValueAnimator.ofObject(
                 ArgbEvaluator(),

@@ -34,6 +34,14 @@ data class FeedResponse(
         val is_anon: Boolean,
         val reason: String,
         val photo: String?,
-        val tags: List<TagModel>?
+        val tags: List<TagModel>?,
+        val comments: Int?,
+        val last_like: String,
+        val likes: List<Reaction>?
+    )
+    data class Reaction(
+        val id: Int,
+        val code: String,
+        var counter: Int
     )
 }
