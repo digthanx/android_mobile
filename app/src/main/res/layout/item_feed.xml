@@ -51,49 +51,42 @@
                 android:id="@+id/toggleButtonGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@id/date_time"
                 app:layout_constraintTop_toBottomOf="@id/senderAndReceiver">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/comment_btn"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="70dp"
+                    style="@style/ReactionBtnFeed"
+                    android:layout_width="78dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
-                    android:backgroundTint="@color/minor_info_secondary"
-                    android:textColor="@color/general_contrast"
+                    android:text="425"
+                    app:icon="@drawable/ic_comment"/>
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/dislike_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="999"
                     app:cornerRadius="8dp"
-                    app:icon="@drawable/ic_comment"
-                    app:iconTint="@color/general_contrast" />
+                    android:textColor="@color/general_contrast"
+                    android:layout_marginEnd="4dp"
+                    app:icon="@drawable/ic_dislike"
+                    style="@style/ReactionBtnFeed"
+                    />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/like_btn"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/minor_info_secondary"
-                    app:cornerRadius="8dp"
-                    android:text="0"
-                    android:textColor="@color/general_contrast"
-                    app:iconTint="@color/general_contrast"
-                    android:layout_marginEnd="4dp"
+                    android:text="999"
                     app:icon="@drawable/ic_like"
-                    style="?attr/materialButtonOutlinedStyle"
+                    style="@style/ReactionBtnFeed" />
 
-                    />
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/dislike_btn"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    app:cornerRadius="8dp"
-                    android:textColor="@color/general_contrast"
-                    app:iconTint="@color/general_contrast"
-                    android:backgroundTint="@color/minor_info_secondary"
-                    app:icon="@drawable/ic_dislike"
-                    style="?attr/materialButtonOutlinedStyle"
-                    />
             </LinearLayout>
+
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
