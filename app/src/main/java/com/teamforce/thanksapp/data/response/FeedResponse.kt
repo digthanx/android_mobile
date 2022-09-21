@@ -35,9 +35,11 @@ data class FeedResponse(
         val reason: String,
         val photo: String?,
         val tags: List<TagModel>?,
-        val comments: Int?,
+        val comments_amount: Int?,
         val last_like: String,
-        val likes: List<Reaction>?
+        var user_liked: Boolean,
+        var user_disliked: Boolean,
+        val reactions: List<Reaction>
     )
     data class Reaction(
         val id: Int,

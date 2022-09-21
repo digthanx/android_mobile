@@ -2,17 +2,15 @@ package com.teamforce.thanksapp.presentation.fragment.feedScreen
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.navigation.NavigationBarView
@@ -55,7 +53,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         binding.profile.setOnClickListener {
             findNavController().navigate(
                 R.id.action_feedFragment_to_profileGraph, null,
-                OptionsTransaction().optionForProfileFragment )
+                OptionsTransaction().optionForProfileFragment
+            )
         }
         swipeToRefresh.setOnRefreshListener {
             inflateRecyclerView()
@@ -64,7 +63,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         displaySnack()
     }
 
-    private fun displaySnack(){
+    private fun displaySnack() {
         binding.notify.setOnClickListener {
             binding.fab.hide()
             val snack = Snackbar.make(
@@ -72,14 +71,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 requireContext().resources.getString(R.string.joke),
                 Snackbar.LENGTH_LONG
             )
-            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
+            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
                 override fun onShown(transientBottomBar: Snackbar?) {
                     super.onShown(transientBottomBar)
                 }
 
                 override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                     super.onDismissed(transientBottomBar, event)
-                    if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
+                    if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
                         binding.fab.show()
                     }
                 }
@@ -98,26 +97,46 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         binding.bottomNavigation.setupWithNavController(navController)
         binding.bottomNavigation.background = null
         binding.fab.setOnClickListener {
-            navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+            navController.navigate(
+                R.id.transactionFragment,
+                null,
+                OptionsTransaction().optionForTransaction
+            )
         }
 
         binding.bottomNavigation.menu.getItem(0).isChecked = true
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.balanceFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
                 R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.feedFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
                 R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.transactionFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
                 R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.historyFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
             }
@@ -127,19 +146,35 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
             when (item.itemId) {
                 R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.balanceFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
                 R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.feedFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
                 R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.transactionFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
                 R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.historyFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
             }
@@ -147,22 +182,43 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         })
     }
 
-    private fun initView(){
+    private fun initView() {
         swipeToRefresh = binding.swipeRefreshLayout
         swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.balanceFragment,
+                R.id.feedFragment,
+                R.id.transactionFragment,
+                R.id.historyFragment
+            )
+        )
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
         setupNavigation(navController)
         viewModel.initViewModel()
-        binding.feedRv.adapter = FeedAdapter(username, requireContext())
+        val feedAdapter = FeedAdapter(username, requireContext())
+        binding.feedRv.adapter = feedAdapter
+        (binding.feedRv.itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
+        feedAdapter.likeClickListener = { mapReaction, position ->
+            viewModel.pressLike(mapReaction)
+            viewModel.isLoadingLikes.observe(viewLifecycleOwner){
+                if(!it) inflateRecyclerView()
+            }
+        }
+        feedAdapter.dislikeClickListener = { mapReaction, position ->
+            viewModel.pressLike(mapReaction)
+            viewModel.isLoadingLikes.observe(viewLifecycleOwner){
+                if(!it) inflateRecyclerView()
+            }
+        }
     }
 
 
-    private fun inflateRecyclerView(){
-        UserDataRepository.getInstance()?.token?.let{ token ->
+    private fun inflateRecyclerView() {
+        UserDataRepository.getInstance()?.token?.let { token ->
             UserDataRepository.getInstance()?.username?.let { username ->
                 viewModel.loadFeedsList(token = token, user = username)
             }
@@ -179,16 +235,16 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 emptyList()
             }
         }
-       // Log.d("Token", "Feeds - ${feeds}")
+        // Log.d("Token", "Feeds - ${feeds}")
         (binding.feedRv.adapter as FeedAdapter).submitList(feeds)
     }
 
-    private fun getListsFromDb(){
+    private fun getListsFromDb() {
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->
                 if (isLoading) {
-                    binding.feedRv.visibility = View.GONE
+                    binding.feedRv.visibility = View.VISIBLE
                     swipeToRefresh.isRefreshing = true
                 } else {
                     binding.feedRv.visibility = View.VISIBLE
@@ -210,7 +266,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             viewLifecycleOwner,
             Observer {
                 mineFeedsList = it
-               Log.d("Token", "mineFeeds ${mineFeedsList}")
+                Log.d("Token", "mineFeeds ${mineFeedsList}")
                 if (binding.chipGroup.checkedChipId == R.id.chipMineEvent) {
                     (binding.feedRv.adapter as FeedAdapter).submitList(mineFeedsList)
                 }
@@ -232,13 +288,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             viewLifecycleOwner,
             Observer {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                //Log.d("Token", " Ошибка лял ял ля  ${it}")
             }
         )
 
     }
-
-
 
 
 }

@@ -115,4 +115,10 @@ interface ThanksApi {
         @Header("Authorization") token: String,
         @Path("user_id") user_Id: Int
     ): Call<ProfileResponse>
+
+    @POST("/press-like/")
+    fun pressLike(
+        @Header("Authorization") token: String,
+        @Body data: Map<String, Int>
+    ): Call<CancelTransactionResponse>
 }

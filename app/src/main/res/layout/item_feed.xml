@@ -58,18 +58,16 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/comment_btn"
                     style="@style/ReactionBtnFeed"
-                    android:layout_width="78dp"
+                    android:layout_width="81dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
-                    android:text="425"
                     app:icon="@drawable/ic_comment"/>
 
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/dislike_btn"
-                    android:layout_width="80dp"
+                    android:layout_width="81dp"
                     android:layout_height="wrap_content"
-                    android:text="999"
                     app:cornerRadius="8dp"
                     android:textColor="@color/general_contrast"
                     android:layout_marginEnd="4dp"
@@ -79,28 +77,24 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/like_btn"
-                    android:layout_width="80dp"
+                    android:layout_width="81dp"
                     android:layout_height="wrap_content"
-                    android:text="999"
                     app:icon="@drawable/ic_like"
                     style="@style/ReactionBtnFeed" />
 
             </LinearLayout>
 
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:scrollbars="none"
-                app:layout_constraintStart_toStartOf="@id/user_avatar"
-                app:layout_constraintTop_toBottomOf="@id/senderAndReceiver"
-                app:layout_constraintEnd_toEndOf="parent">
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroup"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content">
 
-                </com.google.android.material.chip.ChipGroup>
-            </HorizontalScrollView>
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/user_avatar"
+                app:layout_constraintTop_toBottomOf="@id/toggleButtonGroup"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:singleLine="false">
+
+            </com.google.android.material.chip.ChipGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -109,7 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/superLightGray"
-        android:layout_marginVertical="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toggleButtonGroup"/>
