@@ -66,8 +66,8 @@ class FeedViewModel : ViewModel() {
                             if (feeds != null) {
                                 for (item in feeds) {
                                     try {
-                                        if (item.transaction.sender.equals(user) ||
-                                            item.transaction.recipient.equals(user)
+                                        if (item.transaction.sender.equals(user.trim()) ||
+                                            item.transaction.recipient.equals(user.trim())
                                         ) {
                                             myFeeds.add(item)
                                         }

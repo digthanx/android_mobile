@@ -1,10 +1,7 @@
 package com.teamforce.thanksapp.presentation.adapter
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -17,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.core.view.children
 import androidx.navigation.NavOptions
@@ -32,7 +28,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.data.request.LikesRequest
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.ItemFeedBinding
 import com.teamforce.thanksapp.model.domain.TagModel
@@ -72,8 +67,6 @@ class FeedAdapter(
         val dislikesBtn: MaterialButton = binding.dislikeBtn
         val commentBtn: MaterialButton = binding.commentBtn
         val chipGroup: ChipGroup = binding.chipGroup
-        var reason: String? = null
-        var photo: String? = null
         val standardGroup = binding.standardGroup
         var descriptionFeed = ""
         var date = ""
@@ -82,8 +75,6 @@ class FeedAdapter(
         var userId: Int? = null
         var clickReceiver: ClickableSpan? = null
         var clickSender: ClickableSpan? = null
-        var buttonLikeBackgroundColorAnim: ValueAnimator? = null
-        var buttonDislikeBackgroundColorAnim: ValueAnimator? = null
 
 
          object DiffCallback : DiffUtil.ItemCallback<FeedResponse>() {
@@ -105,28 +96,8 @@ class FeedAdapter(
        holder: FeedViewHolder,
        position: Int
    ) {
-       if(currentList[position].transaction.user_liked){
-           holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_success_secondary))
-           holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
-       }else if(currentList[position].transaction.user_disliked){
-           holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_error_secondary))
-           holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
-       }else{
-           holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
-           holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
-       }
-
-       holder.commentBtn.text = currentList[position].transaction.comments_amount.toString()
-       holder.likesBtn.text = "0"
-       holder.dislikesBtn.text = "0"
-
-       for(i in currentList[position].transaction.reactions){
-           if(i.code == "like"){
-               holder.likesBtn.text = (i.counter).toString()
-           }else if(i.code == "dislike"){
-               holder.dislikesBtn.text = (i.counter).toString()
-           }
-       }
+        bindLikesAndComments(holder, position)
+       
         holder.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance()
         holder.clickReceiver =
             transactionToReceiver(holder, position, currentList[position].transaction.recipient_id)
@@ -141,8 +112,20 @@ class FeedAdapter(
                 .into(holder.avatarUser)
         } else {
             holder.avatarUser.setImageResource(R.drawable.ic_anon_avatar)
-
         }
+
+       distinguishSenderAndReceiver(holder, position)
+
+        currentList[position].transaction.tags?.let { setTags(holder.chipGroup, it) }
+
+        convertDateToNecessaryFormat(holder, position)
+
+        transactionToAdditionInfo(holder, position)
+
+
+    }
+
+    private fun distinguishSenderAndReceiver(holder: FeedViewHolder, position: Int){
         if (!currentList[position].transaction.sender.equals(username) &&
             !currentList[position].transaction.recipient.equals(username)
         ) {
@@ -254,35 +237,9 @@ class FeedAdapter(
             holder.descriptionFeed = context.getString(R.string.getFrom)
             // Я отправитель
         }
+    }
 
-        currentList[position].transaction.tags?.let { setTags(holder.chipGroup, it) }
-
-
-        holder.reason = currentList[position].transaction.reason
-        holder.photo = currentList[position].transaction.photo
-        convertDataToNecessaryFormat(holder, position)
-
-        holder.likesBtn.setOnClickListener {
-            //updatesLikesLook(holder, position)
-            val mapReaction: Map<String, Int> = mapOf("like_kind" to 1,
-                "transaction" to currentList[position].transaction.id)
-                // updatesLikesLook(holder, position)
-//            holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
-//            holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_success_secondary))
-            likeClickListener?.invoke(mapReaction, position)
-        }
-
-        holder.dislikesBtn.setOnClickListener {
-            //updatesDislikesLook(holder, position)
-            val mapReaction: Map<String, Int> = mapOf("like_kind" to 2,
-                "transaction" to currentList[position].transaction.id)
-            //updatesDislikesLook(holder, position)
-//            holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
-//            holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_error_secondary))
-            dislikeClickListener?.invoke(mapReaction, position)
-        }
-
-
+    private fun transactionToAdditionInfo(holder: FeedViewHolder, position: Int){
         holder.standardGroup.setOnClickListener { v ->
             val bundle = Bundle()
             bundle.apply {
@@ -317,90 +274,49 @@ class FeedAdapter(
                     OptionsTransaction().optionForAdditionalInfoFeedFragment
                 )
         }
-
     }
 
+    private fun bindLikesAndComments(holder: FeedViewHolder, position: Int){
+        // Default Values
+        holder.likesBtn.text = "0"
+        holder.dislikesBtn.text = "0"
+        holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.general_background))
 
-    @SuppressLint("Recycle")
-    private fun updatesLikesLook(holder: FeedViewHolder, position: Int) {
-        if (holder.buttonLikeBackgroundColorAnim != null) {
-            // reverse the color
-            holder.buttonLikeBackgroundColorAnim!!.reverse()
-            // reset for next time click
-            holder.buttonLikeBackgroundColorAnim = null
-            currentList[position].transaction.user_liked = false
-            // add your code here to remove from database
-        } else {
-            // change counter dislike
-            if(holder.buttonDislikeBackgroundColorAnim != null){
-                holder.buttonDislikeBackgroundColorAnim = null
-                currentList[position].transaction.user_disliked = false
-                holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
-            }
-            holder.buttonDislikeBackgroundColorAnim?.reverse()
-            // create a color value animator
-            holder.buttonLikeBackgroundColorAnim = ValueAnimator.ofObject(
-                ArgbEvaluator(),
-                context.getColor(R.color.minor_info_secondary),
-                context.getColor(R.color.minor_success_secondary)
-            )
-            currentList[position].transaction.user_liked = true
-            holder.buttonLikeBackgroundColorAnim?.duration = 250L
-            // add a update listener for the animator.
-            holder.buttonLikeBackgroundColorAnim?.addUpdateListener {
-                holder.likesBtn.setBackgroundColor(it.getAnimatedValue() as Int)
-            }
-            // you can also set a delay before start
-            //buttonColorAnim.setStartDelay(2000); // 2 seconds
-            // start the animator..
-            holder.buttonLikeBackgroundColorAnim?.start()
-            // add your code here to add to database
+        if(currentList[position].transaction.user_liked){
+            holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_success_secondary))
+            holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
+        }else if(currentList[position].transaction.user_disliked){
+            holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_error_secondary))
+            holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
+        }else{
+            holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
+            holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
         }
 
-        // Set Default view button // first time this will be null
+        holder.commentBtn.text = currentList[position].transaction.comments_amount.toString()
 
-    }
-
-    @SuppressLint("Recycle")
-    private fun updatesDislikesLook(holder: FeedViewHolder, position: Int) {
-        if (holder.buttonDislikeBackgroundColorAnim != null) {
-            // reverse the color
-            holder.buttonDislikeBackgroundColorAnim!!.reverse()
-            // reset for next time click
-            holder.buttonDislikeBackgroundColorAnim = null
-            currentList[position].transaction.user_disliked = false
-            // add your code here to remove from database
-        } else {
-            // change counter like
-            if(holder.buttonLikeBackgroundColorAnim != null){
-                holder.buttonLikeBackgroundColorAnim = null
-                currentList[position].transaction.user_liked = false
-
-                holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
+        for(i in currentList[position].transaction.reactions){
+            if(i.code == "like"){
+                holder.likesBtn.text = (i.counter).toString()
+            }else if(i.code == "dislike"){
+                holder.dislikesBtn.text = (i.counter).toString()
             }
-            holder.buttonLikeBackgroundColorAnim?.reverse()
-            // create a color value animator
-            holder.buttonDislikeBackgroundColorAnim = ValueAnimator.ofObject(
-                ArgbEvaluator(),
-                context.getColor(R.color.minor_info_secondary),
-                context.getColor(R.color.minor_error_secondary)
-            )
-            currentList[position].transaction.user_disliked = true
-
-            // add a update listener for the animator.
-            holder.buttonDislikeBackgroundColorAnim?.addUpdateListener {
-                holder.dislikesBtn.setBackgroundColor(it.getAnimatedValue() as Int)
-            }
-            // you can also set a delay before start
-            //buttonColorAnim.setStartDelay(2000); // 2 seconds
-            // start the animator..
-            holder.buttonDislikeBackgroundColorAnim?.start()
-            // add your code here to add to database
         }
 
-        // Set Default view button // first time this will be null
 
+        holder.likesBtn.setOnClickListener {
+            val mapReaction: Map<String, Int> = mapOf("like_kind" to 1,
+                "transaction" to currentList[position].transaction.id)
+            likeClickListener?.invoke(mapReaction, position)
+        }
+
+        holder.dislikesBtn.setOnClickListener {
+            val mapReaction: Map<String, Int> = mapOf("like_kind" to 2,
+                "transaction" to currentList[position].transaction.id)
+            dislikeClickListener?.invoke(mapReaction, position)
+        }
     }
+
 
     private fun transactionToReceiver(
         holder: FeedViewHolder,
@@ -491,7 +407,7 @@ class FeedAdapter(
     }
 
 
-    private fun convertDataToNecessaryFormat(holder: FeedViewHolder, position: Int) {
+    private fun convertDateToNecessaryFormat(holder: FeedViewHolder, position: Int) {
         try {
             val zdt: ZonedDateTime =
                 ZonedDateTime.parse(currentList[position].time, DateTimeFormatter.ISO_DATE_TIME)

@@ -32,7 +32,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     private var viewModel: FeedViewModel = FeedViewModel()
 
-    private val username: String = UserDataRepository.getInstance()?.username.toString()
+    private val username: String = UserDataRepository.getInstance()?.username.toString().trim()
 
     private lateinit var navController: NavController
     private lateinit var swipeToRefresh: SwipeRefreshLayout
