@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
+import com.teamforce.thanksapp.presentation.viewmodel.AdditionalInfoFeedItemViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
@@ -27,6 +28,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private var _binding: FragmentAdditionalInfoFeedItemBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
+    private val viewModel = AdditionalInfoFeedItemViewModel()
 
     private var dateTransaction: String? = null
     private var avatarReceiver: String? = null
@@ -39,6 +41,13 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private val username = UserDataRepository.getInstance()?.username
     private var userIdReceiver: Int? = null
     private var userIdSender: Int? = null
+    private var likesCount: Int? = null
+    private var dislikesCount: Int? = null
+    private var likesCountReal: Int = 0
+    private var dislikesCountReal: Int = 0
+    private var isLiked: Boolean? = null
+    private var isDisliked: Boolean? = null
+    private var transactionId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +62,11 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             reason = it.getString(Consts.REASON_TRANSACTION)
             userIdReceiver = it.getInt("userIdReceiver")
             userIdSender = it.getInt("userIdSender")
+            likesCount = it.getInt(LIKES_COUNT)
+            dislikesCount = it.getInt(DISLIKES_COUNT)
+            isLiked = it.getBoolean(IS_LIKED)
+            isDisliked = it.getBoolean(IS_DISLIKED)
+            transactionId = it.getInt(TRANSACTION_ID)
         }
     }
 
@@ -76,7 +90,92 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             )
         )
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+        viewModel.initViewModel()
+        setBaseInfo()
+        setPhoto()
+        setLikesAndDislikes()
 
+
+        binding.descriptionTransactionWhoReceived.setOnClickListener {
+            if (userIdReceiver != 0) {
+                userIdReceiver?.let {
+                    transactionToAnotherProfile(it)
+                }
+            }
+
+        }
+
+        binding.descriptionTransactionWhoSent.setOnClickListener {
+            if (userIdSender != 0) {
+                userIdSender?.let {
+                    transactionToAnotherProfile(it)
+                }
+            }
+        }
+        binding.likeBtn.setOnClickListener {
+            transactionId?.let {
+                val mapReaction: Map<String, Int> = mapOf("like_kind" to 1,
+                    "transaction" to it)
+                viewModel.pressLike(mapReaction)
+                updateOutlookLike()
+            }
+        }
+
+        binding.dislikeBtn.setOnClickListener {
+            transactionId?.let {
+                val mapReaction: Map<String, Int> = mapOf("like_kind" to 2,
+                    "transaction" to it)
+                viewModel.pressLike(mapReaction)
+                updateOutlookDislike()
+            }
+        }
+    }
+
+    private fun updateOutlookLike(){
+        if(isLiked != null && isDisliked != null){
+            isLiked = !isLiked!!
+            if (isLiked == true){
+                likesCountReal += 1
+                binding.likeBtn.text = likesCountReal.toString()
+                binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
+                if(isDisliked == true){
+                    isDisliked = false
+                    binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
+                    dislikesCountReal -= 1
+                    binding.dislikeBtn.text = dislikesCountReal.toString()
+                    return
+                }
+            }else{
+                likesCountReal -= 1
+                binding.likeBtn.text =likesCountReal.toString()
+                binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
+
+            }
+        }
+    }
+    private fun updateOutlookDislike(){
+        if(isLiked != null && isDisliked != null){
+            isDisliked = !isDisliked!!
+            if (isDisliked == true){
+                dislikesCountReal += 1
+                binding.dislikeBtn.text = dislikesCountReal.toString()
+                binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_error_secondary))
+                if(isLiked == true){
+                    isLiked = false
+                    binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
+                    likesCountReal -= 1
+                    binding.likeBtn.text = likesCountReal.toString()
+                }
+            }else{
+                dislikesCountReal -= 1
+                binding.dislikeBtn.text = dislikesCountReal.toString()
+                binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
+
+            }
+        }
+    }
+
+    private fun setBaseInfo() {
         with(binding) {
             dateTransactionTv.text = dateTransaction
             if (senderTg?.equals(username) == true) {
@@ -99,6 +198,9 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             }
             reasonTransaction.text = reason
         }
+    }
+
+    private fun setPhoto() {
         if (!avatarReceiver?.contains("null")!!) {
             Glide.with(this)
                 .load(avatarReceiver?.toUri())
@@ -119,32 +221,43 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             binding.cardViewImg.visibility = View.GONE
         }
 
+    }
 
-        binding.descriptionTransactionWhoReceived.setOnClickListener {
-            if(userIdReceiver != 0){
-                userIdReceiver?.let {
-                    transactionToAnotherProfile(it)
-                }
+    private fun setLikesAndDislikes() {
+        likesCount?.let { likes ->
+            dislikesCount?.let { dislikes ->
+                likesCountReal = likesCount!!
+                dislikesCountReal = dislikesCount!!
             }
-
         }
-
-        binding.descriptionTransactionWhoSent.setOnClickListener {
-            if(userIdSender != 0){
-                userIdSender?.let {
-                    transactionToAnotherProfile(it)
-                }
-            }
-
+        binding.likeBtn.text = likesCountReal.toString()
+        binding.dislikeBtn.text = dislikesCountReal.toString()
+        if (isLiked == true) {
+            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
+            binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
+        } else if (isDisliked == true) {
+            binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_error_secondary))
+            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
+        } else {
+            binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
+            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
         }
     }
 
-    private fun transactionToAnotherProfile(userId: Int){
+    private fun transactionToAnotherProfile(userId: Int) {
         val bundle: Bundle = Bundle()
         bundle.putInt("userId", userId)
         findNavController().navigate(
             R.id.action_additionalInfoFeedItemFragment_to_someonesProfileFragment2,
             bundle, OptionsTransaction().optionForProfileFragment
         )
+    }
+
+    companion object {
+        val LIKES_COUNT = "likesCount"
+        val DISLIKES_COUNT = "dislikesCount"
+        val IS_LIKED = "isLiked"
+        val IS_DISLIKED = "isDisliked"
+        val TRANSACTION_ID = "transactionId"
     }
 }

@@ -77,7 +77,7 @@
     <string name="will_burn_after_3">Сгорят через %s дней</string>
     <string name="joke">Мы ценим ваше любопытство и в будущих обновлениях обязательно сюда что-нибудь добавим &#128522;</string>
     <!-- Транзакция фрагмент -->
-    <string name="send">Перевести</string>
+    <string name="send">Поблагодарить</string>
     <string name="addPhoto">Добавить фото</string>
     <string name="reason_transaction">Причина перевода</string>
     <string name="unsuccessfulSendCoins">Кол-во спасибок и причина перевода - обязательные поля</string>

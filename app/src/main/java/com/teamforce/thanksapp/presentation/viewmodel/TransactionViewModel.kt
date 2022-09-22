@@ -223,8 +223,7 @@ class TransactionViewModel : ViewModel() {
                            // _sendCoinsError.postValue(response.message() + " " + response.code())
                             _sendCoinsError.postValue(jArrayError.toString().subSequence(2, jArrayError.toString().length - 2).toString())
                         } else {
-                            val jArrayError = JSONArray(response.errorBody()!!.string())
-                            _sendCoinsError.postValue(jArrayError.toString().subSequence(2, jArrayError.toString().length - 2).toString())
+                            _sendCoinsError.postValue(response.message() + " " + response.code())
                         }
                     }
 

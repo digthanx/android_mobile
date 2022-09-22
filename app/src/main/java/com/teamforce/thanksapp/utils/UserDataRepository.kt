@@ -20,7 +20,7 @@ class UserDataRepository private constructor() {
     fun saveCredentials(context: Context, authtoken: String?, telegram: String?, userName: String?) {
         savePreferences(context, authtoken, telegram, username)
         token = authtoken
-        username = userName
+        username = userName?.trim()
     }
 
     fun logout(context: Context) {

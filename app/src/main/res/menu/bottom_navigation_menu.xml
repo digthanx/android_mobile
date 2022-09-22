@@ -12,7 +12,8 @@
         android:title="@string/balance_label"/>
     <item
         android:id="@+id/transactionFragment"
-        android:enabled="false" />
+        android:enabled="false"
+        android:title="@string/close"/>
     <item
         android:id="@+id/historyFragment"
         android:enabled="true"
@@ -21,7 +22,7 @@
 
     <item
         android:id="@+id/settingFragment"
-        android:enabled="true"
+        android:enabled="false"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings_label"/>
 </menu>

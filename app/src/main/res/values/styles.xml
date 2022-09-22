@@ -239,5 +239,13 @@
         <item name="cornerRadius">12dp</item>
     </style>
 
+    <style name="ReactionBtnFeed" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/general_contrast</item>
+        <item name="backgroundTint">@color/minor_info_secondary</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="iconTint">@color/general_contrast</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+
 
 </resources>
