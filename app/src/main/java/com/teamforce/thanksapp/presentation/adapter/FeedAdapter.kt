@@ -75,6 +75,8 @@ class FeedAdapter(
         var userId: Int? = null
         var clickReceiver: ClickableSpan? = null
         var clickSender: ClickableSpan? = null
+        var likesCount: Int = 0
+        var dislikesCount: Int = 0
 
 
          object DiffCallback : DiffUtil.ItemCallback<FeedResponse>() {
@@ -97,7 +99,7 @@ class FeedAdapter(
        position: Int
    ) {
         bindLikesAndComments(holder, position)
-       
+
         holder.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance()
         holder.clickReceiver =
             transactionToReceiver(holder, position, currentList[position].transaction.recipient_id)
@@ -257,6 +259,11 @@ class FeedAdapter(
                     Consts.AMOUNT_THANKS,
                     currentList[position].transaction.amount.substringBefore(".")
                 )
+                putInt(LIKES_COUNT,  holder.likesCount)
+                putInt(DISLIKES_COUNT, holder.dislikesCount)
+                putBoolean(IS_LIKED, currentList[position].transaction.user_liked)
+                putBoolean(IS_DISLIKED, currentList[position].transaction.user_disliked)
+                putInt(TRANSACTION_ID, currentList[position].transaction.id)
                 currentList[position].transaction.recipient_id?.let {
                     this.putInt("userIdReceiver", it)
                 }
@@ -280,6 +287,8 @@ class FeedAdapter(
         // Default Values
         holder.likesBtn.text = "0"
         holder.dislikesBtn.text = "0"
+        holder.likesCount = 0
+        holder.dislikesCount = 0
         holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.general_background))
 
         if(currentList[position].transaction.user_liked){
@@ -298,8 +307,11 @@ class FeedAdapter(
         for(i in currentList[position].transaction.reactions){
             if(i.code == "like"){
                 holder.likesBtn.text = (i.counter).toString()
+                holder.likesCount = i.counter
             }else if(i.code == "dislike"){
                 holder.dislikesBtn.text = (i.counter).toString()
+                holder.dislikesCount = i.counter
+
             }
         }
 
@@ -438,6 +450,14 @@ class FeedAdapter(
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }
+    }
+
+    companion object {
+        val LIKES_COUNT = "likesCount"
+        val DISLIKES_COUNT = "dislikesCount"
+        val IS_LIKED = "isLiked"
+        val IS_DISLIKED = "isDisliked"
+        val TRANSACTION_ID = "transactionId"
     }
 
 
