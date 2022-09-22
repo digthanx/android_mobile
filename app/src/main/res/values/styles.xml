@@ -1,14 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="BaseTextFont" parent="">
+        <item name="fontFamily">@font/roboto_regular</item>
+    </style>
+
+
+
+    <style name="VerySmallText1.Black" parent="BaseTextFont">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/general_contrast</item>
+    </style>
+
+    <style name="VerySmallText1.White" parent="BaseTextFont">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/general_background</item>
+    </style>
+
+    <style name="VerySmallText1.Gray" parent="BaseTextFont">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/general_secondary</item>
+        <item name="android:letterSpacing">0.25</item>
+    </style>
+
+
+    <style name="SmallText2.Black" parent="BaseTextFont">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/general_contrast</item>
+    </style>
+
+    <style name="SmallText2.White" parent="BaseTextFont">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/general_background</item>
+    </style>
+
+
+    <style name="SmallText2Medium.Black" parent="BaseTextFont">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/general_contrast</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="SmallText2.Gray" parent="BaseTextFont">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/general_secondary</item>
+    </style>
+
+    <style name="StandardText3.Black" parent="BaseTextFont">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/general_contrast</item>
+    </style>
+
+    <style name="StandardText3.Gray" parent="BaseTextFont">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/general_secondary</item>
+    </style>
+
+    <style name="StandardText3.White" parent="BaseTextFont">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/general_background</item>
+    </style>
+
+    <style name="StandardText3Medium.Black" parent="BaseTextFont">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/general_contrast</item>
+    </style>
+
+    <style name="StandardText3Medium.White" parent="BaseTextFont">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/general_background</item>
+    </style>
+
+    <style name="StandardText4.Black" parent="BaseTextFont">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/general_contrast</item>
+    </style>
+
+    <style name="StandardText4.White" parent="BaseTextFont">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/general_background</item>
+    </style>
+
+    <style name="StandardText4Bold.Black" parent="BaseTextFont">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/general_contrast</item>
+    </style>
+
+    <style name="StandardText4Bold.White" parent="BaseTextFont">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/general_background</item>
+    </style>
+
+
+    <style name="Headline1.Green" parent="">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:textColor">@color/minor_success</item>
+    </style>
+
     <style name="Headline3" parent="TextAppearance.MaterialComponents.Headline3">
-        <item name="android:textColor">@color/lightBlack</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/general_contrast</item>
+        <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:textSize">32sp</item>
     </style>
 
     <style name="Headline3.White" parent="Headline3">
         <item name="android:textColor">@color/color5</item>
+        <item name="android:textSize">32sp</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+
     </style>
 
     <style name="Headline4" parent="TextAppearance.MaterialComponents.Headline4">
@@ -21,35 +125,55 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="Headline6Bold" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="Headline6.White" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/general_background</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:textColor">@color/general_contrast</item>
+        <item name="fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">0.05</item>
     </style>
 
     <style name="Body1" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">@color/color1</item>
+        <item name="android:textColor">@color/general_contrast</item>
+        <item name="fontFamily">@font/roboto_regular</item>
+
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Body1.Gray" parent="Body1">
-        <item name="android:textColor">@color/color21</item>
+        <item name="android:textColor">@color/general_contrast</item>
     </style>
 
     <style name="Body2" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textColor">@color/color1</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/general_contrast</item>
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Body2.Black" parent="Body2">
         <item name="android:textColor">@color/color1</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Body2.White" parent="Body2">
         <item name="android:textColor">@color/color5</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="Body2.White14" parent="Body2">
+        <item name="android:textColor">@color/color5</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/roboto_regular</item>
     </style>
 
     <style name="Caption" parent="TextAppearance.MaterialComponents.Caption">
@@ -65,15 +189,22 @@
         <item name="android:textColor">@color/color19</item>
     </style>
 
-    <style name="BorderlessButton" parent="Widget.AppCompat.Button.Borderless">
-
-    </style>
 
     <style name="DefaultButton" parent="Widget.Material3.Button.ElevatedButton">
         <item name="android:backgroundTint">@color/general_brand</item>
         <item name="cornerRadius">12dp</item>
         <item name="android:textColor">@color/color5</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="DefaultButtonSecondary" parent="Widget.Material3.Button.ElevatedButton">
+        <item name="android:backgroundTint">@color/general_brand_secondary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">@color/general_brand</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/roboto_medium</item>
     </style>
 
     <style name="NotFilledButton" parent="">
@@ -86,6 +217,7 @@
         <item name="cornerRadius">12dp</item>
         <item name="android:textColor">@color/general_brand</item>
         <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/roboto_medium</item>
     </style>
 
 
@@ -176,7 +308,7 @@
     <style name="MyChipsFeed" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="android:backgroundTint">@color/chip_text_color_state</item>
         <item name="android:textColor">@color/feed_chip_text_color_state</item>
-        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:elevation">5dp</item>
         <item name="marginHorizontal">5dp</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.ChipsFeed</item>
@@ -209,15 +341,6 @@
         <item name="boxStrokeWidth">0.5dp</item>
         <item name="boxStrokeColor">@color/general_color_grey</item>
        <item name="hintTextColor">@color/general_contrast</item>
-    </style>
-
-    <style name="TabTextSize">
-        <item name="android:textSize">12sp</item>
-        <item name="actionBarTabTextStyle">@style/TextSize</item>
-    </style>
-
-    <style name="TextSize">
-        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="FullscreenDialogTheme" parent="Theme.MaterialComponents.Light.DialogWhenLarge">

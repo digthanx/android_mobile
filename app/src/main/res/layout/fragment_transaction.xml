@@ -15,6 +15,7 @@
         android:elevation="0dp"
         app:layout_collapseMode="pin"
         app:layout_scrollFlags="enterAlways"
+        app:titleTextAppearance="@style/Headline6.White"
         app:titleTextColor="@color/white">
 
 

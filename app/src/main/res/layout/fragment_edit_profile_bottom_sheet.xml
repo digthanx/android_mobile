@@ -80,8 +80,7 @@
                     android:layout_marginBottom="12dp"
                     android:textColor="@color/general_contrast"
                     android:text="@string/contactInformation"
-                    android:textStyle="bold"
-                    android:textSize="16sp" />
+                    style="@style/StandardText4Bold.Black" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_surname"
@@ -194,8 +193,7 @@
                     android:layout_marginBottom="12dp"
                     android:textColor="@color/general_contrast"
                     android:text="@string/placeJob"
-                    android:textStyle="bold"
-                    android:textSize="16sp" />
+                    style="@style/StandardText4Bold.Black" />
 
 
 

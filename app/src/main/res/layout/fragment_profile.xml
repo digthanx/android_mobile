@@ -55,9 +55,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginTop="24dp"
                             android:text="@string/greeting_label"
-                            android:textColor="@color/black"
-                            android:textSize="32sp"
-                            android:textStyle="bold"
+                            style="@style/Headline3"
                             app:layout_constraintStart_toStartOf="@id/user_avatar"
                             app:layout_constraintTop_toBottomOf="@id/user_avatar" />
 
@@ -97,18 +95,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="12dp"
-                            android:textColor="@color/general_contrast"
                             android:text="@string/contactInformation"
-                            android:textStyle="bold"
-                            android:textSize="16sp" />
+                            style="@style/StandardText4Bold.Black" />
 
                         <TextView
                             android:id="@+id/surname_label_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
-                            android:text="@string/surname"
-                            android:textSize="12sp" />
+                            style="@style/SmallText2.Gray"
+                            android:text="@string/surname" />
 
                         <TextView
                             android:id="@+id/surname_value_tv"
@@ -123,7 +119,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:text="@string/firstname"
-                            android:textSize="12sp" />
+                            style="@style/SmallText2.Gray"
+                            />
 
                         <TextView
                             android:id="@+id/firstName_value_tv"
@@ -138,7 +135,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:text="@string/middleName"
-                            android:textSize="12sp" />
+                            style="@style/SmallText2.Gray"
+                            />
 
                         <TextView
                             android:id="@+id/middleName_value_tv"
@@ -153,7 +151,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:text="@string/email_label"
-                            android:textSize="12sp" />
+                            style="@style/SmallText2.Gray"/>
 
                         <TextView
                             android:id="@+id/email_value_tv"
@@ -168,7 +166,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:text="@string/mobile_label"
-                            android:textSize="12sp" />
+                            style="@style/SmallText2.Gray"
+                            />
 
                         <TextView
                             android:id="@+id/mobile_value_tv"
@@ -201,10 +200,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="12dp"
-                            android:textColor="@color/general_contrast"
                             android:text="@string/placeJob"
-                            android:textStyle="bold"
-                            android:textSize="16sp" />
+                            style="@style/StandardText4Bold.Black" />
 
                         <TextView
                             android:id="@+id/company_label_tv"
@@ -212,7 +209,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:text="@string/company_label"
-                            android:textSize="12sp" />
+                            style="@style/SmallText2.Gray"
+                            />
 
                         <TextView
                             android:id="@+id/company_value_tv"
@@ -227,7 +225,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:text="@string/position_label"
-                            android:textSize="12sp" />
+                            style="@style/SmallText2.Gray"
+                            />
 
                         <TextView
                             android:id="@+id/position_value_tv"
@@ -288,11 +287,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginBottom="85dp"
-                    android:backgroundTint="@color/general_brand_secondary"
                     android:paddingVertical="17dp"
-                    android:text="@string/exit"
-                    android:textColor="@color/general_brand"
-                    app:cornerRadius="12dp" />
+                    style="@style/DefaultButtonSecondary"
+                    android:text="@string/exit" />
 
 
             </LinearLayout>

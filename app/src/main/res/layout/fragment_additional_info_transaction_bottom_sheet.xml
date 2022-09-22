@@ -27,6 +27,7 @@
             android:id="@+id/date_transaction_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/SmallText2.Gray"
             android:text="Сегодня в 12:30" />
 
         <LinearLayout
@@ -39,8 +40,8 @@
                 android:id="@+id/description_transaction_you_do"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Вы отправили"
-                android:textColor="@color/general_contrast" />
+                android:textAppearance="@style/StandardText3Medium.Black"
+                android:text="Вы отправили" />
 
             <TextView
                 android:id="@+id/description_transaction_who"
@@ -49,6 +50,7 @@
                 android:text=" \@AnnaKim_TF"
                 android:clickable="true"
                 android:focusable="true"
+                android:textAppearance="@style/StandardText3Medium.Black"
                 android:textColor="@color/general_brand" />
         </LinearLayout>
 
@@ -58,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:text="200 спасибок"
-
+            android:textAppearance="@style/StandardText3Medium.Black"
             android:textColor="@color/general_contrast" />
 
 
@@ -75,9 +77,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="-200"
-                android:textColor="@color/minor_success"
-                android:textSize="40dp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/Headline1.Green"
+               />
 
             <ImageView
                 android:id="@+id/currency_transaction"
@@ -113,9 +114,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginBottom="15dp"
-            android:letterSpacing="0.25"
-            android:text="@string/information"
-            android:textSize="10sp" />
+            android:textAppearance="@style/VerySmallText1.Gray"
+            android:text="@string/information" />
 
 
         <TextView
@@ -125,9 +125,7 @@
             android:layout_marginBottom="7dp"
             android:letterSpacing="0.05"
             android:text="@string/message"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            style="@style/StandardText4Bold.Black" />
 
         <TextView
             android:id="@+id/reason_transaction"
@@ -136,8 +134,7 @@
             android:layout_gravity="start"
             android:layout_marginBottom="26dp"
             android:text="Некая причина перевода"
-            android:textColor="@color/general_contrast"
-            android:textSize="14dp" />
+            android:textAppearance="@style/StandardText3.Black" />
 
         <TextView
             android:id="@+id/label_status_transaction"
@@ -147,9 +144,7 @@
             android:layout_marginBottom="7dp"
             android:letterSpacing="0.05"
             android:text="@string/statusTransfer"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            style="@style/StandardText4Bold.Black" />
 
         <TextView
             android:id="@+id/status_transaction"
@@ -157,8 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:text="@string/occured"
-            android:textColor="@color/general_contrast"
-            android:textSize="14dp" />
+            android:textAppearance="@style/StandardText3.Black"  />
 
         <TextView
             android:id="@+id/photo_tv"
@@ -169,9 +163,7 @@
             android:layout_marginBottom="7dp"
             android:letterSpacing="0.05"
             android:text="@string/photo"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            style="@style/StandardText4Bold.Black"
             android:visibility="visible" />
 
         <com.google.android.material.card.MaterialCardView
