@@ -316,6 +316,7 @@
         <item name="android:textColor">@color/feed_chip_text_color_state</item>
         <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:elevation">5dp</item>
+        <item name="android:letterSpacing">0.05</item>
         <item name="marginHorizontal">5dp</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.ChipsFeed</item>
         <item name="strokeColor">@color/black</item>

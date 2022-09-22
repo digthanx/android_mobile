@@ -230,10 +230,11 @@
                     android:id="@+id/chipAllEvent"
                     style="@style/MyChipsFeed"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_marginStart="10dp"
                     app:chipMinTouchTargetSize="40dp"
                     android:checkable="true"
+                    android:textAppearance="@style/StandardText3Medium.Black"
                     android:checked="true"
                     android:text="@string/comments"/>
 
@@ -241,8 +242,9 @@
                     android:id="@+id/chipMineEvent"
                     style="@style/MyChipsFeed"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     app:chipMinTouchTargetSize="40dp"
+                    android:textAppearance="@style/StandardText3Medium.Black"
                     android:checkable="true"
                     android:text="@string/reactions" />
 

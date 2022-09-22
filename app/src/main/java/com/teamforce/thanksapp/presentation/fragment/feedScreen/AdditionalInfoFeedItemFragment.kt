@@ -94,8 +94,32 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         setBaseInfo()
         setPhoto()
         setLikesAndDislikes()
+        transactionId?.let {
+            getComment(it)
+        }
+
+        transactionId?.let {
+            addComment(it)
+        }
+        listeners()
 
 
+    }
+
+    private fun addComment(transactionId: Int){
+        viewModel.addComment(transactionId, "3")
+    }
+
+    private fun getComment(transactionId: Int){
+        viewModel.loadCommentsList(transactionId)
+    }
+
+    private fun inflateRecycler(){
+        val rv = binding.commentsRv
+
+    }
+
+    private fun listeners(){
         binding.descriptionTransactionWhoReceived.setOnClickListener {
             if (userIdReceiver != 0) {
                 userIdReceiver?.let {
