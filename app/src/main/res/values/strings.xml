@@ -140,6 +140,9 @@
     <!-- Additional Info Feed Fragment -->
     <string name="you">Вы</string>
     <string name="fromYou">Вас</string>
+    <string name="comment">Комментарий</string>
+    <string name="comments">Комментарии</string>
+    <string name="reactions">Оценки</string>
     <!-- Utils -->
     <string name="yesterday">Вчера</string>
     <string name="title_activity_splash_screen">SplashScreen</string>

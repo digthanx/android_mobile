@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp">
-
         <ImageView
             android:id="@+id/user_avatar"
             android:layout_width="40dp"
@@ -24,9 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Малков Дмитрий"
-            android:textSize="16sp"
-            android:textColor="@color/general_contrast"
-            android:textFontWeight="500"
+            android:textAppearance="@style/StandardText4Medium.Black"
             android:layout_marginStart="60dp"
             android:paddingVertical="5dp"
             app:layout_constraintStart_toEndOf="@+id/user_avatar"
@@ -39,6 +36,7 @@
             android:text="Отличный сервис! Предложил попробовать своим клиентам"
             android:layout_marginStart="60dp"
             android:paddingVertical="5dp"
+            android:textAppearance="@style/SmallText2.Black"
             app:layout_constraintStart_toEndOf="@+id/user_avatar"
             app:layout_constraintTop_toBottomOf="@id/fio_sender"/>
 
@@ -47,8 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:textSize="12sp"
             android:text="@string/dateTime"
+            android:textAppearance="@style/SmallText2.Gray"
             app:layout_constraintStart_toEndOf="@+id/user_avatar"
             app:layout_constraintTop_toBottomOf="@id/message"/>
 
@@ -56,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/superLightGray"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

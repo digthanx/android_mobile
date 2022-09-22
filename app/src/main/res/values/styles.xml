@@ -78,6 +78,12 @@
         <item name="android:textColor">@color/general_contrast</item>
     </style>
 
+    <style name="StandardText4Medium.Black" parent="BaseTextFont">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/general_contrast</item>
+    </style>
+
     <style name="StandardText4.White" parent="BaseTextFont">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/general_background</item>
