@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -227,7 +228,7 @@
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipAllEvent"
+                    android:id="@+id/chipComment"
                     style="@style/MyChipsFeed"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
@@ -239,13 +240,14 @@
                     android:text="@string/comments"/>
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipMineEvent"
+                    android:id="@+id/chipReactions"
                     style="@style/MyChipsFeed"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     app:chipMinTouchTargetSize="40dp"
                     android:textAppearance="@style/StandardText3Medium.Black"
                     android:checkable="true"
+                    android:visibility="gone"
                     android:text="@string/reactions" />
 
 
@@ -254,7 +256,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comments_rv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                tools:listitem="@layout/item_comment"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         </LinearLayout>
@@ -269,7 +273,7 @@
         style="@style/MyCardView"
         app:cardElevation="30dp">
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textField"
+            android:id="@+id/textFieldMessage"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -277,6 +281,7 @@
             android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="18dp"
             android:hint="@string/comment"
+            app:endIconTint="@color/general_brand"
             android:textColorHint="@color/general_secondary"
             app:boxStrokeColor="@color/general_color_grey"
             app:boxBackgroundColor="@color/color5"
@@ -287,10 +292,11 @@
             app:boxStrokeWidth="1dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/period_et"
+                android:id="@+id/message_value_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_emotion" />
+                android:inputType="textCapSentences|textMultiLine"
+                android:drawableEnd="@drawable/ic_emotion"/>
 
         </com.google.android.material.textfield.TextInputLayout>
     </com.google.android.material.card.MaterialCardView>

@@ -122,13 +122,13 @@ interface ThanksApi {
         @Body data: Map<String, Int>
     ): Call<CancelTransactionResponse>
 
-    @GET("/get-comments/")
+    @POST("/get-comments/")
     fun getComments(
         @Header("Authorization") token: String,
-        @Body transaction_id: Int
+        @Body transaction_id: GetCommentsRequest
     ): Call<GetCommentsResponse>
 
-    @GET("/get-comments/")
+    @POST("/create-comment/")
     fun createComment(
         @Header("Authorization") token: String,
         @Body data: CreateCommentRequest

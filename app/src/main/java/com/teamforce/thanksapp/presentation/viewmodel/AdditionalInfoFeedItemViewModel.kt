@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CreateCommentRequest
+import com.teamforce.thanksapp.data.request.GetCommentsRequest
 import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.data.response.GetCommentsResponse
@@ -33,8 +34,11 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
     private val _commentsLoadingError = MutableLiveData<String>()
     val commentsLoadingErorr: LiveData<String> = _commentsLoadingError
 
+
     private val _createCommentsLoadingError = MutableLiveData<String>()
     val createCommentsLoadingErorr: LiveData<String> = _createCommentsLoadingError
+    private val _createCommentsLoading = MutableLiveData<Boolean>()
+    val createCommentsLoading: LiveData<Boolean> = _createCommentsLoading
 
     private val _pressLikesError = MutableLiveData<String>()
     val pressLikesError: LiveData<String> = _pressLikesError
@@ -48,9 +52,10 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
 
     fun loadCommentsList(transactionId: Int) {
         _isLoading.postValue(true)
+        val getCommentsRequest = GetCommentsRequest(transactionId)
         UserDataRepository.getInstance()?.token?.let { token ->
             viewModelScope.launch {
-                callCommentsListEndpoint(token, transactionId, Dispatchers.Default)
+                callCommentsListEndpoint(token, getCommentsRequest, Dispatchers.Default)
             }
         }
     }
@@ -58,7 +63,7 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
 
     private suspend fun callCommentsListEndpoint(
         token: String,
-        transactionId: Int,
+        transactionId: GetCommentsRequest,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
@@ -78,7 +83,8 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
                     }
 
                     override fun onFailure(call: Call<GetCommentsResponse>, t: Throwable) {
-                        TODO("Not yet implemented")
+                        _isLoading.postValue(false)
+                        _commentsLoadingError.postValue(t.message)
                     }
         })
     }
@@ -86,7 +92,7 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
 
     fun addComment(transactionId: Int, text: String) {
         val createCommentRequest = CreateCommentRequest(transactionId, text)
-        _isLoading.postValue(true)
+        _createCommentsLoading.postValue(true)
         UserDataRepository.getInstance()?.token?.let { token ->
             viewModelScope.launch {
                 addCommentEndpoint(token, createCommentRequest, Dispatchers.Default)
@@ -107,7 +113,7 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
                         call: Call<CancelTransactionResponse>,
                         response: Response<CancelTransactionResponse>
                     ) {
-                        _isLoading.postValue(false)
+                        _createCommentsLoading.postValue(false)
                         if (response.code() == 200) {
 
                         } else {

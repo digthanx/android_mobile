@@ -25,7 +25,6 @@
             android:text="Малков Дмитрий"
             android:textAppearance="@style/StandardText4Medium.Black"
             android:layout_marginStart="60dp"
-            android:paddingVertical="5dp"
             app:layout_constraintStart_toEndOf="@+id/user_avatar"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -35,7 +34,6 @@
             android:layout_height="wrap_content"
             android:text="Отличный сервис! Предложил попробовать своим клиентам"
             android:layout_marginStart="60dp"
-            android:paddingVertical="5dp"
             android:textAppearance="@style/SmallText2.Black"
             app:layout_constraintStart_toEndOf="@+id/user_avatar"
             app:layout_constraintTop_toBottomOf="@id/fio_sender"/>

@@ -1,10 +1,8 @@
 package com.teamforce.thanksapp.presentation.adapter
 
 import android.content.Context
-import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,12 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.chip.ChipGroup
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.ItemCommentBinding
-import com.teamforce.thanksapp.databinding.ItemFeedBinding
 import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.utils.Consts
 import java.time.LocalDate
