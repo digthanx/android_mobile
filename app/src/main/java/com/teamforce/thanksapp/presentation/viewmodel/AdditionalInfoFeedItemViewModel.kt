@@ -30,9 +30,16 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
 
     private val _comments = MutableLiveData<GetCommentsResponse?>()
     val comments: LiveData<GetCommentsResponse?> = _comments
-
     private val _commentsLoadingError = MutableLiveData<String>()
     val commentsLoadingErorr: LiveData<String> = _commentsLoadingError
+
+
+    private val _deleteComment = MutableLiveData<CancelTransactionResponse>()
+    val deleteComment: LiveData<CancelTransactionResponse> = _deleteComment
+    private val _deleteCommentLoadingError = MutableLiveData<String>()
+    val deleteCommentLoadingErorr: LiveData<String> = _deleteCommentLoadingError
+    private val _deleteCommentLoading = MutableLiveData<Boolean>()
+    val deleteCommentLoading: LiveData<Boolean> = _deleteCommentLoading
 
 
     private val _createCommentsLoadingError = MutableLiveData<String>()
@@ -49,6 +56,44 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
         thanksApi = RetrofitClient.getInstance()
     }
 
+    fun deleteComment(commentId: Int) {
+        _deleteCommentLoading.postValue(true)
+        UserDataRepository.getInstance()?.token?.let { token ->
+            viewModelScope.launch {
+                deleteCommentEndpoint(token, commentId, Dispatchers.Default)
+            }
+        }
+    }
+
+
+    private suspend fun deleteCommentEndpoint(
+        token: String,
+        commentId: Int,
+        dispatcher: CoroutineDispatcher
+    ) {
+        withContext(dispatcher) {
+            thanksApi?.deleteComment("Token $token", commentId)
+                ?.enqueue(object : Callback<CancelTransactionResponse> {
+                    override fun onResponse(
+                        call: Call<CancelTransactionResponse>,
+                        response: Response<CancelTransactionResponse>
+                    ) {
+                        _deleteCommentLoading.postValue(false)
+                        if (response.code() == 200) {
+                            _deleteComment.postValue(response.body())
+                        } else {
+                            _deleteCommentLoadingError.postValue(
+                                response.message() + " " + response.code())
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CancelTransactionResponse>, t: Throwable) {
+                        _isLoading.postValue(false)
+                        _deleteCommentLoadingError.postValue(t.message)
+                    }
+                })
+        }
+    }
 
     fun loadCommentsList(transactionId: Int) {
         _isLoading.postValue(true)

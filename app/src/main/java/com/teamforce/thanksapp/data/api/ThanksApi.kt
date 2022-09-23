@@ -133,4 +133,10 @@ interface ThanksApi {
         @Header("Authorization") token: String,
         @Body data: CreateCommentRequest
     ): Call<CancelTransactionResponse>
+
+    @DELETE("/delete-comment/{comment_id}/")
+    fun deleteComment(
+        @Header("Authorization") token: String,
+        @Path("comment_id") commentId: Int
+    ): Call<CancelTransactionResponse>
 }

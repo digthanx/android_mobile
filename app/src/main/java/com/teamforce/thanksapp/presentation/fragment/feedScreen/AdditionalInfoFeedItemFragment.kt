@@ -134,6 +134,9 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         val commentsAdapter = CommentsAdapter(requireContext())
         rv.adapter = commentsAdapter
     }
+    private fun deleteComment(commentId: Int){
+        viewModel.deleteComment(commentId)
+    }
 
     private fun loadCommentFromDb(transactionId: Int) {
         viewModel.loadCommentsList(transactionId)
@@ -187,6 +190,17 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         }
 
         inputMessage()
+
+        (binding.commentsRv.adapter as CommentsAdapter).onDeleteCommentClickListener = { commentId ->
+            deleteComment(commentId)
+            transactionId?.let{ transactionId ->
+                viewModel.deleteCommentLoading.observe(viewLifecycleOwner){ loading ->
+                    if(!loading) loadCommentFromDb(transactionId)
+                }
+            }
+
+        }
+
     }
 
     private fun inputMessage() {
@@ -206,9 +220,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
                             viewModel.createCommentsLoading.observe(viewLifecycleOwner){ loading ->
                                 if(!loading) loadCommentFromDb(transactionId)
-                                    // Сделать сворачивание клавиатуры после отправки коммента
-                                // Сделать удаление коммента
-                                // Во время раскрития клавиатуры должно быть видно комментарии
                             }
                         }
 
