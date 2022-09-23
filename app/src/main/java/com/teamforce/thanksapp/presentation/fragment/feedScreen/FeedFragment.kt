@@ -256,7 +256,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             viewLifecycleOwner,
             Observer {
                 allFeedsList = it!!
-                Log.d("Token", "allFeeds ${allFeedsList}")
                 if (binding.chipGroup.checkedChipId == R.id.chipAllEvent) {
                     (binding.feedRv.adapter as FeedAdapter).submitList(allFeedsList)
                 }
@@ -266,7 +265,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             viewLifecycleOwner,
             Observer {
                 mineFeedsList = it
-                Log.d("Token", "mineFeeds ${mineFeedsList}")
                 if (binding.chipGroup.checkedChipId == R.id.chipMineEvent) {
                     (binding.feedRv.adapter as FeedAdapter).submitList(mineFeedsList)
                 }
@@ -277,7 +275,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             viewLifecycleOwner,
             Observer {
                 publicFeedsList = it
-                Log.d("Token", "publicFeeds ${publicFeedsList}")
                 if (binding.chipGroup.checkedChipId == R.id.chipPublicEvent) {
                     (binding.feedRv.adapter as FeedAdapter).submitList(publicFeedsList)
                 }
