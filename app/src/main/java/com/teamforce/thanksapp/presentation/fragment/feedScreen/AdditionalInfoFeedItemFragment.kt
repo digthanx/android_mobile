@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.presentation.fragment.feedScreen
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,25 +8,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
 import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.presentation.adapter.CommentsAdapter
-import com.teamforce.thanksapp.presentation.adapter.FeedAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.AdditionalInfoFeedItemViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
@@ -204,11 +201,14 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                         Log.d("Token", "Отправка сообщения")
                         transactionId?.let { transactionId ->
                             addComment(transactionId, binding.messageValueEt.text.toString())
+                            closeKeyboard()
                             binding.messageValueEt.text?.clear()
 
                             viewModel.createCommentsLoading.observe(viewLifecycleOwner){ loading ->
                                 if(!loading) loadCommentFromDb(transactionId)
-                                    // Сделать сво
+                                    // Сделать сворачивание клавиатуры после отправки коммента
+                                // Сделать удаление коммента
+                                // Во время раскрития клавиатуры должно быть видно комментарии
                             }
                         }
 
@@ -231,6 +231,14 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             binding.textFieldMessage.isEndIconCheckable = false
         }
 
+    }
+
+    private fun closeKeyboard(){
+        val view: View? = activity?.currentFocus
+        if (view != null) {
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     private fun updateOutlookLike() {
