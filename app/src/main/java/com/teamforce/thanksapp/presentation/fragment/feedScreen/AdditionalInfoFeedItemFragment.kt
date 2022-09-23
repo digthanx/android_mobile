@@ -1,22 +1,28 @@
 package com.teamforce.thanksapp.presentation.fragment.feedScreen
 
+import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
+import com.teamforce.thanksapp.model.domain.CommentModel
+import com.teamforce.thanksapp.presentation.adapter.CommentsAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.AdditionalInfoFeedItemViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
@@ -48,6 +54,8 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private var isLiked: Boolean? = null
     private var isDisliked: Boolean? = null
     private var transactionId: Int? = null
+
+    private var allComments: List<CommentModel> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,8 +102,52 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         setBaseInfo()
         setPhoto()
         setLikesAndDislikes()
+        createRecycler()
+        transactionId?.let {
+            loadCommentFromDb(it)
+        }
+        listeners()
+        binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+            refreshRecyclerViewWithChip(checkedIds[0])
+        }
+
+    }
+
+    private fun addComment(transactionId: Int, message: String) {
+        viewModel.addComment(transactionId, message)
+    }
 
 
+    private fun refreshRecyclerViewWithChip(checkedId: Int) {
+        val comments: List<CommentModel> = when (checkedId) {
+            R.id.chipComment -> allComments
+            else -> {
+                allComments
+            }
+        }
+        (binding.commentsRv.adapter as CommentsAdapter).submitList(comments)
+
+    }
+
+    private fun createRecycler() {
+        val rv = binding.commentsRv
+        val commentsAdapter = CommentsAdapter(requireContext())
+        rv.adapter = commentsAdapter
+    }
+
+    private fun loadCommentFromDb(transactionId: Int) {
+        viewModel.loadCommentsList(transactionId)
+
+        viewModel.comments.observe(
+            viewLifecycleOwner,
+            Observer {
+                allComments = it?.comments!!
+                (binding.commentsRv.adapter as CommentsAdapter).submitList(it.comments)
+            }
+        )
+    }
+
+    private fun listeners() {
         binding.descriptionTransactionWhoReceived.setOnClickListener {
             if (userIdReceiver != 0) {
                 userIdReceiver?.let {
@@ -114,8 +166,10 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         }
         binding.likeBtn.setOnClickListener {
             transactionId?.let {
-                val mapReaction: Map<String, Int> = mapOf("like_kind" to 1,
-                    "transaction" to it)
+                val mapReaction: Map<String, Int> = mapOf(
+                    "like_kind" to 1,
+                    "transaction" to it
+                )
                 viewModel.pressLike(mapReaction)
                 updateOutlookLike()
             }
@@ -123,50 +177,107 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
         binding.dislikeBtn.setOnClickListener {
             transactionId?.let {
-                val mapReaction: Map<String, Int> = mapOf("like_kind" to 2,
-                    "transaction" to it)
+                val mapReaction: Map<String, Int> = mapOf(
+                    "like_kind" to 2,
+                    "transaction" to it
+                )
                 viewModel.pressLike(mapReaction)
                 updateOutlookDislike()
             }
         }
+
+        inputMessage()
     }
 
-    private fun updateOutlookLike(){
-        if(isLiked != null && isDisliked != null){
+    private fun inputMessage() {
+        binding.messageValueEt.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (s.trim().length > 0) {
+                    binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_CUSTOM
+                    binding.textFieldMessage.endIconDrawable =
+                        context?.getDrawable(R.drawable.ic_send_vector)
+                    binding.textFieldMessage.isEndIconCheckable = true
+                    binding.textFieldMessage.setEndIconOnClickListener {
+                        Log.d("Token", "Отправка сообщения")
+                        transactionId?.let { transactionId ->
+                            addComment(transactionId, binding.messageValueEt.text.toString())
+                            closeKeyboard()
+                            binding.messageValueEt.text?.clear()
+
+                            viewModel.createCommentsLoading.observe(viewLifecycleOwner){ loading ->
+                                if(!loading) loadCommentFromDb(transactionId)
+                                    // Сделать сворачивание клавиатуры после отправки коммента
+                                // Сделать удаление коммента
+                                // Во время раскрития клавиатуры должно быть видно комментарии
+                            }
+                        }
+
+                    }
+                }else{
+                    binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
+                    binding.textFieldMessage.isEndIconCheckable = false
+
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
+        if (binding.messageValueEt.text?.trim().toString().isEmpty()) {
+            // Запретить отправку
+            binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
+            binding.textFieldMessage.isEndIconCheckable = false
+        }
+
+    }
+
+    private fun closeKeyboard(){
+        val view: View? = activity?.currentFocus
+        if (view != null) {
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
+    private fun updateOutlookLike() {
+        if (isLiked != null && isDisliked != null) {
             isLiked = !isLiked!!
-            if (isLiked == true){
+            if (isLiked == true) {
                 likesCountReal += 1
                 binding.likeBtn.text = likesCountReal.toString()
                 binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
-                if(isDisliked == true){
+                if (isDisliked == true) {
                     isDisliked = false
                     binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
                     dislikesCountReal -= 1
                     binding.dislikeBtn.text = dislikesCountReal.toString()
                     return
                 }
-            }else{
+            } else {
                 likesCountReal -= 1
-                binding.likeBtn.text =likesCountReal.toString()
+                binding.likeBtn.text = likesCountReal.toString()
                 binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
 
             }
         }
     }
-    private fun updateOutlookDislike(){
-        if(isLiked != null && isDisliked != null){
+
+    private fun updateOutlookDislike() {
+        if (isLiked != null && isDisliked != null) {
             isDisliked = !isDisliked!!
-            if (isDisliked == true){
+            if (isDisliked == true) {
                 dislikesCountReal += 1
                 binding.dislikeBtn.text = dislikesCountReal.toString()
                 binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_error_secondary))
-                if(isLiked == true){
+                if (isLiked == true) {
                     isLiked = false
                     binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
                     likesCountReal -= 1
                     binding.likeBtn.text = likesCountReal.toString()
                 }
-            }else{
+            } else {
                 dislikesCountReal -= 1
                 binding.dislikeBtn.text = dislikesCountReal.toString()
                 binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))

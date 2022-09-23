@@ -24,7 +24,7 @@
             app:collapsedTitleTextColor="@color/general_background"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="32dp"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded"
+            app:expandedTitleTextAppearance="@style/Headline3.White"
             app:expandedTitleTextColor="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -115,7 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            app:tabTextAppearance="@style/TextSize"
+                            app:tabTextAppearance="@style/Body2.White"
                             app:tabMinWidth="100dp"
                             android:layout_marginStart="16dp"
                             android:layout_marginBottom="10dp"

@@ -49,11 +49,10 @@
                 android:id="@+id/status_transfer_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
                 android:paddingVertical="2dp"
+                android:textAppearance="@style/VerySmallText1.White"
                 android:paddingHorizontal="12dp"
                 android:background="@color/minor_success"
-                android:textColor="@color/general_background"
                 android:text="Выполнен" />
         </com.google.android.material.card.MaterialCardView>
 

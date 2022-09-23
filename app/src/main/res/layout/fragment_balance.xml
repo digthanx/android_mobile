@@ -23,7 +23,7 @@
             app:collapsedTitleTextColor="@color/general_background"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="32dp"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded"
+            app:expandedTitleTextAppearance="@style/Headline3.White"
             app:expandedTitleTextColor="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -137,224 +137,214 @@
 
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <ScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="44dp">
 
-                            <HorizontalScrollView
-                                android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="44dp"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/my_count"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:scrollbars="none">
+                                android:layout_marginEnd="@dimen/margin_small"
+                                android:layout_weight="1"
+                                android:paddingStart="20dp"
+                                app:cardBackgroundColor="@color/blue"
+                                app:cardCornerRadius="18dp"
+                                app:strokeWidth="@dimen/stroke_size">
 
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
+                                <RelativeLayout
+                                    android:layout_width="200dp"
+                                    android:layout_height="143dp"
+                                    android:layout_gravity="end"
+                                    android:gravity="end">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginTop="@dimen/margin_h"
+                                        android:contentDescription="@null"
+                                        android:scaleType="fitEnd"
+                                        android:src="@drawable/ic_coins_line"
+
+                                        app:layout_constraintRight_toRightOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:tint="@color/general_background_light" />
+                                </RelativeLayout>
+
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:orientation="horizontal">
+                                    android:layout_marginStart="@dimen/margin_x"
+                                    android:layout_marginEnd="@dimen/margin_x">
+
+
+                                    <TextView
+                                        android:id="@+id/myCount"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/margin_xxh"
+                                        android:text="@string/my_count"
+                                        android:textAppearance="@style/Body2.White"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/count_value_tv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="@dimen/margin"
+                                        android:text="NULL"
+                                        android:textAppearance="@style/Headline3.White"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/myCount" />
+
+                                    <TextView
+                                        android:id="@+id/distributed_label_tv"
+                                        style="@style/Body2.White14"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="54dp"
+                                        android:layout_marginBottom="@dimen/margin_xx"
+                                        android:text="@string/distributed"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintLeft_toLeftOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/count_value_tv" />
+
+                                    <TextView
+                                        android:id="@+id/distributed_value_tv"
+                                        style="@style/Body2.White14"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="3dp"
+                                        android:layout_marginBottom="24dp"
+                                        android:text="null"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/distributed_label_tv" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/remains"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_small"
+                                android:layout_weight="1"
+                                app:cardBackgroundColor="@color/yellow"
+                                app:cardCornerRadius="18dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/my_count"
+                                app:layout_constraintTop_toBottomOf="@+id/textField">
+
+                                <RelativeLayout
+                                    android:layout_width="200dp"
+                                    android:layout_height="143dp"
+                                    android:layout_gravity="end"
+                                    android:gravity="end">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginTop="@dimen/margin_h"
+                                        android:contentDescription="@null"
+                                        android:scaleType="fitEnd"
+                                        android:src="@drawable/ic_coins_line"
+
+                                        app:layout_constraintRight_toRightOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:tint="@color/general_background_light" />
+                                </RelativeLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="@dimen/margin_x"
+                                    android:layout_marginEnd="@dimen/margin_x">
+
+                                    <TextView
+                                        android:id="@+id/remains_distribute_label_tv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/margin_xxh"
+                                        android:text="@string/least_distribute"
+                                        android:textAppearance="@style/Body2.White"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
 
                                     <com.google.android.material.card.MaterialCardView
-                                        android:id="@+id/my_count"
-                                        android:layout_width="0dp"
+                                        android:id="@+id/least"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginEnd="@dimen/margin_small"
-                                        android:layout_weight="1"
-                                        android:paddingStart="20dp"
-                                        app:cardBackgroundColor="@color/blue"
-                                        app:cardCornerRadius="18dp"
-                                        app:strokeWidth="@dimen/stroke_size">
+                                        android:layout_marginTop="8dp"
+                                        app:cardBackgroundColor="@color/general_background_light"
+                                        app:cardCornerRadius="7dp"
+                                        app:cardElevation="0dp"
+                                        app:layout_constraintStart_toStartOf="@id/least_count"
+                                        app:layout_constraintTop_toBottomOf="@id/least_count">
 
-                                        <RelativeLayout
-                                            android:layout_width="200dp"
-                                            android:layout_height="143dp"
-                                            android:layout_gravity="end"
-                                            android:gravity="end">
-
-                                            <ImageView
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:layout_marginTop="@dimen/margin_h"
-                                                android:contentDescription="@null"
-                                                android:scaleType="fitEnd"
-                                                android:src="@drawable/ic_coins_line"
-
-                                                app:layout_constraintRight_toRightOf="parent"
-                                                app:layout_constraintTop_toTopOf="parent"
-                                                app:tint="@color/general_background_light" />
-                                        </RelativeLayout>
-
-
-                                        <androidx.constraintlayout.widget.ConstraintLayout
+                                        <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:layout_marginStart="@dimen/margin_x"
-                                            android:layout_marginEnd="@dimen/margin_x">
-
-
-                                            <TextView
-                                                android:id="@+id/myCount"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginTop="@dimen/margin_xxh"
-                                                android:text="@string/my_count"
-                                                android:textAppearance="@style/Body2.White"
-                                                app:layout_constraintStart_toStartOf="parent"
-                                                app:layout_constraintTop_toTopOf="parent" />
-
-                                            <TextView
-                                                android:id="@+id/count_value_tv"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginBottom="@dimen/margin"
-                                                android:text="NULL"
-                                                android:textAppearance="@style/Headline3.White"
-                                                app:layout_constraintStart_toStartOf="parent"
-                                                app:layout_constraintTop_toBottomOf="@id/myCount" />
-
-                                            <TextView
-                                                android:id="@+id/distributed_label_tv"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginTop="54dp"
-                                                android:layout_marginBottom="@dimen/margin_xx"
-                                                android:text="@string/distributed"
-                                                android:textColor="@color/white"
-                                                app:layout_constraintBottom_toBottomOf="parent"
-                                                app:layout_constraintLeft_toLeftOf="parent"
-                                                app:layout_constraintTop_toBottomOf="@id/count_value_tv" />
-
-                                            <TextView
-                                                android:id="@+id/distributed_value_tv"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginStart="3dp"
-                                                android:layout_marginBottom="24dp"
-                                                android:text="null"
-                                                android:textColor="@color/white"
-                                                app:layout_constraintBottom_toBottomOf="parent"
-                                                app:layout_constraintStart_toEndOf="@+id/distributed_label_tv" />
-                                        </androidx.constraintlayout.widget.ConstraintLayout>
-                                    </com.google.android.material.card.MaterialCardView>
-
-                                    <com.google.android.material.card.MaterialCardView
-                                        android:id="@+id/remains"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/margin_small"
-                                        android:layout_weight="1"
-                                        app:cardBackgroundColor="@color/yellow"
-                                        app:cardCornerRadius="18dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toEndOf="@id/my_count"
-                                        app:layout_constraintTop_toBottomOf="@+id/textField">
-
-                                        <RelativeLayout
-                                            android:layout_width="200dp"
-                                            android:layout_height="143dp"
-                                            android:layout_gravity="end"
-                                            android:gravity="end">
+                                            android:orientation="horizontal">
 
                                             <ImageView
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:layout_marginTop="@dimen/margin_h"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
                                                 android:contentDescription="@null"
-                                                android:scaleType="fitEnd"
-                                                android:src="@drawable/ic_coins_line"
-
-                                                app:layout_constraintRight_toRightOf="parent"
-                                                app:layout_constraintTop_toTopOf="parent"
-                                                app:tint="@color/general_background_light" />
-                                        </RelativeLayout>
-
-                                        <androidx.constraintlayout.widget.ConstraintLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            android:layout_marginStart="@dimen/margin_x"
-                                            android:layout_marginEnd="@dimen/margin_x">
+                                                android:src="@drawable/ic_fire_not_fill"
+                                                app:tint="@color/general_orange" />
 
                                             <TextView
-                                                android:id="@+id/remains_distribute_label_tv"
+                                                android:id="@+id/will_burn_tv"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginTop="@dimen/margin_xxh"
-                                                android:text="@string/least_distribute"
-                                                android:textColor="@color/white"
-                                                android:textStyle="bold"
-                                                app:layout_constraintStart_toStartOf="parent"
-                                                app:layout_constraintTop_toTopOf="parent" />
-
-                                            <com.google.android.material.card.MaterialCardView
-                                                android:id="@+id/least"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginTop="8dp"
-                                                app:cardBackgroundColor="@color/general_background_light"
-                                                app:cardCornerRadius="7dp"
-                                                app:cardElevation="0dp"
-                                                app:layout_constraintStart_toStartOf="@id/least_count"
-                                                app:layout_constraintTop_toBottomOf="@id/least_count">
-
-                                                <LinearLayout
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="match_parent"
-                                                    android:orientation="horizontal">
-
-                                                    <ImageView
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:contentDescription="@null"
-                                                        android:src="@drawable/ic_fire_not_fill"
-                                                        app:tint="@color/general_orange" />
-
-                                                    <TextView
-                                                        android:id="@+id/will_burn_tv"
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_gravity="center"
-                                                        android:text="@string/will_burn_after"
-                                                        android:textColor="@color/general_orange"
-                                                        android:textSize="8sp" />
-                                                </LinearLayout>
-                                            </com.google.android.material.card.MaterialCardView>
-
-
-                                            <TextView
-                                                android:id="@+id/least_count"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginBottom="8dp"
-                                                android:text="NULL"
-                                                android:textAppearance="@style/Headline3.White"
-                                                app:layout_constraintStart_toStartOf="parent"
-                                                app:layout_constraintTop_toBottomOf="@+id/remains_distribute_label_tv" />
-
-                                            <TextView
-                                                android:id="@+id/least_label_tv"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginTop="54dp"
-                                                android:layout_marginBottom="@dimen/margin_xx"
-                                                android:text="@string/distributed"
-                                                android:textColor="@color/white"
-                                                app:layout_constraintBottom_toBottomOf="parent"
-                                                app:layout_constraintLeft_toLeftOf="parent"
-                                                app:layout_constraintTop_toBottomOf="@id/least_count" />
-
-                                            <TextView
-                                                android:id="@+id/least_value_tv"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginStart="3dp"
-                                                android:layout_marginBottom="24dp"
-                                                android:text="null"
-                                                android:textColor="@color/white"
-                                                app:layout_constraintBottom_toBottomOf="parent"
-                                                app:layout_constraintStart_toEndOf="@+id/least_label_tv" />
-                                        </androidx.constraintlayout.widget.ConstraintLayout>
+                                                android:layout_gravity="center"
+                                                android:text="@string/will_burn_after"
+                                                android:textColor="@color/general_orange"
+                                                android:textSize="8sp" />
+                                        </LinearLayout>
                                     </com.google.android.material.card.MaterialCardView>
-                                </LinearLayout>
-                            </HorizontalScrollView>
-                        </ScrollView>
+
+
+                                    <TextView
+                                        android:id="@+id/least_count"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="8dp"
+                                        android:text="NULL"
+                                        android:textAppearance="@style/Headline3.White"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/remains_distribute_label_tv" />
+
+                                    <TextView
+                                        android:id="@+id/least_label_tv"
+                                        style="@style/Body2.White14"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="54dp"
+                                        android:layout_marginBottom="@dimen/margin_xx"
+                                        android:text="@string/distributed"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintLeft_toLeftOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/least_count" />
+
+                                    <TextView
+                                        android:id="@+id/least_value_tv"
+                                        style="@style/Body2.White14"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="3dp"
+                                        android:layout_marginBottom="24dp"
+                                        android:text="null"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/least_label_tv" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+                            </com.google.android.material.card.MaterialCardView>
+                        </LinearLayout>
+
 
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/cancelled_view"
@@ -377,7 +367,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="39dp"
                                     android:text="@string/cancelled"
-                                    android:textAppearance="@style/Body2"
+                                    android:textAppearance="@style/Body2.White"
                                     android:textColor="@color/minor_error"
                                     app:layout_constraintStart_toStartOf="@id/icon_refuse"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -389,7 +379,7 @@
                                     android:layout_marginStart="37dp"
                                     android:layout_marginTop="7dp"
                                     android:text=" null"
-                                    android:textAppearance="@style/Body2"
+                                    android:textAppearance="@style/Body2.Black"
                                     app:layout_constraintStart_toStartOf="@+id/icon_refuse"
                                     app:layout_constraintTop_toBottomOf="@id/cancelled_label_tv" />
 
@@ -429,7 +419,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="40dp"
                                     android:text="@string/frozen_label"
-                                    android:textAppearance="@style/Body2"
+                                    android:textAppearance="@style/Body2.White"
                                     android:textColor="@color/minor_success"
                                     app:layout_constraintStart_toStartOf="@id/icon_waiting"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -441,7 +431,7 @@
                                     android:layout_marginStart="37dp"
                                     android:layout_marginTop="12dp"
                                     android:text=" null"
-                                    android:textAppearance="@style/Body2"
+                                    android:textAppearance="@style/Body2.Black"
                                     app:layout_constraintStart_toStartOf="@+id/icon_waiting"
                                     app:layout_constraintTop_toBottomOf="@id/frozen_label_tv" />
 
@@ -477,10 +467,10 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             style="@style/Widget.App.BottomNavigationView"
-            android:background="@color/transparent"
             android:layout_width="match_parent"
-            android:layout_marginEnd="16dp"
             android:layout_height="?attr/actionBarSize"
+            android:layout_marginEnd="16dp"
+            android:background="@color/transparent"
             app:menu="@menu/bottom_navigation_menu" />
 
     </com.google.android.material.bottomappbar.BottomAppBar>

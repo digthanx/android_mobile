@@ -24,9 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/auth"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:textAppearance="@style/Headline3.White" />
     </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
@@ -129,8 +127,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="44dp"
                 android:text="@string/get_code_button_label"
-                app:cornerRadius="12dp"
-                android:backgroundTint="@color/general_brand"
+                style="@style/DefaultButton"
+                android:textAllCaps="true"
                 android:paddingVertical="17dp" />
 
         </LinearLayout>
