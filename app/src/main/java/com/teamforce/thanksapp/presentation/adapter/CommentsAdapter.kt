@@ -6,7 +6,6 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -69,21 +68,16 @@ class CommentsAdapter
         bindAvatar(holder, position)
         bindBaseInfo(holder, position)
         bindDate(holder, position)
-//        holder.mainCardView.setOnCreateContextMenuListener { menu, v, menuInfo ->
-//            var edit: MenuItem = menu.add(Menu.NONE, 1, 1, "Edit")
-//            var delete: MenuItem = menu.add(Menu.NONE, 2, 2, "Delete")
-//            //delete.setOnMenuItemClickListener {  }
-//        }
+
         // Если имя пользователя совпадает с именем владельца коммента
         holder.mainCardView.setOnLongClickListener {
-            val popup: PopupMenu = PopupMenu(context, holder.mainCardView)
+            val popup: PopupMenu = PopupMenu(context, holder.fioSender)
             popup.menuInflater.inflate(R.menu.comment_context_menu, popup.menu)
-            popup.gravity = Gravity.END
+            popup.gravity = Gravity.START
+
             popup.setOnMenuItemClickListener {
                 when(it.itemId) {
                      R.id.delete -> {
-                        Toast.makeText(context, "You Clicked : " + it.getTitle(), Toast.LENGTH_SHORT).show()
-                        Log.d("Token", "Меню удалить нажалось")
                          onDeleteCommentClickListener?.invoke(currentList[position].id)
                     }
                 }
@@ -107,7 +101,9 @@ class CommentsAdapter
 //        }
 
     private fun bindBaseInfo(holder: CommentViewHolder, position: Int){
-        holder.fioSender.text = currentList[position].user.name
+        holder.fioSender.text =
+            String.format(context.getString(R.string.fioSender),
+                currentList[position].user.surname, currentList[position].user.name)
         holder.message.text = currentList[position].text
     }
 
