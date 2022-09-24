@@ -35,7 +35,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -97,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -140,7 +140,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:text="Доступно: "
+                        android:text="@string/available"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="@+id/distributed_value_tv"
@@ -151,7 +151,6 @@
                         android:id="@+id/distributed_value_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3027"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -212,7 +211,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            android:text="Дмитрий"
                             android:textAppearance="@style/Body2"
                             android:textStyle="bold"
                             app:layout_constraintStart_toEndOf="@+id/receiver_avatar"
@@ -223,7 +221,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="Малков"
                             android:textAppearance="@style/Body2"
                             android:textStyle="bold"
                             app:layout_constraintStart_toEndOf="@+id/receiver_name_label_tv"
@@ -235,7 +232,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="3dp"
-                            android:text="/@NyamaMDE"
                             android:textSize="12sp"
                             app:layout_constraintStart_toEndOf="@id/receiver_avatar"
                             app:layout_constraintTop_toBottomOf="@+id/receiver_name_label_tv" />
