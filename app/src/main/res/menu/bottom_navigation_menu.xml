@@ -13,7 +13,7 @@
     <item
         android:id="@+id/transactionFragment"
         android:enabled="false"
-        android:title="@string/close"/>
+        android:title="@string/nothing"/>
     <item
         android:id="@+id/historyFragment"
         android:enabled="true"
