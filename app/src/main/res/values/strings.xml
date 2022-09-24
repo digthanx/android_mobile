@@ -106,7 +106,7 @@
     <string name="refused">Отклонен</string>
     <string name="occured">Выполнен</string>
     <string name="allHistory">Вся история</string>
-    <string name="received">Получено</string>
+    <string name="received">\u0020\u0020\u0020   Получено  \u0020\u0020\u0020</string>
     <string name="sended">Отправлено</string>
     <string name="cancelTransaction">Отменить перевод?</string>
     <string name="successfulCancel">Спасибки вернутся на ваш счет :)</string>
