@@ -52,7 +52,7 @@ class TransactionResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.amount.text = "- $amountThanks"
+        binding.amount.text = " $amountThanks"
         binding.receiverTgName.text  = receiverTg
         binding.receiverNameLabelTv.text  = receiverName
         binding.receiverSurnameLabelTv.text  = receiverSurname
