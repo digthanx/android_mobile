@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
@@ -209,14 +211,17 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     }
 
+
+
     private fun inputMessage() {
         binding.messageValueEt.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.trim().length > 0) {
+                if (s.trim().length > 0 || s.length <= 50) {
                     binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_CUSTOM
                     binding.textFieldMessage.endIconDrawable =
                         context?.getDrawable(R.drawable.ic_send_vector)
                     binding.textFieldMessage.isEndIconCheckable = true
+                    binding.textFieldMessage.error = null
                     binding.textFieldMessage.setEndIconOnClickListener {
                         Log.d("Token", "Отправка сообщения")
                         transactionId?.let { transactionId ->
@@ -233,7 +238,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 }else{
                     binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
                     binding.textFieldMessage.isEndIconCheckable = false
-
+                    binding.textFieldMessage.error = getString(R.string.errorMaxLengthMessage)
                 }
             }
 
@@ -246,6 +251,27 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             // Запретить отправку
             binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
             binding.textFieldMessage.isEndIconCheckable = false
+        }
+
+        viewModel.createCommentsLoadingError.observe(viewLifecycleOwner) {
+//            binding.sendCoinLinear.visibility = View.GONE
+//            binding.textField.visibility = View.VISIBLE
+//            binding.messageValueEt.setText("")
+//            binding.countValueEt.setText("")
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            val snack = Snackbar.make(
+                requireView(),
+                it,
+                Snackbar.LENGTH_LONG
+            )
+//            binding.sendCoinBtn.isClickable = true
+//            binding.sendCoinBtn.isEnabled = true
+            snack.setTextMaxLines(3)
+                .setTextColor(context?.getColor(R.color.white)!!)
+                .setAction(context?.getString(R.string.OK)!!) {
+                    snack.dismiss()
+                }
+            snack.show()
         }
 
     }

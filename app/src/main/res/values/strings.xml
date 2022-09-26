@@ -148,6 +148,7 @@
     <string name="delete">Удалить</string>
     <string name="edit">Редактировать</string>
     <string name="fioSender">%s %s</string>
+    <string name="errorMaxLengthMessage">Допустимо максимум 50 символов</string>
     <!-- Utils -->
     <string name="yesterday">Вчера</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
