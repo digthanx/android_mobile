@@ -108,7 +108,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         }
         viewModel.balance.observe(viewLifecycleOwner) {
             UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
-            binding.distributedValueTv.text = it.distribute.amount.toString()
+            if(it.distribute.amount == 0){
+                binding.distributedValueTv.text = it.income.amount.toString()
+            }else{
+                binding.distributedValueTv.text = it.distribute.amount.toString()
+            }
+
         }
 
         binding.attachImageBtn.setOnClickListener {
