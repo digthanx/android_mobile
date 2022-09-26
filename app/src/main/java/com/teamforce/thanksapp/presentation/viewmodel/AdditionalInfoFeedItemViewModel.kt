@@ -9,6 +9,7 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CreateCommentRequest
 import com.teamforce.thanksapp.data.request.GetCommentsRequest
 import com.teamforce.thanksapp.data.response.CancelTransactionResponse
+import com.teamforce.thanksapp.data.response.CreateCommentError
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.data.response.GetCommentsResponse
 import com.teamforce.thanksapp.model.domain.CommentModel
@@ -18,6 +19,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,7 +45,7 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
 
 
     private val _createCommentsLoadingError = MutableLiveData<String>()
-    val createCommentsLoadingErorr: LiveData<String> = _createCommentsLoadingError
+    val createCommentsLoadingError: LiveData<String> = _createCommentsLoadingError
     private val _createCommentsLoading = MutableLiveData<Boolean>()
     val createCommentsLoading: LiveData<Boolean> = _createCommentsLoading
 
@@ -161,14 +163,17 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
                         _createCommentsLoading.postValue(false)
                         if (response.code() == 200) {
 
-                        } else {
+                        } else if(response.code() == 400) {
+                            _createCommentsLoadingError.postValue(
+                                response.message() + " " + response.code())
+                        }else{
                             _createCommentsLoadingError.postValue(
                                 response.message() + " " + response.code())
                         }
                     }
 
                     override fun onFailure(call: Call<CancelTransactionResponse>, t: Throwable) {
-                        _isLoading.postValue(false)
+                        _createCommentsLoading.postValue(false)
                         _createCommentsLoadingError.postValue(t.message)
                     }
                 })

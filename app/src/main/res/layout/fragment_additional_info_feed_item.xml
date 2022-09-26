@@ -225,7 +225,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
-                app:singleSelection="true">
+                app:singleSelection="true"
+                app:selectionRequired="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipComment"
@@ -257,7 +258,7 @@
                 android:id="@+id/comments_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="110dp"
                 tools:listitem="@layout/item_comment"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
@@ -277,10 +278,18 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lines="6"
+            android:minLines="1"
+            android:gravity="top|start"
+            android:maxLines="10"
+            android:scrollbars="vertical"
             android:layout_marginTop="@dimen/margin_x"
             android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="18dp"
             android:hint="@string/comment"
+            app:counterEnabled="true"
+            app:counterMaxLength="50"
+            app:errorEnabled="true"
             app:endIconTint="@color/general_brand"
             android:textColorHint="@color/general_secondary"
             app:boxStrokeColor="@color/general_color_grey"
@@ -295,7 +304,13 @@
                 android:id="@+id/message_value_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences|textMultiLine|text"
+                android:lines="6"
+                android:minLines="1"
+                android:gravity="top|start"
+                android:maxLines="10"
+                android:scrollbars="vertical"
+                android:scrollHorizontally="false"
+                android:inputType="textCapSentences|textMultiLine"
                 android:drawableEnd="@drawable/ic_emotion"/>
 
         </com.google.android.material.textfield.TextInputLayout>
