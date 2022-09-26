@@ -61,11 +61,14 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.balanceFragment, R.id.feedFragment, R.id.transactionFragment, R.id.historyFragment))
+        val appBarConfiguration = AppBarConfiguration(setOf(
+            R.id.feedFragment,
+            R.id.balanceFragment,
+            R.id.historyFragment
+        ))
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
-        setupNavigation(navController)
         initViews()
         loadDataFromServer()
         setDataWithChip(view)
@@ -74,92 +77,39 @@ class HistoryFragment : Fragment() {
             findNavController().navigate(R.id.action_historyFragment_to_profileGraph,
                 null, OptionsTransaction().optionForProfileFragment )
         }
-        displaySnack()
+       // displaySnack()
 
     }
 
-    private fun displaySnack(){
-        binding.notify.setOnClickListener {
-            binding.fab.hide()
-            val snack = Snackbar.make(
-                binding.fab.rootView,
-                requireContext().resources.getString(R.string.joke),
-                Snackbar.LENGTH_LONG
-            )
-            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
-                override fun onShown(transientBottomBar: Snackbar?) {
-                    super.onShown(transientBottomBar)
-                }
-
-                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                    super.onDismissed(transientBottomBar, event)
-                    if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
-                        binding.fab.show()
-                    }
-                }
-            })
-            snack.setTextMaxLines(3)
-                .setTextColor(context?.getColor(R.color.white)!!)
-                .setAction(context?.getString(R.string.OK)!!) {
-                    snack.dismiss()
-                }
-            snack.show()
-
-        }
-    }
-
-    private fun setupNavigation(navController: NavController) {
-        binding.bottomNavigation.setupWithNavController(navController)
-        binding.bottomNavigation.background = null
-
-        binding.fab.setOnClickListener {
-            navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
-        }
-
-        binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-                R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-                R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-                R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-            }
-            true
-        })
-
-        binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
-            when (item.itemId) {
-                R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemReselectedListener
-                }
-                R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemReselectedListener
-                }
-                R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemReselectedListener
-                }
-                R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemReselectedListener
-                }
-            }
-            true
-        })
-    }
+//    private fun displaySnack(){
+//        binding.notify.setOnClickListener {
+//            binding.fab.hide()
+//            val snack = Snackbar.make(
+//                binding.fab.rootView,
+//                requireContext().resources.getString(R.string.joke),
+//                Snackbar.LENGTH_LONG
+//            )
+//            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
+//                override fun onShown(transientBottomBar: Snackbar?) {
+//                    super.onShown(transientBottomBar)
+//                }
+//
+//                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+//                    super.onDismissed(transientBottomBar, event)
+//                    if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
+//                        binding.fab.show()
+//                    }
+//                }
+//            })
+//            snack.setTextMaxLines(3)
+//                .setTextColor(context?.getColor(R.color.white)!!)
+//                .setAction(context?.getString(R.string.OK)!!) {
+//                    snack.dismiss()
+//                }
+//            snack.show()
+//
+//        }
+//    }
 
     private fun initViews() {
         viewModel = HistoryViewModel()

@@ -163,31 +163,6 @@
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="bottom"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:hideOnScroll="true">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            style="@style/Widget.App.BottomNavigationView"
-            android:background="@color/transparent"
-            android:layout_width="match_parent"
-            android:layout_marginEnd="16dp"
-            android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/bottom_navigation_menu" />
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="58dp"
-        android:layout_height="58dp"
-        android:foreground="@drawable/gradient_drawable"
-        app:layout_anchor="@id/bottomAppBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

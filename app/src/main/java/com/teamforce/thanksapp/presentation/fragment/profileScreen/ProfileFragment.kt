@@ -87,9 +87,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val navController = findNavController()
         initViews()
-        setupNavigation(navController)
         requestData()
         setData()
         binding.exitBtn.setOnClickListener {
@@ -103,66 +101,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-    private fun setupNavigation(navController: NavController) {
-        binding.bottomNavigation.setupWithNavController(navController)
-        binding.bottomNavigation.background = null
-//        binding.navView.setupWithNavController(navController)
-
-        // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
-        // binding.bottomNavigation.setupWithNavController(navController)
-
-//        binding.profile.setOnClickListener{
-//            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
-//        }
-
-        binding.fab.setOnClickListener {
-            navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
-        }
-
-        binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-                R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-                R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-                R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-            }
-            true
-        })
-
-        binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
-            when (item.itemId) {
-                R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemReselectedListener
-                }
-                R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemReselectedListener
-                }
-                R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemReselectedListener
-                }
-                R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemReselectedListener
-                }
-            }
-            true
-        })
-    }
 
 
     private fun addPhotoFromIntent() {

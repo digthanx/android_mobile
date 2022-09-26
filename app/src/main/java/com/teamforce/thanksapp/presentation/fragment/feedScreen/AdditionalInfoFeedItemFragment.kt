@@ -323,13 +323,16 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     }
 
     private fun setPhoto() {
-        if (!avatarReceiver?.contains("null")!!) {
-            Glide.with(this)
-                .load(avatarReceiver?.toUri())
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .centerCrop()
-                .into(binding.userAvatar)
+        avatarReceiver?.let {
+            if (!it.contains("null")) {
+                Glide.with(this)
+                    .load(avatarReceiver?.toUri())
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .centerCrop()
+                    .into(binding.userAvatar)
+            }
         }
+
         if (!photo.isNullOrEmpty()) {
             Log.d("Token", "${photo}")
             binding.photoTv.visibility = View.VISIBLE

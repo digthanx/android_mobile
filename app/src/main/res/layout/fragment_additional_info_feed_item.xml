@@ -295,7 +295,7 @@
                 android:id="@+id/message_value_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences|textMultiLine"
+                android:inputType="textCapSentences|textMultiLine|text"
                 android:drawableEnd="@drawable/ic_emotion"/>
 
         </com.google.android.material.textfield.TextInputLayout>

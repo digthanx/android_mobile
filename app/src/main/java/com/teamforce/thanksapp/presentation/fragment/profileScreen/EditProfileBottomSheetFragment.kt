@@ -1,6 +1,8 @@
 package com.teamforce.thanksapp.presentation.fragment.profileScreen
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.net.toUri
+import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.databinding.FragmentEditProfileBottomSheetBinding
@@ -53,6 +57,7 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
         viewModel.initViewModel()
         loadDataFromServer()
         writeData()
+        listenersEventType()
         listenerErrors()
         logicalSaveData()
     }
@@ -117,6 +122,60 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
 
         }
     }
+
+    private fun listenersEventType(){
+        binding.phoneEt.addTextChangedListener(object : TextWatcher{
+            private var mSelfChange = false
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if (s == null || mSelfChange) {
+                    return
+                }
+
+                val preparedStr = s.replace(Regex("(\\D*)"), "")
+                var resultStr = ""
+                for (i in preparedStr.indices) {
+                    resultStr = when (i) {
+                        0 -> resultStr.plus("+7 (")
+                        1 -> resultStr.plus(preparedStr[i])
+                        2 -> resultStr.plus(preparedStr[i])
+                        3 -> resultStr.plus(preparedStr[i])
+                        4 -> resultStr.plus(") ".plus(preparedStr[i]))
+                        5 -> resultStr.plus(preparedStr[i])
+                        6 -> resultStr.plus(preparedStr[i])
+                        7 -> resultStr.plus("-".plus(preparedStr[i]))
+                        8 -> resultStr.plus(preparedStr[i])
+                        9 -> resultStr.plus("-".plus(preparedStr[i]))
+                        10 -> resultStr.plus(preparedStr[i])
+                        else -> resultStr
+                    }
+                }
+
+                mSelfChange = true
+                val oldSelectionPos = binding.phoneEt.selectionStart
+                val isEdit = binding.phoneEt.selectionStart != binding.phoneEt.length()
+                binding.phoneEt.setText(resultStr)
+                if (isEdit) {
+                    binding.phoneEt.setSelection(if (oldSelectionPos > resultStr.length) resultStr.length else oldSelectionPos)
+                } else {
+                    binding.phoneEt.setSelection(resultStr.length)
+                }
+                mSelfChange = false
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
+    }
+
+
 
     private fun listenerErrors(){
         viewModel.profileError.observe(viewLifecycleOwner){
