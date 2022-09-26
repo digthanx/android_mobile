@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
@@ -107,8 +108,13 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             loadCommentFromDb(it)
         }
         listeners()
-        binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-            refreshRecyclerViewWithChip(checkedIds[0])
+        binding.chipGroup.setOnCheckedStateChangeListener { group: ChipGroup, checkedIds: MutableList<Int> ->
+            if(checkedIds.size > 0){
+                refreshRecyclerViewWithChip(checkedIds[0])
+            }else{
+                (binding.commentsRv.adapter as CommentsAdapter).submitList(allComments)
+            }
+
         }
 
     }
