@@ -16,6 +16,7 @@ import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_NAME
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_SURNAME
 import com.teamforce.thanksapp.utils.Consts.RECEIVER_TG
+import com.teamforce.thanksapp.utils.OptionsTransaction
 
 
 class TransactionResultFragment : Fragment() {
@@ -48,13 +49,14 @@ class TransactionResultFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.amount.text = "- $amountThanks"
+        binding.amount.text = " $amountThanks"
         binding.receiverTgName.text  = receiverTg
         binding.receiverNameLabelTv.text  = receiverName
         binding.receiverSurnameLabelTv.text  = receiverSurname
-        if(receiverPhoto.isNullOrEmpty()){
+        if(!receiverPhoto?.contains("null")!!){
             Glide.with(view)
                 .load(receiverPhoto?.toUri())
                 .centerCrop()
@@ -62,16 +64,11 @@ class TransactionResultFragment : Fragment() {
         }else{
             binding.receiverAvatar.setImageResource(R.drawable.ic_anon_avatar)
         }
-        val optionForResult = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(com.google.android.material.R.anim.abc_fade_in)
-            .setExitAnim(com.google.android.material.R.anim.abc_fade_out)
-            .build()
 
         binding.btnToTheBeginning.setOnClickListener {
             findNavController().navigate(
                 R.id.action_transactionResultFragment_to_transactionFragment,
-                null, optionForResult)
+                null, OptionsTransaction().optionForResult)
         }
         binding.btnToTheHistory.setOnClickListener {
 
@@ -80,7 +77,7 @@ class TransactionResultFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_transactionResultFragment_to_transactionFragment,
                 bundle,
-                optionForResult
+                OptionsTransaction().optionForResult
             )
         }
     }

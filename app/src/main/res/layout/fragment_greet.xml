@@ -37,11 +37,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:lineHeight="4dp"
-        android:textStyle="bold"
         android:textColor="@color/black"
         android:text="Цифровое спасибо"
+        android:textAppearance="@style/Headline6Bold"
         android:textAlignment="center"/>
 
     <TextView
@@ -51,6 +49,7 @@
         android:layout_weight="1"
         android:textAlignment="center"
         android:layout_gravity="center"
+        android:textAppearance="@style/StandardText3.Gray"
         android:text="Построение культуры признания и благодарности"/>
 
     <com.google.android.material.button.MaterialButton
@@ -61,8 +60,8 @@
         android:layout_marginTop="25dp"
         android:layout_marginBottom="44dp"
         android:text="@string/enter"
-        app:cornerRadius="12dp"
-        android:backgroundTint="@color/general_brand"
+        android:textAllCaps="true"
+        style="@style/DefaultButton"
         android:paddingVertical="17dp"
         />
 

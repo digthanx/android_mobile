@@ -6,24 +6,23 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
-import com.teamforce.thanksapp.utils.UserDataRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import com.teamforce.thanksapp.utils.RetrofitClient
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
-@HiltViewModel
-class ProfileViewModel @Inject constructor(
-    private val thanksApi: ThanksApi,
-    val userDataRepository: UserDataRepository
-) : ViewModel() {
+class ProfileViewModel() : ViewModel() {
 
+    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _profile = MutableLiveData<ProfileResponse>()
+    //private val _profile = savedStateHandle.getLiveData<ProfileResponse>("profile")
     val profile: LiveData<ProfileResponse> = _profile
     private val _profileError = MutableLiveData<String>()
     val profileError: LiveData<String> = _profileError
@@ -33,6 +32,10 @@ class ProfileViewModel @Inject constructor(
     private val _imageUriError = MutableLiveData<String>()
     val imageUriError: LiveData<String> = _imageUriError
 
+
+    fun initViewModel() {
+        thanksApi = RetrofitClient.getInstance()
+    }
 
     fun loadUserProfile(token: String) {
         _isLoading.postValue(true)
@@ -66,9 +69,20 @@ class ProfileViewModel @Inject constructor(
     }
 
 
-    fun loadUpdateAvatarUserProfile(token: String, userId: String, imageFilePart: MultipartBody.Part) {
+    fun loadUpdateAvatarUserProfile(
+        token: String,
+        userId: String,
+        imageFilePart: MultipartBody.Part
+    ) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callUpdateAvatarProfileEndpoint(token, userId = userId, imageFilePart, Dispatchers.Default) }
+        viewModelScope.launch {
+            callUpdateAvatarProfileEndpoint(
+                token,
+                userId = userId,
+                imageFilePart,
+                Dispatchers.Default
+            )
+        }
     }
 
     private suspend fun callUpdateAvatarProfileEndpoint(
@@ -78,25 +92,26 @@ class ProfileViewModel @Inject constructor(
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.putUserAvatar("Token $token", userId = userId, imageFilePart)?.enqueue(object : Callback<PutUserAvatarResponse> {
-                override fun onResponse(
-                    call: Call<PutUserAvatarResponse>,
-                    response: Response<PutUserAvatarResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _imageUri.postValue(response.body())
-                    } else {
-                        _imageUriError.postValue(response.message() + " " + response.code())
+            thanksApi?.putUserAvatar("Token $token", userId = userId, imageFilePart)
+                ?.enqueue(object : Callback<PutUserAvatarResponse> {
+                    override fun onResponse(
+                        call: Call<PutUserAvatarResponse>,
+                        response: Response<PutUserAvatarResponse>
+                    ) {
+                        _isLoading.postValue(false)
+                        if (response.code() == 200) {
+                            _imageUri.postValue(response.body())
+                        } else {
+                            _imageUriError.postValue(response.message() + " " + response.code())
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<PutUserAvatarResponse>, t: Throwable) {
-                    Log.d(ProfileFragment.TAG, "onFailure: $t")
-                    _isLoading.postValue(false)
-                    _profileError.postValue(t.message)
-                }
-            })
+                    override fun onFailure(call: Call<PutUserAvatarResponse>, t: Throwable) {
+                        Log.d(ProfileFragment.TAG, "onFailure: $t")
+                        _isLoading.postValue(false)
+                        _profileError.postValue(t.message)
+                    }
+                })
         }
     }
 

@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -21,15 +20,14 @@ import com.teamforce.thanksapp.presentation.activity.ILoginAction
 import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
-    private val viewModel: LoginViewModel by viewModels()
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
+
+    private var viewModel: LoginViewModel = LoginViewModel
     private lateinit var innerEditTextUserName: TextInputEditText
     private lateinit var editTextUserName: TextInputLayout
     private lateinit var innerEditTextCode: TextInputEditText
@@ -38,6 +36,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
     private lateinit var helperLink: TextView
     private lateinit var helperText: TextView
     private var dataBundle: Bundle? = null
+    private var username: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,26 +57,26 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
             setHelperLink()
         }
         innerEditTextCode.addTextChangedListener(object:  TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
+                }
 
-            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if(s?.trim()?.length == 4){
-                    if (viewModel.userDataRepository.statusResponseAuth == "{status=Код отправлен в телеграм}") {
-                        viewModel.userDataRepository.verifyCode = innerEditTextCode.text?.trim().toString()
-                        viewModel.verifyCodeTelegram(innerEditTextCode.text?.trim().toString())
-                    } else if (viewModel.userDataRepository.statusResponseAuth == "{status=Код отправлен на указанную электронную почту}") {
-                        viewModel.userDataRepository.verifyCode = innerEditTextCode.text?.trim().toString()
-                        Log.d("Token", "Я по почте захожу")
-                        viewModel.verifyCodeEmail(innerEditTextCode.text?.trim().toString())
-                    }else{
-                        Log.d("Token", "Ни один статус не прошел CheckCodeFragment OnClick")
+                override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if(s?.trim()?.length == 4){
+                        if (UserDataRepository.getInstance()?.statusResponseAuth == "{status=Код отправлен в телеграм}") {
+                            UserDataRepository.getInstance()?.verifyCode = innerEditTextCode.text?.trim().toString()
+                            viewModel.verifyCodeTelegram(innerEditTextCode.text?.trim().toString())
+                        } else if (UserDataRepository.getInstance()?.statusResponseAuth == "{status=Код отправлен на указанную электронную почту}") {
+                            UserDataRepository.getInstance()?.verifyCode = innerEditTextCode.text?.trim().toString()
+                            Log.d("Token", "Я по почте захожу")
+                            viewModel.verifyCodeEmail(innerEditTextCode.text?.trim().toString())
+                        }else{
+                            Log.d("Token", "Ни один статус не прошел CheckCodeFragment OnClick")
+                        }
                     }
                 }
-            }
 
-            override fun afterTextChanged(p0: Editable?) {
+                override fun afterTextChanged(p0: Editable?) {
 
             }
 
@@ -93,6 +92,9 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         helperLink = binding.helperLink
         helperText = binding.helperText
         getCodeButton.setOnClickListener(this)
+        viewModel.initViewModel()
+
+
     }
 
     fun checkAuth(){
@@ -105,7 +107,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
             getCodeButton.isClickable = !it
         }
         viewModel.isSuccessAuth.observe(viewLifecycleOwner) {
-            if (it && viewModel.userDataRepository.username != null) {
+            if (it && UserDataRepository.getInstance()?.username != null) {
                 dataBundle = sendToastAboutVerifyCode()
                 helperText.visibility = View.VISIBLE
                 setEditTextCode()
@@ -113,7 +115,6 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
             }
         }
     }
-
     fun checkVerifyCode(){
         viewModel.verifyError.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(),
@@ -121,7 +122,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         }
 
         viewModel.verifyResult.observe(viewLifecycleOwner) {
-            if (it != null && viewModel.userDataRepository.verifyCode != null) {
+            if (it != null && UserDataRepository.getInstance()?.verifyCode != null) {
                 Log.d("Token", "verifyResult in  CheckCode ${innerEditTextCode.text}")
                 finishLogin(it.authtoken, it.telegramOrEmail)
             }
@@ -129,7 +130,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
     }
 
     private fun finishLogin(authtoken: String?, telegram: String?) {
-        viewModel.userDataRepository.saveCredentials(authtoken, telegram)
+        UserDataRepository.getInstance()?.saveCredentials(requireContext(), authtoken, telegram, username)
         Log.d("Token", "цукпукп")
         findNavController().navigate(R.id.action_loginFragment_to_mainFlowFragment)
     }
@@ -148,18 +149,17 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         if(data.getString(Consts.BUNDLE_TG_OR_EMAIL) == "1"){
             helperTextView.text =
                 String.format(getString(R.string.helperTextAboutEmail),
-                    viewModel.userDataRepository.email.toString())
+                    UserDataRepository.getInstance()?.email.toString())
         }else{
             helperTextView.text = String.format(getString(R.string.helperTextAboutTg),
                 data.getString(Consts.LINK_TO_BOT_Name, "null"))
         }
     }
-
     fun setHelperLink(){
         helperLink.isClickable = true
         helperLink.visibility = View.VISIBLE
         helperLink.setOnClickListener {
-            viewModel.userDataRepository.logout()
+            UserDataRepository.getInstance()?.logout(requireContext())
             helperLink.visibility = View.GONE
             helperText.visibility = View.GONE
             helperText.text = view?.context?.getString(R.string.helperTextStandard)
@@ -174,14 +174,14 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
     fun sendToastAboutVerifyCode(): Bundle{
         val emailOrTelegram = Bundle()
         emailOrTelegram.putString(Consts.BUNDLE_TG_OR_EMAIL, innerEditTextUserName.text.toString())
-        if(viewModel.userDataRepository.statusResponseAuth.toString() == "{status=Код отправлен в телеграм}"){
+        if(UserDataRepository.getInstance()?.statusResponseAuth.toString() == "{status=Код отправлен в телеграм}"){
             Toast.makeText(requireContext(),
                 R.string.Toast_verifyCode_hintTg,
                 Toast.LENGTH_LONG).show()
             emailOrTelegram.putString(Consts.BUNDLE_TG_OR_EMAIL, "0")
             emailOrTelegram.putString(Consts.LINK_TO_BOT_Name, Consts.LINK_TO_BOT)
         }
-        if(viewModel.userDataRepository.statusResponseAuth.toString() == "{status=Код отправлен на указанную электронную почту}"){
+        if(UserDataRepository.getInstance()?.statusResponseAuth.toString() == "{status=Код отправлен на указанную электронную почту}"){
             Toast.makeText(requireContext(),
                 R.string.Toast_verifyCode_hintEmail,
                 Toast.LENGTH_LONG).show()
@@ -193,8 +193,9 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.get_code_btn) {
-            viewModel.userDataRepository.username = innerEditTextUserName.text.toString()
-            viewModel.userDataRepository.email = innerEditTextUserName.text.toString()
+            UserDataRepository.getInstance()?.username = innerEditTextUserName.text.toString()
+            UserDataRepository.getInstance()?.email = innerEditTextUserName.text.toString()
+            username = innerEditTextUserName.text.toString().trim()
             viewModel.authorizeUser(innerEditTextUserName.text.toString())
         }
     }
@@ -207,5 +208,9 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     override fun showCheckCode() {
         TODO("Not yet implemented")
+    }
+
+    override fun getViewModel(): LoginViewModel {
+        return viewModel
     }
 }

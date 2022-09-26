@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoTransactionBottomSheetBinding
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
 import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.DATE_TRANSACTION
@@ -22,6 +25,7 @@ import com.teamforce.thanksapp.utils.Consts.LABEL_STATUS_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.REASON_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.STATUS_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.WE_REFUSED_YOUR_OPERATION
+import com.teamforce.thanksapp.utils.OptionsTransaction
 
 
 class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment() {
@@ -41,6 +45,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
     private var amount_thanks: String? = null
     private var we_refused_your: String? = null
     private var photo_from_sender: String? = null
+    private var userId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +61,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
             amount_thanks = it.getString(AMOUNT_THANKS)
             we_refused_your = it.getString(WE_REFUSED_YOUR_OPERATION)
             photo_from_sender = it.getString("photo_from_sender")
+            userId = it.getInt("userId")
         }
     }
 
@@ -97,16 +103,38 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
                 .into(binding.userAvatar)
         }
         if (!photo_from_sender.isNullOrEmpty()){
-            Log.d("Token", "${photo_from_sender}")
+            Log.d("Token", "${Consts.BASE_URL}${photo_from_sender}")
             binding.photoTv.visibility = View.VISIBLE
             binding.cardViewImg.visibility = View.VISIBLE
             Glide.with(this)
-                .load(photo_from_sender)
+                .load("${Consts.BASE_URL}${photo_from_sender}")
                 .centerCrop()
                 .into(binding.senderImage)
         }else{
             binding.photoTv.visibility = View.GONE
             binding.cardViewImg.visibility = View.GONE
+        }
+
+        binding.descriptionTransactionWho.setOnClickListener {
+            transactionToSomeonesProfile(userId)
+        }
+
+        binding.userAvatar.setOnClickListener {
+            transactionToSomeonesProfile(userId)
+        }
+
+    }
+
+    private fun transactionToSomeonesProfile(userId: Int?){
+        val bundle = Bundle()
+        if(userId != 0){
+            userId?.let {
+                bundle.putInt("userId", it)
+                findNavController()
+                    .navigate(
+                        R.id.action_additionalInfoTransactionBottomSheetFragment2_to_someonesProfileFragment,
+                        bundle, OptionsTransaction().optionForProfileFragment)
+            }
         }
     }
 }

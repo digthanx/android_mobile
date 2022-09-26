@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationBarView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentMainFlowBinding
+import com.teamforce.thanksapp.utils.OptionsTransaction
 
 
 class MainFlowFragment : BaseFlowFragment(
@@ -30,51 +30,65 @@ class MainFlowFragment : BaseFlowFragment(
     }
 
     override fun setupNavigation(navController: NavController) {
-        // binding.bottomNavigation.setupWithNavController(navController)
-//        binding.navView.setupWithNavController(navController)
-
-        // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
-        binding.bottomNavigation.setupWithNavController(navController)
-
-
-        val optionForTransaction = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(com.google.android.material.R.anim.abc_fade_in)
-            .setPopExitAnim(com.google.android.material.R.anim.abc_fade_out)
-            .build()
-
-//        binding.profile.setOnClickListener{
-//            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
+//         binding.bottomNavigation.setupWithNavController(navController)
+//        binding.bottomNavigation.background = null
+////        binding.navView.setupWithNavController(navController)
+//
+//        // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
+//       // binding.bottomNavigation.setupWithNavController(navController)
+//
+////        binding.profile.setOnClickListener{
+////            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
+////        }
+//
+//        binding.fab.setOnClickListener {
+//            navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
 //        }
-
-        binding.bottomNavigation.menu.getItem(1).isChecked = true
-        binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-                R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-                R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-                R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
-            }
-            true
-        })
-
-        binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
-            return@OnItemReselectedListener
-        })
+//
+//        binding.bottomNavigation.menu.getItem(1).isChecked = true
+//        binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
+//            when (item.itemId) {
+//                R.id.balanceFragment -> {
+//                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+//                    return@OnItemSelectedListener true
+//                }
+//                R.id.feedFragment -> {
+//                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+//                    return@OnItemSelectedListener true
+//                }
+//                R.id.transactionFragment -> {
+//                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+//                    return@OnItemSelectedListener true
+//                }
+//                R.id.historyFragment -> {
+//                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+//                    return@OnItemSelectedListener true
+//                }
+//            }
+//            true
+//        })
+//
+//        binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
+//            when (item.itemId) {
+//                R.id.balanceFragment -> {
+//                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+//                    return@OnItemReselectedListener
+//                }
+//                R.id.feedFragment -> {
+//                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+//                    return@OnItemReselectedListener
+//                }
+//                R.id.transactionFragment -> {
+//                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+//                    return@OnItemReselectedListener
+//                }
+//                R.id.historyFragment -> {
+//                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+//                    return@OnItemReselectedListener
+//                }
+//            }
+//            true
+//        })
     }
 
 

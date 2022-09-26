@@ -11,24 +11,20 @@ import com.teamforce.thanksapp.data.request.UpdateProfileRequest
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.UpdateFewContactsResponse
 import com.teamforce.thanksapp.data.response.UpdateProfileResponse
-import com.teamforce.thanksapp.utils.UserDataRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.teamforce.thanksapp.utils.RetrofitClient
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
-@HiltViewModel
-class EditProfileViewModel @Inject constructor(
-    private val thanksApi: ThanksApi,
-    val userDataRepository: UserDataRepository
-) : ViewModel() {
+class EditProfileViewModel(): ViewModel(){
 
 
+    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -52,6 +48,13 @@ class EditProfileViewModel @Inject constructor(
     val updateFewContact: LiveData<UpdateFewContactsResponse> = _updateFewContact
     private val _updateFewContactError = MutableLiveData<String>()
     val updateFewContactError: LiveData<String> = _updateFewContactError
+
+
+    fun initViewModel() {
+        thanksApi = RetrofitClient.getInstance()
+    }
+
+
 
     fun loadUserProfile(token: String) {
         _isLoading.postValue(true)
@@ -112,7 +115,10 @@ class EditProfileViewModel @Inject constructor(
                         Log.d("Token", "${response.body()}")
                         _updateProfile.postValue(response.body())
                     } else {
-                        _updateProfileError.postValue(response.message() + " " + response.code())
+                        val jArrayError = JSONArray(response.errorBody()!!.string())
+                        _updateProfileError.postValue(
+                            jArrayError.toString()
+                                .subSequence(2, jArrayError.toString().length - 2).toString())
                     }
                 }
 

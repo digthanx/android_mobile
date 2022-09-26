@@ -2,7 +2,6 @@ package com.teamforce.thanksapp.presentation.activity
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -12,10 +11,10 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ActivityMainBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), IMainAction {
+
+
     private var _binding: ActivityMainBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
@@ -33,17 +32,18 @@ class MainActivity : AppCompatActivity(), IMainAction {
         setContentView(binding.root)
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
         val prefs: SharedPreferences = getSharedPreferences("com.teamforce.thanksapp", MODE_PRIVATE)
-        val restoredText = prefs.getString("Token", null)
-        Log.d("Token", "Token ${restoredText}")
-        if (restoredText != null) {
-            viewModel.userDataRepository.token = restoredText
-            viewModel.loadUserProfile(restoredText)
+        val restoredToken = prefs.getString("Token", null)
+        val restoredUsername = prefs.getString("Username", null)
+        if (restoredToken != null) {
+            UserDataRepository.getInstance()?.token = restoredToken
+            UserDataRepository.getInstance()?.username = restoredUsername
+            viewModel.initViewModel()
+            viewModel.loadUserProfile(restoredToken)
             viewModel.profile.observe(
                 this,
                 Observer {
                     if(it.profile.tgName != "null"){
-                        viewModel.userDataRepository.username = it.profile.tgName
-                        Log.d("Token", "Имя пользователя ------- ${it.profile.tgName}")
+                        UserDataRepository.getInstance()?.username = it.profile.tgName
                     }
                 }
             )

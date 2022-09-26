@@ -35,8 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="@string/name"
-                android:textStyle="bold"
+                android:fontFamily="@font/roboto_medium"
                 android:textAppearance="@style/Body2"
                 app:layout_constraintStart_toEndOf="@+id/user_avatar"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -46,8 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@string/surname"
-                android:textStyle="bold"
+                android:fontFamily="@font/roboto_medium"
                 android:textAppearance="@style/Body2"
                 app:layout_constraintStart_toEndOf="@+id/user_name_label_tv"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -58,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="3dp"
+                android:fontFamily="@font/roboto_regular"
                 android:text="@string/tgName"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@id/user_avatar"

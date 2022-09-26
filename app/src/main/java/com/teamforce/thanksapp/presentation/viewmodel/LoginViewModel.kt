@@ -10,8 +10,8 @@ import com.teamforce.thanksapp.data.request.AuthorizationRequest
 import com.teamforce.thanksapp.data.request.VerificationRequest
 import com.teamforce.thanksapp.data.response.VerificationResponse
 import com.teamforce.thanksapp.model.domain.UserData
+import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,14 +19,10 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
-@HiltViewModel
-class LoginViewModel @Inject constructor(
-    private val thanksApi: ThanksApi,
-    val userDataRepository: UserDataRepository
-) : ViewModel() {
+object LoginViewModel : ViewModel() {
 
+    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _isSuccessAuth = MutableLiveData<Boolean>()
@@ -44,13 +40,16 @@ class LoginViewModel @Inject constructor(
     private var telegramOrEmail: String? = null
 
 
-    fun logout(){
-        userDataRepository.logout()
+    fun logout() {
         xId = null
         xEmail = null
         xCode = null
         token = null
         telegramOrEmail = null
+    }
+
+    fun initViewModel() {
+        thanksApi = RetrofitClient.getInstance()
     }
 
     fun authorizeUser(telegramIdOrEmail: String) {
@@ -73,14 +72,17 @@ class LoginViewModel @Inject constructor(
                         _isLoading.postValue(false)
                         if (response.code() == 200) {
                             Log.d("Token", "Status запроса: ${response.body().toString()}")
-                            if (response.body().toString() == "{status=Код отправлен в телеграм}"){
+                            if (response.body().toString() == "{status=Код отправлен в телеграм}") {
                                 xId = response.headers().get("X-Telegram")
                             }
-                            if(response.body().toString() == "{status=Код отправлен на указанную электронную почту}"){
+                            if (response.body()
+                                    .toString() == "{status=Код отправлен на указанную электронную почту}"
+                            ) {
                                 xEmail = response.headers().get("X-Email")
 
                             }
-                            userDataRepository.statusResponseAuth = response.body().toString()
+                            UserDataRepository.getInstance()?.statusResponseAuth =
+                                response.body().toString()
                             xCode = response.headers().get("X-Code")
                             _isSuccessAuth.postValue(true)
                         } else {
@@ -179,7 +181,6 @@ class LoginViewModel @Inject constructor(
                 })
         }
     }
-
 
 
 }

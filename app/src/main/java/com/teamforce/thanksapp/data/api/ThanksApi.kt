@@ -53,11 +53,12 @@ interface ThanksApi {
     @POST("/send-coins/")
     fun sendCoinsWithImage(
         @Header("Authorization") token: String,
-        @Part photo: MultipartBody.Part,
+        @Part photo: MultipartBody.Part?,
         @Part("recipient") recipient: RequestBody,
         @Part("amount") amount: RequestBody,
         @Part("reason") reason: RequestBody,
         @Part("is_anonymous") is_anonymous: RequestBody,
+        @Part("tags") tags: RequestBody?
     ): Call<SendCoinsResponse>
 
     @GET("/user/transactions/")
@@ -108,4 +109,34 @@ interface ThanksApi {
     fun getTags(
         @Header("Authorization") token: String
     ): Call<List<TagModel>>
+
+    @GET("/profile/{user_id}/")
+    fun getAnotherProfile(
+        @Header("Authorization") token: String,
+        @Path("user_id") user_Id: Int
+    ): Call<ProfileResponse>
+
+    @POST("/press-like/")
+    fun pressLike(
+        @Header("Authorization") token: String,
+        @Body data: Map<String, Int>
+    ): Call<CancelTransactionResponse>
+
+    @POST("/get-comments/")
+    fun getComments(
+        @Header("Authorization") token: String,
+        @Body transaction_id: GetCommentsRequest
+    ): Call<GetCommentsResponse>
+
+    @POST("/create-comment/")
+    fun createComment(
+        @Header("Authorization") token: String,
+        @Body data: CreateCommentRequest
+    ): Call<CancelTransactionResponse>
+
+    @DELETE("/delete-comment/{comment_id}/")
+    fun deleteComment(
+        @Header("Authorization") token: String,
+        @Path("comment_id") commentId: Int
+    ): Call<CancelTransactionResponse>
 }

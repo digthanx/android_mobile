@@ -12,17 +12,20 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserTransactionsResponse
 import com.teamforce.thanksapp.databinding.ItemTransferBinding
+import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AMOUNT_THANKS
@@ -35,10 +38,10 @@ import com.teamforce.thanksapp.utils.Consts.LABEL_STATUS_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.REASON_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.STATUS_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.WE_REFUSED_YOUR_OPERATION
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class TransfersAdapter(
@@ -186,7 +189,10 @@ class TransfersAdapter(
             }
         }
 
+        dataSet[position].tags?.let { setTags(holder.chipGroup, it) }
+
         convertDataToNecessaryFormat(holder, position)
+        transactionToAnotherProfile(holder, position)
 
         holder.view.tag = dataSet[position]
         holder.photoFromSender = dataSet[position].photo
@@ -205,12 +211,54 @@ class TransfersAdapter(
                 putString(LABEL_STATUS_TRANSACTION, holder.labelStatusTransaction)
                 putString(AMOUNT_THANKS, holder.valueTransfer.text.toString())
                 putString(WE_REFUSED_YOUR_OPERATION, holder.weRefusedYourOperation)
+                dataSet[position].recipient_id?.let{
+                    putInt("userIdReceiver", it)
+                }
+                dataSet[position].sender_id?.let{
+                    putInt("userIdSender", it)
+                }
 
             }
             v.findNavController().navigate(R.id.action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2, bundle)
         }
 
 
+    }
+
+    private fun transactionToAnotherProfile(holder: TransfersViewHolder, position: Int){
+        if(dataSet[position].sender.sender_tg_name.equals(username)){
+            holder.userId = dataSet[position].recipient_id
+        }else if((dataSet[position].sender.sender_tg_name != "anonymous" && dataSet[position].recipient.recipient_tg_name.equals(username))){
+            holder.userId = dataSet[position].sender_id
+        }
+
+        holder.tgNameUser.setOnClickListener { view ->
+            val bundle: Bundle = Bundle()
+            if(holder.userId != 0){
+                holder.userId?.let {
+                    bundle.putInt("userId", it)
+                    view.findNavController().navigate(
+                        R.id.action_historyFragment_to_someonesProfileFragment,
+                        bundle, OptionsTransaction().optionForProfileFragment)
+                }
+            }
+
+        }
+    }
+
+    private fun setTags(tagsChipGroup: ChipGroup,tagList: List<TagModel>){
+        for (i in tagList.indices) {
+            val tagName = tagList[i].name
+            val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
+                .inflate(R.layout.chip_tag_example_in_history_transaction, tagsChipGroup, false) as Chip
+            with(chip) {
+                setText(String.format(context.getString(R.string.setTag), tagName))
+                setEnsureMinTouchTargetSize(true)
+                minimumWidth = 0
+            }
+
+            tagsChipGroup.addView(chip)
+        }
     }
 
     private fun convertDataToNecessaryFormat(holder: TransfersViewHolder, position: Int){
@@ -272,7 +320,9 @@ class TransfersAdapter(
         val statusCard: MaterialCardView = binding.statusCard
         val btnRefusedTransaction: ImageButton = binding.refuseTransactionBtn
         var standardGroup: ConstraintLayout = binding.standardGroup
+        val chipGroup: ChipGroup = binding.chipGroup
         var photoFromSender: String? = null
+        var userId: Int? = null
 
         val view: View = binding.root
         var dateGetInfo: String = "null"

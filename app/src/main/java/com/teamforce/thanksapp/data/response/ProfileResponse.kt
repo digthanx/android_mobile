@@ -1,14 +1,18 @@
 package com.teamforce.thanksapp.data.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.teamforce.thanksapp.data.network.models.Contact
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ProfileResponse(
     @SerializedName("username")
     val username: String?,
     @SerializedName("profile")
     val profile: ProfileBean,
-){
+):Parcelable {
+    @Parcelize
     data class ProfileBean(
         @SerializedName("id")
         val id: String,
@@ -25,8 +29,9 @@ data class ProfileResponse(
         @SerializedName("surname") val surname: String?,
         @SerializedName("first_name") val firstname: String?,
         @SerializedName("middle_name") val middlename: String?,
-        @SerializedName("nickname") val nickname: String?
-    )
+        @SerializedName("nickname") val nickname: String?,
+        @SerializedName("job_title") val jobTitle: String?
+    ): Parcelable
 
 
 }

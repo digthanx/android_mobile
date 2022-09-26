@@ -25,22 +25,28 @@
     <string name="auth">Авторизация</string>
     <!-- Profile Fragment -->
     <string name="username_label">ФИО</string>
+    <string name="greeting_label">Привет, %s!</string>
     <string name="legal_label">Юр.Лицо</string>
     <string name="department_label">Подразделение</string>
+    <string name="position_label">Должность</string>
     <string name="hired_label">Дата начала работы</string>
+    <string name="role_label">Роль</string>
     <string name="mobile_label">Мобильный номер</string>
     <string name="email_label">Корпоративная почта</string>
     <string name="company_label">Компания</string>
-    <string name="lastAuth">Последний вход сегодня %s</string>
+    <string name="lastAuth">Последний вход %s в %s</string>
     <string name="userFio">%s %s %s</string>
-    <string name="placeJob">МЕСТО РАБОТЫ</string>
-    <string name="information">ИНФОРМАЦИЯ</string>
+    <string name="placeJob">Место работы</string>
+    <string name="contactInformation">Контактные данные</string>
+    <string name="information">Информация</string>
     <string name="wouldYouLikeToExit">Выйти из профиля?</string>
     <string name="accept">Да</string>
     <string name="decline">Нет</string>
     <string name="whatEditInProfile">Что именно вы хотите отредактировать?</string>
     <string name="avatar">Аватар</string>
     <string name="stringData">Личную информацию</string>
+    <string name="exit">Выйти</string>
+    <string name="close">Закрыть</string>
     <!-- Edit Profile Bottom Sheet Fragment -->
     <string name="contacts">КОНТАКТЫ</string>
     <string name="save">Сохранить</string>
@@ -56,29 +62,34 @@
     <string name="user_name_label">Имя пользователя</string>
     <string name="balance_label">Баланс</string>
     <string name="feed_label">Лента</string>
-    <string name="new_transaction_label">Новый перевод</string>
+    <string name="new_transaction_label">Новая благодарность</string>
     <string name="transaction_result_label">Отправлено</string>
     <string name="history_label">История</string>
+    <string name="settings_label">Настройки</string>
     <string name="period">Выберите период</string>
     <string name="my_count">Мой счет</string>
     <string name="distributed">Распределено:</string>
     <string name="least_distribute">Осталось раздать</string>
     <string name="cancelled">Аннулировано</string>
     <string name="frozen_label">На согласовании</string>
-    <string name="will_burn_after">Сгорят через \u200b %s день</string>
+    <string name="will_burn_after">До конца периода \u200b %s дней</string>
     <string name="will_burn_after_2">Сгорят через %s дня</string>
     <string name="will_burn_after_3">Сгорят через %s дней</string>
+    <string name="joke">Мы ценим ваше любопытство и в будущих обновлениях обязательно сюда что-нибудь добавим &#128522;</string>
     <!-- Транзакция фрагмент -->
-    <string name="send">Перевести</string>
+    <string name="send">Поблагодарить</string>
     <string name="addPhoto">Добавить фото</string>
     <string name="reason_transaction">Причина перевода</string>
-    <string name="unsuccessfulSendCoins">Нельзя переводить больше 50% от суммы доступной для перевода</string>
+    <string name="unsuccessfulSendCoins">Кол-во спасибок и причина перевода - обязательные поля</string>
     <string name="isAnon">Анонимно</string>
     <string name="addValues">Добавить ценность</string>
     <string name="choiceValues">Выберите ценность</string>
     <string name="choiceReceiver">Выберите получателя</string>
     <string name="applyValues">Применить</string>
     <string name="values">Ценности</string>
+    <string name="addedSomeValues">Добавлено %s ценности.Добавить еще?</string>
+    <string name="addedOneValue">Добавлена %s ценность.Добавить еще?</string>
+    <string name="available">Доступно: \u0020</string>
     <string name="empty">\"\"</string>
     <!-- item_user -->
     <string name="name">Name</string>
@@ -88,7 +99,7 @@
 
     <!--История транзакций -->
     <string name="received_from">Перевод от %s</string>
-    <string name="G">Ожидает истечния периода отмены</string>
+    <string name="G">Ожидает истечения периода отмены</string>
     <string name="sended_to">Перевод для %s</string>
     <string name="approved">Согласовано</string>
     <string name="on_approval">На согласовании</string>
@@ -96,13 +107,14 @@
     <string name="refused">Отклонен</string>
     <string name="occured">Выполнен</string>
     <string name="allHistory">Вся история</string>
-    <string name="received">Получено</string>
+    <string name="received">\u0020\u0020\u0020   Получено  \u0020\u0020\u0020</string>
     <string name="sended">Отправлено</string>
     <string name="cancelTransaction">Отменить перевод?</string>
-    <string name="successfulCancel">Спасибки вернуться на ваш счет :)</string>
+    <string name="successfulCancel">Спасибки вернутся на ваш счет :)</string>
+    <string name="setTag">#%s</string>
     <!-- Additional Info Bottom Sheet Dialog Fragment -->
     <string name="message">Сообщение</string>
-    <string name="photo">Фото</string>
+    <string name="photo">Фотография</string>
     <string name="statusTransfer">Статус перевода</string>
     <string name="typeTransfer">Тип перевода</string>
     <string name="reasonOfRefusing">Причина отказа</string>
@@ -129,15 +141,23 @@
     <!-- Additional Info Feed Fragment -->
     <string name="you">Вы</string>
     <string name="fromYou">Вас</string>
+    <string name="comment">Комментарий</string>
+    <string name="comments">Комментарии</string>
+    <string name="reactions">Оценки</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
+    <string name="fioSender">%s %s</string>
     <!-- Utils -->
     <string name="yesterday">Вчера</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="nothing"> </string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="detailOfTransaction">Детали транзакции</string>
+    <string name="someonesProfile">Профиль пользователя</string>
     <string name="profile">Профиль</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>

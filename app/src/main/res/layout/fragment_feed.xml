@@ -22,7 +22,7 @@
             app:collapsedTitleTextColor="@color/general_background"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="32dp"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded"
+            app:expandedTitleTextAppearance="@style/Headline3.White"
             app:expandedTitleTextColor="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -83,6 +83,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_Scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <com.google.android.material.card.MaterialCardView
@@ -115,7 +116,8 @@
                                 android:id="@+id/chipGroup"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_marginHorizontal="20dp"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginVertical="5dp"
                                 android:background="@color/white"
                                 app:singleSelection="true">
 
@@ -124,7 +126,9 @@
                                     style="@style/MyChipsFeed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
                                     android:checkable="true"
+                                    android:checked="true"
                                     android:text="@string/allEvent"/>
 
                                 <com.google.android.material.chip.Chip
@@ -140,17 +144,18 @@
                                     style="@style/MyChipsFeed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginEnd="10dp"
                                     android:checkable="true"
                                     android:text="@string/publicEvent" />
 
                             </com.google.android.material.chip.ChipGroup>
                         </LinearLayout>
 
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/feed_rv"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/feed_rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -158,5 +163,31 @@
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:hideOnScroll="true">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            style="@style/Widget.App.BottomNavigationView"
+            android:background="@color/transparent"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="16dp"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/bottom_navigation_menu" />
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        android:foreground="@drawable/gradient_drawable"
+        app:layout_anchor="@id/bottomAppBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

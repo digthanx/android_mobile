@@ -103,14 +103,20 @@ class HistoryViewModel @Inject constructor(
                         _isLoading.postValue(false)
                         if (response.code() == 200) {
                             val allData: SparseArray<HistoryModel> = SparseArray<HistoryModel>()
-                            val receivedData: SparseArray<HistoryModel> = SparseArray<HistoryModel>()
+                            val receivedData: SparseArray<HistoryModel> =
+                                SparseArray<HistoryModel>()
                             val sendedData: SparseArray<HistoryModel> = SparseArray<HistoryModel>()
                             val history: List<UserTransactionsResponse>? = response.body()
                             if (history != null) {
                                 for (item in history) {
                                     try {
                                         val dateTime: LocalDateTime =
-                                            LocalDateTime.parse(item.updatedAt.replace("+03:00", ""))
+                                            LocalDateTime.parse(
+                                                item.updatedAt.replace(
+                                                    "+03:00",
+                                                    ""
+                                                )
+                                            )
                                         val day = dateTime.dayOfYear
 
                                         if (allData.containsKey(day)) {
@@ -121,7 +127,10 @@ class HistoryViewModel @Inject constructor(
                                         } else {
                                             allData.put(day, HistoryModel(day, listOf(item)))
                                         }
-                                        if (item.sender.sender_tg_name != null && item.sender.sender_tg_name.equals(user)) {
+                                        if (item.sender.sender_tg_name != null && item.sender.sender_tg_name.equals(
+                                                user
+                                            )
+                                        ) {
                                             if (sendedData.containsKey(day)) {
                                                 val model = sendedData.get(day)
                                                 var data = model.data
@@ -137,7 +146,10 @@ class HistoryViewModel @Inject constructor(
                                                 data = data.plusElement(item)
                                                 receivedData.put(day, HistoryModel(day, data))
                                             } else {
-                                                receivedData.put(day, HistoryModel(day, listOf(item)))
+                                                receivedData.put(
+                                                    day,
+                                                    HistoryModel(day, listOf(item))
+                                                )
                                             }
                                         }
 
@@ -154,7 +166,10 @@ class HistoryViewModel @Inject constructor(
                         }
                     }
 
-                    override fun onFailure(call: Call<List<UserTransactionsResponse>>, t: Throwable) {
+                    override fun onFailure(
+                        call: Call<List<UserTransactionsResponse>>,
+                        t: Throwable
+                    ) {
                         _isLoading.postValue(false)
                         _transactionsLoadingError.postValue(t.message)
                     }
@@ -165,7 +180,14 @@ class HistoryViewModel @Inject constructor(
 
     fun cancelUserTransaction(token: String, transactionId: String, status: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { cancelUserTransactionEndpoint(token, transactionId, status, Dispatchers.Default) }
+        viewModelScope.launch {
+            cancelUserTransactionEndpoint(
+                token,
+                transactionId,
+                status,
+                Dispatchers.Default
+            )
+        }
     }
 
     private suspend fun cancelUserTransactionEndpoint(
@@ -175,7 +197,11 @@ class HistoryViewModel @Inject constructor(
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.cancelTransaction("Token $token", transactionId, CancelTransactionRequest(status))?.enqueue(object : Callback<CancelTransactionResponse> {
+            thanksApi?.cancelTransaction(
+                "Token $token",
+                transactionId,
+                CancelTransactionRequest(status)
+            )?.enqueue(object : Callback<CancelTransactionResponse> {
                 override fun onResponse(
                     call: Call<CancelTransactionResponse>,
                     response: Response<CancelTransactionResponse>
