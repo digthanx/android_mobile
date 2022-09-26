@@ -11,6 +11,7 @@ import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,9 +19,14 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class FeedViewModel : ViewModel() {
-    private var thanksApi: ThanksApi? = null
+@HiltViewModel
+class FeedViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+
+    ) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _allFeeds = MutableLiveData<List<FeedResponse>?>()
@@ -35,10 +41,6 @@ class FeedViewModel : ViewModel() {
     val pressLikesError: LiveData<String> = _pressLikesError
     private val _isLoadingLikes = MutableLiveData<Boolean>()
     val isLoadingLikes: LiveData<Boolean> = _isLoadingLikes
-
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
 
     fun loadFeedsList(token: String, user: String) {
         _isLoading.postValue(true)
@@ -95,7 +97,7 @@ class FeedViewModel : ViewModel() {
 
     fun pressLike(mapReactions: Map<String, Int>) {
         _isLoadingLikes.postValue(true)
-        UserDataRepository.getInstance()?.token?.let {
+        userDataRepository.token?.let {
             viewModelScope.launch { callPressLikeEndpoint(it, mapReactions, Dispatchers.IO) }
         }
 

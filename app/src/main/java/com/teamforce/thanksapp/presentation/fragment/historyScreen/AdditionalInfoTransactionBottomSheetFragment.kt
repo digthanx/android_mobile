@@ -28,6 +28,7 @@ import com.teamforce.thanksapp.utils.Consts.WE_REFUSED_YOUR_OPERATION
 import com.teamforce.thanksapp.utils.OptionsTransaction
 
 
+
 class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentAdditionalInfoTransactionBottomSheetBinding? = null

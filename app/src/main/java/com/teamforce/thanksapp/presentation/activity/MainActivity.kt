@@ -11,10 +11,10 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ActivityMainBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), IMainAction {
-
-
     private var _binding: ActivityMainBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
@@ -35,15 +35,14 @@ class MainActivity : AppCompatActivity(), IMainAction {
         val restoredToken = prefs.getString("Token", null)
         val restoredUsername = prefs.getString("Username", null)
         if (restoredToken != null) {
-            UserDataRepository.getInstance()?.token = restoredToken
-            UserDataRepository.getInstance()?.username = restoredUsername
-            viewModel.initViewModel()
+            viewModel.userDataRepository.token = restoredToken
+            viewModel.userDataRepository.username = restoredUsername
             viewModel.loadUserProfile(restoredToken)
             viewModel.profile.observe(
                 this,
                 Observer {
                     if(it.profile.tgName != "null"){
-                        UserDataRepository.getInstance()?.username = it.profile.tgName
+                        viewModel.userDataRepository.username = it.profile.tgName
                     }
                 }
             )

@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -45,18 +46,19 @@ import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.getPath
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
-
+@AndroidEntryPoint
 class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClickListener {
 
     // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentTransactionBinding by viewBinding()
 
-    private var viewModel: TransactionViewModel = TransactionViewModel()
+    private val viewModel: TransactionViewModel by viewModels()
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -93,8 +95,6 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         )
         binding.toolbarTransaction.setupWithNavController(navController, appBarConfiguration)
         shouldMeGoToHistoryFragment()
-        viewModel = TransactionViewModel()
-        viewModel.initViewModel()
         initViews(view)
         dropDownMenuUserInput(binding.usersEt)
         loadValuesFromDB()
@@ -102,12 +102,11 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         appealToDB()
         checkedChip()
         openValuesEt()
-        val token = UserDataRepository.getInstance()?.token
-        if (token != null) {
-            viewModel.loadUserBalance(token)
+        if (viewModel.userDataRepository.token != null) {
+            viewModel.loadUserBalance(viewModel.userDataRepository.token!!)
         }
         viewModel.balance.observe(viewLifecycleOwner) {
-            UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
+            viewModel.userDataRepository.leastCoins = it.distribute.amount
             binding.distributedValueTv.text = it.distribute.amount.toString()
         }
 
@@ -208,7 +207,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     }
 
     private fun loadValuesFromDB() {
-        UserDataRepository.getInstance()?.token?.let { token ->
+        viewModel.userDataRepository.token?.let { token ->
             viewModel.loadTags(token)
         }
     }
@@ -365,11 +364,11 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             // TODO Возможно стоит будет оптимизировать вызов списка пользователей
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.trim().length > 0 && count > before && s.toString() != user?.tgName) {
-                    UserDataRepository.getInstance()?.token?.let {
+                    viewModel.userDataRepository.token?.let {
                         viewModel.loadUsersList(s.toString(), it)
                     }
                 } else if (binding.usersEt.text?.trim().toString().isEmpty()) {
-                    UserDataRepository.getInstance()?.token?.let {
+                    viewModel.userDataRepository.token?.let {
                         viewModel.loadUsersListWithoutInput("true", it)
                     }
                 } else {
@@ -383,7 +382,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             override fun afterTextChanged(s: Editable) {}
         })
         if (binding.usersEt.text?.trim().toString().isEmpty()) {
-            UserDataRepository.getInstance()?.token?.let {
+            viewModel.userDataRepository.token?.let {
                 viewModel.loadUsersListWithoutInput("true", it)
             }
         }
@@ -463,7 +462,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             if (userId != -1 && countText.isNotEmpty() && reason.isNotEmpty()) {
                 try {
                     val count: Int = Integer.valueOf(countText)
-                    UserDataRepository.getInstance()?.token?.let {
+                    viewModel.userDataRepository.token?.let {
                         viewModel.sendCoinsWithImage(
                             it,
                             userId,

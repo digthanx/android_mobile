@@ -12,6 +12,7 @@ import com.teamforce.thanksapp.data.response.VerificationResponse
 import com.teamforce.thanksapp.model.domain.UserData
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,10 +20,13 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-object LoginViewModel : ViewModel() {
-
-    private var thanksApi: ThanksApi? = null
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+    ) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _isSuccessAuth = MutableLiveData<Boolean>()
@@ -41,6 +45,7 @@ object LoginViewModel : ViewModel() {
 
 
     fun logout() {
+        userDataRepository.logout()
         xId = null
         xEmail = null
         xCode = null
@@ -48,9 +53,6 @@ object LoginViewModel : ViewModel() {
         telegramOrEmail = null
     }
 
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
 
     fun authorizeUser(telegramIdOrEmail: String) {
         telegramOrEmail = telegramIdOrEmail
@@ -81,7 +83,7 @@ object LoginViewModel : ViewModel() {
                                 xEmail = response.headers().get("X-Email")
 
                             }
-                            UserDataRepository.getInstance()?.statusResponseAuth =
+                            userDataRepository.statusResponseAuth =
                                 response.body().toString()
                             xCode = response.headers().get("X-Code")
                             _isSuccessAuth.postValue(true)

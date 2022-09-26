@@ -13,6 +13,8 @@ import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,11 +27,15 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 
-class TransactionViewModel : ViewModel() {
+@HiltViewModel
+class TransactionViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _users = MutableLiveData<List<UserBean>>()
@@ -50,10 +56,6 @@ class TransactionViewModel : ViewModel() {
     private val _tagsError = MutableLiveData<String>()
     val tagsError: LiveData<String> = _tagsError
 
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
-
 
     fun loadTags(token: String) {
         _isLoading.postValue(true)
@@ -65,7 +67,7 @@ class TransactionViewModel : ViewModel() {
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getTags("Token $token")?.enqueue(object : Callback<List<TagModel>> {
+            thanksApi.getTags("Token $token")?.enqueue(object : Callback<List<TagModel>> {
                 override fun onResponse(
                     call: Call<List<TagModel>>,
                     response: Response<List<TagModel>>
@@ -220,8 +222,11 @@ class TransactionViewModel : ViewModel() {
                             _isSuccessOperation.postValue(true)
                         } else if (response.code() == 400) {
                             val jArrayError = JSONArray(response.errorBody()!!.string())
-                           // _sendCoinsError.postValue(response.message() + " " + response.code())
-                            _sendCoinsError.postValue(jArrayError.toString().subSequence(2, jArrayError.toString().length - 2).toString())
+                            // _sendCoinsError.postValue(response.message() + " " + response.code())
+                            _sendCoinsError.postValue(
+                                jArrayError.toString()
+                                    .subSequence(2, jArrayError.toString().length - 2).toString()
+                            )
                         } else {
                             _sendCoinsError.postValue(response.message() + " " + response.code())
                         }

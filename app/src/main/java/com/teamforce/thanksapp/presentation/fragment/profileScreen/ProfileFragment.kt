@@ -37,22 +37,22 @@ import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
-
+@AndroidEntryPoint
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
-
 
 
     // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentProfileBinding by viewBinding()
 
-//        private val viewModel = ViewModelProvider(this, SavedStateViewModelFactory())
+    //        private val viewModel = ViewModelProvider(this, SavedStateViewModelFactory())
 //            .get(ProfileViewModel::class.java)
-    private val viewModel = ProfileViewModel()
+    private val viewModel: ProfileViewModel by viewModels()
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -116,25 +116,45 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 //        }
 
         binding.fab.setOnClickListener {
-            navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+            navController.navigate(
+                R.id.transactionFragment,
+                null,
+                OptionsTransaction().optionForTransaction
+            )
         }
 
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.balanceFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
                 R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.feedFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
                 R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.transactionFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
                 R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.historyFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
             }
@@ -144,19 +164,35 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
             when (item.itemId) {
                 R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.balanceFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
                 R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.feedFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
                 R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.transactionFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
                 R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.historyFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
             }
@@ -183,32 +219,32 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val requestFile: RequestBody =
             RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
-        UserDataRepository.getInstance()?.token.let { token ->
-            UserDataRepository.getInstance()?.profileId.let { id ->
+        viewModel.userDataRepository.token.let { token ->
+            viewModel.userDataRepository.profileId.let { id ->
                 viewModel.loadUpdateAvatarUserProfile(token!!, id!!, body)
             }
         }
     }
 
-     private fun requestData(){
-         val token = UserDataRepository.getInstance()?.token
-         if (token != null) {
-             viewModel.loadUserProfile(token)
-         }
-     }
+    private fun requestData() {
+        val token = viewModel.userDataRepository.token
+        if (token != null) {
+            viewModel.loadUserProfile(token)
+        }
+    }
 
-    private fun setData(){
-        viewModel.profile.observe(viewLifecycleOwner){
+    private fun setData() {
+        viewModel.profile.observe(viewLifecycleOwner) {
             //userName.text = it.profile.firstname
             binding.firstNameValueTv.text = it.profile.firstname
             binding.surnameValueTv.text = it.profile.surname
             binding.middleNameValueTv.text = it.profile.middlename
             binding.companyValueTv.text = it.profile.organization
             binding.positionValueTv.text = it.profile.jobTitle
-            if(it.profile.jobTitle.isNullOrEmpty()){
+            if (it.profile.jobTitle.isNullOrEmpty()) {
                 binding.positionValueTv.visibility = View.GONE
                 binding.positionLabelTv.visibility = View.GONE
-            }else{
+            } else {
                 binding.positionValueTv.visibility = View.VISIBLE
                 binding.positionLabelTv.visibility = View.VISIBLE
             }
@@ -222,18 +258,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 //            }
 
 
-            if(it.profile.contacts.size == 1){
-                if(it.profile.contacts[0].contact_type == "@"){
+            if (it.profile.contacts.size == 1) {
+                if (it.profile.contacts[0].contact_type == "@") {
                     binding.emailValueTv.text = it.profile.contacts[0].contact_id
                     contactId_1 = it.profile.contacts[0].id
                     contactValue_1 = it.profile.contacts[0].contact_id
-                }else{
+                } else {
                     binding.mobileValueTv.text = it.profile.contacts[0].contact_id
                     contactId_2 = it.profile.contacts[0].id
                     contactValue_2 = it.profile.contacts[0].contact_id
                 }
-            }else if(it.profile.contacts.size == 2){
-                if(it.profile.contacts[0].contact_type == "@"){
+            } else if (it.profile.contacts.size == 2) {
+                if (it.profile.contacts[0].contact_type == "@") {
                     binding.emailValueTv.text = it.profile.contacts[0].contact_id
                     contactId_1 = it.profile.contacts[0].id
                     binding.mobileValueTv.text = it.profile.contacts[1].contact_id
@@ -241,7 +277,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     contactValue_1 = it.profile.contacts[0].contact_id
                     contactValue_2 = it.profile.contacts[1].contact_id
 
-                }else{
+                } else {
                     binding.emailValueTv.text = it.profile.contacts[1].contact_id
                     contactId_1 = it.profile.contacts[1].id
                     binding.mobileValueTv.text = it.profile.contacts[0].contact_id
@@ -251,38 +287,39 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 }
             }
 
-            if(!it.profile.photo.isNullOrEmpty()){
+            if (!it.profile.photo.isNullOrEmpty()) {
                 Glide.with(this)
                     .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
                     .centerCrop()
                     .into(binding.userAvatar)
-            }else {
+            } else {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
             }
 
-            UserDataRepository.getInstance()?.profileId = it.profile.id
+            viewModel.userDataRepository.profileId = it.profile.id
         }
     }
 
-    private fun greetingUser(username: String){
+    private fun greetingUser(username: String) {
         val spannable = SpannableStringBuilder(
             String.format(requireContext().getString(R.string.greeting_label), username)
         )
         spannable.setSpan(
             ForegroundColorSpan(requireContext().getColor(R.color.general_brand)),
             7, spannable.length - 1,
-            Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+        )
         binding.greetingUserTv.text = spannable
     }
 
-    private fun swipeToRefresh(){
+    private fun swipeToRefresh() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             requestData()
             binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
-    private fun showAlertDialogForExit(){
+    private fun showAlertDialogForExit() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.wouldYouLikeToExit))
 
@@ -291,13 +328,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
             .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
                 dialog.cancel()
-                UserDataRepository.getInstance()?.logout(requireContext())
+                viewModel.userDataRepository.logout()
                 activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
             }
             .show()
     }
 
-    private fun showAlertDialogForEditProfile(){
+    private fun showAlertDialogForEditProfile() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.whatEditInProfile))
 
@@ -317,17 +354,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 findNavController().navigate(
                     R.id.action_profileFragment_to_editProfileBottomSheetFragment,
                     bundle,
-                OptionsTransaction().optionForEditProfile)
+                    OptionsTransaction().optionForEditProfile
+                )
             }
             .show()
     }
 
 
-
     private fun initViews() {
         binding.swipeRefreshLayout.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
-        viewModel.initViewModel()
-
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->

@@ -20,11 +20,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListOfValuesViewModel @Inject constructor(
-    val userDataRepository: UserDataRepository
+    val userDataRepository: UserDataRepository,
+    private val thanksApi: ThanksApi,
 
-) : ViewModel() {
+    ) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 

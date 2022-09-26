@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.net.toUri
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -20,14 +21,15 @@ import com.teamforce.thanksapp.presentation.viewmodel.EditProfileViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_bottom_sheet) {
 
     // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentEditProfileBottomSheetBinding by viewBinding()
 
-    private val viewModel = EditProfileViewModel()
+    private val viewModel: EditProfileViewModel by viewModels()
 
 
     private var contactValue_1Email: String? = null
@@ -50,7 +52,6 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initViewModel()
         loadDataFromServer()
         writeData()
         listenerErrors()
@@ -59,7 +60,7 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
 
 
     private fun loadDataFromServer() {
-        UserDataRepository.getInstance()?.token?.let {
+        viewModel.userDataRepository.token?.let {
             viewModel.loadUserProfile(it)
         }
     }
@@ -110,7 +111,7 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
                     emailContact = it.profile.contacts[1]
                     phoneContact = it.profile.contacts[0]
                 }
-            }else{
+            } else {
                 phoneContact = Contact(null, "P", "")
                 emailContact = Contact(null, "@", "")
             }
@@ -118,8 +119,8 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
         }
     }
 
-    private fun listenerErrors(){
-        viewModel.profileError.observe(viewLifecycleOwner){
+    private fun listenerErrors() {
+        viewModel.profileError.observe(viewLifecycleOwner) {
             val snack = Snackbar.make(
                 requireView(),
                 it,
@@ -161,8 +162,8 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
             firstName = binding.firstEt.text?.trim().toString()
             surname = binding.surnameEt.text?.trim().toString()
             middleName = binding.middleEt.text?.trim().toString()
-            UserDataRepository.getInstance()?.token?.let { token ->
-                UserDataRepository.getInstance()?.profileId?.let { profileId ->
+            viewModel.userDataRepository.token?.let { token ->
+                viewModel.userDataRepository.profileId?.let { profileId ->
                     viewModel.loadUpdateProfile(
                         token, profileId,
                         firstName = firstName,
