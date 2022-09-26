@@ -135,14 +135,6 @@ class BalanceFragment : Fragment() {
     private fun setupNavigation(navController: NavController) {
         binding.bottomNavigation.setupWithNavController(navController)
         binding.bottomNavigation.background = null
-//        binding.navView.setupWithNavController(navController)
-
-        // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
-        // binding.bottomNavigation.setupWithNavController(navController)
-
-//        binding.profile.setOnClickListener{
-//            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
-//        }
 
         binding.fab.setOnClickListener {
             navController.navigate(
@@ -151,20 +143,20 @@ class BalanceFragment : Fragment() {
                 OptionsTransaction().optionForTransaction
             )
         }
-
+        //binding.bottomNavigation.menu.getItem(1).isChecked = true
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.balanceFragment -> {
+                R.id.feedFragment -> {
                     navController.navigate(
-                        R.id.balanceFragment,
+                        R.id.feedFragment,
                         null,
                         OptionsTransaction().optionForTransaction
                     )
                     return@OnItemSelectedListener true
                 }
-                R.id.feedFragment -> {
+                R.id.balanceFragment -> {
                     navController.navigate(
-                        R.id.feedFragment,
+                        R.id.balanceFragment,
                         null,
                         OptionsTransaction().optionForTransaction
                     )
@@ -225,7 +217,6 @@ class BalanceFragment : Fragment() {
                     return@OnItemReselectedListener
                 }
             }
-            true
         })
     }
 
@@ -269,7 +260,8 @@ class BalanceFragment : Fragment() {
                 } else if ((isTwo(text) || isThree(text) || isFour(text)) && isNotTen(text)) {
                     willBurn.text = String.format(getString(R.string.will_burn_after_2), text)
                 } else {
-                    willBurn.text = String.format(getString(R.string.will_burn_after_3), text)
+                   // willBurn.text = String.format(getString(R.string.will_burn_after_3), text)
+                    willBurn.text = getString(R.string.will_burn_today)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, e.message, e.fillInStackTrace())
