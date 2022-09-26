@@ -253,26 +253,26 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             binding.textFieldMessage.isEndIconCheckable = false
         }
 
-        viewModel.createCommentsLoadingError.observe(viewLifecycleOwner) {
-//            binding.sendCoinLinear.visibility = View.GONE
-//            binding.textField.visibility = View.VISIBLE
-//            binding.messageValueEt.setText("")
-//            binding.countValueEt.setText("")
-            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-            val snack = Snackbar.make(
-                requireView(),
-                it,
-                Snackbar.LENGTH_LONG
-            )
-//            binding.sendCoinBtn.isClickable = true
-//            binding.sendCoinBtn.isEnabled = true
-            snack.setTextMaxLines(3)
-                .setTextColor(context?.getColor(R.color.white)!!)
-                .setAction(context?.getString(R.string.OK)!!) {
-                    snack.dismiss()
-                }
-            snack.show()
-        }
+//        viewModel.createCommentsLoadingError.observe(viewLifecycleOwner) {
+////            binding.sendCoinLinear.visibility = View.GONE
+////            binding.textField.visibility = View.VISIBLE
+////            binding.messageValueEt.setText("")
+////            binding.countValueEt.setText("")
+//            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+//            val snack = Snackbar.make(
+//                requireView(),
+//                it,
+//                Snackbar.LENGTH_LONG
+//            )
+////            binding.sendCoinBtn.isClickable = true
+////            binding.sendCoinBtn.isEnabled = true
+//            snack.setTextMaxLines(3)
+//                .setTextColor(context?.getColor(R.color.white)!!)
+//                .setAction(context?.getString(R.string.OK)!!) {
+//                    snack.dismiss()
+//                }
+//            snack.show()
+//        }
 
     }
 
