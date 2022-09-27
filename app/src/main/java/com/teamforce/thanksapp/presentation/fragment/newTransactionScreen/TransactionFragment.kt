@@ -465,7 +465,8 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 else -> false
             }
             tagsToIdTags()
-            if (userId != -1 && countText.isNotEmpty() && reason.isNotEmpty()) {
+            if (userId != -1 && countText.isNotEmpty() &&
+                (reason.isNotEmpty() || listCheckedIdTags.size > 0)) {
                 try {
                     val count: Int = Integer.valueOf(countText)
                     UserDataRepository.getInstance()?.token?.let {

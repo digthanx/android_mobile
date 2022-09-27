@@ -81,7 +81,7 @@
     <string name="send">Поблагодарить</string>
     <string name="addPhoto">Добавить фото</string>
     <string name="reason_transaction">Причина благодарности</string>
-    <string name="unsuccessfulSendCoins">Кол-во спасибок и причина благодарности - обязательные поля</string>
+    <string name="unsuccessfulSendCoins">Кол-во спасибок, причина благодарности/тег ценности - обязательные поля</string>
     <string name="isAnon">Анонимно</string>
     <string name="addValues">Добавить ценность</string>
     <string name="choiceValues">Выберите ценность</string>
