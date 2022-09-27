@@ -125,6 +125,10 @@
     <string name="iRefusedMyOperation">Вы отклонили свою операцию</string>
     <string name="comingTransfer">Входящая  благодарность</string>
     <string name="amountThanks">%s спасибок</string>
+    <!-- Челлендж фрагмент -->
+    <string name="createChallenge">Создать челлендж</string>
+    <string name="allChallenge">Все</string>
+    <string name="activeChallenge">Активные</string>
 
     <!--Utils -->
     <string name="OK">Ок</string>
