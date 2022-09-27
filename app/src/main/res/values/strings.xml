@@ -64,8 +64,6 @@
     <string name="feed_label">Лента</string>
     <string name="new_transaction_label">Новая благодарность</string>
     <string name="transaction_result_label">Отправлено</string>
-    <string name="history_label">История</string>
-    <string name="settings_label">Настройки</string>
     <string name="period">Выберите период</string>
     <string name="my_count">Мой счет</string>
     <string name="distributed">Распределено:</string>
@@ -161,6 +159,9 @@
     <string name="detailOfTransaction">Детали транзакции</string>
     <string name="someonesProfile">Профиль пользователя</string>
     <string name="profile">Профиль</string>
+    <string name="history_label">История</string>
+    <string name="settings_label">Настройки</string>
+    <string name="challenge_label">Челленджи</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

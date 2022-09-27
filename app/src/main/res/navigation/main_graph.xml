@@ -145,4 +145,18 @@
                 app:destination="@id/profileGraph" />
         </fragment>
     </navigation>
+    <navigation
+        android:id="@+id/challenge_graph"
+        android:label="@string/challenge_label"
+        app:startDestination="@id/challengesFragment">
+        <fragment
+            android:id="@+id/challengesFragment"
+            android:name="com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment"
+            android:label="fragment_challenges"
+            tools:layout="@layout/fragment_challenges">
+            <action
+                android:id="@+id/action_challengesFragment_to_profileGraph"
+                app:destination="@id/profileGraph" />
+        </fragment>
+    </navigation>
 </navigation>
