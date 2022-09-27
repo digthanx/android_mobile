@@ -216,12 +216,10 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private fun inputMessage() {
         binding.messageValueEt.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.trim().length > 0 || s.length <= 50) {
+                if (s.trim().length > 0) {
                     binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_CUSTOM
                     binding.textFieldMessage.endIconDrawable =
                         context?.getDrawable(R.drawable.ic_send_vector)
-                    binding.textFieldMessage.isEndIconCheckable = true
-                    binding.textFieldMessage.error = null
                     binding.textFieldMessage.setEndIconOnClickListener {
                         Log.d("Token", "Отправка сообщения")
                         transactionId?.let { transactionId ->
@@ -237,8 +235,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                     }
                 }else{
                     binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
-                    binding.textFieldMessage.isEndIconCheckable = false
-                    binding.textFieldMessage.error = getString(R.string.errorMaxLengthMessage)
                 }
             }
 
