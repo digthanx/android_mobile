@@ -73,7 +73,7 @@ class TransfersAdapter(
                     showAlertDialogForCancelTransaction(dataSet[position].id)
                 }
             }
-            holder.valueTransfer.text = "- " + dataSet[position].amount
+            holder.valueTransfer.text = " " + dataSet[position].amount
             holder.tgNameUser.text = String.format(
                 context.getString(R.string.tgName), dataSet[position].recipient.recipient_tg_name)
             holder.descr_transaction_1 = context.getString(R.string.youSended)
