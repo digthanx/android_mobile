@@ -213,6 +213,7 @@
         <item name="fontFamily">@font/roboto_medium</item>
     </style>
 
+
     <style name="NotFilledButton" parent="">
         <item name="android:backgroundTint">@color/general_background</item>
         <item name="iconTint">@color/general_brand</item>

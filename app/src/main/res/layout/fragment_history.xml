@@ -87,22 +87,19 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nested_Scroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:backgroundTint="@color/general_background"
-            android:background="@color/general_background">
-
+            android:layout_height="match_parent">
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 app:cardBackgroundColor="@color/general_brand"
                 app:cardCornerRadius="0dp"
-                app:cardElevation="0dp">
+                app:cardElevation="4dp">
 
                 <com.google.android.material.card.MaterialCardView
                     style="@style/MyCardView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:cardBackgroundColor="@color/general_background"
                     android:elevation="0dp">
 
                     <LinearLayout

@@ -97,6 +97,7 @@
                     style="@style/MyCardView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:cardBackgroundColor="@color/general_background"
                     android:elevation="0dp">
 
                     <LinearLayout
@@ -155,6 +156,8 @@
                             android:id="@+id/feed_rv"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginBottom="60dp"
+                            tools:listitem="@layout/item_feed"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
                     </LinearLayout>
