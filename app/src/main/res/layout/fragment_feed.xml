@@ -97,6 +97,7 @@
                     style="@style/MyCardView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:cardBackgroundColor="@color/general_background"
                     android:elevation="0dp">
 
                     <LinearLayout
