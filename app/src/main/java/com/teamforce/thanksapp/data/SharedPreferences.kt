@@ -12,12 +12,20 @@ class SharedPreferences @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 
-    fun savePreferences(authtoken: String?, telegram: String?, username: String?) {
+    fun savePreferences(
+        authToken: String?,
+        telegram: String?,
+        username: String?,
+//        email: String?,
+//        userId: Int
+    ) {
         val prefs: SharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = prefs.edit()
         editor.putString(SP_ARG_TELEGRAM, telegram)
-        editor.putString(SP_ARG_TOKEN, authtoken)
+        editor.putString(SP_ARG_TOKEN, authToken)
         editor.putString(SP_ARG_USERNAME, username)
+//        editor.putString(SP_ARG_EMAIL, email)
+//        editor.putInt(SP_ARG_USER_ID, userId)
         editor.apply()
     }
 
@@ -26,5 +34,7 @@ class SharedPreferences @Inject constructor(
         private const val SP_ARG_TELEGRAM = "Telegram"
         private const val SP_ARG_TOKEN = "Token"
         private const val SP_ARG_USERNAME = "Username"
+        private const val SP_ARG_EMAIL = "Email"
+        private const val SP_ARG_USER_ID = "UserId"
     }
 }
