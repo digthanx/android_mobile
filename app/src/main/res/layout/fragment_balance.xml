@@ -44,15 +44,15 @@
                     android:layout_marginEnd="10dp"
                     android:src="@drawable/ic_app_logo" />
 
-                <com.google.android.material.card.MaterialCardView
+                <LinearLayout
+                    android:background="@drawable/white_circle_background"
                     android:id="@+id/profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginEnd="16dp"
                     android:clickable="true"
-                    android:focusable="true"
-                    app:cardCornerRadius="100dp">
+                    android:focusable="true">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:layout_width="wrap_content"
@@ -60,8 +60,8 @@
                         android:layout_margin="5dp"
                         android:scaleType="matrix"
                         android:src="@drawable/smile"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-                </com.google.android.material.card.MaterialCardView>
+                        />
+                </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/notify"
