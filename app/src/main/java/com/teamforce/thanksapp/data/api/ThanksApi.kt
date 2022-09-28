@@ -32,27 +32,24 @@ interface ThanksApi {
     ): Call<VerificationResponse>
 
     @GET("/user/profile/")
-    fun getProfile(@Header("Authorization") token: String): Call<ProfileResponse>
+    fun getProfile(): Call<ProfileResponse>
 
     @GET("/user/balance/")
-    fun getBalance(@Header("Authorization") token: String): Call<BalanceResponse>
+    fun getBalance(): Call<BalanceResponse>
 
     @POST("/search-user/")
     fun getUsersList(
-        @Header("Authorization") token: String,
         @Body usersListRequest: UsersListRequest
     ): Call<List<UserBean>>
 
     @POST("/send-coins/")
     fun sendCoins(
-        @Header("Authorization") token: String,
         @Body request: SendCoinsRequest
     ): Call<SendCoinsResponse>
 
     @Multipart
     @POST("/send-coins/")
     fun sendCoinsWithImage(
-        @Header("Authorization") token: String,
         @Part photo: MultipartBody.Part?,
         @Part("recipient") recipient: RequestBody,
         @Part("amount") amount: RequestBody,
@@ -62,14 +59,13 @@ interface ThanksApi {
     ): Call<SendCoinsResponse>
 
     @GET("/user/transactions/")
-    fun getUserTransactions(@Header("Authorization") token: String): Call<List<UserTransactionsResponse>>
+    fun getUserTransactions(): Call<List<UserTransactionsResponse>>
 
     @GET("/feed/")
-    fun getFeed(@Header("Authorization") token: String): Call<List<FeedResponse>>
+    fun getFeed(): Call<List<FeedResponse>>
 
     @POST("/users-list/")
     fun getUsersWithoutInput(
-        @Header("Authorization") token: String,
         @Body get_users: UserListWithoutInputRequest
     ): Call<List<UserBean>>
 
@@ -77,7 +73,6 @@ interface ThanksApi {
     @Multipart
     @POST("/update-profile-image/{id}/")
     fun putUserAvatar(
-        @Header("Authorization") token: String,
         @Path("id") userId: String,
         @Part photo: MultipartBody.Part
     ): Call<PutUserAvatarResponse>
@@ -85,7 +80,6 @@ interface ThanksApi {
 
     @PUT("/cancel-transaction/{id}/")
     fun cancelTransaction(
-        @Header("Authorization") token: String,
         @Path("id") transactionId: String,
         @Body status: CancelTransactionRequest
     ): Call<CancelTransactionResponse>
@@ -94,49 +88,41 @@ interface ThanksApi {
 
     @PUT("/update-profile-by-user/{id}/")
     fun updateProfile(
-        @Header("Authorization") token: String,
         @Path("id") userId: String,
         @Body data: UpdateProfileRequest
     ): Call<UpdateProfileResponse>
 
     @POST("/create-few-contacts/")
     fun updateFewContact(
-        @Header("Authorization") token: String,
         @Body data: List<Contact>?,
     ): Call<UpdateFewContactsResponse>
 
     @GET("/tags/")
     fun getTags(
-        @Header("Authorization") token: String
     ): Call<List<TagModel>>
 
     @GET("/profile/{user_id}/")
     fun getAnotherProfile(
-        @Header("Authorization") token: String,
         @Path("user_id") user_Id: Int
     ): Call<ProfileResponse>
 
     @POST("/press-like/")
     fun pressLike(
-        @Header("Authorization") token: String,
         @Body data: Map<String, Int>
     ): Call<CancelTransactionResponse>
 
     @POST("/get-comments/")
     fun getComments(
-        @Header("Authorization") token: String,
         @Body transaction_id: GetCommentsRequest
     ): Call<GetCommentsResponse>
 
     @POST("/create-comment/")
     fun createComment(
-        @Header("Authorization") token: String,
         @Body data: CreateCommentRequest
     ): Call<CancelTransactionResponse>
 
     @DELETE("/delete-comment/{comment_id}/")
     fun deleteComment(
-        @Header("Authorization") token: String,
         @Path("comment_id") commentId: Int
     ): Call<CancelTransactionResponse>
 }

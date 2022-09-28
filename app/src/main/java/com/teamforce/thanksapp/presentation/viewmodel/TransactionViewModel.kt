@@ -57,17 +57,16 @@ class TransactionViewModel @Inject constructor(
     val tagsError: LiveData<String> = _tagsError
 
 
-    fun loadTags(token: String) {
+    fun loadTags() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callTagsEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callTagsEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callTagsEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi.getTags("Token $token")?.enqueue(object : Callback<List<TagModel>> {
+            thanksApi.getTags().enqueue(object : Callback<List<TagModel>> {
                 override fun onResponse(
                     call: Call<List<TagModel>>,
                     response: Response<List<TagModel>>
@@ -89,17 +88,16 @@ class TransactionViewModel @Inject constructor(
     }
 
 
-    fun loadUserBalance(token: String) {
+    fun loadUserBalance() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callBalanceEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callBalanceEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callBalanceEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getBalance("Token $token")?.enqueue(object : Callback<BalanceResponse> {
+            thanksApi.getBalance().enqueue(object : Callback<BalanceResponse> {
                 override fun onResponse(
                     call: Call<BalanceResponse>,
                     response: Response<BalanceResponse>
@@ -121,19 +119,18 @@ class TransactionViewModel @Inject constructor(
     }
 
 
-    fun loadUsersList(username: String, token: String) {
+    fun loadUsersList(username: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callUsersListEndpoint(username, token, Dispatchers.Default) }
+        viewModelScope.launch { callUsersListEndpoint(username, Dispatchers.Default) }
     }
 
     private suspend fun callUsersListEndpoint(
         username: String,
-        token: String,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getUsersList("Token $token", UsersListRequest(username))
-                ?.enqueue(object : Callback<List<UserBean>> {
+            thanksApi.getUsersList(UsersListRequest(username))
+                .enqueue(object : Callback<List<UserBean>> {
                     override fun onResponse(
                         call: Call<List<UserBean>>,
                         response: Response<List<UserBean>>
@@ -156,7 +153,7 @@ class TransactionViewModel @Inject constructor(
     }
 
     fun sendCoinsWithImage(
-        token: String, recipient: Int, amount: Int,
+        recipient: Int, amount: Int,
         reason: String,
         isAnon: Boolean,
         imageFilePart: MultipartBody.Part?,
@@ -165,7 +162,7 @@ class TransactionViewModel @Inject constructor(
         _isLoading.postValue(true)
         viewModelScope.launch {
             callSendCoinsWithImageEndpoint(
-                token, recipient, amount,
+                recipient, amount,
                 reason, isAnon,
                 imageFilePart,
                 listOfTagsCheckedValues,
@@ -176,7 +173,6 @@ class TransactionViewModel @Inject constructor(
 
 
     private suspend fun callSendCoinsWithImageEndpoint(
-        token: String,
         recipient: Int,
         amount: Int,
         reason: String,
@@ -202,7 +198,6 @@ class TransactionViewModel @Inject constructor(
 
 
             thanksApi?.sendCoinsWithImage(
-                "Token $token",
                 imageFilePart,
                 recipientB,
                 amountB,
@@ -240,12 +235,11 @@ class TransactionViewModel @Inject constructor(
         }
     }
 
-    fun loadUsersListWithoutInput(get_users: String, token: String) {
+    fun loadUsersListWithoutInput(get_users: String) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             callUsersListWithoutInputEndpoint(
                 get_users,
-                token,
                 Dispatchers.Default
             )
         }
@@ -253,15 +247,13 @@ class TransactionViewModel @Inject constructor(
 
     private suspend fun callUsersListWithoutInputEndpoint(
         get_users: String,
-        token: String,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getUsersWithoutInput(
-                "Token $token",
+            thanksApi.getUsersWithoutInput(
                 get_users = UserListWithoutInputRequest(get_users)
             )
-                ?.enqueue(object : Callback<List<UserBean>> {
+                .enqueue(object : Callback<List<UserBean>> {
                     override fun onResponse(
                         call: Call<List<UserBean>>,
                         response: Response<List<UserBean>>
@@ -282,6 +274,4 @@ class TransactionViewModel @Inject constructor(
                 })
         }
     }
-
-
 }

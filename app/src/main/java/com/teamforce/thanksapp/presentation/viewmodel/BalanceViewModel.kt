@@ -32,17 +32,16 @@ class BalanceViewModel @Inject constructor(
     val balanceError: LiveData<String> = _balanceError
 
 
-    fun loadUserBalance(token: String) {
+    fun loadUserBalance() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callBalanceEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callBalanceEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callBalanceEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getBalance("Token $token")?.enqueue(object : Callback<BalanceResponse> {
+            thanksApi.getBalance().enqueue(object : Callback<BalanceResponse> {
                 override fun onResponse(
                     call: Call<BalanceResponse>,
                     response: Response<BalanceResponse>

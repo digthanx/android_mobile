@@ -29,6 +29,11 @@ class SharedPreferences @Inject constructor(
         editor.apply()
     }
 
+    fun getToken(): String? {
+        val prefs: SharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+        return prefs.getString(SP_ARG_TOKEN, null)
+    }
+
     companion object {
         private const val SP_NAME = "com.teamforce.thanksapp"
         private const val SP_ARG_TELEGRAM = "Telegram"

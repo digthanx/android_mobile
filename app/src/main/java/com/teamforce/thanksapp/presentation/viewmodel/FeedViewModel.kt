@@ -26,7 +26,7 @@ class FeedViewModel @Inject constructor(
     private val thanksApi: ThanksApi,
     val userDataRepository: UserDataRepository
 
-    ) : ViewModel() {
+) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _allFeeds = MutableLiveData<List<FeedResponse>?>()
@@ -42,20 +42,19 @@ class FeedViewModel @Inject constructor(
     private val _isLoadingLikes = MutableLiveData<Boolean>()
     val isLoadingLikes: LiveData<Boolean> = _isLoadingLikes
 
-    fun loadFeedsList(token: String, user: String) {
+    fun loadFeedsList(user: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callFeedsListEndpoint(token, user, Dispatchers.Default) }
+        viewModelScope.launch { callFeedsListEndpoint(user, Dispatchers.Default) }
     }
 
 
     private suspend fun callFeedsListEndpoint(
-        token: String,
         user: String,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getFeed("Token $token")
-                ?.enqueue(object : Callback<List<FeedResponse>> {
+            thanksApi.getFeed()
+                .enqueue(object : Callback<List<FeedResponse>> {
                     override fun onResponse(
                         call: Call<List<FeedResponse>>,
                         response: Response<List<FeedResponse>>
@@ -97,20 +96,17 @@ class FeedViewModel @Inject constructor(
 
     fun pressLike(mapReactions: Map<String, Int>) {
         _isLoadingLikes.postValue(true)
-        userDataRepository.token?.let {
-            viewModelScope.launch { callPressLikeEndpoint(it, mapReactions, Dispatchers.IO) }
-        }
+        viewModelScope.launch { callPressLikeEndpoint(mapReactions, Dispatchers.IO) }
 
     }
 
     private suspend fun callPressLikeEndpoint(
-        token: String,
         listReactions: Map<String, Int>,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.pressLike("Token $token", listReactions)
-                ?.enqueue(object : Callback<CancelTransactionResponse> {
+            thanksApi.pressLike(listReactions)
+                .enqueue(object : Callback<CancelTransactionResponse> {
                     override fun onResponse(
                         call: Call<CancelTransactionResponse>,
                         response: Response<CancelTransactionResponse>

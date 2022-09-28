@@ -35,9 +35,8 @@ class MainActivity : AppCompatActivity(), IMainAction {
         val restoredToken = prefs.getString("Token", null)
         val restoredUsername = prefs.getString("Username", null)
         if (restoredToken != null) {
-            viewModel.userDataRepository.token = restoredToken
             viewModel.userDataRepository.username = restoredUsername
-            viewModel.loadUserProfile(restoredToken)
+            viewModel.loadUserProfile()
             viewModel.profile.observe(
                 this,
                 Observer {

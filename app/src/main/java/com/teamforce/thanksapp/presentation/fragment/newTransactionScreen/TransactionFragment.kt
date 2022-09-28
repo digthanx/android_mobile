@@ -102,14 +102,13 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         appealToDB()
         checkedChip()
         openValuesEt()
-        if (viewModel.userDataRepository.token != null) {
-            viewModel.loadUserBalance(viewModel.userDataRepository.token!!)
-        }
+        viewModel.loadUserBalance()
+
         viewModel.balance.observe(viewLifecycleOwner) {
             viewModel.userDataRepository.leastCoins = it.distribute.amount
-            if(it.distribute.amount == 0){
+            if (it.distribute.amount == 0) {
                 binding.distributedValueTv.text = it.income.amount.toString()
-            }else{
+            } else {
                 binding.distributedValueTv.text = it.distribute.amount.toString()
             }
 
@@ -212,9 +211,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     }
 
     private fun loadValuesFromDB() {
-        viewModel.userDataRepository.token?.let { token ->
-            viewModel.loadTags(token)
-        }
+        viewModel.loadTags()
     }
 
     private fun setValuesFromDb() {
@@ -368,14 +365,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         userInput.addTextChangedListener(object : TextWatcher {
             // TODO Возможно стоит будет оптимизировать вызов списка пользователей
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.trim().length > 0 && count > before && s.toString() != user?.tgName) {
-                    viewModel.userDataRepository.token?.let {
-                        viewModel.loadUsersList(s.toString(), it)
-                    }
+                if (s.trim().isNotEmpty() && count > before && s.toString() != user?.tgName) {
+                    viewModel.loadUsersList(s.toString())
+
                 } else if (binding.usersEt.text?.trim().toString().isEmpty()) {
-                    viewModel.userDataRepository.token?.let {
-                        viewModel.loadUsersListWithoutInput("true", it)
-                    }
+                    viewModel.loadUsersListWithoutInput("true")
+
                 } else {
                     binding.usersListRv.visibility = View.GONE
                 }
@@ -387,9 +382,8 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             override fun afterTextChanged(s: Editable) {}
         })
         if (binding.usersEt.text?.trim().toString().isEmpty()) {
-            viewModel.userDataRepository.token?.let {
-                viewModel.loadUsersListWithoutInput("true", it)
-            }
+            viewModel.loadUsersListWithoutInput("true")
+
         }
     }
 
@@ -465,22 +459,21 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             }
             tagsToIdTags()
             if (userId != -1 && countText.isNotEmpty() &&
-                (reason.isNotEmpty() || listCheckedIdTags.size > 0)) {
+                (reason.isNotEmpty() || listCheckedIdTags.size > 0)
+            ) {
                 try {
                     val count: Int = Integer.valueOf(countText)
-                    viewModel.userDataRepository.token?.let {
-                        viewModel.sendCoinsWithImage(
-                            it,
-                            userId,
-                            count,
-                            reason,
-                            isAnon,
-                            imageFilePart,
-                            listCheckedIdTags
-                        )
-                        binding.sendCoinBtn.isClickable = false
-                        binding.sendCoinBtn.isEnabled = false
-                    }
+                    viewModel.sendCoinsWithImage(
+                        userId,
+                        count,
+                        reason,
+                        isAnon,
+                        imageFilePart,
+                        listCheckedIdTags
+                    )
+                    binding.sendCoinBtn.isClickable = false
+                    binding.sendCoinBtn.isEnabled = false
+
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
                     //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()

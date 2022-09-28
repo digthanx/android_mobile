@@ -65,9 +65,8 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
 
 
     private fun loadDataFromServer() {
-        viewModel.userDataRepository.token?.let {
-            viewModel.loadUserProfile(it)
-        }
+        viewModel.loadUserProfile()
+
     }
 
     private fun writeData() {
@@ -124,8 +123,8 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
         }
     }
 
-    private fun listenersEventType(){
-        binding.phoneEt.addTextChangedListener(object : TextWatcher{
+    private fun listenersEventType() {
+        binding.phoneEt.addTextChangedListener(object : TextWatcher {
             private var mSelfChange = false
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -177,9 +176,8 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
     }
 
 
-
-    private fun listenerErrors(){
-        viewModel.profileError.observe(viewLifecycleOwner){
+    private fun listenerErrors() {
+        viewModel.profileError.observe(viewLifecycleOwner) {
             val snack = Snackbar.make(
                 requireView(),
                 it,
@@ -221,35 +219,31 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
             firstName = binding.firstEt.text?.trim().toString()
             surname = binding.surnameEt.text?.trim().toString()
             middleName = binding.middleEt.text?.trim().toString()
-            viewModel.userDataRepository.token?.let { token ->
-                viewModel.userDataRepository.profileId?.let { profileId ->
-                    viewModel.loadUpdateProfile(
-                        token, profileId,
-                        firstName = firstName,
-                        surname = surname,
-                        middleName = middleName,
-                        tgName = null,
-                        nickname = null
-                    )
-                    val listContact: MutableList<Contact> = mutableListOf<Contact>()
-                    emailContact?.contact_id = binding.emailEt.text.toString()
-                    phoneContact?.contact_id = binding.phoneEt.text.toString()
-                    Log.d("Errori", "${binding.emailEt.text.toString()}")
-                    Log.d("Errori", "${emailContact?.contact_id}")
-                    emailContact?.let { listContact.add(it) }
-                    phoneContact?.let { listContact.add(it) }
-
-                    viewModel.loadUpdateFewContact(token, listContact)
-
-                }
-                findNavController().navigate(
-                    R.id.action_editProfileBottomSheetFragment_to_profileFragment,
-                    null,
-                    OptionsTransaction().optionForProfileFromEditProfile
+            viewModel.userDataRepository.profileId?.let { profileId ->
+                viewModel.loadUpdateProfile(
+                    profileId,
+                    firstName = firstName,
+                    surname = surname,
+                    middleName = middleName,
+                    tgName = null,
+                    nickname = null
                 )
+                val listContact: MutableList<Contact> = mutableListOf<Contact>()
+                emailContact?.contact_id = binding.emailEt.text.toString()
+                phoneContact?.contact_id = binding.phoneEt.text.toString()
+                Log.d("Errori", "${binding.emailEt.text.toString()}")
+                Log.d("Errori", "${emailContact?.contact_id}")
+                emailContact?.let { listContact.add(it) }
+                phoneContact?.let { listContact.add(it) }
+
+                viewModel.loadUpdateFewContact(listContact)
 
             }
-
+            findNavController().navigate(
+                R.id.action_editProfileBottomSheetFragment_to_profileFragment,
+                null,
+                OptionsTransaction().optionForProfileFromEditProfile
+            )
         }
 
     }

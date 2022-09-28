@@ -52,22 +52,21 @@ class HistoryViewModel @Inject constructor(
     private val _cancelTransactionError = MutableLiveData<String>()
     val cancelTransactionError: LiveData<String> = _cancelTransactionError
 
-    fun loadTransactionsList(token: String, user: String) {
+    fun loadTransactionsList(user: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callTransactionsListEndpoint(token, user, Dispatchers.Default) }
+        viewModelScope.launch { callTransactionsListEndpoint(user, Dispatchers.Default) }
     }
 
-    fun loadUserProfile(token: String) {
+    fun loadUserProfile() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callProfileEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callProfileEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callProfileEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getProfile("Token $token")?.enqueue(object : Callback<ProfileResponse> {
+            thanksApi.getProfile().enqueue(object : Callback<ProfileResponse> {
                 override fun onResponse(
                     call: Call<ProfileResponse>,
                     response: Response<ProfileResponse>
@@ -89,13 +88,12 @@ class HistoryViewModel @Inject constructor(
     }
 
     private suspend fun callTransactionsListEndpoint(
-        token: String,
         user: String,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getUserTransactions("Token $token")
-                ?.enqueue(object : Callback<List<UserTransactionsResponse>> {
+            thanksApi.getUserTransactions()
+                .enqueue(object : Callback<List<UserTransactionsResponse>> {
                     override fun onResponse(
                         call: Call<List<UserTransactionsResponse>>,
                         response: Response<List<UserTransactionsResponse>>
@@ -178,11 +176,10 @@ class HistoryViewModel @Inject constructor(
     }
 
 
-    fun cancelUserTransaction(token: String, transactionId: String, status: String) {
+    fun cancelUserTransaction(transactionId: String, status: String) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             cancelUserTransactionEndpoint(
-                token,
                 transactionId,
                 status,
                 Dispatchers.Default
@@ -191,17 +188,15 @@ class HistoryViewModel @Inject constructor(
     }
 
     private suspend fun cancelUserTransactionEndpoint(
-        token: String,
         transactionId: String,
         status: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.cancelTransaction(
-                "Token $token",
+            thanksApi.cancelTransaction(
                 transactionId,
                 CancelTransactionRequest(status)
-            )?.enqueue(object : Callback<CancelTransactionResponse> {
+            ).enqueue(object : Callback<CancelTransactionResponse> {
                 override fun onResponse(
                     call: Call<CancelTransactionResponse>,
                     response: Response<CancelTransactionResponse>

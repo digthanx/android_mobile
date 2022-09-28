@@ -60,7 +60,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             inflateRecyclerView()
             swipeToRefresh.isRefreshing = false
         }
-      //  displaySnack()
+        //  displaySnack()
     }
 
     private fun displaySnack() {
@@ -90,7 +90,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     }
 
 
-
     private fun initView() {
         swipeToRefresh = binding.swipeRefreshLayout
         swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
@@ -105,31 +104,32 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
-        val feedAdapter = FeedAdapter(viewModel.userDataRepository.username.toString().trim(), requireContext())
-        feedAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        val feedAdapter =
+            FeedAdapter(viewModel.userDataRepository.username.toString().trim(), requireContext())
+        feedAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.feedRv.adapter = feedAdapter
         (binding.feedRv.itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
         feedAdapter.likeClickListener = { mapReaction, position ->
             viewModel.pressLike(mapReaction)
-            viewModel.isLoadingLikes.observe(viewLifecycleOwner){
-                if(!it) inflateRecyclerView()
+            viewModel.isLoadingLikes.observe(viewLifecycleOwner) {
+                if (!it) inflateRecyclerView()
             }
         }
         feedAdapter.dislikeClickListener = { mapReaction, position ->
             viewModel.pressLike(mapReaction)
-            viewModel.isLoadingLikes.observe(viewLifecycleOwner){
-                if(!it) inflateRecyclerView()
+            viewModel.isLoadingLikes.observe(viewLifecycleOwner) {
+                if (!it) inflateRecyclerView()
             }
         }
     }
 
 
     private fun inflateRecyclerView() {
-        viewModel.userDataRepository.token?.let { token ->
-            viewModel.userDataRepository.username?.let { username ->
-                viewModel.loadFeedsList(token = token, user = username)
-            }
+        viewModel.userDataRepository.username?.let { username ->
+            viewModel.loadFeedsList(user = username)
         }
+
     }
 
     private fun refreshRecyclerView(checkedId: Int) {

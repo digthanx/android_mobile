@@ -24,7 +24,7 @@ class ProfileViewModel @Inject constructor(
     private val thanksApi: ThanksApi,
     val userDataRepository: UserDataRepository
 
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -40,17 +40,16 @@ class ProfileViewModel @Inject constructor(
     private val _imageUriError = MutableLiveData<String>()
     val imageUriError: LiveData<String> = _imageUriError
 
-    fun loadUserProfile(token: String) {
+    fun loadUserProfile() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callProfileEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callProfileEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callProfileEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi.getProfile("Token $token").enqueue(object : Callback<ProfileResponse> {
+            thanksApi.getProfile().enqueue(object : Callback<ProfileResponse> {
                 override fun onResponse(
                     call: Call<ProfileResponse>,
                     response: Response<ProfileResponse>
@@ -73,14 +72,12 @@ class ProfileViewModel @Inject constructor(
 
 
     fun loadUpdateAvatarUserProfile(
-        token: String,
         userId: String,
         imageFilePart: MultipartBody.Part
     ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             callUpdateAvatarProfileEndpoint(
-                token,
                 userId = userId,
                 imageFilePart,
                 Dispatchers.Default
@@ -89,14 +86,13 @@ class ProfileViewModel @Inject constructor(
     }
 
     private suspend fun callUpdateAvatarProfileEndpoint(
-        token: String,
         userId: String,
         imageFilePart: MultipartBody.Part,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.putUserAvatar("Token $token", userId = userId, imageFilePart)
-                ?.enqueue(object : Callback<PutUserAvatarResponse> {
+            thanksApi.putUserAvatar(userId = userId, imageFilePart)
+                .enqueue(object : Callback<PutUserAvatarResponse> {
                     override fun onResponse(
                         call: Call<PutUserAvatarResponse>,
                         response: Response<PutUserAvatarResponse>

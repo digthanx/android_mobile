@@ -33,17 +33,16 @@ class ListOfValuesViewModel @Inject constructor(
     private val _tagsError = MutableLiveData<String>()
     val tagsError: LiveData<String> = _tagsError
 
-    fun loadTags(token: String) {
+    fun loadTags() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callTagsEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callTagsEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callTagsEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getTags("Token $token")?.enqueue(object : Callback<List<TagModel>> {
+            thanksApi.getTags().enqueue(object : Callback<List<TagModel>> {
                 override fun onResponse(
                     call: Call<List<TagModel>>,
                     response: Response<List<TagModel>>

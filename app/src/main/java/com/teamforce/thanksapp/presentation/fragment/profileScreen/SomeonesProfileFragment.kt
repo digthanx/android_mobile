@@ -86,11 +86,8 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
     }
 
     private fun requestData() {
-        val token = viewModel.userDataRepository.token
-        if (token != null) {
-            userId?.let {
-                viewModel.loadAnotherUserProfile(token, it)
-            }
+        userId?.let {
+            viewModel.loadAnotherUserProfile(it)
         }
     }
 

@@ -22,7 +22,7 @@ import javax.inject.Inject
 class SomeonesProfileViewModel @Inject constructor(
     private val thanksApi: ThanksApi,
     val userDataRepository: UserDataRepository
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -31,19 +31,18 @@ class SomeonesProfileViewModel @Inject constructor(
     private val _anotherProfileError = MutableLiveData<String>()
     val profileError: LiveData<String> = _anotherProfileError
 
-    fun loadAnotherUserProfile(token: String, userId: Int) {
+    fun loadAnotherUserProfile(userId: Int) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callAnotherProfileEndpoint(token, userId, Dispatchers.Default) }
+        viewModelScope.launch { callAnotherProfileEndpoint(userId, Dispatchers.Default) }
     }
 
     private suspend fun callAnotherProfileEndpoint(
-        token: String,
         userId: Int,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getAnotherProfile("Token $token", user_Id = userId)
-                ?.enqueue(object : Callback<ProfileResponse> {
+            thanksApi.getAnotherProfile(user_Id = userId)
+                .enqueue(object : Callback<ProfileResponse> {
                     override fun onResponse(
                         call: Call<ProfileResponse>,
                         response: Response<ProfileResponse>

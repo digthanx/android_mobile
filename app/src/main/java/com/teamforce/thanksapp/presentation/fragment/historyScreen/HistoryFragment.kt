@@ -61,11 +61,13 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.feedFragment,
-            R.id.balanceFragment,
-            R.id.historyFragment
-        ))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.feedFragment,
+                R.id.balanceFragment,
+                R.id.historyFragment
+            )
+        )
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
@@ -74,10 +76,12 @@ class HistoryFragment : Fragment() {
         setDataWithChip(view)
 
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_historyFragment_to_profileGraph,
-                null, OptionsTransaction().optionForProfileFragment )
+            findNavController().navigate(
+                R.id.action_historyFragment_to_profileGraph,
+                null, OptionsTransaction().optionForProfileFragment
+            )
         }
-       // displaySnack()
+        // displaySnack()
 
     }
 
@@ -116,12 +120,18 @@ class HistoryFragment : Fragment() {
         swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         recyclerView = binding.historyRv
         recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.layoutManager =  object : LinearLayoutManager(context){
-            override fun canScrollVertically(): Boolean { return false }
+        recyclerView.layoutManager = object : LinearLayoutManager(context) {
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
         }
 
 
-        recyclerView.adapter = HistoryAdapter(viewModel.userDataRepository.username.toString(), requireContext(), viewModel)
+        recyclerView.adapter = HistoryAdapter(
+            viewModel.userDataRepository.username.toString(),
+            requireContext(),
+            viewModel
+        )
 
         viewModel.isLoading.observe(
             viewLifecycleOwner,
@@ -136,9 +146,9 @@ class HistoryFragment : Fragment() {
             }
         )
 
-        binding.tabGroup.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        binding.tabGroup.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                refreshRecyclerView(tab?.position?:0)
+                refreshRecyclerView(tab?.position ?: 0)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -157,18 +167,16 @@ class HistoryFragment : Fragment() {
         }
     }
 
-    private fun loadDataFromServer(){
-        viewModel.userDataRepository.token?.let { token ->
-            viewModel.userDataRepository.username?.let { username ->
-                viewModel.loadTransactionsList(
-                    token,
-                    username
-                )
-            }
+    private fun loadDataFromServer() {
+        viewModel.userDataRepository.username?.let { username ->
+            viewModel.loadTransactionsList(
+                username
+            )
         }
+
     }
 
-    private fun setDataWithChip(view: View){
+    private fun setDataWithChip(view: View) {
         viewModel.allTransactions.observe(
             viewLifecycleOwner,
             Observer {
@@ -209,14 +217,17 @@ class HistoryFragment : Fragment() {
         viewModel.cancelTransaction.observe(
             viewLifecycleOwner,
             Observer {
-                Snackbar.make(view, requireContext().resources.getString(R.string.successfulCancel), Snackbar.LENGTH_LONG)
+                Snackbar.make(
+                    view,
+                    requireContext().resources.getString(R.string.successfulCancel),
+                    Snackbar.LENGTH_LONG
+                )
                     .setBackgroundTint(context?.getColor(R.color.minor_success)!!)
                     .setTextColor(context?.getColor(R.color.white)!!)
                     .show()
             }
         )
     }
-
 
 
     private fun refreshRecyclerView(checkedId: Int) {
@@ -241,7 +252,6 @@ class HistoryFragment : Fragment() {
         }
         return list.asReversed()
     }
-
 
 
     companion object {

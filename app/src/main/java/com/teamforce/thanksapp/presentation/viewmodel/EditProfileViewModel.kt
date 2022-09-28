@@ -29,7 +29,7 @@ class EditProfileViewModel @Inject constructor(
     private val thanksApi: ThanksApi,
     val userDataRepository: UserDataRepository
 
-    ): ViewModel(){
+) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -55,17 +55,16 @@ class EditProfileViewModel @Inject constructor(
     private val _updateFewContactError = MutableLiveData<String>()
     val updateFewContactError: LiveData<String> = _updateFewContactError
 
-    fun loadUserProfile(token: String) {
+    fun loadUserProfile() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callProfileEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callProfileEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callProfileEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getProfile("Token $token")?.enqueue(object : Callback<ProfileResponse> {
+            thanksApi.getProfile().enqueue(object : Callback<ProfileResponse> {
                 override fun onResponse(
                     call: Call<ProfileResponse>,
                     response: Response<ProfileResponse>
@@ -87,24 +86,32 @@ class EditProfileViewModel @Inject constructor(
     }
 
 
-
-    fun loadUpdateProfile(token: String, userId: String, tgName: String?, surname: String?,
-                          firstName: String?, middleName: String?, nickname: String?) {
+    fun loadUpdateProfile(
+        userId: String, tgName: String?, surname: String?,
+        firstName: String?, middleName: String?, nickname: String?
+    ) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callUpdateProfileEndpoint(token, userId = userId, tgName, surname,
-            firstName, middleName, nickname, Dispatchers.Default) }
+        viewModelScope.launch {
+            callUpdateProfileEndpoint(
+                userId = userId, tgName, surname,
+                firstName, middleName, nickname, Dispatchers.Default
+            )
+        }
     }
 
     private suspend fun callUpdateProfileEndpoint(
-        token: String,
         userId: String,
         tgName: String?, surname: String?,
         firstName: String?, middleName: String?, nickname: String?,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.updateProfile("Token $token", userId = userId, UpdateProfileRequest(tgName, surname,
-                firstName, middleName, nickname))?.enqueue(object : Callback<UpdateProfileResponse> {
+            thanksApi.updateProfile(
+                userId = userId, UpdateProfileRequest(
+                    tgName, surname,
+                    firstName, middleName, nickname
+                )
+            ).enqueue(object : Callback<UpdateProfileResponse> {
                 override fun onResponse(
                     call: Call<UpdateProfileResponse>,
                     response: Response<UpdateProfileResponse>
@@ -117,7 +124,8 @@ class EditProfileViewModel @Inject constructor(
                         val jArrayError = JSONArray(response.errorBody()!!.string())
                         _updateProfileError.postValue(
                             jArrayError.toString()
-                                .subSequence(2, jArrayError.toString().length - 2).toString())
+                                .subSequence(2, jArrayError.toString().length - 2).toString()
+                        )
                     }
                 }
 
@@ -130,36 +138,40 @@ class EditProfileViewModel @Inject constructor(
     }
 
 
-
-    fun loadUpdateFewContact(token: String, listContacts: List<Contact>) {
+    fun loadUpdateFewContact(listContacts: List<Contact>) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callUpdateFewContactEndpoint(token, listContacts, Dispatchers.Default) }
+        viewModelScope.launch {
+            callUpdateFewContactEndpoint(
+                listContacts,
+                Dispatchers.Default
+            )
+        }
     }
 
     private suspend fun callUpdateFewContactEndpoint(
-        token: String,
         listContacts: List<Contact>,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.updateFewContact("Token $token", listContacts)?.enqueue(object : Callback<UpdateFewContactsResponse> {
-                override fun onResponse(
-                    call: Call<UpdateFewContactsResponse>,
-                    response: Response<UpdateFewContactsResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _updateFewContact.postValue(response.body())
-                    } else {
-                        _updateFewContactError.postValue(response.message() + " " + response.code())
+            thanksApi.updateFewContact(listContacts)
+                .enqueue(object : Callback<UpdateFewContactsResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateFewContactsResponse>,
+                        response: Response<UpdateFewContactsResponse>
+                    ) {
+                        _isLoading.postValue(false)
+                        if (response.code() == 200) {
+                            _updateFewContact.postValue(response.body())
+                        } else {
+                            _updateFewContactError.postValue(response.message() + " " + response.code())
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<UpdateFewContactsResponse>, t: Throwable) {
-                    _isLoading.postValue(false)
-                    _updateFewContactError.postValue(t.message)
-                }
-            })
+                    override fun onFailure(call: Call<UpdateFewContactsResponse>, t: Throwable) {
+                        _isLoading.postValue(false)
+                        _updateFewContactError.postValue(t.message)
+                    }
+                })
         }
     }
 

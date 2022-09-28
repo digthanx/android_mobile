@@ -30,7 +30,7 @@ import javax.inject.Inject
 class AdditionalInfoFeedItemViewModel @Inject constructor(
     private val thanksApi: ThanksApi,
     val userDataRepository: UserDataRepository
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -61,22 +61,19 @@ class AdditionalInfoFeedItemViewModel @Inject constructor(
 
     fun deleteComment(commentId: Int) {
         _deleteCommentLoading.postValue(true)
-        userDataRepository.token?.let { token ->
-            viewModelScope.launch {
-                deleteCommentEndpoint(token, commentId, Dispatchers.Default)
-            }
+        viewModelScope.launch {
+            deleteCommentEndpoint(commentId, Dispatchers.Default)
         }
     }
 
 
     private suspend fun deleteCommentEndpoint(
-        token: String,
         commentId: Int,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.deleteComment("Token $token", commentId)
-                ?.enqueue(object : Callback<CancelTransactionResponse> {
+            thanksApi.deleteComment(commentId)
+                .enqueue(object : Callback<CancelTransactionResponse> {
                     override fun onResponse(
                         call: Call<CancelTransactionResponse>,
                         response: Response<CancelTransactionResponse>
@@ -102,22 +99,20 @@ class AdditionalInfoFeedItemViewModel @Inject constructor(
     fun loadCommentsList(transactionId: Int) {
         _isLoading.postValue(true)
         val getCommentsRequest = GetCommentsRequest(transactionId)
-        userDataRepository.token?.let { token ->
-            viewModelScope.launch {
-                callCommentsListEndpoint(token, getCommentsRequest, Dispatchers.Default)
-            }
+        viewModelScope.launch {
+            callCommentsListEndpoint(getCommentsRequest, Dispatchers.Default)
         }
+
     }
 
 
     private suspend fun callCommentsListEndpoint(
-        token: String,
         transactionId: GetCommentsRequest,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getComments("Token $token", transactionId)
-                ?.enqueue(object : Callback<GetCommentsResponse> {
+            thanksApi.getComments(transactionId)
+                .enqueue(object : Callback<GetCommentsResponse> {
                     override fun onResponse(
                         call: Call<GetCommentsResponse>,
                         response: Response<GetCommentsResponse>
@@ -143,22 +138,19 @@ class AdditionalInfoFeedItemViewModel @Inject constructor(
     fun addComment(transactionId: Int, text: String) {
         val createCommentRequest = CreateCommentRequest(transactionId, text)
         _createCommentsLoading.postValue(true)
-        userDataRepository.token?.let { token ->
-            viewModelScope.launch {
-                addCommentEndpoint(token, createCommentRequest, Dispatchers.Default)
-            }
+        viewModelScope.launch {
+            addCommentEndpoint(createCommentRequest, Dispatchers.Default)
         }
     }
 
 
     private suspend fun addCommentEndpoint(
-        token: String,
         createCommentRequest: CreateCommentRequest,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.createComment("Token $token", createCommentRequest)
-                ?.enqueue(object : Callback<CancelTransactionResponse> {
+            thanksApi.createComment(createCommentRequest)
+                .enqueue(object : Callback<CancelTransactionResponse> {
                     override fun onResponse(
                         call: Call<CancelTransactionResponse>,
                         response: Response<CancelTransactionResponse>
@@ -166,10 +158,11 @@ class AdditionalInfoFeedItemViewModel @Inject constructor(
                         _createCommentsLoading.postValue(false)
                         if (response.code() == 200) {
 
-                        } else if(response.code() == 400) {
+                        } else if (response.code() == 400) {
                             _createCommentsLoadingError.postValue(
-                                response.message() + " " + response.code())
-                        }else{
+                                response.message() + " " + response.code()
+                            )
+                        } else {
                             _createCommentsLoadingError.postValue(
                                 response.message() + " " + response.code()
                             )
@@ -186,19 +179,17 @@ class AdditionalInfoFeedItemViewModel @Inject constructor(
 
     fun pressLike(mapReactions: Map<String, Int>) {
         _isLoadingLikes.postValue(true)
-        userDataRepository.token?.let {
-            viewModelScope.launch { callPressLikeEndpoint(it, mapReactions, Dispatchers.IO) }
-        }
+        viewModelScope.launch { callPressLikeEndpoint(mapReactions, Dispatchers.IO) }
+
 
     }
 
     private suspend fun callPressLikeEndpoint(
-        token: String,
         listReactions: Map<String, Int>,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi.pressLike("Token $token", listReactions)
+            thanksApi.pressLike(listReactions)
                 .enqueue(object : Callback<CancelTransactionResponse> {
                     override fun onResponse(
                         call: Call<CancelTransactionResponse>,
