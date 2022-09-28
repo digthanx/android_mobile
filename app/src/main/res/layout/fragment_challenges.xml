@@ -111,6 +111,7 @@ tools:context=".presentation.fragment.challenges.ChallengesFragment">
                     android:orientation="vertical">
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/create_btn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:strokeColor="@color/general_background"

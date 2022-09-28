@@ -1,209 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:backgroundTint="@color/general_background"
-    android:orientation="vertical"
-    tools:context=".presentation.fragment.challenges.CreateChallengeFragment">
-
+    android:scrollbars="none">
     <LinearLayout
-        android:id="@+id/progressBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:backgroundTint="@color/general_background"
+        android:orientation="vertical"
+        tools:context=".presentation.fragment.challenges.CreateChallengeFragment">
+
+        <LinearLayout
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginVertical="24dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/StandardText4Medium.Black"
+                android:text="Основная инофрмация"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SmallText2.Gray"
+                android:text="Заполните данные о челлендже"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearTextFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:orientation="vertical">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/titleTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                app:boxCornerRadiusTopStart="15dp"
+                android:layout_marginBottom="16dp"
+                app:boxStrokeWidth="0.5dp"
+                app:startIconTint="@color/general_brand"
+                app:boxStrokeColor="@color/general_color_grey">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/title_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/inputNameChallenge"
+                    android:lines="1"
+                    android:inputType="text"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/descriptionTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                app:boxCornerRadiusTopStart="15dp"
+                android:layout_marginBottom="16dp"
+                app:boxStrokeWidth="0.5dp"
+                app:boxStrokeColor="@color/general_color_grey">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/description_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/description"
+                    android:lines="6"
+                    android:minLines="6"
+                    android:gravity="top|start"
+                    android:maxLines="6"
+                    android:scrollbars="vertical"
+                    android:inputType="textCapSentences|textMultiLine" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dateTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                app:boxCornerRadiusTopStart="15dp"
+                android:layout_marginBottom="16dp"
+                android:focusable="false"
+                app:boxStrokeWidth="0.5dp"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="custom"
+                app:endIconTint="@color/general_contrast"
+                app:boxStrokeColor="@color/general_color_grey">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/date_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:hint="@string/dateCloseEvent"
+                    android:lines="1"
+                    android:inputType="none"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/prizeFundTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                app:boxCornerRadiusTopStart="15dp"
+                android:layout_marginBottom="16dp"
+                app:boxStrokeWidth="0.5dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_prize_fund"
+                app:endIconTint="@null"
+                app:boxStrokeColor="@color/general_color_grey">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/prizeFund_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/pointAtPrizeFund"
+                    android:inputType="number"
+                    android:lines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/prizePoolTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                app:boxCornerRadiusTopStart="15dp"
+                android:layout_marginBottom="16dp"
+                app:boxStrokeWidth="0.5dp"
+                app:boxStrokeColor="@color/general_color_grey">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/prizePool_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/pointAtPrizePool"
+                    android:lines="1"
+                    android:inputType="number"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/attach_image_btn"
+                style="@style/NotFilledButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:paddingVertical="17dp"
+                android:text="@string/backgroundChallenge"
+                app:icon="@drawable/ic_attach"
+                app:iconGravity="textStart" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/continue_btn"
+                style="@style/DefaultButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="17dp"
+                android:text="@string/then"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/close_btn"
+                style="@style/NotFilledButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                android:paddingVertical="17dp"
+                app:strokeWidth="0dp"
+                android:text="@string/refuse"
+                />
+        </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginVertical="24dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/StandardText4Medium.Black"
-            android:text="Основная инофрмация"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/SmallText2.Gray"
-            android:text="Заполните данные о челлендже"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearTextFields"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:orientation="vertical">
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/titleTextField"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxCornerRadiusBottomEnd="15dp"
-            app:boxCornerRadiusBottomStart="15dp"
-            app:boxCornerRadiusTopEnd="15dp"
-            app:boxCornerRadiusTopStart="15dp"
-            android:layout_marginBottom="16dp"
-            app:boxStrokeWidth="0.5dp"
-            app:startIconTint="@color/general_brand"
-            app:boxStrokeColor="@color/general_color_grey">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/title_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/inputNameChallenge"
-                android:lines="1"
-                android:inputType="text"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/descriptionTextField"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxCornerRadiusBottomEnd="15dp"
-            app:boxCornerRadiusBottomStart="15dp"
-            app:boxCornerRadiusTopEnd="15dp"
-            app:boxCornerRadiusTopStart="15dp"
-            android:layout_marginBottom="16dp"
-            app:boxStrokeWidth="0.5dp"
-            app:boxStrokeColor="@color/general_color_grey">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/description_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/description"
-                android:lines="6"
-                android:minLines="6"
-                android:gravity="top|start"
-                android:maxLines="6"
-                android:scrollbars="vertical"
-                android:inputType="textCapSentences|textMultiLine" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/dateTextField"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxCornerRadiusBottomEnd="15dp"
-            app:boxCornerRadiusBottomStart="15dp"
-            app:boxCornerRadiusTopEnd="15dp"
-            app:boxCornerRadiusTopStart="15dp"
-            android:layout_marginBottom="5dp"
-            app:boxStrokeWidth="0.5dp"
-            app:endIconDrawable="@drawable/ic_calendar"
-            app:endIconMode="custom"
-            app:endIconTint="@color/general_contrast"
-            app:boxStrokeColor="@color/general_color_grey">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/date_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/dateCloseEvent"
-                android:lines="1"
-                android:inputType="text"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/prizeFundTextField"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxCornerRadiusBottomEnd="15dp"
-            app:boxCornerRadiusBottomStart="15dp"
-            app:boxCornerRadiusTopEnd="15dp"
-            app:boxCornerRadiusTopStart="15dp"
-            android:layout_marginBottom="5dp"
-            app:boxStrokeWidth="0.5dp"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/ic_prize_fund"
-            app:endIconTint="@null"
-            app:boxStrokeColor="@color/general_color_grey">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/prizeFund_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/pointAtPrizeFund"
-                android:lines="1"
-                android:inputType="number"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/prizePoolTextField"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxCornerRadiusBottomEnd="15dp"
-            app:boxCornerRadiusBottomStart="15dp"
-            app:boxCornerRadiusTopEnd="15dp"
-            app:boxCornerRadiusTopStart="15dp"
-            android:layout_marginBottom="16dp"
-            app:boxStrokeWidth="0.5dp"
-            app:boxStrokeColor="@color/general_color_grey">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/prizePool_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/pointAtPrizePool"
-                android:lines="1"
-                android:inputType="number"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/attach_image_btn"
-            style="@style/NotFilledButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:paddingVertical="17dp"
-            android:text="@string/backgroundChallenge"
-            app:icon="@drawable/ic_attach"
-            app:iconGravity="textStart" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/continue_btn"
-            style="@style/DefaultButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="17dp"
-            android:text="@string/then"
-             />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/close_btn"
-            style="@style/NotFilledButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="0dp"
-            android:stateListAnimator="@null"
-            android:paddingVertical="17dp"
-            app:strokeWidth="0dp"
-            android:text="@string/refuse"
-             />
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

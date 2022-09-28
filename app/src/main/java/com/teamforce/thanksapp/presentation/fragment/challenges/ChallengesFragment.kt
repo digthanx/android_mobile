@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -14,6 +15,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentChallengesBinding
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
+import com.teamforce.thanksapp.utils.OptionsTransaction
 
 
 class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
@@ -38,6 +40,14 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
+
+        binding.createBtn.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_challengesFragment_to_createChallengeFragment,
+                null,
+                OptionsTransaction().optionForEditProfile)
+        }
     }
+
 
 }
