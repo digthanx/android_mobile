@@ -64,8 +64,6 @@
     <string name="feed_label">Лента</string>
     <string name="new_transaction_label">Новая благодарность</string>
     <string name="transaction_result_label">Отправлено</string>
-    <string name="history_label">История</string>
-    <string name="settings_label">Настройки</string>
     <string name="period">Выберите период</string>
     <string name="my_count">Мой счет</string>
     <string name="distributed">Распределено:</string>
@@ -75,12 +73,13 @@
     <string name="will_burn_after">До конца периода \u200b %s дней</string>
     <string name="will_burn_after_2">Сгорят через %s дня</string>
     <string name="will_burn_after_3">Сгорят через %s дней</string>
+    <string name="will_burn_today">Сгорят сегодня в 18:00</string>
     <string name="joke">Мы ценим ваше любопытство и в будущих обновлениях обязательно сюда что-нибудь добавим &#128522;</string>
     <!-- Транзакция фрагмент -->
     <string name="send">Поблагодарить</string>
     <string name="addPhoto">Добавить фото</string>
-    <string name="reason_transaction">Причина перевода</string>
-    <string name="unsuccessfulSendCoins">Кол-во спасибок и причина перевода - обязательные поля</string>
+    <string name="reason_transaction">Причина благодарности</string>
+    <string name="unsuccessfulSendCoins">Кол-во спасибок, причина благодарности/тег ценности - обязательные поля</string>
     <string name="isAnon">Анонимно</string>
     <string name="addValues">Добавить ценность</string>
     <string name="choiceValues">Выберите ценность</string>
@@ -98,9 +97,9 @@
     <string name="dateTime">%s в %s</string>
 
     <!--История транзакций -->
-    <string name="received_from">Перевод от %s</string>
+    <string name="received_from">Благодарность от %s</string>
     <string name="G">Ожидает истечения периода отмены</string>
-    <string name="sended_to">Перевод для %s</string>
+    <string name="sended_to">Благодарность для %s</string>
     <string name="approved">Согласовано</string>
     <string name="on_approval">На согласовании</string>
     <string name="annulled">Аннулировано</string>
@@ -109,14 +108,14 @@
     <string name="allHistory">Вся история</string>
     <string name="received">\u0020\u0020\u0020   Получено  \u0020\u0020\u0020</string>
     <string name="sended">Отправлено</string>
-    <string name="cancelTransaction">Отменить перевод?</string>
+    <string name="cancelTransaction">Отменить благодарность?</string>
     <string name="successfulCancel">Спасибки вернутся на ваш счет :)</string>
     <string name="setTag">#%s</string>
     <!-- Additional Info Bottom Sheet Dialog Fragment -->
     <string name="message">Сообщение</string>
     <string name="photo">Фотография</string>
-    <string name="statusTransfer">Статус перевода</string>
-    <string name="typeTransfer">Тип перевода</string>
+    <string name="statusTransfer">Статус благодарности</string>
+    <string name="typeTransfer">Тип благодарности</string>
     <string name="reasonOfRefusing">Причина отказа</string>
     <string name="youSended">Вы отправили</string>
     <string name="youGot">Вы получили от</string>
@@ -124,8 +123,12 @@
     <string name="weRefusedYourOperation">Мы отклонили вашу операцию</string>
     <string name="operationWasRefused">Операция была отменена</string>
     <string name="iRefusedMyOperation">Вы отклонили свою операцию</string>
-    <string name="comingTransfer">Входящий перевод</string>
+    <string name="comingTransfer">Входящая  благодарность</string>
     <string name="amountThanks">%s спасибок</string>
+    <!-- Челлендж фрагмент -->
+    <string name="createChallenge">Создать челлендж</string>
+    <string name="allChallenge">Все</string>
+    <string name="activeChallenge">Активные</string>
 
     <!--Utils -->
     <string name="OK">Ок</string>
@@ -147,6 +150,7 @@
     <string name="delete">Удалить</string>
     <string name="edit">Редактировать</string>
     <string name="fioSender">%s %s</string>
+    <string name="errorMaxLengthMessage">Допустимо максимум 50 символов</string>
     <!-- Utils -->
     <string name="yesterday">Вчера</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
@@ -159,6 +163,9 @@
     <string name="detailOfTransaction">Детали транзакции</string>
     <string name="someonesProfile">Профиль пользователя</string>
     <string name="profile">Профиль</string>
+    <string name="history_label">История</string>
+    <string name="settings_label">Настройки</string>
+    <string name="challenge_label">Челленджи</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

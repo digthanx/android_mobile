@@ -79,7 +79,7 @@ class FeedAdapter(
         var dislikesCount: Int = 0
 
 
-         object DiffCallback : DiffUtil.ItemCallback<FeedResponse>() {
+        object DiffCallback : DiffUtil.ItemCallback<FeedResponse>() {
             override fun areItemsTheSame(oldItem: FeedResponse, newItem: FeedResponse): Boolean {
                 return oldItem.id == newItem.id
             }
@@ -92,12 +92,12 @@ class FeedAdapter(
     }
 
 
-   // @RequiresApi(Build.VERSION_CODES.O)
+    // @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(
-       holder: FeedViewHolder,
-       position: Int
-   ) {
+        holder: FeedViewHolder,
+        position: Int
+    ) {
         bindLikesAndComments(holder, position)
 
         holder.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance()
@@ -116,18 +116,23 @@ class FeedAdapter(
             holder.avatarUser.setImageResource(R.drawable.ic_anon_avatar)
         }
 
-       distinguishSenderAndReceiver(holder, position)
+        distinguishSenderAndReceiver(holder, position)
 
         currentList[position].transaction.tags?.let { setTags(holder.chipGroup, it) }
 
         convertDateToNecessaryFormat(holder, position)
 
-        transactionToAdditionInfo(holder, position)
+        holder.standardGroup.setOnClickListener { v ->
+            transactionToAdditionInfo(holder, position, v)
+        }
 
+        holder.commentBtn.setOnClickListener { v ->
+            transactionToAdditionInfo(holder, position, v)
+        }
 
     }
 
-    private fun distinguishSenderAndReceiver(holder: FeedViewHolder, position: Int){
+    private fun distinguishSenderAndReceiver(holder: FeedViewHolder, position: Int) {
         if (!currentList[position].transaction.sender.equals(username) &&
             !currentList[position].transaction.recipient.equals(username)
         ) {
@@ -241,49 +246,48 @@ class FeedAdapter(
         }
     }
 
-    private fun transactionToAdditionInfo(holder: FeedViewHolder, position: Int){
-        holder.standardGroup.setOnClickListener { v ->
-            val bundle = Bundle()
-            bundle.apply {
-                putString(
-                    Consts.AVATAR_USER,
-                    "${Consts.BASE_URL}${currentList[position].transaction.recipient_photo}"
-                )
-                putString(Consts.DATE_TRANSACTION, holder.dateTime.text.toString())
-                putString(Consts.DESCRIPTION_FEED, holder.descriptionFeed)
-                putString(Consts.SENDER_TG, currentList[position].transaction.sender)
-                putString(Consts.RECEIVER_TG, currentList[position].transaction.recipient)
-                putString(Consts.PHOTO_TRANSACTION, currentList[position].transaction.photo)
-                putString(Consts.REASON_TRANSACTION, currentList[position].transaction.reason)
-                putString(
-                    Consts.AMOUNT_THANKS,
-                    currentList[position].transaction.amount.substringBefore(".")
-                )
-                putInt(LIKES_COUNT,  holder.likesCount)
-                putInt(DISLIKES_COUNT, holder.dislikesCount)
-                putBoolean(IS_LIKED, currentList[position].transaction.user_liked)
-                putBoolean(IS_DISLIKED, currentList[position].transaction.user_disliked)
-                putInt(TRANSACTION_ID, currentList[position].transaction.id)
-                currentList[position].transaction.recipient_id?.let {
-                    this.putInt("userIdReceiver", it)
-                }
-
-                currentList[position].transaction.sender_id?.let {
-                    this.putInt("userIdSender", it)
-                }
-
-
+    private fun transactionToAdditionInfo(holder: FeedViewHolder, position: Int, v: View) {
+        val bundle = Bundle()
+        bundle.apply {
+            putString(
+                Consts.AVATAR_USER,
+                "${Consts.BASE_URL}${currentList[position].transaction.recipient_photo}"
+            )
+            putString(Consts.DATE_TRANSACTION, holder.dateTime.text.toString())
+            putString(Consts.DESCRIPTION_FEED, holder.descriptionFeed)
+            putString(Consts.SENDER_TG, currentList[position].transaction.sender)
+            putString(Consts.RECEIVER_TG, currentList[position].transaction.recipient)
+            putString(Consts.PHOTO_TRANSACTION, currentList[position].transaction.photo)
+            putString(Consts.REASON_TRANSACTION, currentList[position].transaction.reason)
+            putString(
+                Consts.AMOUNT_THANKS,
+                currentList[position].transaction.amount.substringBefore(".")
+            )
+            putInt(LIKES_COUNT, holder.likesCount)
+            putInt(DISLIKES_COUNT, holder.dislikesCount)
+            putBoolean(IS_LIKED, currentList[position].transaction.user_liked)
+            putBoolean(IS_DISLIKED, currentList[position].transaction.user_disliked)
+            putInt(TRANSACTION_ID, currentList[position].transaction.id)
+            currentList[position].transaction.recipient_id?.let {
+                this.putInt("userIdReceiver", it)
             }
-            v.findNavController()
-                .navigate(
-                    R.id.action_feedFragment_to_additionalInfoFeedItemFragment,
-                    bundle,
-                    OptionsTransaction().optionForAdditionalInfoFeedFragment
-                )
+
+            currentList[position].transaction.sender_id?.let {
+                this.putInt("userIdSender", it)
+            }
+
+
         }
+        v.findNavController()
+            .navigate(
+                R.id.action_feedFragment_to_additionalInfoFeedItemFragment,
+                bundle,
+                OptionsTransaction().optionForAdditionalInfoFeedFragment
+            )
+
     }
 
-    private fun bindLikesAndComments(holder: FeedViewHolder, position: Int){
+    private fun bindLikesAndComments(holder: FeedViewHolder, position: Int) {
         // Default Values
         holder.likesBtn.text = "0"
         holder.dislikesBtn.text = "0"
@@ -291,24 +295,24 @@ class FeedAdapter(
         holder.dislikesCount = 0
         holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.general_background))
 
-        if(currentList[position].transaction.user_liked){
+        if (currentList[position].transaction.user_liked) {
             holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_success_secondary))
             holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
-        }else if(currentList[position].transaction.user_disliked){
+        } else if (currentList[position].transaction.user_disliked) {
             holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_error_secondary))
             holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
-        }else{
+        } else {
             holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
             holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
         }
 
         holder.commentBtn.text = currentList[position].transaction.comments_amount.toString()
 
-        for(i in currentList[position].transaction.reactions){
-            if(i.code == "like"){
+        for (i in currentList[position].transaction.reactions) {
+            if (i.code == "like") {
                 holder.likesBtn.text = (i.counter).toString()
                 holder.likesCount = i.counter
-            }else if(i.code == "dislike"){
+            } else if (i.code == "dislike") {
                 holder.dislikesBtn.text = (i.counter).toString()
                 holder.dislikesCount = i.counter
 
@@ -317,14 +321,18 @@ class FeedAdapter(
 
 
         holder.likesBtn.setOnClickListener {
-            val mapReaction: Map<String, Int> = mapOf("like_kind" to 1,
-                "transaction" to currentList[position].transaction.id)
+            val mapReaction: Map<String, Int> = mapOf(
+                "like_kind" to 1,
+                "transaction" to currentList[position].transaction.id
+            )
             likeClickListener?.invoke(mapReaction, position)
         }
 
         holder.dislikesBtn.setOnClickListener {
-            val mapReaction: Map<String, Int> = mapOf("like_kind" to 2,
-                "transaction" to currentList[position].transaction.id)
+            val mapReaction: Map<String, Int> = mapOf(
+                "like_kind" to 2,
+                "transaction" to currentList[position].transaction.id
+            )
             dislikeClickListener?.invoke(mapReaction, position)
         }
     }
@@ -397,7 +405,7 @@ class FeedAdapter(
     }
 
     private fun setTags(tagsChipGroup: ChipGroup, tagList: List<TagModel>) {
-        if(tagsChipGroup.children.none()){
+        if (tagsChipGroup.children.none()) {
             for (i in tagList.indices) {
                 val tagName = tagList[i].name
                 val chip: Chip = LayoutInflater.from(tagsChipGroup.context)

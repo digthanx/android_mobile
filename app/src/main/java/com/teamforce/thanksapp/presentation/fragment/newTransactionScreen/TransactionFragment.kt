@@ -106,8 +106,13 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             viewModel.loadUserBalance(viewModel.userDataRepository.token!!)
         }
         viewModel.balance.observe(viewLifecycleOwner) {
-            viewModel.userDataRepository.leastCoins = it.distribute.amount
-            binding.distributedValueTv.text = it.distribute.amount.toString()
+            UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
+            if(it.distribute.amount == 0){
+                binding.distributedValueTv.text = it.income.amount.toString()
+            }else{
+                binding.distributedValueTv.text = it.distribute.amount.toString()
+            }
+
         }
 
         binding.attachImageBtn.setOnClickListener {
@@ -459,7 +464,8 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 else -> false
             }
             tagsToIdTags()
-            if (userId != -1 && countText.isNotEmpty() && reason.isNotEmpty()) {
+            if (userId != -1 && countText.isNotEmpty() &&
+                (reason.isNotEmpty() || listCheckedIdTags.size > 0)) {
                 try {
                     val count: Int = Integer.valueOf(countText)
                     viewModel.userDataRepository.token?.let {

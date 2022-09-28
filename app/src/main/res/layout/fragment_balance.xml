@@ -44,15 +44,15 @@
                     android:layout_marginEnd="10dp"
                     android:src="@drawable/ic_app_logo" />
 
-                <com.google.android.material.card.MaterialCardView
+                <LinearLayout
+                    android:background="@drawable/white_circle_background"
                     android:id="@+id/profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginEnd="16dp"
                     android:clickable="true"
-                    android:focusable="true"
-                    app:cardCornerRadius="100dp">
+                    android:focusable="true">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:layout_width="wrap_content"
@@ -60,8 +60,8 @@
                         android:layout_margin="5dp"
                         android:scaleType="matrix"
                         android:src="@drawable/smile"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-                </com.google.android.material.card.MaterialCardView>
+                        />
+                </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/notify"
@@ -456,31 +456,6 @@
 
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="bottom">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            style="@style/Widget.App.BottomNavigationView"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginEnd="16dp"
-            android:background="@color/transparent"
-            app:menu="@menu/bottom_navigation_menu" />
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="58dp"
-        android:layout_height="58dp"
-        android:foreground="@drawable/gradient_drawable"
-        app:layout_anchor="@id/bottomAppBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

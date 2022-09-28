@@ -65,20 +65,18 @@ class BalanceFragment : Fragment() {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.balanceFragment,
                 R.id.feedFragment,
-                R.id.transactionFragment,
+                R.id.balanceFragment,
                 R.id.historyFragment
             )
         )
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
-        setupNavigation(navController)
         initViews(view)
         loadBalanceData()
         setBalanceData()
-        displaySnack()
+       // displaySnack()
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->
@@ -106,132 +104,35 @@ class BalanceFragment : Fragment() {
 
     }
 
-    private fun displaySnack() {
-        binding.notify.setOnClickListener {
-            binding.fab.hide()
-            val snack = Snackbar.make(
-                binding.fab.rootView,
-                requireContext().resources.getString(R.string.joke),
-                Snackbar.LENGTH_LONG
-            )
-            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                override fun onShown(transientBottomBar: Snackbar?) {
-                    super.onShown(transientBottomBar)
-                }
-
-                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                    super.onDismissed(transientBottomBar, event)
-                    if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                        binding.fab.show()
-                    }
-                }
-            })
-            snack.setTextMaxLines(3)
-                .setTextColor(context?.getColor(R.color.white)!!)
-                .setAction(context?.getString(R.string.OK)!!) {
-                    snack.dismiss()
-                }
-            snack.show()
-
-        }
-    }
-
-    private fun setupNavigation(navController: NavController) {
-        binding.bottomNavigation.setupWithNavController(navController)
-        binding.bottomNavigation.background = null
-//        binding.navView.setupWithNavController(navController)
-
-        // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
-        // binding.bottomNavigation.setupWithNavController(navController)
-
-//        binding.profile.setOnClickListener{
-//            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
+//    private fun displaySnack(){
+//        binding.notify.setOnClickListener {
+//            binding.fab.hide()
+//            val snack = Snackbar.make(
+//                binding.fab.rootView,
+//                requireContext().resources.getString(R.string.joke),
+//                Snackbar.LENGTH_LONG
+//            )
+//            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
+//                override fun onShown(transientBottomBar: Snackbar?) {
+//                    super.onShown(transientBottomBar)
+//                }
+//
+//                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+//                    super.onDismissed(transientBottomBar, event)
+//                    if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
+//                        binding.fab.show()
+//                    }
+//                }
+//            })
+//            snack.setTextMaxLines(3)
+//                .setTextColor(context?.getColor(R.color.white)!!)
+//                .setAction(context?.getString(R.string.OK)!!) {
+//                    snack.dismiss()
+//                }
+//            snack.show()
+//
 //        }
-
-        binding.fab.setOnClickListener {
-            navController.navigate(
-                R.id.transactionFragment,
-                null,
-                OptionsTransaction().optionForTransaction
-            )
-        }
-
-        binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.balanceFragment -> {
-                    navController.navigate(
-                        R.id.balanceFragment,
-                        null,
-                        OptionsTransaction().optionForTransaction
-                    )
-                    return@OnItemSelectedListener true
-                }
-                R.id.feedFragment -> {
-                    navController.navigate(
-                        R.id.feedFragment,
-                        null,
-                        OptionsTransaction().optionForTransaction
-                    )
-                    return@OnItemSelectedListener true
-                }
-                R.id.transactionFragment -> {
-                    navController.navigate(
-                        R.id.transactionFragment,
-                        null,
-                        OptionsTransaction().optionForTransaction
-                    )
-                    return@OnItemSelectedListener true
-                }
-                R.id.historyFragment -> {
-                    navController.navigate(
-                        R.id.historyFragment,
-                        null,
-                        OptionsTransaction().optionForTransaction
-                    )
-                    return@OnItemSelectedListener true
-                }
-            }
-            true
-        })
-
-        binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
-            when (item.itemId) {
-                R.id.balanceFragment -> {
-                    navController.navigate(
-                        R.id.balanceFragment,
-                        null,
-                        OptionsTransaction().optionForTransaction
-                    )
-                    return@OnItemReselectedListener
-                }
-                R.id.feedFragment -> {
-                    navController.navigate(
-                        R.id.feedFragment,
-                        null,
-                        OptionsTransaction().optionForTransaction
-                    )
-                    return@OnItemReselectedListener
-                }
-                R.id.transactionFragment -> {
-                    navController.navigate(
-                        R.id.transactionFragment,
-                        null,
-                        OptionsTransaction().optionForTransaction
-                    )
-                    return@OnItemReselectedListener
-                }
-                R.id.historyFragment -> {
-                    navController.navigate(
-                        R.id.historyFragment,
-                        null,
-                        OptionsTransaction().optionForTransaction
-                    )
-                    return@OnItemReselectedListener
-                }
-            }
-            true
-        })
-    }
+//    }
 
 
     private fun loadBalanceData() {
@@ -273,7 +174,8 @@ class BalanceFragment : Fragment() {
                 } else if ((isTwo(text) || isThree(text) || isFour(text)) && isNotTen(text)) {
                     willBurn.text = String.format(getString(R.string.will_burn_after_2), text)
                 } else {
-                    willBurn.text = String.format(getString(R.string.will_burn_after_3), text)
+                   // willBurn.text = String.format(getString(R.string.will_burn_after_3), text)
+                    willBurn.text = getString(R.string.will_burn_today)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, e.message, e.fillInStackTrace())

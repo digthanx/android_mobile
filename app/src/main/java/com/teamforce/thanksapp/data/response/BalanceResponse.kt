@@ -10,6 +10,7 @@ data class BalanceResponse(
     data class IncomeBean(
         val amount: Int,
         val frozen: Int,
+        @SerializedName("sent")
         val sended: Int,
         val received: Int,
         val cancelled: Int
