@@ -91,19 +91,19 @@
             android:layout_height="match_parent"
             android:background="@color/general_background"
             android:backgroundTint="@color/general_background">
-
+            
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 app:cardBackgroundColor="@color/general_brand"
                 app:cardCornerRadius="0dp"
-                app:cardElevation="0dp">
+                app:cardElevation="4dp">
 
                 <com.google.android.material.card.MaterialCardView
                     style="@style/MyCardView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:cardBackgroundColor="@color/general_background"
                     android:elevation="0dp">
 
                     <LinearLayout

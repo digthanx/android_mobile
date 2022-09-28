@@ -58,6 +58,10 @@ class MainFlowFragment : BaseFlowFragment(
                     navController.navigate(R.id.history_graph, null, OptionsTransaction().optionForTransaction)
                     return@OnItemSelectedListener true
                 }
+                R.id.challenge_graph -> {
+                    navController.navigate(R.id.challenge_graph, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemSelectedListener true
+                }
             }
             true
         })
@@ -80,8 +84,12 @@ class MainFlowFragment : BaseFlowFragment(
                     navController.navigate(R.id.history_graph, null, OptionsTransaction().optionForTransaction)
                     return@OnItemReselectedListener
                 }
+                R.id.challenge_graph -> {
+                    navController.navigate(R.id.challenge_graph, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
             }
-            true
+
         })
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
