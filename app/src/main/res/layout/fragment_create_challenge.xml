@@ -179,6 +179,36 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/show_attached_img_card"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="16dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_launcher_background" />
+
+                    <ImageButton
+                        android:id="@+id/detach_img_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="55dp"
+                        android:layout_marginBottom="50dp"
+                        android:backgroundTint="@color/transparent"
+                        android:src="@drawable/ic_cross_white" />
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/attach_image_btn"
                 style="@style/NotFilledButton"
