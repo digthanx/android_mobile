@@ -57,6 +57,8 @@ class ProfileViewModel @Inject constructor(
                     _isLoading.postValue(false)
                     if (response.code() == 200) {
                         _profile.postValue(response.body())
+                        userDataRepository.saveProfileId(response.body()!!.profile.id)
+                        userDataRepository.username = response.body()!!.profile.tgName
                     } else {
                         _profileError.postValue(response.message() + " " + response.code())
                     }
@@ -72,16 +74,16 @@ class ProfileViewModel @Inject constructor(
 
 
     fun loadUpdateAvatarUserProfile(
-        userId: String,
         imageFilePart: MultipartBody.Part
     ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
-            callUpdateAvatarProfileEndpoint(
-                userId = userId,
-                imageFilePart,
-                Dispatchers.Default
-            )
+            if (userDataRepository.getProfileId() != null)
+                callUpdateAvatarProfileEndpoint(
+                    userId = userDataRepository.getProfileId()!!,
+                    imageFilePart,
+                    Dispatchers.Default
+                )
         }
     }
 
@@ -114,5 +116,6 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun isUserAuthorized() = userDataRepository.getAuthToken() != null
 
 }

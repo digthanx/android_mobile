@@ -17,6 +17,7 @@ import com.teamforce.thanksapp.presentation.activity.ILoginAction
 import com.teamforce.thanksapp.presentation.viewmodel.AuthorizationType
 import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.Result
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -78,37 +79,56 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
     }
 
     private fun checkAuth() {
-        viewModel.authError.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-            binding.textField.error = "Пользователь не найден"
-            binding.textField.isErrorEnabled = true
+        viewModel.authResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Error -> {
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
+                    binding.textField.error = "Пользователь не найден"
+                    binding.textField.isErrorEnabled = true
+                }
+                is Result.Success -> {
+                    if (result.value && viewModel.userDataRepository.username != null) {
+                        dataBundle = sendToastAboutVerifyCode()
+                        binding.helperText.visibility = View.VISIBLE
+                        setEditTextCode()
+                        hideGetCodeBtn()
+                    }
+                }
+                else -> {
+
+                }
+            }
         }
+
         viewModel.isLoading.observe(viewLifecycleOwner) {
             binding.getCodeBtn.isClickable = !it
         }
-        viewModel.isSuccessAuth.observe(viewLifecycleOwner) {
-            if (it && viewModel.userDataRepository.username != null) {
-                dataBundle = sendToastAboutVerifyCode()
-                binding.helperText.visibility = View.VISIBLE
-                setEditTextCode()
-                hideGetCodeBtn()
-            }
-        }
+
     }
 
     private fun checkVerifyCode() {
-        viewModel.verifyError.observe(viewLifecycleOwner) {
-            Toast.makeText(
-                requireContext(),
-                String.format(getString(R.string.incorrect_code)), Toast.LENGTH_LONG
-            ).show()
+        viewModel.verifyResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        String.format(getString(R.string.incorrect_code)), Toast.LENGTH_LONG
+                    ).show()
+                }
+                is Result.Success -> {
+                    if (binding.codeEt.text?.trim().toString().isNotEmpty()) {
+                        Log.d("Token", "verifyResult in  CheckCode ${binding.codeEt.text}")
+                        finishLogin(result.value.authtoken, result.value.telegramOrEmail)
+                    }
+                }
+                else -> {}
+
+            }
         }
 
+
         viewModel.verifyResult.observe(viewLifecycleOwner) {
-            if (it != null && binding.codeEt.text?.trim().toString().isNotEmpty()) {
-                Log.d("Token", "verifyResult in  CheckCode ${binding.codeEt.text}")
-                finishLogin(it.authtoken, it.telegramOrEmail)
-            }
+
         }
     }
 
@@ -148,7 +168,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
             helperLink.isClickable = true
             helperLink.visibility = View.VISIBLE
             helperLink.setOnClickListener {
-                viewModel.userDataRepository.logout()
+                viewModel.logout()
                 helperLink.visibility = View.GONE
                 helperText.visibility = View.GONE
                 helperText.text = view?.context?.getString(R.string.helperTextStandard)

@@ -120,9 +120,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val requestFile: RequestBody =
             RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
-        viewModel.userDataRepository.profileId.let { id ->
-            viewModel.loadUpdateAvatarUserProfile(id!!, body)
-        }
+        viewModel.loadUpdateAvatarUserProfile(body)
     }
 
     private fun requestData() {
@@ -191,8 +189,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             } else {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
             }
-
-            viewModel.userDataRepository.profileId = it.profile.id
         }
     }
 

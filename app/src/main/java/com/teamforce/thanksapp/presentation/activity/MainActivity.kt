@@ -1,6 +1,5 @@
 package com.teamforce.thanksapp.presentation.activity
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -8,9 +7,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.data.SharedPreferences
 import com.teamforce.thanksapp.databinding.ActivityMainBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
-import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,20 +30,13 @@ class MainActivity : AppCompatActivity(), IMainAction {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
-        val prefs: SharedPreferences = getSharedPreferences("com.teamforce.thanksapp", MODE_PRIVATE)
-        val restoredToken = prefs.getString("Token", null)
-        val restoredUsername = prefs.getString("Username", null)
-        if (restoredToken != null) {
-            viewModel.userDataRepository.username = restoredUsername
+        val prefs: android.content.SharedPreferences? =
+            getSharedPreferences("com.teamforce.thanksapp", MODE_PRIVATE)
+        val restoredUsername = prefs?.getString("Username", null)
+        if (viewModel.isUserAuthorized()) {
+            viewModel.userDataRepository.username =
+                restoredUsername //todo исправить доступ к этому полу через shared preferences
             viewModel.loadUserProfile()
-            viewModel.profile.observe(
-                this,
-                Observer {
-                    if(it.profile.tgName != "null"){
-                        viewModel.userDataRepository.username = it.profile.tgName
-                    }
-                }
-            )
             navGraph.setStartDestination(R.id.mainFlowFragment)
         } else {
             navGraph.setStartDestination(R.id.signFlowFragment)

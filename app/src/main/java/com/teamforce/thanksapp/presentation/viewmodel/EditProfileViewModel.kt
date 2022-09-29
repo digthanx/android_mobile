@@ -87,15 +87,16 @@ class EditProfileViewModel @Inject constructor(
 
 
     fun loadUpdateProfile(
-        userId: String, tgName: String?, surname: String?,
+        tgName: String?, surname: String?,
         firstName: String?, middleName: String?, nickname: String?
     ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
-            callUpdateProfileEndpoint(
-                userId = userId, tgName, surname,
-                firstName, middleName, nickname, Dispatchers.Default
-            )
+            if (userDataRepository.getProfileId() != null)
+                callUpdateProfileEndpoint(
+                    userDataRepository.getProfileId()!!, tgName, surname,
+                    firstName, middleName, nickname, Dispatchers.Default
+                )
         }
     }
 

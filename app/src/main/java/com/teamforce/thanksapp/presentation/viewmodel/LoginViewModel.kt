@@ -10,7 +10,7 @@ import com.teamforce.thanksapp.data.request.AuthorizationRequest
 import com.teamforce.thanksapp.data.request.VerificationRequest
 import com.teamforce.thanksapp.data.response.VerificationResponse
 import com.teamforce.thanksapp.model.domain.UserData
-import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.Result
 import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -29,14 +29,7 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-    private val _isSuccessAuth = MutableLiveData<Boolean>()
-    val isSuccessAuth: LiveData<Boolean> = _isSuccessAuth
-    private val _authError = MutableLiveData<String>()
-    val authError: LiveData<String> = _authError
-    private val _verifyError = MutableLiveData<String>()
-    val verifyError: LiveData<String> = _verifyError
-    private val _verifyResult = MutableLiveData<UserData?>()
-    val verifyResult: LiveData<UserData?> = _verifyResult
+
     private var xId: String? = null
     private var xEmail: String? = null
     private var xCode: String? = null
@@ -44,6 +37,12 @@ class LoginViewModel @Inject constructor(
     private var telegramOrEmail: String? = null
 
     var authorizationType: AuthorizationType? = null
+
+    private val _authResult = MutableLiveData<Result<Boolean>>()
+    val authResult: LiveData<Result<Boolean>> = _authResult
+
+    private val _verifyResult = MutableLiveData<Result<UserData>>()
+    val verifyResult: LiveData<Result<UserData>> = _verifyResult
 
     fun logout() {
         userDataRepository.logout()
@@ -87,17 +86,15 @@ class LoginViewModel @Inject constructor(
 
                             }
                             xCode = response.headers().get("X-Code")
-                            _isSuccessAuth.postValue(true)
+                            _authResult.postValue(Result.Success(true))
                         } else {
-                            _isSuccessAuth.postValue(false)
-                            _authError.postValue(response.message() + " " + response.code())
+                            _authResult.postValue(Result.Error("${response.message()} ${response.code()}"))
                         }
                     }
 
                     override fun onFailure(call: Call<Any>, t: Throwable) {
                         _isLoading.postValue(false)
-                        _isSuccessAuth.postValue(false)
-                        _authError.postValue(t.message)
+                        _authResult.postValue(Result.Error(t.message ?: "Something went wrong"))
                     }
                 })
         }
@@ -114,8 +111,8 @@ class LoginViewModel @Inject constructor(
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.verificationWithTelegram(xId, xCode, VerificationRequest(code = code))
-                ?.enqueue(object : Callback<VerificationResponse> {
+            thanksApi.verificationWithTelegram(xId, xCode, VerificationRequest(code = code))
+                .enqueue(object : Callback<VerificationResponse> {
                     override fun onResponse(
                         call: Call<VerificationResponse>,
                         response: Response<VerificationResponse>
@@ -124,21 +121,25 @@ class LoginViewModel @Inject constructor(
                         if (response.code() == 200) {
                             token = response.body()?.token
                             if (token == null) {
-                                _verifyResult.postValue(null)
-                                _verifyError.postValue("token == null!!!!!")
+                                _verifyResult.postValue(Result.Error("token == null!!!!!"))
                             } else {
-                                _verifyResult.postValue(UserData(token, telegramOrEmail))
+                                _verifyResult.postValue(
+                                    Result.Success(
+                                        UserData(
+                                            token,
+                                            telegramOrEmail
+                                        )
+                                    )
+                                )
                             }
                         } else {
-                            _verifyResult.postValue(null)
-                            _verifyError.postValue(response.message() + " " + response.code())
+                            _verifyResult.postValue(Result.Error(response.message() + " " + response.code()))
                         }
                     }
 
                     override fun onFailure(call: Call<VerificationResponse>, t: Throwable) {
                         _isLoading.postValue(false)
-                        _verifyResult.postValue(null)
-                        _verifyError.postValue(t.message)
+                        _verifyResult.postValue(Result.Error(t.message ?: "Something went wrong"))
                     }
                 })
         }
@@ -165,21 +166,27 @@ class LoginViewModel @Inject constructor(
                         if (response.code() == 200) {
                             token = response.body()?.token
                             if (token == null) {
-                                _verifyResult.postValue(null)
-                                _verifyError.postValue("token == null!!!!!")
+                                _verifyResult.postValue(Result.Error("token == null!!!!!"))
+
                             } else {
-                                _verifyResult.postValue(UserData(token, telegramOrEmail))
+                                _verifyResult.postValue(
+                                    Result.Success(
+                                        UserData(
+                                            token,
+                                            telegramOrEmail
+                                        )
+                                    )
+                                )
                             }
                         } else {
-                            _verifyResult.postValue(null)
-                            _verifyError.postValue(response.message() + " " + response.code())
+                            _verifyResult.postValue(Result.Error(response.message() + " " + response.code()))
+
                         }
                     }
 
                     override fun onFailure(call: Call<VerificationResponse>, t: Throwable) {
                         _isLoading.postValue(false)
-                        _verifyResult.postValue(null)
-                        _verifyError.postValue(t.message)
+                        _verifyResult.postValue(Result.Error(t.message ?: "Something went wrong"))
                     }
                 })
         }
