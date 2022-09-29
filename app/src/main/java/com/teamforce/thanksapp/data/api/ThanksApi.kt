@@ -62,7 +62,9 @@ interface ThanksApi {
     ): Call<SendCoinsResponse>
 
     @GET("/user/transactions/")
-    fun getUserTransactions(@Header("Authorization") token: String): Call<List<UserTransactionsResponse>>
+    fun getUserTransactions(
+        @Header("Authorization") token: String
+    ): Call<List<UserTransactionsResponse>>
 
     @GET("/feed/")
     fun getFeed(@Header("Authorization") token: String): Call<List<FeedResponse>>
@@ -139,4 +141,16 @@ interface ThanksApi {
         @Header("Authorization") token: String,
         @Path("comment_id") commentId: Int
     ): Call<CancelTransactionResponse>
+
+    @Multipart
+    @POST("/create-challenge/")
+    fun createChallenge(
+        @Header("Authorization") token: String,
+        @Part photo: MultipartBody.Part?,
+        @Part("name") name: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("end_at") endAt: RequestBody,
+        @Part("start_balance") amountFund: RequestBody,
+        @Part("parameters") parameters: RequestBody,
+    ): Call<CreateChallengeResponse>
 }

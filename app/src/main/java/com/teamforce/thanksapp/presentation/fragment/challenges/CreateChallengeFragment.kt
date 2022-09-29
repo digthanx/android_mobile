@@ -18,12 +18,14 @@ import com.bumptech.glide.Glide
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.DialogDatePickerBinding
 import com.teamforce.thanksapp.databinding.FragmentCreateChallengeBinding
-import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
+import com.teamforce.thanksapp.presentation.viewmodel.CreateChallengeViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
 import com.teamforce.thanksapp.utils.getPath
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.time.*
 import java.util.*
 
 
@@ -31,6 +33,9 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
 
     // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentCreateChallengeBinding by viewBinding()
+
+    private var viewModel: CreateChallengeViewModel = CreateChallengeViewModel()
+
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -46,17 +51,28 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
             }
         }
 
-    var date: String = ""
+    var dateForTextView: String = ""
+    var dateForSendingFormatted: String = ""
     private var imageFilePart: MultipartBody.Part? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.initViewModel()
         callDatePickerListener(binding)
-        uploadDataToDb()
+        binding.continueBtn.setOnClickListener {
+            if (!binding.titleEt.text.isNullOrEmpty() &&
+                !binding.descriptionEt.text.isNullOrEmpty() &&
+                !binding.prizeFundEt.text.isNullOrEmpty() &&
+                !binding.prizePoolEt.text.isNullOrEmpty()
+            ){
+                uploadDataToDb()
+            }
+        }
         uploadImageFromGallery()
+
     }
 
-    private fun callDatePickerListener(myBinding: FragmentCreateChallengeBinding){
+    private fun callDatePickerListener(myBinding: FragmentCreateChallengeBinding) {
         binding.dateEt.setOnClickListener {
             val builderDialog = AlertDialog.Builder(context)
             val inflater = requireActivity().layoutInflater
@@ -65,27 +81,34 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
             val datePicker = DatePicker(requireContext())
             binding.linearForDatePicker.addView(datePicker)
             val today = Calendar.getInstance()
-            datePicker.init(today.get(Calendar.YEAR),
+            datePicker.init(
+                today.get(Calendar.YEAR),
                 today.get(Calendar.MONTH),
                 today.get(Calendar.DAY_OF_MONTH)
-            ){ view, year, month, day ->
+            ) { view, year, month, day ->
             }
             builderDialog.setView(datePickerLayout)
                 .setPositiveButton(getString(R.string.applyValues),
-                    DialogInterface.OnClickListener{dialog, which ->
+                    DialogInterface.OnClickListener { dialog, which ->
                         // Сохранения значения в переменную
-                        date = "${binding.datePicker.dayOfMonth}" +
+                        dateForTextView = "${binding.datePicker.dayOfMonth}" +
                                 ".${binding.datePicker.month}" +
                                 ".${binding.datePicker.year}"
+                        translateDateAndTime(
+                            binding.datePicker.dayOfMonth,
+                            binding.datePicker.month,
+                            binding.datePicker.year
+                        )
                         dialog.cancel()
-                        myBinding.dateEt.setText(date)
+                        myBinding.dateEt.setText(dateForTextView)
                     })
                 .setNegativeButton(
                     getString(R.string.refuse),
                     DialogInterface.OnClickListener { dialog, which ->
-                        date = ""
+                        dateForTextView = ""
+                        dateForSendingFormatted = ""
                         dialog.dismiss()
-                        myBinding.dateEt.setText(date)
+                        myBinding.dateEt.setText(dateForTextView)
                     }
                 )
             val dialog = builderDialog.create()
@@ -94,16 +117,32 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
     }
 
 
-    private fun uploadDataToDb(){
-        val nameChallenge = binding.titleEt.text
-        val description = binding.descriptionEt.text
-        val prizeFund = binding.prizeFundEt.text?.trim()
-        val prizePool = binding.prizePoolEt.text?.trim()
-        val dateChallenge = date
+    private fun uploadDataToDb() {
+        val nameChallenge = binding.titleEt.text.toString()
+        val description = binding.descriptionEt.text.toString()
+        val prizeFund = binding.prizeFundEt.text?.trim().toString().toInt()
+        val prizePool = binding.prizePoolEt.text?.trim().toString().toInt()
+        val parameters = listOf<Map<String, Int>>(mapOf("id" to 2, "value" to prizePool))
+        val dateChallenge = dateForSendingFormatted.toString()
         // Отправка данных о чалике
+        viewModel.createChallenge(
+            name = nameChallenge,
+            description = description,
+            amountFund = prizeFund,
+            endAt = dateChallenge,
+            parameters = parameters,
+            photo = imageFilePart
+        )
     }
 
-    private fun uploadImageFromGallery(){
+    private fun translateDateAndTime(day: Int, month: Int, year: Int) {
+        val timeNow = LocalTime.now()
+        val dateSelected = LocalDate.of(year, month, day)
+        val dateAndTime = LocalDateTime.of(dateSelected, timeNow).toString()
+        dateForSendingFormatted = dateAndTime
+    }
+
+    private fun uploadImageFromGallery() {
         binding.attachImageBtn.setOnClickListener {
             requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             addPhotoFromIntent()
