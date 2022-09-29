@@ -93,7 +93,6 @@ interface ThanksApi {
     ): Call<CancelTransactionResponse>
 
 
-
     @PUT("/update-profile-by-user/{id}/")
     fun updateProfile(
         @Header("Authorization") token: String,
@@ -153,4 +152,9 @@ interface ThanksApi {
         @Part("start_balance") amountFund: RequestBody,
         @Part("parameters") parameters: RequestBody,
     ): Call<CreateChallengeResponse>
+
+    @GET("/challenges/")
+    fun getChallenges(
+        @Header("Authorization") token: String
+    ): Call<GetChallengesResponse>
 }
