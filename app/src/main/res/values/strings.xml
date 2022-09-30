@@ -129,6 +129,15 @@
     <string name="createChallenge">Создать челлендж</string>
     <string name="allChallenge">Все</string>
     <string name="activeChallenge">Активные</string>
+    <string name="inputNameChallenge">Название</string>
+    <string name="refuse">Отменить</string>
+    <string name="then">Продолжить</string>
+    <string name="description">Описание</string>
+    <string name="dateCloseEvent">Дата завершения события</string>
+    <string name="pointAtPrizeFund">Укажите призовой фонд</string>
+    <string name="pointAtPrizePool">Укажите количество призовых мест</string>
+    <string name="backgroundChallenge">Обложка челленджа</string>
+
 
     <!--Utils -->
     <string name="OK">Ок</string>

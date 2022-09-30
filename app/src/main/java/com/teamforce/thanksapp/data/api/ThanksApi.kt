@@ -3,6 +3,7 @@ package com.teamforce.thanksapp.data.api
 import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.TagModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -62,7 +63,9 @@ interface ThanksApi {
     ): Call<SendCoinsResponse>
 
     @GET("/user/transactions/")
-    fun getUserTransactions(@Header("Authorization") token: String): Call<List<UserTransactionsResponse>>
+    fun getUserTransactions(
+        @Header("Authorization") token: String
+    ): Call<List<UserTransactionsResponse>>
 
     @GET("/feed/")
     fun getFeed(@Header("Authorization") token: String): Call<List<FeedResponse>>
@@ -89,7 +92,6 @@ interface ThanksApi {
         @Path("id") transactionId: String,
         @Body status: CancelTransactionRequest
     ): Call<CancelTransactionResponse>
-
 
 
     @PUT("/update-profile-by-user/{id}/")
@@ -139,4 +141,21 @@ interface ThanksApi {
         @Header("Authorization") token: String,
         @Path("comment_id") commentId: Int
     ): Call<CancelTransactionResponse>
+
+    @Multipart
+    @POST("/create-challenge/")
+    fun createChallenge(
+        @Header("Authorization") token: String,
+        @Part photo: MultipartBody.Part?,
+        @Part("name") name: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("end_at") endAt: RequestBody,
+        @Part("start_balance") amountFund: RequestBody,
+        @Part("parameters") parameters: RequestBody,
+    ): Call<CreateChallengeResponse>
+
+    @GET("/challenges/")
+    fun getChallenges(
+        @Header("Authorization") token: String
+    ): Call<List<ChallengeModel>>
 }
