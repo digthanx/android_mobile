@@ -3,6 +3,7 @@ package com.teamforce.thanksapp.data.api
 import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.TagModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -156,5 +157,5 @@ interface ThanksApi {
     @GET("/challenges/")
     fun getChallenges(
         @Header("Authorization") token: String
-    ): Call<GetChallengesResponse>
+    ): Call<List<ChallengeModel>>
 }

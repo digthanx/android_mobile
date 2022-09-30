@@ -122,6 +122,7 @@
                                 android:layout_marginHorizontal="10dp"
                                 android:layout_marginVertical="5dp"
                                 android:background="@color/white"
+                                app:selectionRequired="true"
                                 app:singleSelection="true">
 
                                 <com.google.android.material.chip.Chip

@@ -5,19 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.teamforce.thanksapp.data.api.ThanksApi
-import com.teamforce.thanksapp.data.response.CreateChallengeResponse
 import com.teamforce.thanksapp.data.response.GetChallengesResponse
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,8 +24,8 @@ class ChallengesViewModel: ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _getChallenges = MutableLiveData<GetChallengesResponse>()
-    val getChallenges: LiveData<GetChallengesResponse> = _getChallenges
+    private val _challenges = MutableLiveData<List<ChallengeModel>>()
+    val challenges: LiveData<List<ChallengeModel>> = _challenges
     private val _getChallengesError = MutableLiveData<String>()
     val getChallengesError: LiveData<String> = _getChallengesError
 
@@ -42,7 +38,7 @@ class ChallengesViewModel: ViewModel() {
         _isLoading.postValue(true)
         UserDataRepository.getInstance()?.token?.let {
             viewModelScope.launch { callGetChallengesEndpoint(
-                it, Dispatchers.Default)
+                it, Dispatchers.IO)
             }
         }
 
@@ -55,20 +51,21 @@ class ChallengesViewModel: ViewModel() {
         withContext(coroutineDispatcher) {
 
             thanksApi?.getChallenges("Token $token")
-                ?.enqueue(object : Callback<GetChallengesResponse> {
+                ?.enqueue(object : Callback<List<ChallengeModel>> {
                 override fun onResponse(
-                    call: Call<GetChallengesResponse>,
-                    response: Response<GetChallengesResponse>
+                    call: Call<List<ChallengeModel>>,
+                    response: Response<List<ChallengeModel>>
                 ) {
                     _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _getChallenges.postValue(response.body())
+                    if (response.code() == 200 || response.code() == 201) {
+                        _challenges.postValue(response.body())
+                        Log.d("Token", "Challenges in request ${response.body()}")
                     } else {
                         _getChallengesError.postValue(response.message() + " " + response.code())
                     }
                 }
 
-                override fun onFailure(call: Call<GetChallengesResponse>, t: Throwable) {
+                override fun onFailure(call: Call<List<ChallengeModel>>, t: Throwable) {
                     _isLoading.postValue(false)
                     _getChallengesError.postValue(t.message)
                 }
