@@ -2,12 +2,15 @@ package com.teamforce.thanksapp.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
+import com.teamforce.thanksapp.utils.OptionsTransaction
 
 class ChallengeAdapter(
 ): ListAdapter<ChallengeModel,
@@ -67,6 +70,13 @@ class ChallengeAdapter(
             currentList[position].awardees?.let { winners.text = it.toString() }
             currentList[position].start_balance?.let { prizeFund.text = it.toString() }
             //currentList[position].parameters?.get(0)?.let { prizePool.setText(it.value) }
+        }
+        holder.mainCard.setOnClickListener {
+            holder.root.findNavController().navigate(
+                R.id.action_challengesFragment_to_detailsMainChallengeFragment,
+                null,
+                OptionsTransaction().optionForEditProfile
+            )
         }
     }
 }
