@@ -152,7 +152,7 @@ interface ThanksApi {
         @Part("end_at") endAt: RequestBody,
         @Part("start_balance") amountFund: RequestBody,
         @Part("parameters") parameters: RequestBody,
-    ): Call<CreateChallengeResponse>
+    ): Call<ChallengeModel>
 
     @GET("/challenges/")
     fun getChallenges(

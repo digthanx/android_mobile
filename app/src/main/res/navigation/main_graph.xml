@@ -164,6 +164,10 @@
             android:id="@+id/createChallengeFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.CreateChallengeFragment"
             android:label="fragment_create_challenge"
-            tools:layout="@layout/fragment_create_challenge" />
+            tools:layout="@layout/fragment_create_challenge" >
+            <action
+                android:id="@+id/action_createChallengeFragment_to_challengesFragment"
+                app:destination="@id/challengesFragment" />
+        </fragment>
     </navigation>
 </navigation>
