@@ -66,7 +66,7 @@ class ChallengeAdapter(
             currentList[position].approved_reports_amount?.let { participants.setText(it.toString()) }
             currentList[position].awardees?.let { winners.text = it.toString() }
             currentList[position].start_balance?.let { prizeFund.text = it.toString() }
-           // prizePool.setText(currentList[position].)
+            //currentList[position].parameters?.get(0)?.let { prizePool.setText(it.value) }
         }
     }
 }
