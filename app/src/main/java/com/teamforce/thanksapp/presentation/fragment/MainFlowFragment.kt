@@ -36,7 +36,7 @@ class MainFlowFragment : BaseFlowFragment(
 
 
         binding.fab.setOnClickListener {
-            navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction)
+            navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
         }
 
         binding.bottomNavigation.menu.getItem(0).isChecked = true
@@ -50,10 +50,10 @@ class MainFlowFragment : BaseFlowFragment(
                     navController.navigate(R.id.balance_graph, null, OptionsTransaction().optionForTransaction)
                     return@OnItemSelectedListener true
                 }
-                R.id.transaction_graph -> {
-                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction)
-                    return@OnItemSelectedListener true
-                }
+//                R.id.transaction_graph -> {
+//                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
+//                    return@OnItemSelectedListener true
+//                }
                 R.id.history_graph -> {
                     navController.navigate(R.id.history_graph, null, OptionsTransaction().optionForTransaction)
                     return@OnItemSelectedListener true
@@ -77,7 +77,7 @@ class MainFlowFragment : BaseFlowFragment(
                     return@OnItemReselectedListener
                 }
                 R.id.transaction_graph -> {
-                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
                     return@OnItemReselectedListener
                 }
                 R.id.history_graph -> {
@@ -108,13 +108,13 @@ class MainFlowFragment : BaseFlowFragment(
     private fun hideBottomNavigation(){
         binding.bottomNavigation.visibility = View.GONE
         binding.bottomAppBar.visibility = View.GONE
-        binding.fab.visibility = View.GONE
+        binding.fab.hide()
     }
 
     private fun showBottomNavigation(){
         binding.bottomNavigation.visibility = View.VISIBLE
         binding.bottomAppBar.visibility = View.VISIBLE
-        binding.fab.visibility = View.VISIBLE
+        binding.fab.show()
 
     }
 

@@ -71,8 +71,8 @@
     <string name="cancelled">Аннулировано</string>
     <string name="frozen_label">На согласовании</string>
     <string name="will_burn_after">До конца периода \u200b %s дней</string>
-    <string name="will_burn_after_2">Сгорят через %s дня</string>
-    <string name="will_burn_after_3">Сгорят через %s дней</string>
+    <string name="will_burn_after_2">До конца периода \u200b %s дней</string>
+    <string name="will_burn_after_3">До конца периода \u200b %s дней</string>
     <string name="will_burn_today">Сгорят сегодня в 18:00</string>
     <string name="joke">Мы ценим ваше любопытство и в будущих обновлениях обязательно сюда что-нибудь добавим &#128522;</string>
     <!-- Транзакция фрагмент -->
