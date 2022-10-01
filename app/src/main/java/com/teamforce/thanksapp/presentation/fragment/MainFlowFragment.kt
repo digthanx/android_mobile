@@ -96,7 +96,8 @@ class MainFlowFragment : BaseFlowFragment(
             if( destination.id == R.id.transactionFragment ||
                 destination.id == R.id.someonesProfileFragment ||
                 destination.id == R.id.additionalInfoFeedItemFragment ||
-                destination.id == R.id.editProfileBottomSheetFragment ){
+                destination.id == R.id.editProfileBottomSheetFragment ||
+                destination.id == R.id.createChallengeFragment){
                 hideBottomNavigation()
             }else{
                 showBottomNavigation()

@@ -156,6 +156,14 @@
             <action
                 android:id="@+id/action_challengesFragment_to_profileGraph"
                 app:destination="@id/profileGraph" />
+            <action
+                android:id="@+id/action_challengesFragment_to_createChallengeFragment"
+                app:destination="@id/createChallengeFragment" />
         </fragment>
+        <fragment
+            android:id="@+id/createChallengeFragment"
+            android:name="com.teamforce.thanksapp.presentation.fragment.challenges.CreateChallengeFragment"
+            android:label="fragment_create_challenge"
+            tools:layout="@layout/fragment_create_challenge" />
     </navigation>
 </navigation>

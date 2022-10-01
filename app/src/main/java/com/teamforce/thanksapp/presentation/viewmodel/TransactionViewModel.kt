@@ -204,8 +204,7 @@ class TransactionViewModel @Inject constructor(
                 reasonB,
                 isAnonB,
                 tags
-            )
-                ?.enqueue(object : Callback<SendCoinsResponse> {
+            )?.enqueue(object : Callback<SendCoinsResponse> {
                     override fun onResponse(
                         call: Call<SendCoinsResponse>,
                         response: Response<SendCoinsResponse>

@@ -3,6 +3,7 @@ package com.teamforce.thanksapp.data.api
 import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.TagModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -85,7 +86,6 @@ interface ThanksApi {
     ): Call<CancelTransactionResponse>
 
 
-
     @PUT("/update-profile-by-user/{id}/")
     fun updateProfile(
         @Path("id") userId: String,
@@ -125,4 +125,18 @@ interface ThanksApi {
     fun deleteComment(
         @Path("comment_id") commentId: Int
     ): Call<CancelTransactionResponse>
+
+    @Multipart
+    @POST("/create-challenge/")
+    fun createChallenge(
+        @Part photo: MultipartBody.Part?,
+        @Part("name") name: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("end_at") endAt: RequestBody,
+        @Part("start_balance") amountFund: RequestBody,
+        @Part("parameters") parameters: RequestBody,
+    ): Call<CreateChallengeResponse>
+
+    @GET("/challenges/")
+    fun getChallenges(): Call<List<ChallengeModel>>
 }
