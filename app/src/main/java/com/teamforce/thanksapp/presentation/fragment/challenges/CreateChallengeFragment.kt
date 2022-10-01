@@ -13,6 +13,7 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.teamforce.thanksapp.R
@@ -21,6 +22,7 @@ import com.teamforce.thanksapp.databinding.FragmentCreateChallengeBinding
 import com.teamforce.thanksapp.presentation.viewmodel.CreateChallengeViewModel
 import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
 import com.teamforce.thanksapp.utils.getPath
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -28,13 +30,13 @@ import java.io.File
 import java.time.*
 import java.util.*
 
-
+@AndroidEntryPoint
 class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
 
     // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentCreateChallengeBinding by viewBinding()
 
-    private var viewModel: CreateChallengeViewModel = CreateChallengeViewModel()
+    private val viewModel: CreateChallengeViewModel by viewModels()
 
 
     private val requestPermissionLauncher =
@@ -57,7 +59,6 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initViewModel()
         callDatePickerListener(binding)
         binding.continueBtn.setOnClickListener {
             if (!binding.titleEt.text.isNullOrEmpty() &&
