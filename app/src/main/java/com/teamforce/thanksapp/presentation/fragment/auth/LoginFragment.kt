@@ -87,7 +87,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
                     binding.textField.isErrorEnabled = true
                 }
                 is Result.Success -> {
-                    if (result.value && viewModel.userDataRepository.username != null) {
+                    if (result.value && username != null) {
                         dataBundle = sendToastAboutVerifyCode()
                         binding.helperText.visibility = View.VISIBLE
                         setEditTextCode()
@@ -125,8 +125,6 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
             }
         }
-
-
         viewModel.verifyResult.observe(viewLifecycleOwner) {
 
         }
@@ -153,7 +151,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
             helperTextView.text =
                 String.format(
                     getString(R.string.helperTextAboutEmail),
-                    viewModel.userDataRepository.email.toString()
+                    binding.telegramEt.text.toString()
                 )
         } else {
             helperTextView.text = String.format(
@@ -205,8 +203,6 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.get_code_btn) {
-            viewModel.userDataRepository.username = binding.telegramEt.text.toString()
-            viewModel.userDataRepository.email = binding.telegramEt.text.toString()
             username = binding.telegramEt.text.toString().trim()
             viewModel.authorizeUser(binding.telegramEt.text.toString())
         }

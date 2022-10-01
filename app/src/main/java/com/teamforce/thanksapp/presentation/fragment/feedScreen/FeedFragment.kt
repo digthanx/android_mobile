@@ -105,7 +105,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
         val feedAdapter =
-            FeedAdapter(viewModel.userDataRepository.username.toString().trim(), requireContext())
+            FeedAdapter(viewModel.userDataRepository.getUserName().toString().trim(), requireContext())
         feedAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.feedRv.adapter = feedAdapter
@@ -126,10 +126,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
 
     private fun inflateRecyclerView() {
-        viewModel.userDataRepository.username?.let { username ->
-            viewModel.loadFeedsList(user = username)
-        }
-
+            viewModel.loadFeedsList()
     }
 
     private fun refreshRecyclerView(checkedId: Int) {

@@ -327,14 +327,14 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private fun setBaseInfo() {
         with(binding) {
             dateTransactionTv.text = dateTransaction
-            if (senderTg?.equals(viewModel.userDataRepository.username) == true) {
+            if (senderTg?.equals(viewModel.userDataRepository.getUserName()) == true) {
                 descriptionTransactionWhoSent.text = context?.getString(R.string.fromYou)
             } else {
                 descriptionTransactionWhoSent.text = context?.getString(
                     R.string.tgName
                 )?.let { String.format(it, senderTg) }
             }
-            if (receiverTg?.equals(viewModel.userDataRepository.username) == true) {
+            if (receiverTg?.equals(viewModel.userDataRepository.getUserName()) == true) {
                 descriptionTransactionWhoReceived.text = context?.getString(R.string.you)
             } else {
                 descriptionTransactionWhoReceived.text = context?.getString(

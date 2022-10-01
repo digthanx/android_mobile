@@ -105,7 +105,6 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         viewModel.loadUserBalance()
 
         viewModel.balance.observe(viewLifecycleOwner) {
-            viewModel.userDataRepository.leastCoins = it.distribute.amount
             if (it.distribute.amount == 0) {
                 binding.distributedValueTv.text = it.income.amount.toString()
             } else {

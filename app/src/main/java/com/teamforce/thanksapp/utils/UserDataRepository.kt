@@ -7,11 +7,6 @@ import javax.inject.Singleton
 class UserDataRepository @Inject constructor(
     private val sharedPreferences: com.teamforce.thanksapp.data.SharedPreferences
 ) {
-
-    var leastCoins: Int? = null  // todo можно вынести в shared preferences
-    var username: String? = null
-    var email: String? = null // todo нужно вынести в shared preferences
-
     fun saveCredentials(
         authToken: String?,
         telegram: String?,
@@ -20,13 +15,16 @@ class UserDataRepository @Inject constructor(
         sharedPreferences.savePreferences(
             authToken = authToken,
             telegram = telegram,
-            username = username,
+            username = userName,
         )
-        username = userName?.trim()
     }
 
     fun saveUsername(userName: String?) {
-        sharedPreferences.username = username
+        sharedPreferences.username = userName
+    }
+
+    fun getUserName(): String? {
+        return sharedPreferences.username
     }
 
     fun saveProfileId(userId: String?) {
@@ -42,11 +40,6 @@ class UserDataRepository @Inject constructor(
     }
 
     fun logout() {
-        sharedPreferences.savePreferences(null, null, null/* null, -1*/)
-        sharedPreferences.username = null
-        sharedPreferences.profileId = null
-        leastCoins = null
-        username = null
-        email = null
+        sharedPreferences.logout()
     }
 }

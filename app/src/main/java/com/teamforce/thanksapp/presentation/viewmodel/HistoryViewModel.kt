@@ -52,9 +52,9 @@ class HistoryViewModel @Inject constructor(
     private val _cancelTransactionError = MutableLiveData<String>()
     val cancelTransactionError: LiveData<String> = _cancelTransactionError
 
-    fun loadTransactionsList(user: String) {
+    fun loadTransactionsList() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callTransactionsListEndpoint(user, Dispatchers.Default) }
+        viewModelScope.launch { callTransactionsListEndpoint(userDataRepository.getUserName()!!, Dispatchers.Default) }
     }
 
     fun loadUserProfile() {

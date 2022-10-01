@@ -42,9 +42,9 @@ class FeedViewModel @Inject constructor(
     private val _isLoadingLikes = MutableLiveData<Boolean>()
     val isLoadingLikes: LiveData<Boolean> = _isLoadingLikes
 
-    fun loadFeedsList(user: String) {
+    fun loadFeedsList() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callFeedsListEndpoint(user, Dispatchers.Default) }
+        viewModelScope.launch { callFeedsListEndpoint(userDataRepository.getUserName()!!, Dispatchers.Default) }
     }
 
 

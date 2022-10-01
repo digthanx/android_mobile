@@ -30,12 +30,7 @@ class MainActivity : AppCompatActivity(), IMainAction {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
-        val prefs: android.content.SharedPreferences? =
-            getSharedPreferences("com.teamforce.thanksapp", MODE_PRIVATE)
-        val restoredUsername = prefs?.getString("Username", null)
         if (viewModel.isUserAuthorized()) {
-            viewModel.userDataRepository.username =
-                restoredUsername //todo исправить доступ к этому полу через shared preferences
             viewModel.loadUserProfile()
             navGraph.setStartDestination(R.id.mainFlowFragment)
         } else {

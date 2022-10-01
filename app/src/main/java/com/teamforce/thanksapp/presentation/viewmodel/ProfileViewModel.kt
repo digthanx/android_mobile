@@ -58,7 +58,7 @@ class ProfileViewModel @Inject constructor(
                     if (response.code() == 200) {
                         _profile.postValue(response.body())
                         userDataRepository.saveProfileId(response.body()!!.profile.id)
-                        userDataRepository.username = response.body()!!.profile.tgName
+                        userDataRepository.saveUsername(response.body()!!.profile.tgName)
                     } else {
                         _profileError.postValue(response.message() + " " + response.code())
                     }

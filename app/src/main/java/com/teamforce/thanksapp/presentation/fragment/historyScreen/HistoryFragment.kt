@@ -128,7 +128,7 @@ class HistoryFragment : Fragment() {
 
 
         recyclerView.adapter = HistoryAdapter(
-            viewModel.userDataRepository.username.toString(),
+            viewModel.userDataRepository.getUserName()!!,
             requireContext(),
             viewModel
         )
@@ -168,11 +168,8 @@ class HistoryFragment : Fragment() {
     }
 
     private fun loadDataFromServer() {
-        viewModel.userDataRepository.username?.let { username ->
-            viewModel.loadTransactionsList(
-                username
-            )
-        }
+        viewModel.loadTransactionsList()
+
 
     }
 

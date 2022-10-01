@@ -13,6 +13,18 @@ class SharedPreferences @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 
+    fun logout() {
+        context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).edit {
+            putString(SP_ARG_TELEGRAM, null)
+            putString(SP_ARG_TOKEN, null)
+            putString(SP_ARG_USERNAME, null)
+            putString(SP_ARG_EMAIL, null)
+            putString(SP_ARG_USER_ID, null)
+
+        }
+
+    }
+
     fun savePreferences(
         authToken: String?,
         telegram: String?,
@@ -46,7 +58,6 @@ class SharedPreferences @Inject constructor(
         set(value) = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).edit {
             putString(SP_ARG_USER_ID, value)
         }
-
 
     companion object {
         private const val SP_NAME = "com.teamforce.thanksapp"

@@ -141,7 +141,6 @@ class BalanceFragment : Fragment() {
 
     private fun setBalanceData() {
         viewModel.balance.observe(viewLifecycleOwner) {
-            viewModel.userDataRepository.leastCoins = it.distribute.amount
             count.text = it.income.amount.toString()
             distributed.text =
                 String.format(getString(R.string.spaceWithContent), it.income.sended.toString())
