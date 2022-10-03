@@ -1,7 +1,7 @@
 package com.teamforce.thanksapp.model.domain
 
 data class ChallengeModel(
-    val id: Int?,
+    val id: Int,
     val name: String?,
     val photo: String?,
     val updated_at: String?,

@@ -106,10 +106,12 @@ class ChallengeAdapter(
         holder.mainCard.setOnClickListener {
             val bundle = Bundle()
             bundle.apply {
+                putString(CHALLENGER_STATUS, currentList[position].status)
+                putInt(CHALLENGER_ID, currentList[position].id)
             }
             holder.root.findNavController().navigate(
                 R.id.action_challengesFragment_to_detailsMainChallengeFragment,
-                null,
+                bundle,
                 OptionsTransaction().optionForEditProfile
             )
         }
@@ -158,5 +160,6 @@ class ChallengeAdapter(
         const val CHALLENGER_DATE_END = "challenger_date_end"
         const val CHALLENGER_CREATOR_ID = "challenger_creator_id"
         const val CHALLENGER_STATUS = "challenger_status"
+        const val CHALLENGER_ID = "challenger_id"
     }
 }
