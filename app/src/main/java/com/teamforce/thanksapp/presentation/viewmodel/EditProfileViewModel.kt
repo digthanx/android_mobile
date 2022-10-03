@@ -63,26 +63,26 @@ class EditProfileViewModel @Inject constructor(
     private suspend fun callProfileEndpoint(
         coroutineDispatcher: CoroutineDispatcher
     ) {
-        withContext(coroutineDispatcher) {
-            thanksApi.getProfile().enqueue(object : Callback<ProfileResponse> {
-                override fun onResponse(
-                    call: Call<ProfileResponse>,
-                    response: Response<ProfileResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _profile.postValue(response.body())
-                    } else {
-                        _profileError.postValue(response.message() + " " + response.code())
-                    }
-                }
-
-                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-                    _isLoading.postValue(false)
-                    _profileError.postValue(t.message)
-                }
-            })
-        }
+//        withContext(coroutineDispatcher) {
+//            thanksApi.getProfile().enqueue(object : Callback<ProfileResponse> {
+//                override fun onResponse(
+//                    call: Call<ProfileResponse>,
+//                    response: Response<ProfileResponse>
+//                ) {
+//                    _isLoading.postValue(false)
+//                    if (response.code() == 200) {
+//                        _profile.postValue(response.body())
+//                    } else {
+//                        _profileError.postValue(response.message() + " " + response.code())
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+//                    _isLoading.postValue(false)
+//                    _profileError.postValue(t.message)
+//                }
+//            })
+//        }
     }
 
 

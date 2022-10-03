@@ -33,7 +33,7 @@ interface ThanksApi {
     ): Call<VerificationResponse>
 
     @GET("/user/profile/")
-    fun getProfile(): Call<ProfileResponse>
+    suspend fun getProfile(): ProfileResponse
 
     @GET("/user/balance/")
     fun getBalance(): Call<BalanceResponse>

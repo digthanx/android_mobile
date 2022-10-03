@@ -6,8 +6,10 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
+import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -49,26 +51,50 @@ class ProfileViewModel @Inject constructor(
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi.getProfile().enqueue(object : Callback<ProfileResponse> {
-                override fun onResponse(
-                    call: Call<ProfileResponse>,
-                    response: Response<ProfileResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _profile.postValue(response.body())
-                        userDataRepository.saveProfileId(response.body()!!.profile.id)
-                        userDataRepository.saveUsername(response.body()!!.profile.tgName)
-                    } else {
-                        _profileError.postValue(response.message() + " " + response.code())
+            _isLoading.postValue(true)
+
+            val result = safeApiCall(Dispatchers.IO) {
+                thanksApi.getProfile()
+            }
+
+            when (result) {
+                is ResultWrapper.Success -> {
+                    _profile.postValue(result.value!!)
+                    userDataRepository.saveProfileId(result.value.profile.id)
+                    userDataRepository.saveUsername(result.value.profile.id)
+                }
+                else -> {
+                    if (result is ResultWrapper.GenericError) {
+                        _profileError.postValue(result.error + " " + result.code)
+
+                    } else if (result is ResultWrapper.NetworkError) {
+                        _profileError.postValue("Ошибка сети")
                     }
                 }
+            }
 
-                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-                    _isLoading.postValue(false)
-                    _profileError.postValue(t.message)
-                }
-            })
+            _isLoading.postValue(false)
+
+//            thanksApi.getProfile().enqueue(object : Callback<ProfileResponse> {
+//                override fun onResponse(
+//                    call: Call<ProfileResponse>,
+//                    response: Response<ProfileResponse>
+//                ) {
+//                    _isLoading.postValue(false)
+//                    if (response.code() == 200) {
+//                        _profile.postValue(response.body())
+//                        userDataRepository.saveProfileId(response.body()!!.profile.id)
+//                        userDataRepository.saveUsername(response.body()!!.profile.tgName)
+//                    } else {
+//                        _profileError.postValue(response.message() + " " + response.code())
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+//                    _isLoading.postValue(false)
+//                    _profileError.postValue(t.message)
+//                }
+//            })
         }
     }
 
