@@ -1,5 +1,7 @@
 package com.teamforce.thanksapp.data.api
 
+import com.teamforce.thanksapp.data.entities.profile.ContactEntity
+import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
@@ -33,7 +35,7 @@ interface ThanksApi {
     ): Call<VerificationResponse>
 
     @GET("/user/profile/")
-    suspend fun getProfile(): ProfileResponse
+    suspend fun getProfile(): ProfileEntity
 
     @GET("/user/balance/")
     fun getBalance(): Call<BalanceResponse>
@@ -94,7 +96,7 @@ interface ThanksApi {
 
     @POST("/create-few-contacts/")
     fun updateFewContact(
-        @Body data: List<Contact>?,
+        @Body data: List<ContactEntity>?,
     ): Call<UpdateFewContactsResponse>
 
     @GET("/tags/")

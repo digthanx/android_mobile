@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.data.repository
 
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
 import com.teamforce.thanksapp.domain.repositories.ProfileRepository
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class ProfileRepositoryImpl @Inject constructor(
     private val thanksApi: ThanksApi
 ) : ProfileRepository {
-    override suspend fun loadUserProfile(): ResultWrapper<ProfileResponse> {
+    override suspend fun loadUserProfile(): ResultWrapper<ProfileEntity> {
         return safeApiCall(Dispatchers.IO) {
             thanksApi.getProfile()
         }

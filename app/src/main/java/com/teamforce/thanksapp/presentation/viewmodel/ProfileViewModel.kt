@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamforce.thanksapp.data.response.ProfileResponse
+import com.teamforce.thanksapp.domain.models.profile.ProfileModel
 import com.teamforce.thanksapp.domain.repositories.ProfileRepository
+import com.teamforce.thanksapp.domain.usecases.LoadProfileUseCase
 import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,15 +18,15 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
+    private val loadProfileUseCase: LoadProfileUseCase,
     private val profileRepository: ProfileRepository
-
 ) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-    private val _profile = MutableLiveData<ProfileResponse>()
+    private val _profile = MutableLiveData<ProfileModel>()
 
-    val profile: LiveData<ProfileResponse> = _profile
+    val profile: LiveData<ProfileModel> = _profile
     private val _profileError = MutableLiveData<String>()
 
     fun loadUserProfile() {
@@ -34,22 +35,18 @@ class ProfileViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 _isLoading.postValue(true)
 
-                when (val result = profileRepository.loadUserProfile()) {
+                when (val result = loadProfileUseCase()) {
                     is ResultWrapper.Success -> {
                         _profile.postValue(result.value!!)
                         userDataRepository.saveProfileId(result.value.profile.id)
                         userDataRepository.saveUsername(result.value.profile.id)
                     }
-                    else -> {
-                        if (result is ResultWrapper.GenericError) {
-                            _profileError.postValue(result.error + " " + result.code)
+                    is ResultWrapper.GenericError ->
+                        _profileError.postValue(result.error + " " + result.code)
 
-                        } else if (result is ResultWrapper.NetworkError) {
-                            _profileError.postValue("Ошибка сети")
-                        }
-                    }
+                    is ResultWrapper.NetworkError ->
+                        _profileError.postValue("Ошибка сети")
                 }
-
                 _isLoading.postValue(false)
             }
         }
@@ -83,7 +80,6 @@ class ProfileViewModel @Inject constructor(
     fun logout() {
         userDataRepository.logout()
     }
-
 
     fun isUserAuthorized() = userDataRepository.getAuthToken() != null
 

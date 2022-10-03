@@ -100,7 +100,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             //userName.text = it.profile.firstname
             binding.firstNameValueTv.text = it.profile.firstname
             binding.surnameValueTv.text = it.profile.surname
-            binding.middleNameValueTv.text = it.profile.middlename
+            binding.middleNameValueTv.text = it.profile.middleName
             binding.companyValueTv.text = it.profile.organization
             binding.positionValueTv.text = it.profile.jobTitle
             if (it.profile.jobTitle.isNullOrEmpty()) {
@@ -113,25 +113,25 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             greetingUser(it.profile.firstname.toString())
 
             if (it.profile.contacts.size == 1) {
-                if (it.profile.contacts[0].contact_type == "@") {
-                    binding.emailValueTv.text = it.profile.contacts[0].contact_id
-                    contactValue1 = it.profile.contacts[0].contact_id
+                if (it.profile.contacts[0].contactType == "@") {
+                    binding.emailValueTv.text = it.profile.contacts[0].contactId
+                    contactValue1 = it.profile.contacts[0].contactId
                 } else {
-                    binding.mobileValueTv.text = it.profile.contacts[0].contact_id
-                    contactValue2 = it.profile.contacts[0].contact_id
+                    binding.mobileValueTv.text = it.profile.contacts[0].contactId
+                    contactValue2 = it.profile.contacts[0].contactId
                 }
             } else if (it.profile.contacts.size == 2) {
-                if (it.profile.contacts[0].contact_type == "@") {
-                    binding.emailValueTv.text = it.profile.contacts[0].contact_id
-                    binding.mobileValueTv.text = it.profile.contacts[1].contact_id
-                    contactValue1 = it.profile.contacts[0].contact_id
-                    contactValue2 = it.profile.contacts[1].contact_id
+                if (it.profile.contacts[0].contactType == "@") {
+                    binding.emailValueTv.text = it.profile.contacts[0].contactId
+                    binding.mobileValueTv.text = it.profile.contacts[1].contactId
+                    contactValue1 = it.profile.contacts[0].contactId
+                    contactValue2 = it.profile.contacts[1].contactId
 
                 } else {
-                    binding.emailValueTv.text = it.profile.contacts[1].contact_id
-                    binding.mobileValueTv.text = it.profile.contacts[0].contact_id
-                    contactValue1 = it.profile.contacts[1].contact_id
-                    contactValue2 = it.profile.contacts[0].contact_id
+                    binding.emailValueTv.text = it.profile.contacts[1].contactId
+                    binding.mobileValueTv.text = it.profile.contacts[0].contactId
+                    contactValue1 = it.profile.contacts[1].contactId
+                    contactValue2 = it.profile.contacts[0].contactId
                 }
             }
 
@@ -184,7 +184,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.whatEditInProfile))
 
-            .setNegativeButton(resources.getString(R.string.avatar)) { dialog, which ->
+            .setNegativeButton(resources.getString(R.string.avatar)) { dialog, _ ->
                 dialog.cancel()
                 //loadImage.launch("image/*")
                 requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)

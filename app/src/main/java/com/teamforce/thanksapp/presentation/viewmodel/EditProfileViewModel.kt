@@ -6,11 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.UpdateProfileRequest
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.UpdateFewContactsResponse
 import com.teamforce.thanksapp.data.response.UpdateProfileResponse
+import com.teamforce.thanksapp.domain.models.profile.ContactModel
+import com.teamforce.thanksapp.domain.models.profile.ProfileModel
+import com.teamforce.thanksapp.domain.usecases.LoadProfileUseCase
 import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
@@ -29,7 +33,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
     private val thanksApi: ThanksApi,
-    val userDataRepository: UserDataRepository
+    val userDataRepository: UserDataRepository,
+    private val loadProfileUseCase: LoadProfileUseCase
 ) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -45,8 +50,8 @@ class EditProfileViewModel @Inject constructor(
     val isSuccessOperation: LiveData<Boolean> = _isSuccessOperation
 
 
-    private val _profile = MutableLiveData<ProfileResponse>()
-    val profile: LiveData<ProfileResponse> = _profile
+    private val _profile = MutableLiveData<ProfileModel>()
+    val profile: LiveData<ProfileModel> = _profile
     private val _profileError = MutableLiveData<String>()
     val profileError: LiveData<String> = _profileError
 
@@ -65,11 +70,8 @@ class EditProfileViewModel @Inject constructor(
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            val result = safeApiCall(Dispatchers.IO) {
-                thanksApi.getProfile()
-            }
 
-            when (result) {
+            when (val result = loadProfileUseCase()) {
                 is ResultWrapper.Success -> {
                     _profile.postValue(result.value!!)
                 }
@@ -139,18 +141,25 @@ class EditProfileViewModel @Inject constructor(
     }
 
 
-    fun loadUpdateFewContact(listContacts: List<Contact>) {
+    fun loadUpdateFewContact(listContacts: List<ContactModel>) {
+        val contacts = listContacts.map {
+            ContactEntity(
+                id = it.id,
+                contact_id = it.contactId,
+                contact_type = it.contactType
+            )
+        }
         _isLoading.postValue(true)
         viewModelScope.launch {
             callUpdateFewContactEndpoint(
-                listContacts,
+                contacts,
                 Dispatchers.Default
             )
         }
     }
 
     private suspend fun callUpdateFewContactEndpoint(
-        listContacts: List<Contact>,
+        listContacts: List<ContactEntity>,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {

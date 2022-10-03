@@ -21,6 +21,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.databinding.FragmentEditProfileBottomSheetBinding
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
+import com.teamforce.thanksapp.domain.models.profile.ContactModel
 import com.teamforce.thanksapp.presentation.viewmodel.EditProfileViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
@@ -40,8 +41,8 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
     private var contactValue_2Phone: String? = null
     private var greeting: String? = null
 
-    private var emailContact: Contact? = null
-    private var phoneContact: Contact? = null
+    private var emailContact: ContactModel? = null
+    private var phoneContact: ContactModel? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +76,7 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
             binding.positionValueTv.text = it.profile.jobTitle
             binding.surnameEt.setText(it.profile.surname)
             binding.firstEt.setText(it.profile.firstname)
-            binding.middleEt.setText(it.profile.middlename)
+            binding.middleEt.setText(it.profile.middleName)
             binding.companyValueTv.setText(it.profile.organization)
 
             if (it.profile.jobTitle.isNullOrEmpty()) {
@@ -93,31 +94,31 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
                     .into(binding.userAvatar)
             }
             if (it.profile.contacts.size == 1) {
-                if (it.profile.contacts[0].contact_type == "@") {
-                    binding.emailEt.setText(it.profile.contacts[0].contact_id)
+                if (it.profile.contacts[0].contactType == "@") {
+                    binding.emailEt.setText(it.profile.contacts[0].contactId)
                     emailContact = it.profile.contacts[0]
-                    phoneContact = Contact(null, "P", "")
+                    phoneContact = ContactModel(null, "P", "")
                 } else {
-                    binding.phoneEt.setText(it.profile.contacts[0].contact_id)
+                    binding.phoneEt.setText(it.profile.contacts[0].contactId)
                     phoneContact = it.profile.contacts[0]
-                    emailContact = Contact(null, "@", "")
+                    emailContact = ContactModel(null, "@", "")
 
                 }
             } else if (it.profile.contacts.size == 2) {
-                if (it.profile.contacts[0].contact_type == "@") {
-                    binding.emailEt.setText(it.profile.contacts[0].contact_id)
-                    binding.phoneEt.setText(it.profile.contacts[1].contact_id)
+                if (it.profile.contacts[0].contactType == "@") {
+                    binding.emailEt.setText(it.profile.contacts[0].contactId)
+                    binding.phoneEt.setText(it.profile.contacts[1].contactId)
                     emailContact = it.profile.contacts[0]
                     phoneContact = it.profile.contacts[1]
                 } else {
-                    binding.emailEt.setText(it.profile.contacts[1].contact_id)
-                    binding.phoneEt.setText(it.profile.contacts[0].contact_id)
+                    binding.emailEt.setText(it.profile.contacts[1].contactId)
+                    binding.phoneEt.setText(it.profile.contacts[0].contactId)
                     emailContact = it.profile.contacts[1]
                     phoneContact = it.profile.contacts[0]
                 }
             } else {
-                phoneContact = Contact(null, "P", "")
-                emailContact = Contact(null, "@", "")
+                phoneContact = ContactModel(null, "P", "")
+                emailContact = ContactModel(null, "@", "")
             }
 
         }
@@ -226,11 +227,11 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
                 tgName = null,
                 nickname = null
             )
-            val listContact: MutableList<Contact> = mutableListOf<Contact>()
-            emailContact?.contact_id = binding.emailEt.text.toString()
-            phoneContact?.contact_id = binding.phoneEt.text.toString()
+            val listContact: MutableList<ContactModel> = mutableListOf<ContactModel>()
+            emailContact?.contactId = binding.emailEt.text.toString()
+            phoneContact?.contactId = binding.phoneEt.text.toString()
             Log.d("Errori", "${binding.emailEt.text.toString()}")
-            Log.d("Errori", "${emailContact?.contact_id}")
+            Log.d("Errori", "${emailContact?.contactId}")
             emailContact?.let { listContact.add(it) }
             phoneContact?.let { listContact.add(it) }
 

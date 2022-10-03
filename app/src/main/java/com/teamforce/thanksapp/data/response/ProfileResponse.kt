@@ -32,7 +32,5 @@ data class ProfileResponse(
         @SerializedName("nickname") val nickname: String?,
         @SerializedName("job_title") val jobTitle: String?
     ): Parcelable
-
-
 }
 
