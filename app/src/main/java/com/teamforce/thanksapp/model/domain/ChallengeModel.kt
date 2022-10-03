@@ -10,6 +10,7 @@ data class ChallengeModel(
     val creator_id: Int?,
     val parameters: List<ParameterModel>?,
     val approved_reports_amount: Int?,
+    val fund: Int,
     val status: String?,
     val is_new_reports: Boolean?,
     val prize_size: Int?,

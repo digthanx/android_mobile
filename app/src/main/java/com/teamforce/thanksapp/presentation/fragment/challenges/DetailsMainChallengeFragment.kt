@@ -24,18 +24,13 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tabs = binding.tabLayout.getChildAt(0) as ViewGroup
+        initTabLayoutMediator()
+        listenersBtn()
 
-        for (i in 0 until tabs.childCount ) {
-            val tab = tabs.getChildAt(i)
-            val layoutParams = tab.layoutParams as LinearLayout.LayoutParams
-            layoutParams.weight = 0f
-            layoutParams.marginEnd = 12
-            layoutParams.marginStart = 12
-            layoutParams.width = 10
-            tab.layoutParams = layoutParams
-            binding.tabLayout.requestLayout()
-        }
+
+    }
+
+    private fun initTabLayoutMediator(){
         binding.pager.adapter = FragmentDetailChallengeStateAdapter(requireActivity())
         TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
             when(position){
@@ -44,6 +39,9 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                 2 -> tab.text = context?.getString(R.string.participants)
             }
         }.attach()
+    }
+
+    private fun listenersBtn(){
         binding.closeBtn.setOnClickListener {
             findNavController().navigate(
                 R.id.action_detailsMainChallengeFragment_to_challengesFragment,
