@@ -74,7 +74,6 @@ class CreateChallengeViewModel: ViewModel() {
                 RequestBody.create(MediaType.parse("application/json"), parametersJson)
 
 
-
             thanksApi?.createChallenge(
                 "Token $token",
                 photo,

@@ -16,8 +16,10 @@ import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.adapter.FragmentDetailChallengeStateAdapter
 import com.teamforce.thanksapp.utils.OptionsTransaction
 
-private const val CHALLENGER_STATUS = ChallengeAdapter.CHALLENGER_STATUS
-private const val CHALLENGER_ID = ChallengeAdapter.CHALLENGER_ID
+private const val CHALLENGE_STATUS = ChallengeAdapter.CHALLENGER_STATUS
+private const val CHALLENGE_ID = ChallengeAdapter.CHALLENGER_ID
+private const val CHALLENGE_ACTIVE = ChallengeAdapter.CHALLENGER_STATE_ACTIVE
+private const val CHALLENGE_BACKGROUND = ChallengeAdapter.CHALLENGE_BACKGROUND
 
 class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_challenge) {
 
@@ -25,17 +27,22 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
     private var statusChallenge: String? = null
     private var idChallenge: Int? = null
+    private var challengeActive: Boolean? = null
+    private var challengeBackground: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            statusChallenge = it.getString(CHALLENGER_STATUS)
-            idChallenge = it.getInt(CHALLENGER_ID)
+            statusChallenge = it.getString(CHALLENGE_STATUS)
+            idChallenge = it.getInt(CHALLENGE_ID)
+            challengeActive = it.getBoolean(CHALLENGE_ACTIVE)
+            challengeBackground = it.getString(CHALLENGE_BACKGROUND)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setData()
         initTabLayoutMediator()
         listenersBtn()
 
@@ -63,6 +70,19 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                 null,
                 OptionsTransaction().optionForProfileFromEditProfile
             )
+        }
+    }
+
+    private fun setData(){
+        //if(challengeBackground.isNullOrEmpty())
+        if(challengeActive == true){
+            binding.statusActiveText.text = requireContext().getString(R.string.active)
+            binding.statusActiveCard
+                .setBackgroundColor(requireContext().getColor(R.color.minor_info))
+        }else{
+            binding.statusActiveText.text = requireContext().getString(R.string.completed)
+            binding.statusActiveCard
+                .setBackgroundColor(requireContext().getColor(R.color.minor_success))
         }
     }
 

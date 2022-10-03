@@ -52,6 +52,7 @@ class ChallengeAdapter(
         val prizePoolText = binding.prizePoolText
         val lastUpdateChallengeValue = binding.lastUpdateChallengeValue
         val lastUpdateChallengeCard = binding.lastUpdateChallengeCard
+        var activeText = ""
         val mainCard = binding.mainCard
         val root = binding.root
         var date: String = ""
@@ -100,6 +101,11 @@ class ChallengeAdapter(
             }else{
                 currentList[position].parameters?.get(0)?.let { prizePool.setText(it.value.toString()) }
             }
+            if(currentList[position].active){
+                holder.activeText = holder.root.context.getString(R.string.active)
+            }else{
+                holder.activeText = holder.root.context.getString(R.string.completed)
+            }
             prizeFund.setText(currentList[position].fund.toString())
             convertDateToNecessaryFormat(holder, position)
         }
@@ -108,6 +114,8 @@ class ChallengeAdapter(
             bundle.apply {
                 putString(CHALLENGER_STATUS, currentList[position].status)
                 putInt(CHALLENGER_ID, currentList[position].id)
+                putBoolean(CHALLENGER_STATE_ACTIVE, currentList[position].active)
+                putString(CHALLENGE_BACKGROUND, currentList[position].photo)
             }
             holder.root.findNavController().navigate(
                 R.id.action_challengesFragment_to_detailsMainChallengeFragment,
@@ -159,6 +167,7 @@ class ChallengeAdapter(
         const val CHALLENGER_PRIZE_POOL = "challenger_prize_pool"
         const val CHALLENGER_DATE_END = "challenger_date_end"
         const val CHALLENGER_CREATOR_ID = "challenger_creator_id"
+        const val CHALLENGE_BACKGROUND = "challenge_background"
         const val CHALLENGER_STATUS = "challenger_status"
         const val CHALLENGER_ID = "challenger_id"
     }

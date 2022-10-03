@@ -138,9 +138,13 @@
     <string name="pointAtPrizePool">Укажите количество призовых мест</string>
     <string name="backgroundChallenge">Обложка челленджа</string>
     <string name="lastUpdateChallenge">Обновлен: %s</string>
+    <string name="active">Активен</string>
+    <string name="completed">Завершён</string>
     <!-- Челлендж фрагмент детали -->
     <string name="details">Детали</string>
     <string name="participants">Участники</string>
+    <string name="fund">%s форсиков</string>
+    <string name="occupiedPrizePool">%s / %s</string>
 
 
     <!--Utils -->

@@ -14,5 +14,6 @@ data class ChallengeModel(
     val status: String?,
     val is_new_reports: Boolean?,
     val prize_size: Int?,
-    val awardees: Int?
+    val awardees: Int?,
+    val active: Boolean
 )
