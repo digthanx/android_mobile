@@ -390,5 +390,18 @@
         <item name="strokeWidth">0dp</item>
     </style>
 
+    <style name="MyTabChallenge" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@drawable/selector_tab</item>
+        <item name="tabIndicatorColor">@color/transparent</item>
+        <item name="android:textAppearance">@style/SmallText2Medium.Black</item>
+        <item name="tabTextColor">@color/general_contrast</item>
+        <item name="tabSelectedTextColor">@color/general_background</item>
+    </style>
+
+    <style name="ShapeAppearance.TabItem" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
 
 </resources>
