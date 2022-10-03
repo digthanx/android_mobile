@@ -11,8 +11,10 @@ import com.teamforce.thanksapp.data.request.UpdateProfileRequest
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.UpdateFewContactsResponse
 import com.teamforce.thanksapp.data.response.UpdateProfileResponse
+import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +30,6 @@ import javax.inject.Inject
 class EditProfileViewModel @Inject constructor(
     private val thanksApi: ThanksApi,
     val userDataRepository: UserDataRepository
-
 ) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -63,26 +64,25 @@ class EditProfileViewModel @Inject constructor(
     private suspend fun callProfileEndpoint(
         coroutineDispatcher: CoroutineDispatcher
     ) {
-//        withContext(coroutineDispatcher) {
-//            thanksApi.getProfile().enqueue(object : Callback<ProfileResponse> {
-//                override fun onResponse(
-//                    call: Call<ProfileResponse>,
-//                    response: Response<ProfileResponse>
-//                ) {
-//                    _isLoading.postValue(false)
-//                    if (response.code() == 200) {
-//                        _profile.postValue(response.body())
-//                    } else {
-//                        _profileError.postValue(response.message() + " " + response.code())
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-//                    _isLoading.postValue(false)
-//                    _profileError.postValue(t.message)
-//                }
-//            })
-//        }
+        withContext(coroutineDispatcher) {
+            val result = safeApiCall(Dispatchers.IO) {
+                thanksApi.getProfile()
+            }
+
+            when (result) {
+                is ResultWrapper.Success -> {
+                    _profile.postValue(result.value!!)
+                }
+                else -> {
+                    if (result is ResultWrapper.GenericError) {
+                        _profileError.postValue(result.error + " " + result.code)
+
+                    } else if (result is ResultWrapper.NetworkError) {
+                        _profileError.postValue("Ошибка сети")
+                    }
+                }
+            }
+        }
     }
 
 

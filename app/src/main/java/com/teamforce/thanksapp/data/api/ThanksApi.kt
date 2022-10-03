@@ -73,10 +73,10 @@ interface ThanksApi {
 
     @Multipart
     @POST("/update-profile-image/{id}/")
-    fun putUserAvatar(
+    suspend fun putUserAvatar(
         @Path("id") userId: String,
         @Part photo: MultipartBody.Part
-    ): Call<PutUserAvatarResponse>
+    ): PutUserAvatarResponse
 
 
     @PUT("/cancel-transaction/{id}/")

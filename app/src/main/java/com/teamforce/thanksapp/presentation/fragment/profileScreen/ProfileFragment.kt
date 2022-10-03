@@ -9,49 +9,26 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.SavedStateViewModelFactory
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.navigation.NavigationBarView
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
-
-
-    // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentProfileBinding by viewBinding()
 
-    //        private val viewModel = ViewModelProvider(this, SavedStateViewModelFactory())
-//            .get(ProfileViewModel::class.java)
     private val viewModel: ProfileViewModel by viewModels()
 
     private val requestPermissionLauncher =
@@ -68,11 +45,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         }
 
-
-    private var contactId_1: Int? = null
-    private var contactId_2: Int? = null
-    private var contactValue_1: String? = null
-    private var contactValue_2: String? = null
+    private var contactValue1: String? = null
+    private var contactValue2: String? = null
 
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -110,17 +84,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
 
     private fun uriToMultipart(imageURI: Uri, filePath: String) {
-        // Хардовая вставка картинки с самого начала
-        // Убрать как только сделаю обновление по свайпам
         Glide.with(this)
             .load(imageURI)
             .centerCrop()
             .into(binding.userAvatar)
-        val file = File(filePath)
-        val requestFile: RequestBody =
-            RequestBody.create(MediaType.parse("multipart/form-data"), file)
-        val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
-        viewModel.loadUpdateAvatarUserProfile(body)
+        viewModel.loadUpdateAvatarUserProfile(filePath)
     }
 
     private fun requestData() {
@@ -143,41 +111,27 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 binding.positionLabelTv.visibility = View.VISIBLE
             }
             greetingUser(it.profile.firstname.toString())
-//            if(it.profile.middlename == "null"){
-//                userFio.text = String.format(requireContext().getString(R.string.userFio),
-//                    it.profile.surname ,it.profile.firstname, "")
-//            }else{
-//                userFio.text = String.format(requireContext().getString(R.string.userFio),
-//                    it.profile.surname ,it.profile.firstname, it.profile.middlename)
-//            }
-
 
             if (it.profile.contacts.size == 1) {
                 if (it.profile.contacts[0].contact_type == "@") {
                     binding.emailValueTv.text = it.profile.contacts[0].contact_id
-                    contactId_1 = it.profile.contacts[0].id
-                    contactValue_1 = it.profile.contacts[0].contact_id
+                    contactValue1 = it.profile.contacts[0].contact_id
                 } else {
                     binding.mobileValueTv.text = it.profile.contacts[0].contact_id
-                    contactId_2 = it.profile.contacts[0].id
-                    contactValue_2 = it.profile.contacts[0].contact_id
+                    contactValue2 = it.profile.contacts[0].contact_id
                 }
             } else if (it.profile.contacts.size == 2) {
                 if (it.profile.contacts[0].contact_type == "@") {
                     binding.emailValueTv.text = it.profile.contacts[0].contact_id
-                    contactId_1 = it.profile.contacts[0].id
                     binding.mobileValueTv.text = it.profile.contacts[1].contact_id
-                    contactId_2 = it.profile.contacts[1].id
-                    contactValue_1 = it.profile.contacts[0].contact_id
-                    contactValue_2 = it.profile.contacts[1].contact_id
+                    contactValue1 = it.profile.contacts[0].contact_id
+                    contactValue2 = it.profile.contacts[1].contact_id
 
                 } else {
                     binding.emailValueTv.text = it.profile.contacts[1].contact_id
-                    contactId_1 = it.profile.contacts[1].id
                     binding.mobileValueTv.text = it.profile.contacts[0].contact_id
-                    contactId_2 = it.profile.contacts[0].id
-                    contactValue_1 = it.profile.contacts[1].contact_id
-                    contactValue_2 = it.profile.contacts[0].contact_id
+                    contactValue1 = it.profile.contacts[1].contact_id
+                    contactValue2 = it.profile.contacts[0].contact_id
                 }
             }
 
@@ -220,7 +174,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
             .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
                 dialog.cancel()
-                viewModel.userDataRepository.logout()
+                viewModel.logout()
                 activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
             }
             .show()
@@ -240,8 +194,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
                 dialog.cancel()
                 val bundle = Bundle()
-                bundle.putString("contact_value_1", contactValue_1)
-                bundle.putString("contact_value_2", contactValue_2)
+                bundle.putString("contact_value_1", contactValue1)
+                bundle.putString("contact_value_2", contactValue2)
                 bundle.putString("greeting", binding.greetingUserTv.text.toString())
                 findNavController().navigate(
                     R.id.action_profileFragment_to_editProfileBottomSheetFragment,
@@ -256,18 +210,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun initViews() {
         binding.swipeRefreshLayout.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         viewModel.isLoading.observe(
-            viewLifecycleOwner,
-            Observer { isLoading ->
-                if (isLoading) {
-                    binding.allContent.visibility = View.GONE
-                    binding.swipeRefreshLayout.isRefreshing = true
-                } else {
-                    binding.allContent.visibility = View.VISIBLE
-                    binding.swipeRefreshLayout.isRefreshing = false
+            viewLifecycleOwner
+        ) { isLoading ->
+            if (isLoading) {
+                binding.allContent.visibility = View.GONE
+                binding.swipeRefreshLayout.isRefreshing = true
+            } else {
+                binding.allContent.visibility = View.VISIBLE
+                binding.swipeRefreshLayout.isRefreshing = false
 
-                }
             }
-        )
+        }
     }
 
     companion object {
