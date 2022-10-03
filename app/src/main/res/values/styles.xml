@@ -127,7 +127,7 @@
     </style>
 
     <style name="Headline6" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="android:textColor">@color/color1</item>
+        <item name="android:textColor">@color/general_contrast</item>
         <item name="android:textSize">20sp</item>
     </style>
 

@@ -1,14 +1,297 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.fragment.challenges.fragmentsViewPager2.DetailsInnerChallengeFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".presentation.fragment.challenges.fragmentsViewPager2.DetailsInnerChallengeFragment">
 
-</FrameLayout>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="10dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nameChallenge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Headline6Bold"
+                    android:layout_marginBottom="6dp"
+                    android:text="Пробежать 100м"/>
+
+                <TextView
+                    android:id="@+id/descriptionChallenge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    style="@style/SmallText2.Black"
+                    android:text="Давайте проведем часть времени в активном спортивногом состоянии.
+                Предлагаю всем в течении недели пройти 100 км или пробежать.
+                Кто сможет - получить форсики. Жду!"/>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    android:layout_marginBottom="8dp"
+                    app:cardBackgroundColor="@color/minor_info_secondary">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/minor_info"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginHorizontal="12dp"
+                        style="@style/SmallText2.Black"
+                        android:text="Производиться регистрация участников"/>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    app:cardBackgroundColor="@color/minor_info_secondary">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/minor_info"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginHorizontal="12dp"
+                        style="@style/SmallText2.Black"
+                        android:text="Производиться прием отчетов"/>
+                </com.google.android.material.card.MaterialCardView>
+
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/prizeFund_cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="10dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_prize_fund"/>
+
+                <TextView
+                    android:id="@+id/prizeFund_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/SmallText2Medium.Black"
+                    android:text="Призовой фонд"/>
+
+                <TextView
+                    android:id="@+id/prizeFund_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="415 форсиков"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/dateEnd_cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="10dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_clock"/>
+
+                <TextView
+                    android:id="@+id/dateEnd_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/SmallText2Medium.Black"
+                    android:text="Дата завершения"/>
+
+                <TextView
+                    android:id="@+id/dateEnd_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="13 августа 2022 года"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/prizePool_cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="10dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_gift"/>
+
+                <TextView
+                    android:id="@+id/prizePool_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/SmallText2Medium.Black"
+                    android:text="Призовых мест"/>
+
+                <TextView
+                    android:id="@+id/prizePool_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="14 / 100"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:minHeight="104dp"
+            android:layout_weight="1"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/user_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="5dp"
+            android:layout_marginBottom="16dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginBottom="15dp"
+                android:layout_marginVertical="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/user_avatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_anon_avatar"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/user_name_label_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Организатор"
+                    android:textAppearance="@style/Body2"
+                    app:layout_constraintStart_toEndOf="@+id/user_avatar"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/user_surname_label_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textAppearance="@style/Body2"
+                    app:layout_constraintStart_toEndOf="@+id/user_name_label_tv"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/user_tg_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/general_brand"
+                    android:text="@string/tgName"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@id/user_avatar"
+                    app:layout_constraintTop_toBottomOf="@+id/user_name_label_tv" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/action_linear"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:layout_marginEnd="8dp"
+                style="@style/DefaultButton"
+                android:text="Черновик"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/like_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:icon="@drawable/ic_like"
+                style="@style/ReactionBtnFeed" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dislike_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:cornerRadius="8dp"
+                android:textColor="@color/general_contrast"
+                android:layout_marginEnd="4dp"
+                app:icon="@drawable/ic_dislike"
+                style="@style/ReactionBtnFeed"
+                />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+</ScrollView>
