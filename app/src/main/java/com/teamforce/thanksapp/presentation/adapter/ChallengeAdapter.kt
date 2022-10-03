@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.presentation.adapter
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,10 @@ import com.teamforce.thanksapp.databinding.ItemChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class ChallengeAdapter(
 ): ListAdapter<ChallengeModel,
@@ -49,6 +54,9 @@ class ChallengeAdapter(
         val lastUpdateChallengeCard = binding.lastUpdateChallengeCard
         val mainCard = binding.mainCard
         val root = binding.root
+        var date: String = ""
+        var time: String =  ""
+        val dateTime: String = ""
 
 
         object DiffCallback : DiffUtil.ItemCallback<ChallengeModel>() {
@@ -93,7 +101,7 @@ class ChallengeAdapter(
                 currentList[position].parameters?.get(0)?.let { prizePool.setText(it.value.toString()) }
             }
             prizeFund.setText(currentList[position].fund.toString())
-
+            convertDateToNecessaryFormat(holder, position)
         }
         holder.mainCard.setOnClickListener {
             val bundle = Bundle()
@@ -106,6 +114,38 @@ class ChallengeAdapter(
             )
         }
     }
+
+    private fun convertDateToNecessaryFormat(holder: ChallengeViewHolder, position: Int) {
+        try {
+            val zdt: ZonedDateTime =
+                ZonedDateTime.parse(currentList[position].updated_at, DateTimeFormatter.ISO_DATE_TIME)
+            val dateTime: String? =
+                LocalDateTime.parse(zdt.toString(), DateTimeFormatter.ISO_DATE_TIME)
+                    .format(DateTimeFormatter.ofPattern("dd.MM.y HH:mm"))
+            val date = dateTime?.subSequence(0, 10)
+            val today: LocalDate = LocalDate.now()
+            val yesterday: String = today.minusDays(1).format(DateTimeFormatter.ISO_DATE)
+            val todayString =
+                LocalDate.parse(today.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .format(DateTimeFormatter.ofPattern("dd.MM.y"))
+            val yesterdayString =
+                LocalDate.parse(yesterday, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .format(DateTimeFormatter.ofPattern("dd.MM.y"))
+
+            if (date == todayString) {
+                holder.date = "Сегодня"
+            } else if (date == yesterdayString) {
+                holder.date = "Вчера"
+            } else {
+                holder.date = date.toString()
+            }
+            holder.lastUpdateChallengeValue.text =
+                String.format(holder.root.context.getString(R.string.lastUpdateChallenge), holder.date)
+        } catch (e: Exception) {
+            Log.e("ChallengeAdapter", e.message, e.fillInStackTrace())
+        }
+    }
+
 
     companion object {
         const val CHALLENGER_NAME = "challenger_name"

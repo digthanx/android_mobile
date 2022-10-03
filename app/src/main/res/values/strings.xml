@@ -137,6 +137,7 @@
     <string name="pointAtPrizeFund">Укажите призовой фонд</string>
     <string name="pointAtPrizePool">Укажите количество призовых мест</string>
     <string name="backgroundChallenge">Обложка челленджа</string>
+    <string name="lastUpdateChallenge">Обновлен: %s</string>
     <!-- Челлендж фрагмент детали -->
     <string name="details">Детали</string>
     <string name="participants">Участники</string>
