@@ -181,5 +181,18 @@
                 android:id="@+id/action_detailsMainChallengeFragment_to_challengesFragment"
                 app:destination="@id/challengesFragment" />
         </fragment>
+        <fragment
+            android:id="@+id/detailsInnerChallengeFragment"
+            android:name="com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.DetailsInnerChallengeFragment"
+            android:label="DetailsInnerChallengeFragment" >
+            <action
+                android:id="@+id/action_detailsInnerChallengeFragment_to_createReportFragment"
+                app:destination="@id/createReportFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/createReportFragment"
+            android:name="com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.CreateReportFragment"
+            android:label="fragment_create_report"
+            tools:layout="@layout/fragment_create_report" />
     </navigation>
 </navigation>
