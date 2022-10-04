@@ -16,6 +16,8 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
             app:cardElevation="10dp"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_marginTop="16dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="8dp">
@@ -31,7 +33,7 @@
                     android:layout_height="wrap_content"
                     style="@style/Headline6Bold"
                     android:layout_marginBottom="6dp"
-                    android:text="Пробежать 100м"/>
+                    android:text="Заголовок челленджа"/>
 
                 <TextView
                     android:id="@+id/descriptionChallenge"
@@ -39,9 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     style="@style/SmallText2.Black"
-                    android:text="Давайте проведем часть времени в активном спортивногом состоянии.
-                Предлагаю всем в течении недели пройти 100 км или пробежать.
-                Кто сможет - получить форсики. Жду!"/>
+                    android:text="Текст описания челленджа"/>
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
@@ -86,6 +86,8 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
             app:cardElevation="10dp"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="8dp">
             <LinearLayout
@@ -105,13 +107,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="@style/SmallText2Medium.Black"
-                    android:text="Призовой фонд"/>
+                    android:text="@string/prizeFund"/>
 
                 <TextView
                     android:id="@+id/prizeFund_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="415 форсиков"/>
+                    android:text="ххх форсиков"/>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -122,6 +124,8 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
             app:cardElevation="10dp"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="8dp">
             <LinearLayout
@@ -142,13 +146,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="@style/SmallText2Medium.Black"
-                    android:text="Дата завершения"/>
+                    android:text="@string/dateEnd"/>
 
                 <TextView
                     android:id="@+id/dateEnd_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="13 августа 2022 года"/>
+                    android:text="хх.хх.хх"/>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -159,6 +163,8 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
             app:cardElevation="10dp"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="8dp">
             <LinearLayout
@@ -179,13 +185,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="@style/SmallText2Medium.Black"
-                    android:text="Призовых мест"/>
+                    android:text="@string/PrizePool"/>
 
                 <TextView
                     android:id="@+id/prizePool_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="14 / 100"/>
+                    android:text="xxx / xxx"/>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -201,6 +207,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardCornerRadius="12dp"
             app:cardElevation="5dp"
             android:layout_marginBottom="16dp">

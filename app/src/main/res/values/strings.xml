@@ -145,6 +145,9 @@
     <string name="participants">Участники</string>
     <string name="fund">%s форсиков</string>
     <string name="occupiedPrizePool">%s / %s</string>
+    <string name="PrizePool">Призовых мест</string>
+    <string name="dateEnd">Дата завершения</string>
+    <string name="prizeFund">Призовой фонд</string>
 
 
     <!--Utils -->
