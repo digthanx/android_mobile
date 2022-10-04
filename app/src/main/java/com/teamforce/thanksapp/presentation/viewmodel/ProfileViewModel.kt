@@ -39,7 +39,7 @@ class ProfileViewModel @Inject constructor(
                     is ResultWrapper.Success -> {
                         _profile.postValue(result.value!!)
                         userDataRepository.saveProfileId(result.value.profile.id)
-                        userDataRepository.saveUsername(result.value.profile.id)
+                        userDataRepository.saveUsername(result.value.profile.tgName)
                     }
                     is ResultWrapper.GenericError ->
                         _profileError.postValue(result.error + " " + result.code)
