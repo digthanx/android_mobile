@@ -149,7 +149,13 @@
     <string name="PrizePool">Призовых мест</string>
     <string name="dateEnd">Дата завершения</string>
     <string name="prizeFund">Призовой фонд</string>
-
+    <!-- Создание отчета фрагмент -->
+    <string name="spaceSevenTimes">\u0020\u0020\u0020\u0020\u0020\u0020\u0020</string>
+    <string name="result">Результат</string>
+    <string name="closeInHeader">Закрыть</string>
+    <string name="sendReport">Отправить результат</string>
+    <string name="saveWithoutSending">Сохранить без отправки</string>
+    <string name="notToPublicResult">Не публиковать результат</string>
 
     <!--Utils -->
     <string name="OK">Ок</string>

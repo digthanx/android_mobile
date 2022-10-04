@@ -33,7 +33,7 @@
                     android:layout_marginHorizontal="8dp"
                     style="@style/SmallText2.White"
                     android:textColor="@color/general_background"
-                    android:text="Активен"/>
+                    android:text="@string/active"/>
             </com.google.android.material.card.MaterialCardView>
 
             <ImageView
@@ -48,7 +48,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:textColor="@color/general_brand"
-                android:text="Закрыть"/>
+                android:text="@string/closeInHeader"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

@@ -273,12 +273,15 @@
             android:gravity="center"
             android:orientation="horizontal">
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/send_report_btn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:layout_marginEnd="8dp"
                 style="@style/DefaultButton"
-                android:text="Черновик"/>
+                android:textSize="14sp"
+                android:letterSpacing="-0.031"
+                android:text="@string/sendReport"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/like_btn"

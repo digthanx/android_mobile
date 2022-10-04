@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -40,6 +41,9 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         super.onViewCreated(view, savedInstanceState)
         loadChallengeData(idChallenge)
         setDataAboutChallenge()
+        binding.sendReportBtn.setOnClickListener {
+
+        }
     }
 
     private fun loadChallengeData(challengeId: Int?){
