@@ -204,7 +204,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
     override fun onClick(v: View?) {
         if (v?.id == R.id.get_code_btn) {
             username = binding.telegramEt.text.toString().trim()
-            viewModel.authorizeUser(binding.telegramEt.text.toString())
+            viewModel.authorizeUser(binding.telegramEt.text?.trim().toString())
         }
     }
 
