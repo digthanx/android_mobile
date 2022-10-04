@@ -2,6 +2,7 @@ package com.teamforce.thanksapp.di
 
 import com.teamforce.thanksapp.data.SharedPreferences
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.utils.Consts
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +36,7 @@ class NetworkModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://176.99.6.251:8888")
+            .baseUrl(Consts.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
