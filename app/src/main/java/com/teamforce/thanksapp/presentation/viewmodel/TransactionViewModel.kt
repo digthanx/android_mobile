@@ -13,6 +13,8 @@ import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,11 +27,15 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 
-class TransactionViewModel : ViewModel() {
+@HiltViewModel
+class TransactionViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _users = MutableLiveData<List<UserBean>>()
@@ -50,22 +56,17 @@ class TransactionViewModel : ViewModel() {
     private val _tagsError = MutableLiveData<String>()
     val tagsError: LiveData<String> = _tagsError
 
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
 
-
-    fun loadTags(token: String) {
+    fun loadTags() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callTagsEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callTagsEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callTagsEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getTags("Token $token")?.enqueue(object : Callback<List<TagModel>> {
+            thanksApi.getTags().enqueue(object : Callback<List<TagModel>> {
                 override fun onResponse(
                     call: Call<List<TagModel>>,
                     response: Response<List<TagModel>>
@@ -87,17 +88,16 @@ class TransactionViewModel : ViewModel() {
     }
 
 
-    fun loadUserBalance(token: String) {
+    fun loadUserBalance() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callBalanceEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callBalanceEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callBalanceEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getBalance("Token $token")?.enqueue(object : Callback<BalanceResponse> {
+            thanksApi.getBalance().enqueue(object : Callback<BalanceResponse> {
                 override fun onResponse(
                     call: Call<BalanceResponse>,
                     response: Response<BalanceResponse>
@@ -119,19 +119,18 @@ class TransactionViewModel : ViewModel() {
     }
 
 
-    fun loadUsersList(username: String, token: String) {
+    fun loadUsersList(username: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callUsersListEndpoint(username, token, Dispatchers.Default) }
+        viewModelScope.launch { callUsersListEndpoint(username, Dispatchers.Default) }
     }
 
     private suspend fun callUsersListEndpoint(
         username: String,
-        token: String,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getUsersList("Token $token", UsersListRequest(username))
-                ?.enqueue(object : Callback<List<UserBean>> {
+            thanksApi.getUsersList(UsersListRequest(username))
+                .enqueue(object : Callback<List<UserBean>> {
                     override fun onResponse(
                         call: Call<List<UserBean>>,
                         response: Response<List<UserBean>>
@@ -154,7 +153,7 @@ class TransactionViewModel : ViewModel() {
     }
 
     fun sendCoinsWithImage(
-        token: String, recipient: Int, amount: Int,
+        recipient: Int, amount: Int,
         reason: String,
         isAnon: Boolean,
         imageFilePart: MultipartBody.Part?,
@@ -163,7 +162,7 @@ class TransactionViewModel : ViewModel() {
         _isLoading.postValue(true)
         viewModelScope.launch {
             callSendCoinsWithImageEndpoint(
-                token, recipient, amount,
+                recipient, amount,
                 reason, isAnon,
                 imageFilePart,
                 listOfTagsCheckedValues,
@@ -174,7 +173,6 @@ class TransactionViewModel : ViewModel() {
 
 
     private suspend fun callSendCoinsWithImageEndpoint(
-        token: String,
         recipient: Int,
         amount: Int,
         reason: String,
@@ -200,7 +198,6 @@ class TransactionViewModel : ViewModel() {
 
 
             thanksApi?.sendCoinsWithImage(
-                "Token $token",
                 imageFilePart,
                 recipientB,
                 amountB,
@@ -219,8 +216,11 @@ class TransactionViewModel : ViewModel() {
                             _isSuccessOperation.postValue(true)
                         } else if (response.code() == 400) {
                             val jArrayError = JSONArray(response.errorBody()!!.string())
-                           // _sendCoinsError.postValue(response.message() + " " + response.code())
-                            _sendCoinsError.postValue(jArrayError.toString().subSequence(2, jArrayError.toString().length - 2).toString())
+                            // _sendCoinsError.postValue(response.message() + " " + response.code())
+                            _sendCoinsError.postValue(
+                                jArrayError.toString()
+                                    .subSequence(2, jArrayError.toString().length - 2).toString()
+                            )
                         } else {
                             _sendCoinsError.postValue(response.message() + " " + response.code())
                         }
@@ -234,12 +234,11 @@ class TransactionViewModel : ViewModel() {
         }
     }
 
-    fun loadUsersListWithoutInput(get_users: String, token: String) {
+    fun loadUsersListWithoutInput(get_users: String) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             callUsersListWithoutInputEndpoint(
                 get_users,
-                token,
                 Dispatchers.Default
             )
         }
@@ -247,15 +246,13 @@ class TransactionViewModel : ViewModel() {
 
     private suspend fun callUsersListWithoutInputEndpoint(
         get_users: String,
-        token: String,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getUsersWithoutInput(
-                "Token $token",
+            thanksApi.getUsersWithoutInput(
                 get_users = UserListWithoutInputRequest(get_users)
             )
-                ?.enqueue(object : Callback<List<UserBean>> {
+                .enqueue(object : Callback<List<UserBean>> {
                     override fun onResponse(
                         call: Call<List<UserBean>>,
                         response: Response<List<UserBean>>
@@ -276,6 +273,4 @@ class TransactionViewModel : ViewModel() {
                 })
         }
     }
-
-
 }

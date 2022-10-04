@@ -1,17 +1,16 @@
 package com.teamforce.thanksapp.presentation.fragment.feedScreen
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -25,16 +24,15 @@ import com.teamforce.thanksapp.presentation.adapter.FeedAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentFeedBinding by viewBinding()
 
-    private var viewModel: FeedViewModel = FeedViewModel()
-
-    private val username: String = UserDataRepository.getInstance()?.username.toString().trim()
+    private val viewModel: FeedViewModel by viewModels()
 
     private lateinit var navController: NavController
     private lateinit var swipeToRefresh: SwipeRefreshLayout
@@ -62,7 +60,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             inflateRecyclerView()
             swipeToRefresh.isRefreshing = false
         }
-      //  displaySnack()
+        //  displaySnack()
     }
 
     private fun displaySnack() {
@@ -92,7 +90,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     }
 
 
-
     private fun initView() {
         swipeToRefresh = binding.swipeRefreshLayout
         swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
@@ -107,32 +104,29 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
-        viewModel.initViewModel()
-        val feedAdapter = FeedAdapter(username, requireContext())
-        feedAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        val feedAdapter =
+            FeedAdapter(viewModel.userDataRepository.getUserName().toString().trim(), requireContext())
+        feedAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.feedRv.adapter = feedAdapter
         (binding.feedRv.itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
         feedAdapter.likeClickListener = { mapReaction, position ->
             viewModel.pressLike(mapReaction)
-            viewModel.isLoadingLikes.observe(viewLifecycleOwner){
-                if(!it) inflateRecyclerView()
+            viewModel.isLoadingLikes.observe(viewLifecycleOwner) {
+                if (!it) inflateRecyclerView()
             }
         }
         feedAdapter.dislikeClickListener = { mapReaction, position ->
             viewModel.pressLike(mapReaction)
-            viewModel.isLoadingLikes.observe(viewLifecycleOwner){
-                if(!it) inflateRecyclerView()
+            viewModel.isLoadingLikes.observe(viewLifecycleOwner) {
+                if (!it) inflateRecyclerView()
             }
         }
     }
 
 
     private fun inflateRecyclerView() {
-        UserDataRepository.getInstance()?.token?.let { token ->
-            UserDataRepository.getInstance()?.username?.let { username ->
-                viewModel.loadFeedsList(token = token, user = username)
-            }
-        }
+            viewModel.loadFeedsList()
     }
 
     private fun refreshRecyclerView(checkedId: Int) {

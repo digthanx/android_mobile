@@ -2,8 +2,9 @@ package com.teamforce.thanksapp.presentation.fragment.challenges
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -14,16 +15,16 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentChallengesBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
-import com.teamforce.thanksapp.presentation.adapter.FeedAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.ChallengesViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
 
     // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentChallengesBinding by viewBinding()
-    private val viewModel: ChallengesViewModel = ChallengesViewModel()
+    private val viewModel: ChallengesViewModel by viewModels()
 
     private val navController: NavController by lazy { findNavController() }
 
@@ -52,7 +53,6 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
     }
 
     private fun initView() {
-        viewModel.initViewModel()
         binding.swipeRefreshLayout.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         val appBarConfiguration = AppBarConfiguration(
             setOf(

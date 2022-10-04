@@ -6,5 +6,4 @@ interface ILoginAction {
 
     fun showCheckCode()
 
-    fun getViewModel(): LoginViewModel
 }

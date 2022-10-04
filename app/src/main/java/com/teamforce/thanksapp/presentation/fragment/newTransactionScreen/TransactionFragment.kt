@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -45,18 +46,19 @@ import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.getPath
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
-
+@AndroidEntryPoint
 class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClickListener {
 
     // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentTransactionBinding by viewBinding()
 
-    private var viewModel: TransactionViewModel = TransactionViewModel()
+    private val viewModel: TransactionViewModel by viewModels()
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -93,8 +95,6 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         )
         binding.toolbarTransaction.setupWithNavController(navController, appBarConfiguration)
         shouldMeGoToHistoryFragment()
-        viewModel = TransactionViewModel()
-        viewModel.initViewModel()
         initViews(view)
         dropDownMenuUserInput(binding.usersEt)
         loadValuesFromDB()
@@ -102,15 +102,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         appealToDB()
         checkedChip()
         openValuesEt()
-        val token = UserDataRepository.getInstance()?.token
-        if (token != null) {
-            viewModel.loadUserBalance(token)
-        }
+        viewModel.loadUserBalance()
+
         viewModel.balance.observe(viewLifecycleOwner) {
-            UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
-            if(it.distribute.amount == 0){
+            if (it.distribute.amount == 0) {
                 binding.distributedValueTv.text = it.income.amount.toString()
-            }else{
+            } else {
                 binding.distributedValueTv.text = it.distribute.amount.toString()
             }
 
@@ -213,9 +210,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     }
 
     private fun loadValuesFromDB() {
-        UserDataRepository.getInstance()?.token?.let { token ->
-            viewModel.loadTags(token)
-        }
+        viewModel.loadTags()
     }
 
     private fun setValuesFromDb() {
@@ -369,14 +364,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         userInput.addTextChangedListener(object : TextWatcher {
             // TODO Возможно стоит будет оптимизировать вызов списка пользователей
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.trim().length > 0 && count > before && s.toString() != user?.tgName) {
-                    UserDataRepository.getInstance()?.token?.let {
-                        viewModel.loadUsersList(s.toString(), it)
-                    }
+                if (s.trim().isNotEmpty() && count > before && s.toString() != user?.tgName) {
+                    viewModel.loadUsersList(s.toString())
+
                 } else if (binding.usersEt.text?.trim().toString().isEmpty()) {
-                    UserDataRepository.getInstance()?.token?.let {
-                        viewModel.loadUsersListWithoutInput("true", it)
-                    }
+                    viewModel.loadUsersListWithoutInput("true")
+
                 } else {
                     binding.usersListRv.visibility = View.GONE
                 }
@@ -388,9 +381,8 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             override fun afterTextChanged(s: Editable) {}
         })
         if (binding.usersEt.text?.trim().toString().isEmpty()) {
-            UserDataRepository.getInstance()?.token?.let {
-                viewModel.loadUsersListWithoutInput("true", it)
-            }
+            viewModel.loadUsersListWithoutInput("true")
+
         }
     }
 
@@ -466,22 +458,21 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             }
             tagsToIdTags()
             if (userId != -1 && countText.isNotEmpty() &&
-                (reason.isNotEmpty() || listCheckedIdTags.size > 0)) {
+                (reason.isNotEmpty() || listCheckedIdTags.size > 0)
+            ) {
                 try {
                     val count: Int = Integer.valueOf(countText)
-                    UserDataRepository.getInstance()?.token?.let {
-                        viewModel.sendCoinsWithImage(
-                            it,
-                            userId,
-                            count,
-                            reason,
-                            isAnon,
-                            imageFilePart,
-                            listCheckedIdTags
-                        )
-                        binding.sendCoinBtn.isClickable = false
-                        binding.sendCoinBtn.isEnabled = false
-                    }
+                    viewModel.sendCoinsWithImage(
+                        userId,
+                        count,
+                        reason,
+                        isAnon,
+                        imageFilePart,
+                        listCheckedIdTags
+                    )
+                    binding.sendCoinBtn.isClickable = false
+                    binding.sendCoinBtn.isEnabled = false
+
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
                     //Toast.makeText(requireContext(), viewModel.sendCoinsError.toString(), Toast.LENGTH_LONG).show()

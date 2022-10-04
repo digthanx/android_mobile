@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,10 +16,15 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class ListOfValuesViewModel : ViewModel() {
+@HiltViewModel
+class ListOfValuesViewModel @Inject constructor(
+    val userDataRepository: UserDataRepository,
+    private val thanksApi: ThanksApi,
 
-    private var thanksApi: ThanksApi? = null
+    ) : ViewModel() {
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -26,21 +33,16 @@ class ListOfValuesViewModel : ViewModel() {
     private val _tagsError = MutableLiveData<String>()
     val tagsError: LiveData<String> = _tagsError
 
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
-
-    fun loadTags(token: String) {
+    fun loadTags() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callTagsEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callTagsEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callTagsEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getTags("Token $token")?.enqueue(object : Callback<List<TagModel>> {
+            thanksApi.getTags().enqueue(object : Callback<List<TagModel>> {
                 override fun onResponse(
                     call: Call<List<TagModel>>,
                     response: Response<List<TagModel>>

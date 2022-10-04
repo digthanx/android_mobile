@@ -15,6 +15,7 @@ import com.teamforce.thanksapp.data.response.GetCommentsResponse
 import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,10 +24,14 @@ import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class AdditionalInfoFeedItemViewModel() : ViewModel() {
+@HiltViewModel
+class AdditionalInfoFeedItemViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -54,28 +59,21 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
     private val _isLoadingLikes = MutableLiveData<Boolean>()
     val isLoadingLikes: LiveData<Boolean> = _isLoadingLikes
 
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
-
     fun deleteComment(commentId: Int) {
         _deleteCommentLoading.postValue(true)
-        UserDataRepository.getInstance()?.token?.let { token ->
-            viewModelScope.launch {
-                deleteCommentEndpoint(token, commentId, Dispatchers.Default)
-            }
+        viewModelScope.launch {
+            deleteCommentEndpoint(commentId, Dispatchers.Default)
         }
     }
 
 
     private suspend fun deleteCommentEndpoint(
-        token: String,
         commentId: Int,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.deleteComment("Token $token", commentId)
-                ?.enqueue(object : Callback<CancelTransactionResponse> {
+            thanksApi.deleteComment(commentId)
+                .enqueue(object : Callback<CancelTransactionResponse> {
                     override fun onResponse(
                         call: Call<CancelTransactionResponse>,
                         response: Response<CancelTransactionResponse>
@@ -85,7 +83,8 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
                             _deleteComment.postValue(response.body())
                         } else {
                             _deleteCommentLoadingError.postValue(
-                                response.message() + " " + response.code())
+                                response.message() + " " + response.code()
+                            )
                         }
                     }
 
@@ -100,22 +99,20 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
     fun loadCommentsList(transactionId: Int) {
         _isLoading.postValue(true)
         val getCommentsRequest = GetCommentsRequest(transactionId)
-        UserDataRepository.getInstance()?.token?.let { token ->
-            viewModelScope.launch {
-                callCommentsListEndpoint(token, getCommentsRequest, Dispatchers.Default)
-            }
+        viewModelScope.launch {
+            callCommentsListEndpoint(getCommentsRequest, Dispatchers.Default)
         }
+
     }
 
 
     private suspend fun callCommentsListEndpoint(
-        token: String,
         transactionId: GetCommentsRequest,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getComments("Token $token", transactionId)
-                ?.enqueue(object : Callback<GetCommentsResponse> {
+            thanksApi.getComments(transactionId)
+                .enqueue(object : Callback<GetCommentsResponse> {
                     override fun onResponse(
                         call: Call<GetCommentsResponse>,
                         response: Response<GetCommentsResponse>
@@ -125,7 +122,8 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
                             _comments.postValue(response.body())
                         } else {
                             _commentsLoadingError.postValue(
-                                response.message() + " " + response.code())
+                                response.message() + " " + response.code()
+                            )
                         }
                     }
 
@@ -133,29 +131,26 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
                         _isLoading.postValue(false)
                         _commentsLoadingError.postValue(t.message)
                     }
-        })
+                })
+        }
     }
-}
 
     fun addComment(transactionId: Int, text: String) {
         val createCommentRequest = CreateCommentRequest(transactionId, text)
         _createCommentsLoading.postValue(true)
-        UserDataRepository.getInstance()?.token?.let { token ->
-            viewModelScope.launch {
-                addCommentEndpoint(token, createCommentRequest, Dispatchers.Default)
-            }
+        viewModelScope.launch {
+            addCommentEndpoint(createCommentRequest, Dispatchers.Default)
         }
     }
 
 
     private suspend fun addCommentEndpoint(
-        token: String,
         createCommentRequest: CreateCommentRequest,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.createComment("Token $token", createCommentRequest)
-                ?.enqueue(object : Callback<CancelTransactionResponse> {
+            thanksApi.createComment(createCommentRequest)
+                .enqueue(object : Callback<CancelTransactionResponse> {
                     override fun onResponse(
                         call: Call<CancelTransactionResponse>,
                         response: Response<CancelTransactionResponse>
@@ -163,12 +158,14 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
                         _createCommentsLoading.postValue(false)
                         if (response.code() == 200) {
 
-                        } else if(response.code() == 400) {
+                        } else if (response.code() == 400) {
                             _createCommentsLoadingError.postValue(
-                                response.message() + " " + response.code())
-                        }else{
+                                response.message() + " " + response.code()
+                            )
+                        } else {
                             _createCommentsLoadingError.postValue(
-                                response.message() + " " + response.code())
+                                response.message() + " " + response.code()
+                            )
                         }
                     }
 
@@ -180,39 +177,37 @@ class AdditionalInfoFeedItemViewModel() : ViewModel() {
         }
     }
 
-fun pressLike(mapReactions: Map<String, Int>) {
-    _isLoadingLikes.postValue(true)
-    UserDataRepository.getInstance()?.token?.let {
-        viewModelScope.launch { callPressLikeEndpoint(it, mapReactions, Dispatchers.IO) }
+    fun pressLike(mapReactions: Map<String, Int>) {
+        _isLoadingLikes.postValue(true)
+        viewModelScope.launch { callPressLikeEndpoint(mapReactions, Dispatchers.IO) }
+
+
     }
 
-}
-
-private suspend fun callPressLikeEndpoint(
-    token: String,
-    listReactions: Map<String, Int>,
-    dispatcher: CoroutineDispatcher
-) {
-    withContext(dispatcher) {
-        thanksApi?.pressLike("Token $token", listReactions)
-            ?.enqueue(object : Callback<CancelTransactionResponse> {
-                override fun onResponse(
-                    call: Call<CancelTransactionResponse>,
-                    response: Response<CancelTransactionResponse>
-                ) {
-                    _isLoadingLikes.postValue(false)
-                    if (response.code() == 200) {
-                        Log.d("Token", "Успешно лайк отправил")
-                    } else {
-                        _pressLikesError.postValue(response.message() + " " + response.code())
+    private suspend fun callPressLikeEndpoint(
+        listReactions: Map<String, Int>,
+        dispatcher: CoroutineDispatcher
+    ) {
+        withContext(dispatcher) {
+            thanksApi.pressLike(listReactions)
+                .enqueue(object : Callback<CancelTransactionResponse> {
+                    override fun onResponse(
+                        call: Call<CancelTransactionResponse>,
+                        response: Response<CancelTransactionResponse>
+                    ) {
+                        _isLoadingLikes.postValue(false)
+                        if (response.code() == 200) {
+                            Log.d("Token", "Успешно лайк отправил")
+                        } else {
+                            _pressLikesError.postValue(response.message() + " " + response.code())
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<CancelTransactionResponse>, t: Throwable) {
-                    _isLoadingLikes.postValue(false)
-                    _pressLikesError.postValue(t.message)
-                }
-            })
+                    override fun onFailure(call: Call<CancelTransactionResponse>, t: Throwable) {
+                        _isLoadingLikes.postValue(false)
+                        _pressLikesError.postValue(t.message)
+                    }
+                })
+        }
     }
-}
 }

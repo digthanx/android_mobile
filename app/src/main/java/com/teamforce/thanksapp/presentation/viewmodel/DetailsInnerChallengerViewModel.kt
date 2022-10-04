@@ -10,6 +10,7 @@ import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.ChallengeModelById
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,9 +18,13 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class DetailsInnerChallengerViewModel: ViewModel() {
-    private var thanksApi: ThanksApi? = null
+@HiltViewModel
+class DetailsInnerChallengerViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+) : ViewModel() {
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -28,30 +33,25 @@ class DetailsInnerChallengerViewModel: ViewModel() {
     private val _getChallengeError = MutableLiveData<String>()
     val getChallengeError: LiveData<String> = _getChallengeError
 
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
 
-
-    fun loadChallenge(challengeId: Int){
+    fun loadChallenge(challengeId: Int) {
         _isLoading.postValue(true)
-        UserDataRepository.getInstance()?.token?.let {
-            viewModelScope.launch { callGetChallengeEndpoint(
-                it, challengeId, Dispatchers.IO)
-            }
+        viewModelScope.launch {
+            callGetChallengeEndpoint(
+                challengeId, Dispatchers.IO
+            )
         }
 
     }
 
     private suspend fun callGetChallengeEndpoint(
-        token: String,
         challengeId: Int,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
 
-            thanksApi?.getChallenge("Token $token", challengeId)
-                ?.enqueue(object : Callback<ChallengeModelById> {
+            thanksApi.getChallenge(challengeId)
+                .enqueue(object : Callback<ChallengeModelById> {
                     override fun onResponse(
                         call: Call<ChallengeModelById>,
                         response: Response<ChallengeModelById>

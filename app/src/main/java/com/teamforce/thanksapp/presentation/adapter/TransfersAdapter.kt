@@ -298,10 +298,7 @@ class TransfersAdapter(
             }
             .setPositiveButton(context.resources.getString(R.string.accept)) { dialog, which ->
                 dialog.cancel()
-                UserDataRepository.getInstance()?.token?.let {
-                    viewModel.cancelUserTransaction(it, idTransaction.toString(), "D")
-                }
-
+                    viewModel.cancelUserTransaction(idTransaction.toString(), "D")
             }
             .show()
     }

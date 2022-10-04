@@ -11,6 +11,7 @@ import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,9 +19,14 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class FeedViewModel : ViewModel() {
-    private var thanksApi: ThanksApi? = null
+@HiltViewModel
+class FeedViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+
+) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _allFeeds = MutableLiveData<List<FeedResponse>?>()
@@ -36,24 +42,19 @@ class FeedViewModel : ViewModel() {
     private val _isLoadingLikes = MutableLiveData<Boolean>()
     val isLoadingLikes: LiveData<Boolean> = _isLoadingLikes
 
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
-
-    fun loadFeedsList(token: String, user: String) {
+    fun loadFeedsList() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callFeedsListEndpoint(token, user, Dispatchers.Default) }
+        viewModelScope.launch { callFeedsListEndpoint(userDataRepository.getUserName()!!, Dispatchers.Default) }
     }
 
 
     private suspend fun callFeedsListEndpoint(
-        token: String,
         user: String,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getFeed("Token $token")
-                ?.enqueue(object : Callback<List<FeedResponse>> {
+            thanksApi.getFeed()
+                .enqueue(object : Callback<List<FeedResponse>> {
                     override fun onResponse(
                         call: Call<List<FeedResponse>>,
                         response: Response<List<FeedResponse>>
@@ -95,20 +96,17 @@ class FeedViewModel : ViewModel() {
 
     fun pressLike(mapReactions: Map<String, Int>) {
         _isLoadingLikes.postValue(true)
-        UserDataRepository.getInstance()?.token?.let {
-            viewModelScope.launch { callPressLikeEndpoint(it, mapReactions, Dispatchers.IO) }
-        }
+        viewModelScope.launch { callPressLikeEndpoint(mapReactions, Dispatchers.IO) }
 
     }
 
     private suspend fun callPressLikeEndpoint(
-        token: String,
         listReactions: Map<String, Int>,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.pressLike("Token $token", listReactions)
-                ?.enqueue(object : Callback<CancelTransactionResponse> {
+            thanksApi.pressLike(listReactions)
+                .enqueue(object : Callback<CancelTransactionResponse> {
                     override fun onResponse(
                         call: Call<CancelTransactionResponse>,
                         response: Response<CancelTransactionResponse>

@@ -1,5 +1,7 @@
 package com.teamforce.thanksapp.data.api
 
+import com.teamforce.thanksapp.data.entities.profile.ContactEntity
+import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
@@ -34,27 +36,24 @@ interface ThanksApi {
     ): Call<VerificationResponse>
 
     @GET("/user/profile/")
-    fun getProfile(@Header("Authorization") token: String): Call<ProfileResponse>
+    suspend fun getProfile(): ProfileEntity
 
     @GET("/user/balance/")
-    fun getBalance(@Header("Authorization") token: String): Call<BalanceResponse>
+    fun getBalance(): Call<BalanceResponse>
 
     @POST("/search-user/")
     fun getUsersList(
-        @Header("Authorization") token: String,
         @Body usersListRequest: UsersListRequest
     ): Call<List<UserBean>>
 
     @POST("/send-coins/")
     fun sendCoins(
-        @Header("Authorization") token: String,
         @Body request: SendCoinsRequest
     ): Call<SendCoinsResponse>
 
     @Multipart
     @POST("/send-coins/")
     fun sendCoinsWithImage(
-        @Header("Authorization") token: String,
         @Part photo: MultipartBody.Part?,
         @Part("recipient") recipient: RequestBody,
         @Part("amount") amount: RequestBody,
@@ -64,32 +63,27 @@ interface ThanksApi {
     ): Call<SendCoinsResponse>
 
     @GET("/user/transactions/")
-    fun getUserTransactions(
-        @Header("Authorization") token: String
-    ): Call<List<UserTransactionsResponse>>
+    fun getUserTransactions(): Call<List<UserTransactionsResponse>>
 
     @GET("/feed/")
-    fun getFeed(@Header("Authorization") token: String): Call<List<FeedResponse>>
+    fun getFeed(): Call<List<FeedResponse>>
 
     @POST("/users-list/")
     fun getUsersWithoutInput(
-        @Header("Authorization") token: String,
         @Body get_users: UserListWithoutInputRequest
     ): Call<List<UserBean>>
 
 
     @Multipart
     @POST("/update-profile-image/{id}/")
-    fun putUserAvatar(
-        @Header("Authorization") token: String,
+    suspend fun putUserAvatar(
         @Path("id") userId: String,
         @Part photo: MultipartBody.Part
-    ): Call<PutUserAvatarResponse>
+    ): PutUserAvatarResponse
 
 
     @PUT("/cancel-transaction/{id}/")
     fun cancelTransaction(
-        @Header("Authorization") token: String,
         @Path("id") transactionId: String,
         @Body status: CancelTransactionRequest
     ): Call<CancelTransactionResponse>
@@ -97,56 +91,47 @@ interface ThanksApi {
 
     @PUT("/update-profile-by-user/{id}/")
     fun updateProfile(
-        @Header("Authorization") token: String,
         @Path("id") userId: String,
         @Body data: UpdateProfileRequest
     ): Call<UpdateProfileResponse>
 
     @POST("/create-few-contacts/")
     fun updateFewContact(
-        @Header("Authorization") token: String,
-        @Body data: List<Contact>?,
+        @Body data: List<ContactEntity>?,
     ): Call<UpdateFewContactsResponse>
 
     @GET("/tags/")
     fun getTags(
-        @Header("Authorization") token: String
     ): Call<List<TagModel>>
 
     @GET("/profile/{user_id}/")
     fun getAnotherProfile(
-        @Header("Authorization") token: String,
         @Path("user_id") user_Id: Int
     ): Call<ProfileResponse>
 
     @POST("/press-like/")
     fun pressLike(
-        @Header("Authorization") token: String,
         @Body data: Map<String, Int>
     ): Call<CancelTransactionResponse>
 
     @POST("/get-comments/")
     fun getComments(
-        @Header("Authorization") token: String,
         @Body transaction_id: GetCommentsRequest
     ): Call<GetCommentsResponse>
 
     @POST("/create-comment/")
     fun createComment(
-        @Header("Authorization") token: String,
         @Body data: CreateCommentRequest
     ): Call<CancelTransactionResponse>
 
     @DELETE("/delete-comment/{comment_id}/")
     fun deleteComment(
-        @Header("Authorization") token: String,
         @Path("comment_id") commentId: Int
     ): Call<CancelTransactionResponse>
 
     @Multipart
     @POST("/create-challenge/")
     fun createChallenge(
-        @Header("Authorization") token: String,
         @Part photo: MultipartBody.Part?,
         @Part("name") name: RequestBody,
         @Part("description") description: RequestBody,
@@ -156,13 +141,10 @@ interface ThanksApi {
     ): Call<ChallengeModel>
 
     @GET("/challenges/")
-    fun getChallenges(
-        @Header("Authorization") token: String,
-    ): Call<List<ChallengeModel>>
+    fun getChallenges(): Call<List<ChallengeModel>>
 
     @GET("/challenges/{challenge_id}/")
     fun getChallenge(
-        @Header("Authorization") token: String,
         @Path("challenge_id") commentId: Int
     ): Call<ChallengeModelById>
 }

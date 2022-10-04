@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -26,16 +27,19 @@ import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.activityNavController
 import com.teamforce.thanksapp.utils.navigateSafely
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
+@AndroidEntryPoint
 class BalanceFragment : Fragment() {
 
     private var _binding: FragmentBalanceBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
-    private lateinit var viewModel: BalanceViewModel
+    private val viewModel: BalanceViewModel by viewModels()
+
     private lateinit var count: TextView
     private lateinit var distributed: TextView
     private lateinit var leastCount: TextView
@@ -132,14 +136,11 @@ class BalanceFragment : Fragment() {
 
 
     private fun loadBalanceData() {
-        UserDataRepository.getInstance()?.token?.let {
-            viewModel.loadUserBalance(it)
-        }
+        viewModel.loadUserBalance()
     }
 
     private fun setBalanceData() {
         viewModel.balance.observe(viewLifecycleOwner) {
-            UserDataRepository.getInstance()?.leastCoins = it.distribute.amount
             count.text = it.income.amount.toString()
             distributed.text =
                 String.format(getString(R.string.spaceWithContent), it.income.sended.toString())
@@ -200,8 +201,6 @@ class BalanceFragment : Fragment() {
     }
 
     private fun initViews(view: View) {
-        viewModel = BalanceViewModel()
-        viewModel.initViewModel()
         count = binding.countValueTv
         distributed = binding.distributedValueTv
         leastCount = binding.leastCount

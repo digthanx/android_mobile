@@ -12,6 +12,7 @@ import com.teamforce.thanksapp.data.response.CreateChallengeResponse
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,10 +23,13 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class CreateChallengeViewModel: ViewModel() {
+@HiltViewModel
+class CreateChallengeViewModel @Inject constructor(
+    private val thanksApi: ThanksApi
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -36,24 +40,25 @@ class CreateChallengeViewModel: ViewModel() {
     private val _isSuccessOperation = MutableLiveData<Boolean>()
     val isSuccessOperation: LiveData<Boolean> = _isSuccessOperation
 
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
 
-
-    fun createChallenge(name: String, description: String,
-                        endAt: String, amountFund: Int, photo: MultipartBody.Part?, parameters: List<Map<String, Int>>) {
+    fun createChallenge(
+        name: String,
+        description: String,
+        endAt: String,
+        amountFund: Int,
+        photo: MultipartBody.Part?,
+        parameters: List<Map<String, Int>>
+    ) {
         _isLoading.postValue(true)
-        UserDataRepository.getInstance()?.token?.let {
-            viewModelScope.launch { callCreateChallengeEndpoint(
-                it, name, description, endAt, amountFund, photo, parameters, Dispatchers.Default)
-            }
+        viewModelScope.launch {
+            callCreateChallengeEndpoint(
+                name, description, endAt, amountFund, photo, parameters, Dispatchers.Default
+            )
         }
 
     }
 
     private suspend fun callCreateChallengeEndpoint(
-        token: String,
         name: String,
         description: String,
         endAt: String,
@@ -64,7 +69,8 @@ class CreateChallengeViewModel: ViewModel() {
     ) {
         withContext(coroutineDispatcher) {
             val nameB = RequestBody.create(MediaType.parse("multipart/form-data"), name)
-            val descriptionB = RequestBody.create(MediaType.parse("multipart/form-data"), description)
+            val descriptionB =
+                RequestBody.create(MediaType.parse("multipart/form-data"), description)
             val endAtB =
                 RequestBody.create(MediaType.parse("multipart/form-data"), endAt)
             val amountFundB =
@@ -75,7 +81,6 @@ class CreateChallengeViewModel: ViewModel() {
 
 
             thanksApi?.createChallenge(
-                "Token $token",
                 photo,
                 nameB,
                 descriptionB,

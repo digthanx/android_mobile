@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -30,8 +31,9 @@ import com.teamforce.thanksapp.presentation.adapter.HistoryAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class HistoryFragment : Fragment() {
 
 
@@ -40,14 +42,12 @@ class HistoryFragment : Fragment() {
 
 
     private lateinit var swipeToRefresh: SwipeRefreshLayout
-    private lateinit var viewModel: HistoryViewModel
+    private val viewModel: HistoryViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
     private var allTransactionsList: List<HistoryModel> = emptyList()
     private var receivedTransactionsList: List<HistoryModel> = emptyList()
     private var sentTransactionsList: List<HistoryModel> = emptyList()
 
-
-    private val username: String = UserDataRepository.getInstance()?.username.toString()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,11 +61,13 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.feedFragment,
-            R.id.balanceFragment,
-            R.id.historyFragment
-        ))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.feedFragment,
+                R.id.balanceFragment,
+                R.id.historyFragment
+            )
+        )
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
@@ -74,10 +76,12 @@ class HistoryFragment : Fragment() {
         setDataWithChip(view)
 
         binding.profile.setOnClickListener {
-            findNavController().navigate(R.id.action_historyFragment_to_profileGraph,
-                null, OptionsTransaction().optionForProfileFragment )
+            findNavController().navigate(
+                R.id.action_historyFragment_to_profileGraph,
+                null, OptionsTransaction().optionForProfileFragment
+            )
         }
-       // displaySnack()
+        // displaySnack()
 
     }
 
@@ -112,18 +116,22 @@ class HistoryFragment : Fragment() {
 //    }
 
     private fun initViews() {
-        viewModel = HistoryViewModel()
-        viewModel.initViewModel()
         swipeToRefresh = binding.swipeRefreshLayout
         swipeToRefresh.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         recyclerView = binding.historyRv
         recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.layoutManager =  object : LinearLayoutManager(context){
-            override fun canScrollVertically(): Boolean { return false }
+        recyclerView.layoutManager = object : LinearLayoutManager(context) {
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
         }
 
 
-        recyclerView.adapter = HistoryAdapter(username, requireContext(), viewModel)
+        recyclerView.adapter = HistoryAdapter(
+            viewModel.userDataRepository.getUserName()!!,
+            requireContext(),
+            viewModel
+        )
 
         viewModel.isLoading.observe(
             viewLifecycleOwner,
@@ -138,9 +146,9 @@ class HistoryFragment : Fragment() {
             }
         )
 
-        binding.tabGroup.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        binding.tabGroup.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                refreshRecyclerView(tab?.position?:0)
+                refreshRecyclerView(tab?.position ?: 0)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -159,18 +167,13 @@ class HistoryFragment : Fragment() {
         }
     }
 
-    private fun loadDataFromServer(){
-        UserDataRepository.getInstance()?.token?.let { token ->
-            UserDataRepository.getInstance()?.username?.let { username ->
-                viewModel.loadTransactionsList(
-                    token,
-                    username
-                )
-            }
-        }
+    private fun loadDataFromServer() {
+        viewModel.loadTransactionsList()
+
+
     }
 
-    private fun setDataWithChip(view: View){
+    private fun setDataWithChip(view: View) {
         viewModel.allTransactions.observe(
             viewLifecycleOwner,
             Observer {
@@ -211,14 +214,17 @@ class HistoryFragment : Fragment() {
         viewModel.cancelTransaction.observe(
             viewLifecycleOwner,
             Observer {
-                Snackbar.make(view, requireContext().resources.getString(R.string.successfulCancel), Snackbar.LENGTH_LONG)
+                Snackbar.make(
+                    view,
+                    requireContext().resources.getString(R.string.successfulCancel),
+                    Snackbar.LENGTH_LONG
+                )
                     .setBackgroundTint(context?.getColor(R.color.minor_success)!!)
                     .setTextColor(context?.getColor(R.color.white)!!)
                     .show()
             }
         )
     }
-
 
 
     private fun refreshRecyclerView(checkedId: Int) {
@@ -243,7 +249,6 @@ class HistoryFragment : Fragment() {
         }
         return list.asReversed()
     }
-
 
 
     companion object {

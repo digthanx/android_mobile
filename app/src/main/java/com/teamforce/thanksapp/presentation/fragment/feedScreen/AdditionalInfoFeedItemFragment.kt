@@ -9,9 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
@@ -29,15 +28,15 @@ import com.teamforce.thanksapp.presentation.adapter.CommentsAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.AdditionalInfoFeedItemViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
-import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AdditionalInfoFeedItemFragment : Fragment() {
 
     private var _binding: FragmentAdditionalInfoFeedItemBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
-    private val viewModel = AdditionalInfoFeedItemViewModel()
+    private val viewModel: AdditionalInfoFeedItemViewModel by viewModels()
 
     private var dateTransaction: String? = null
     private var avatarReceiver: String? = null
@@ -47,7 +46,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private var amount: String? = null
     private var photo: String? = null
     private var reason: String? = null
-    private val username = UserDataRepository.getInstance()?.username
     private var userIdReceiver: Int? = null
     private var userIdSender: Int? = null
     private var likesCount: Int? = null
@@ -101,7 +99,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             )
         )
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
-        viewModel.initViewModel()
         setBaseInfo()
         setPhoto()
         setLikesAndDislikes()
@@ -142,7 +139,8 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         val commentsAdapter = CommentsAdapter(requireContext())
         rv.adapter = commentsAdapter
     }
-    private fun deleteComment(commentId: Int){
+
+    private fun deleteComment(commentId: Int) {
         viewModel.deleteComment(commentId)
     }
 
@@ -199,15 +197,16 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
         inputMessage()
 
-        (binding.commentsRv.adapter as CommentsAdapter).onDeleteCommentClickListener = { commentId ->
-            deleteComment(commentId)
-            transactionId?.let{ transactionId ->
-                viewModel.deleteCommentLoading.observe(viewLifecycleOwner){ loading ->
-                    if(!loading) loadCommentFromDb(transactionId)
+        (binding.commentsRv.adapter as CommentsAdapter).onDeleteCommentClickListener =
+            { commentId ->
+                deleteComment(commentId)
+                transactionId?.let { transactionId ->
+                    viewModel.deleteCommentLoading.observe(viewLifecycleOwner) { loading ->
+                        if (!loading) loadCommentFromDb(transactionId)
+                    }
                 }
-            }
 
-        }
+            }
 
     }
 
@@ -227,13 +226,13 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                             closeKeyboard()
                             binding.messageValueEt.text?.clear()
 
-                            viewModel.createCommentsLoading.observe(viewLifecycleOwner){ loading ->
-                                if(!loading) loadCommentFromDb(transactionId)
+                            viewModel.createCommentsLoading.observe(viewLifecycleOwner) { loading ->
+                                if (!loading) loadCommentFromDb(transactionId)
                             }
                         }
 
                     }
-                }else{
+                } else {
                     binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
                 }
             }
@@ -272,7 +271,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     }
 
-    private fun closeKeyboard(){
+    private fun closeKeyboard() {
         val view: View? = activity?.currentFocus
         if (view != null) {
             val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -328,14 +327,14 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private fun setBaseInfo() {
         with(binding) {
             dateTransactionTv.text = dateTransaction
-            if (senderTg?.equals(username) == true) {
+            if (senderTg?.equals(viewModel.userDataRepository.getUserName()) == true) {
                 descriptionTransactionWhoSent.text = context?.getString(R.string.fromYou)
             } else {
                 descriptionTransactionWhoSent.text = context?.getString(
                     R.string.tgName
                 )?.let { String.format(it, senderTg) }
             }
-            if (receiverTg?.equals(username) == true) {
+            if (receiverTg?.equals(viewModel.userDataRepository.getUserName()) == true) {
                 descriptionTransactionWhoReceived.text = context?.getString(R.string.you)
             } else {
                 descriptionTransactionWhoReceived.text = context?.getString(

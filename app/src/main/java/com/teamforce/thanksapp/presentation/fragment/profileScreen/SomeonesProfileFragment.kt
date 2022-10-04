@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.net.toUri
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -19,14 +20,15 @@ import com.teamforce.thanksapp.databinding.FragmentSomeonesProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.SomeonesProfileViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
 
     // reflection API and ViewBinding.bind are used under the hood
     private val binding: FragmentSomeonesProfileBinding by viewBinding()
 
-    private val viewModel = SomeonesProfileViewModel()
+    private val viewModel: SomeonesProfileViewModel by viewModels()
 
     private var userId: Int? = null
 
@@ -37,7 +39,6 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
             userId = it.getInt("userId")
         }
     }
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,14 +52,13 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
             )
         )
         binding.toolbarTransaction.setupWithNavController(navController, appBarConfiguration)
-        viewModel.initViewModel()
         initViews()
         requestData()
         setData()
         swipeToRefresh()
     }
 
-    private fun initViews(){
+    private fun initViews() {
         binding.swipeRefreshLayout.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         viewModel.isLoading.observe(
             viewLifecycleOwner,
@@ -78,55 +78,51 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
         )
     }
 
-    private fun swipeToRefresh(){
+    private fun swipeToRefresh() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             requestData()
             binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
-    private fun requestData(){
-        val token = UserDataRepository.getInstance()?.token
-        if (token != null) {
-            userId?.let {
-                viewModel.loadAnotherUserProfile(token, it)
-            }
+    private fun requestData() {
+        userId?.let {
+            viewModel.loadAnotherUserProfile(it)
         }
     }
-    private fun setData(){
-        viewModel.anotherProfile.observe(viewLifecycleOwner){
+
+    private fun setData() {
+        viewModel.anotherProfile.observe(viewLifecycleOwner) {
             binding.firstNameValueTv.text = it.profile.firstname
             binding.surnameValueTv.text = it.profile.surname
             binding.middleNameValueTv.text = it.profile.middlename
             binding.companyValueTv.text = it.profile.organization
             binding.positionValueTv.text = it.profile.jobTitle
             binding.userTgName.text = it.profile.tgName
-            if(it.profile.contacts.size == 1){
-                if(it.profile.contacts[0].contact_type == "@"){
+            if (it.profile.contacts.size == 1) {
+                if (it.profile.contacts[0].contact_type == "@") {
                     binding.emailValueTv.text = it.profile.contacts[0].contact_id
-                }else{
+                } else {
                     binding.mobileValueTv.text = it.profile.contacts[0].contact_id
                 }
-            }else if(it.profile.contacts.size == 2){
-                if(it.profile.contacts[0].contact_type == "@"){
+            } else if (it.profile.contacts.size == 2) {
+                if (it.profile.contacts[0].contact_type == "@") {
                     binding.emailValueTv.text = it.profile.contacts[0].contact_id
                     binding.mobileValueTv.text = it.profile.contacts[1].contact_id
-                }else{
+                } else {
                     binding.emailValueTv.text = it.profile.contacts[1].contact_id
                     binding.mobileValueTv.text = it.profile.contacts[0].contact_id
                 }
             }
 
-            if(!it.profile.photo.isNullOrEmpty()){
+            if (!it.profile.photo.isNullOrEmpty()) {
                 Glide.with(this)
                     .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
                     .centerCrop()
                     .into(binding.userAvatar)
-            }else {
+            } else {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
             }
-
-
         }
     }
 }

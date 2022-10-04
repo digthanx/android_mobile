@@ -7,7 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.response.BalanceResponse
-import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,10 +16,14 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class BalanceViewModel : ViewModel() {
+@HiltViewModel
+class BalanceViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _balance = MutableLiveData<BalanceResponse>()
@@ -26,21 +31,17 @@ class BalanceViewModel : ViewModel() {
     private val _balanceError = MutableLiveData<String>()
     val balanceError: LiveData<String> = _balanceError
 
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
 
-    fun loadUserBalance(token: String) {
+    fun loadUserBalance() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callBalanceEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callBalanceEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callBalanceEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getBalance("Token $token")?.enqueue(object : Callback<BalanceResponse> {
+            thanksApi.getBalance().enqueue(object : Callback<BalanceResponse> {
                 override fun onResponse(
                     call: Call<BalanceResponse>,
                     response: Response<BalanceResponse>
