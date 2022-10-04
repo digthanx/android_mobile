@@ -98,7 +98,8 @@ tools:context=".presentation.fragment.challenges.ChallengesFragment">
             app:cardElevation="0dp">
 
             <com.google.android.material.card.MaterialCardView
-                style="@style/MyCardView"
+                android:layout_marginBottom="-16dp"
+                app:cardCornerRadius="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:elevation="0dp">

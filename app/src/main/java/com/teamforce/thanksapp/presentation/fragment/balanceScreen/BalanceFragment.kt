@@ -76,7 +76,7 @@ class BalanceFragment : Fragment() {
         initViews(view)
         loadBalanceData()
         setBalanceData()
-        // displaySnack()
+       // displaySnack()
         viewModel.isLoading.observe(
             viewLifecycleOwner,
             Observer { isLoading ->
@@ -171,8 +171,8 @@ class BalanceFragment : Fragment() {
                 } else if ((isTwo(text) || isThree(text) || isFour(text)) && isNotTen(text)) {
                     willBurn.text = String.format(getString(R.string.will_burn_after_2), text)
                 } else {
-                    // willBurn.text = String.format(getString(R.string.will_burn_after_3), text)
-                    willBurn.text = getString(R.string.will_burn_today)
+                    willBurn.text = String.format(getString(R.string.will_burn_after_3), text)
+//                    willBurn.text = getString(R.string.will_burn_today)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, e.message, e.fillInStackTrace())

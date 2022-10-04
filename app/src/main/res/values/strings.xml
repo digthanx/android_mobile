@@ -71,8 +71,8 @@
     <string name="cancelled">Аннулировано</string>
     <string name="frozen_label">На согласовании</string>
     <string name="will_burn_after">До конца периода \u200b %s дней</string>
-    <string name="will_burn_after_2">Сгорят через %s дня</string>
-    <string name="will_burn_after_3">Сгорят через %s дней</string>
+    <string name="will_burn_after_2">До конца периода \u200b %s дней</string>
+    <string name="will_burn_after_3">До конца периода \u200b %s дней</string>
     <string name="will_burn_today">Сгорят сегодня в 18:00</string>
     <string name="joke">Мы ценим ваше любопытство и в будущих обновлениях обязательно сюда что-нибудь добавим &#128522;</string>
     <!-- Транзакция фрагмент -->
@@ -137,6 +137,17 @@
     <string name="pointAtPrizeFund">Укажите призовой фонд</string>
     <string name="pointAtPrizePool">Укажите количество призовых мест</string>
     <string name="backgroundChallenge">Обложка челленджа</string>
+    <string name="lastUpdateChallenge">Обновлен: %s</string>
+    <string name="active">Активен</string>
+    <string name="completed">Завершён</string>
+    <!-- Челлендж фрагмент детали -->
+    <string name="details">Детали</string>
+    <string name="participants">Участники</string>
+    <string name="fund">%s форсиков</string>
+    <string name="occupiedPrizePool">%s / %s</string>
+    <string name="PrizePool">Призовых мест</string>
+    <string name="dateEnd">Дата завершения</string>
+    <string name="prizeFund">Призовой фонд</string>
 
 
     <!--Utils -->

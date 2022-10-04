@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.response.BalanceResponse
 import com.teamforce.thanksapp.data.response.CreateChallengeResponse
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,10 +33,12 @@ class CreateChallengeViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _createChallenge = MutableLiveData<CreateChallengeResponse>()
-    val createChallenge: LiveData<CreateChallengeResponse> = _createChallenge
+    private val _createChallenge = MutableLiveData<ChallengeModel>()
+    val createChallenge: LiveData<ChallengeModel> = _createChallenge
     private val _createChallengeError = MutableLiveData<String>()
     val createChallengeError: LiveData<String> = _createChallengeError
+    private val _isSuccessOperation = MutableLiveData<Boolean>()
+    val isSuccessOperation: LiveData<Boolean> = _isSuccessOperation
 
 
     fun createChallenge(
@@ -77,7 +80,6 @@ class CreateChallengeViewModel @Inject constructor(
                 RequestBody.create(MediaType.parse("application/json"), parametersJson)
 
 
-
             thanksApi?.createChallenge(
                 photo,
                 nameB,
@@ -85,13 +87,15 @@ class CreateChallengeViewModel @Inject constructor(
                 endAtB,
                 amountFundB,
                 parametersB
-            )?.enqueue(object : Callback<CreateChallengeResponse> {
+            )?.enqueue(object : Callback<ChallengeModel> {
                 override fun onResponse(
-                    call: Call<CreateChallengeResponse>,
-                    response: Response<CreateChallengeResponse>
+                    call: Call<ChallengeModel>,
+                    response: Response<ChallengeModel>
                 ) {
+                    _isSuccessOperation.postValue(false)
                     _isLoading.postValue(false)
                     if (response.code() == 200) {
+                        _isSuccessOperation.postValue(true)
                         _createChallenge.postValue(response.body())
                         Log.d("Token", "Пользовательские данные ${response.body()}")
                     } else {
@@ -99,7 +103,7 @@ class CreateChallengeViewModel @Inject constructor(
                     }
                 }
 
-                override fun onFailure(call: Call<CreateChallengeResponse>, t: Throwable) {
+                override fun onFailure(call: Call<ChallengeModel>, t: Throwable) {
                     _isLoading.postValue(false)
                     _createChallengeError.postValue(t.message)
                 }

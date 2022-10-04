@@ -42,7 +42,7 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
             findNavController().navigate(
                 R.id.action_challengesFragment_to_createChallengeFragment,
                 null,
-                OptionsTransaction().optionForEditProfile
+                OptionsTransaction().optionForProfileFromEditProfile
             )
 
         }
