@@ -2,31 +2,30 @@ package com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPa
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsInnerChallengeBinding
-import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.DetailsInnerChallengerViewModel
 import com.teamforce.thanksapp.utils.Consts
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-
+@AndroidEntryPoint
 class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_challenge) {
 
     private val binding: FragmentDetailsInnerChallengeBinding by viewBinding()
-    private val viewModel = DetailsInnerChallengerViewModel()
+    private val viewModel :DetailsInnerChallengerViewModel by viewModels()
 
     private var idChallenge: Int? = null
 
@@ -39,7 +38,6 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initViewModel()
         loadChallengeData(idChallenge)
         setDataAboutChallenge()
     }
