@@ -4,6 +4,7 @@ import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.model.domain.ChallengeModel
+import com.teamforce.thanksapp.model.domain.ChallengeModelById
 import com.teamforce.thanksapp.model.domain.TagModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -152,10 +153,16 @@ interface ThanksApi {
         @Part("end_at") endAt: RequestBody,
         @Part("start_balance") amountFund: RequestBody,
         @Part("parameters") parameters: RequestBody,
-    ): Call<CreateChallengeResponse>
+    ): Call<ChallengeModel>
 
     @GET("/challenges/")
     fun getChallenges(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
     ): Call<List<ChallengeModel>>
+
+    @GET("/challenges/{challenge_id}/")
+    fun getChallenge(
+        @Header("Authorization") token: String,
+        @Path("challenge_id") commentId: Int
+    ): Call<ChallengeModelById>
 }

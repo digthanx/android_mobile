@@ -127,7 +127,7 @@
     </style>
 
     <style name="Headline6" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="android:textColor">@color/color1</item>
+        <item name="android:textColor">@color/general_contrast</item>
         <item name="android:textSize">20sp</item>
     </style>
 
@@ -273,11 +273,23 @@
 
 
     <style name="MyCardView" parent="@style/Widget.MaterialComponents.CardView">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialCardView.Cut</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.MaterialCardView.Cut</item>
     </style>
 
 
     <style name="ShapeAppearanceOverlay.MaterialCardView.Cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="My2" parent="">
+        <item name="shapeAppearanceOverlay">@style/My</item>
+    </style>
+
+    <style name="My" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">20dp</item>
         <item name="cornerSizeTopLeft">20dp</item>
@@ -376,6 +388,24 @@
         <item name="cornerRadius">8dp</item>
         <item name="iconTint">@color/general_contrast</item>
         <item name="strokeWidth">0dp</item>
+    </style>
+
+    <style name="MyTabChallenge" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@drawable/selector_tab</item>
+        <item name="tabIndicatorColor">@color/transparent</item>
+        <item name="android:textAppearance">@style/SmallText2Medium.Black</item>
+        <item name="tabTextColor">@color/general_contrast</item>
+        <item name="tabSelectedTextColor">@color/general_background</item>
+    </style>
+
+    <style name="ShapeAppearance.TabItem" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="BackGroundImageView">
+        <item name="android:alpha">0.5</item>
+        <item name="android:scaleType">fitXY</item>
     </style>
 
 

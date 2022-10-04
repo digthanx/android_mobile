@@ -13,13 +13,16 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.DialogDatePickerBinding
 import com.teamforce.thanksapp.databinding.FragmentCreateChallengeBinding
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.presentation.viewmodel.CreateChallengeViewModel
 import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.getPath
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -35,6 +38,8 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
     private val binding: FragmentCreateChallengeBinding by viewBinding()
 
     private var viewModel: CreateChallengeViewModel = CreateChallengeViewModel()
+
+    private var createChallengeResult: ChallengeModel? = null
 
 
     private val requestPermissionLauncher =
@@ -69,6 +74,19 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
             }
         }
         uploadImageFromGallery()
+
+        viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
+            findNavController().navigate(
+                R.id.action_createChallengeFragment_to_challengesFragment, null,
+                OptionsTransaction().optionForEditProfile)
+        }
+
+
+        binding.closeBtn.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_createChallengeFragment_to_challengesFragment, null,
+            OptionsTransaction().optionForEditProfile)
+        }
 
     }
 
@@ -133,6 +151,12 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
             parameters = parameters,
             photo = imageFilePart
         )
+        viewModel.createChallenge.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                createChallengeResult = it
+            })
+
     }
 
     private fun translateDateAndTime(day: Int, month: Int, year: Int) {
