@@ -149,10 +149,13 @@ interface ThanksApi {
         @Path("challenge_id") commentId: Int
     ): Call<ChallengeModelById>
 
+    @Multipart
     @POST("/challenges/{challenge_id}/")
     suspend fun createChallengeReport(
-        @Body request: CreateReportRequest
-    ): CreateReportResponse
+        @Part photo: MultipartBody.Part?,
+        @Part("challenge") challengeId: RequestBody,
+        @Part("text") comment: RequestBody
+        ): CreateReportResponse
 
     @GET("/challenge-contenders/{challenge_id}/")
     suspend fun getChallengeContenders(

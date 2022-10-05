@@ -8,6 +8,8 @@ import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
 import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.safeApiCall
 import kotlinx.coroutines.Dispatchers
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 class ChallengeRepositoryImpl @Inject constructor(
@@ -23,9 +25,12 @@ class ChallengeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createReport(
-        request: CreateReportRequest): ResultWrapper<CreateReportResponse> {
+        photo: MultipartBody.Part?,
+        challengeId: RequestBody,
+        comment: RequestBody
+    ): ResultWrapper<CreateReportResponse> {
         return safeApiCall(Dispatchers.IO) {
-            thanksApi.createChallengeReport(request)
+            thanksApi.createChallengeReport(photo, challengeId, comment)
         }
     }
 }

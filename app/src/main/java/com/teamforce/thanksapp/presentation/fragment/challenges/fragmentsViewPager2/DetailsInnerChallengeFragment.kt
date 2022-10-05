@@ -51,9 +51,11 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         setDataAboutChallenge()
         checkReportSharedPref()
         binding.sendReportBtn.setOnClickListener {
+            val bundle = Bundle()
+            idChallenge?.let { it1 -> bundle.putInt(ChallengeAdapter.CHALLENGER_ID, it1) }
             it.findNavController().navigate(
                 R.id.action_global_createReportFragment,
-                null,
+                bundle,
                 OptionsTransaction().optionForEditProfile
             )
         }
