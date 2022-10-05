@@ -199,7 +199,11 @@
             android:id="@+id/createReportFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.CreateReportFragment"
             android:label="fragment_create_report"
-            tools:layout="@layout/fragment_create_report" />
+            tools:layout="@layout/fragment_create_report" >
+            <action
+                android:id="@+id/action_createReportFragment_to_detailsMainChallengeFragment"
+                app:destination="@id/detailsMainChallengeFragment" />
+        </fragment>
         <action
             android:id="@+id/action_global_createReportFragment"
             app:destination="@id/createReportFragment" />

@@ -66,7 +66,15 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
             }
             activity?.onBackPressed()
         }
+        binding.sendReport.setOnClickListener {
+
+        }
+
         deleteReportState()
+    }
+
+    private fun sendReport(){
+
     }
 
     private fun restoreSavedDateFromSP() {
@@ -97,7 +105,6 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
         }else{
             deleteReportState()
         }
-        // При восстановление нужно прогнать filePath через uriToMultipart
     }
 
     private fun deleteReportState(){
