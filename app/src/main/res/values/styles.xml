@@ -208,7 +208,7 @@
     </style>
 
 
-    <style name="DefaultButton" parent="Widget.Material3.Button.ElevatedButton">
+    <style name="DefaultButton" parent="">
         <item name="android:backgroundTint">@color/general_brand</item>
         <item name="cornerRadius">12dp</item>
         <item name="android:textColor">@color/color5</item>
@@ -220,7 +220,7 @@
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="DefaultButtonSecondary" parent="Widget.Material3.Button.ElevatedButton">
+    <style name="DefaultButtonSecondary" parent="">
         <item name="android:backgroundTint">@color/general_brand_secondary</item>
         <item name="cornerRadius">12dp</item>
         <item name="android:textColor">@color/general_brand</item>
