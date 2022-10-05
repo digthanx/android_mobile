@@ -148,4 +148,9 @@ interface ThanksApi {
     fun getChallenge(
         @Path("challenge_id") commentId: Int
     ): Call<ChallengeModelById>
+
+    @GET("/challenge-participants/{challenge_id}/")
+    fun getChallengeParticipants(
+        @Path("challenge_id") challengeId: Int
+    ): GetChallengeParticipantsResponse
 }
