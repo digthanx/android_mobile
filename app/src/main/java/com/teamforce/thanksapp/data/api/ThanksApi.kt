@@ -137,7 +137,8 @@ interface ThanksApi {
         @Part("description") description: RequestBody,
         @Part("end_at") endAt: RequestBody,
         @Part("start_balance") amountFund: RequestBody,
-        @Part("parameters") parameters: RequestBody,
+        @Part("parameter_id") parameter_id: RequestBody,
+        @Part("parameter_value") parameter_value: RequestBody,
     ): Call<ChallengeModel>
 
     @GET("/challenges/")
