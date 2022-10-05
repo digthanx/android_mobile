@@ -143,6 +143,7 @@
     <!-- Челлендж фрагмент детали -->
     <string name="details">Детали</string>
     <string name="participants">Участники</string>
+    <string name="contenders">Претенденты</string>
     <string name="fund">%s форсиков</string>
     <string name="occupiedPrizePool">%s / %s</string>
     <string name="PrizePool">Призовых мест</string>

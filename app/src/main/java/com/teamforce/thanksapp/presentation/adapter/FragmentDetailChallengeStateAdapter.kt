@@ -5,10 +5,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.CommentsChallengeFragment
+import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.ContendersChallengeFragment
 import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.DetailsInnerChallengeFragment
 
 class FragmentDetailChallengeStateAdapter(fragment: FragmentActivity): FragmentStateAdapter(fragment) {
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = 3
     private var challengeId: Int = 0
 
     public fun setChallengeId(data: Int){
@@ -27,6 +28,11 @@ class FragmentDetailChallengeStateAdapter(fragment: FragmentActivity): FragmentS
                 return fragment
             }
             1 -> CommentsChallengeFragment()
+            2 -> {
+               val fragment = ContendersChallengeFragment()
+                fragment.arguments = bundle
+                return fragment
+            }
             else -> {
                 DetailsInnerChallengeFragment()
             }

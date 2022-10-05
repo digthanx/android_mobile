@@ -141,7 +141,8 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
         val description = binding.descriptionEt.text.toString()
         val prizeFund = binding.prizeFundEt.text?.trim().toString().toInt()
         val prizePool = binding.prizePoolEt.text?.trim().toString().toInt()
-        val parameters = listOf<Map<String, Int>>(mapOf("id" to 2, "value" to prizePool))
+        val parameter_id = 2
+        val parameter_value = prizePool
         val dateChallenge = dateForSendingFormatted.toString()
         // Отправка данных о чалике
         viewModel.createChallenge(
@@ -149,7 +150,8 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
             description = description,
             amountFund = prizeFund,
             endAt = dateChallenge,
-            parameters = parameters,
+            parameter_id = parameter_id,
+            parameter_value = parameter_value,
             photo = imageFilePart
         )
         viewModel.createChallenge.observe(

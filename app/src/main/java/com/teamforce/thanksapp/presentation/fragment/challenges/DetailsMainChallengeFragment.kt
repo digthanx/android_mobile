@@ -58,7 +58,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             when(position){
                 0 -> tab.text = context?.getString(R.string.details)
                 1 -> tab.text = context?.getString(R.string.comments)
-                2 -> tab.text = context?.getString(R.string.participants)
+                2 -> tab.text = context?.getString(R.string.contenders)
             }
         }.attach()
     }

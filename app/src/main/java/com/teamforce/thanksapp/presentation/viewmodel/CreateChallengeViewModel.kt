@@ -47,12 +47,13 @@ class CreateChallengeViewModel @Inject constructor(
         endAt: String,
         amountFund: Int,
         photo: MultipartBody.Part?,
-        parameters: List<Map<String, Int>>
+        parameter_id: Int,
+        parameter_value: Int
     ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             callCreateChallengeEndpoint(
-                name, description, endAt, amountFund, photo, parameters, Dispatchers.Default
+                name, description, endAt, amountFund, photo, parameter_id, parameter_value, Dispatchers.Default
             )
         }
 
@@ -64,7 +65,8 @@ class CreateChallengeViewModel @Inject constructor(
         endAt: String,
         amountFund: Int,
         photo: MultipartBody.Part?,
-        parameters: List<Map<String, Int>>,
+        parameter_id: Int,
+        parameter_value: Int,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
@@ -75,9 +77,10 @@ class CreateChallengeViewModel @Inject constructor(
                 RequestBody.create(MediaType.parse("multipart/form-data"), endAt)
             val amountFundB =
                 RequestBody.create(MediaType.parse("multipart/form-data"), amountFund.toString())
-            val parametersJson = Gson().toJson(parameters)
-            val parametersB =
-                RequestBody.create(MediaType.parse("application/json"), parametersJson)
+            val parameter_idB =
+                RequestBody.create(MediaType.parse("multipart/form-data"), parameter_id.toString())
+            val parameter_valueB =
+                RequestBody.create(MediaType.parse("multipart/form-data"), parameter_value.toString())
 
 
             thanksApi?.createChallenge(
@@ -86,7 +89,8 @@ class CreateChallengeViewModel @Inject constructor(
                 descriptionB,
                 endAtB,
                 amountFundB,
-                parametersB
+                parameter_idB,
+                parameter_valueB
             )?.enqueue(object : Callback<ChallengeModel> {
                 override fun onResponse(
                     call: Call<ChallengeModel>,
