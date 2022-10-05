@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationBarView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentMainFlowBinding
+import com.teamforce.thanksapp.utils.OptionsTransaction
 
 
 class MainFlowFragment : BaseFlowFragment(
@@ -29,43 +29,37 @@ class MainFlowFragment : BaseFlowFragment(
         return binding.root
     }
 
+
     override fun setupNavigation(navController: NavController) {
-        // binding.bottomNavigation.setupWithNavController(navController)
-//        binding.navView.setupWithNavController(navController)
-
-        // Неизвестно, можно ли так делать вкупе с тем, что я вручную все внизу описал, будем тестить
         binding.bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.background = null
 
 
-        val optionForTransaction = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(androidx.transition.R.anim.abc_grow_fade_in_from_bottom)
-            .setExitAnim(androidx.transition.R.anim.abc_shrink_fade_out_from_bottom)
-            .setPopEnterAnim(com.google.android.material.R.anim.abc_fade_in)
-            .setPopExitAnim(com.google.android.material.R.anim.abc_fade_out)
-            .build()
+        binding.fab.setOnClickListener {
+            navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
+        }
 
-//        binding.profile.setOnClickListener{
-//            navController.navigate(R.id.profileFragment, null, optionForProfileFragment)
-//        }
-
-        binding.bottomNavigation.menu.getItem(1).isChecked = true
+        binding.bottomNavigation.menu.getItem(0).isChecked = true
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.balanceFragment -> {
-                    navController.navigate(R.id.balanceFragment, null, optionForTransaction)
+                R.id.feed_graph -> {
+                    navController.navigate(R.id.feed_graph, null, OptionsTransaction().optionForTransaction)
                     return@OnItemSelectedListener true
                 }
-                R.id.feedFragment -> {
-                    navController.navigate(R.id.feedFragment, null, optionForTransaction)
+                R.id.balance_graph -> {
+                    navController.navigate(R.id.balance_graph, null, OptionsTransaction().optionForTransaction)
                     return@OnItemSelectedListener true
                 }
-                R.id.transactionFragment -> {
-                    navController.navigate(R.id.transactionFragment, null, optionForTransaction)
+//                R.id.transaction_graph -> {
+//                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
+//                    return@OnItemSelectedListener true
+//                }
+                R.id.history_graph -> {
+                    navController.navigate(R.id.history_graph, null, OptionsTransaction().optionForTransaction)
                     return@OnItemSelectedListener true
                 }
-                R.id.historyFragment -> {
-                    navController.navigate(R.id.historyFragment, null, optionForTransaction)
+                R.id.challenge_graph -> {
+                    navController.navigate(R.id.challenge_graph, null, OptionsTransaction().optionForTransaction)
                     return@OnItemSelectedListener true
                 }
             }
@@ -73,8 +67,56 @@ class MainFlowFragment : BaseFlowFragment(
         })
 
         binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
-            return@OnItemReselectedListener
+            when (item.itemId) {
+                R.id.feed_graph -> {
+                    navController.navigate(R.id.feed_graph, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.balance_graph -> {
+                    navController.navigate(R.id.balance_graph, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.transaction_graph -> {
+                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
+                    return@OnItemReselectedListener
+                }
+                R.id.history_graph -> {
+                    navController.navigate(R.id.history_graph, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+                R.id.challenge_graph -> {
+                    navController.navigate(R.id.challenge_graph, null, OptionsTransaction().optionForTransaction)
+                    return@OnItemReselectedListener
+                }
+            }
+
         })
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if( destination.id == R.id.transactionFragment ||
+                destination.id == R.id.someonesProfileFragment ||
+                destination.id == R.id.additionalInfoFeedItemFragment ||
+                destination.id == R.id.editProfileBottomSheetFragment ||
+                destination.id == R.id.createChallengeFragment ||
+                destination.id == R.id.detailsMainChallengeFragment){
+                hideBottomNavigation()
+            }else{
+                showBottomNavigation()
+            }
+        }
+    }
+
+    private fun hideBottomNavigation(){
+        binding.bottomNavigation.visibility = View.GONE
+        binding.bottomAppBar.visibility = View.GONE
+        binding.fab.hide()
+    }
+
+    private fun showBottomNavigation(){
+        binding.bottomNavigation.visibility = View.VISIBLE
+        binding.bottomAppBar.visibility = View.VISIBLE
+        binding.fab.show()
+
     }
 
 

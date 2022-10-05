@@ -13,7 +13,8 @@ import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.UserTransactionsResponse
 import com.teamforce.thanksapp.model.domain.HistoryModel
-import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,10 +23,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class HistoryViewModel : ViewModel() {
+@HiltViewModel
+class HistoryViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     private val _allTransactions = MutableLiveData<SparseArray<HistoryModel>>()
@@ -47,54 +52,18 @@ class HistoryViewModel : ViewModel() {
     private val _cancelTransactionError = MutableLiveData<String>()
     val cancelTransactionError: LiveData<String> = _cancelTransactionError
 
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
-
-    fun loadTransactionsList(token: String, user: String) {
+    fun loadTransactionsList() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callTransactionsListEndpoint(token, user, Dispatchers.Default) }
-    }
-
-    fun loadUserProfile(token: String) {
-        _isLoading.postValue(true)
-        viewModelScope.launch { callProfileEndpoint(token, Dispatchers.Default) }
-    }
-
-    private suspend fun callProfileEndpoint(
-        token: String,
-        coroutineDispatcher: CoroutineDispatcher
-    ) {
-        withContext(coroutineDispatcher) {
-            thanksApi?.getProfile("Token $token")?.enqueue(object : Callback<ProfileResponse> {
-                override fun onResponse(
-                    call: Call<ProfileResponse>,
-                    response: Response<ProfileResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _profile.postValue(response.body())
-                    } else {
-                        _profileError.postValue(response.message() + " " + response.code())
-                    }
-                }
-
-                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-                    _isLoading.postValue(false)
-                    _profileError.postValue(t.message)
-                }
-            })
-        }
+        viewModelScope.launch { callTransactionsListEndpoint(userDataRepository.getUserName()!!, Dispatchers.Default) }
     }
 
     private suspend fun callTransactionsListEndpoint(
-        token: String,
         user: String,
         dispatcher: CoroutineDispatcher
     ) {
         withContext(dispatcher) {
-            thanksApi?.getUserTransactions("Token $token")
-                ?.enqueue(object : Callback<List<UserTransactionsResponse>> {
+            thanksApi.getUserTransactions()
+                .enqueue(object : Callback<List<UserTransactionsResponse>> {
                     override fun onResponse(
                         call: Call<List<UserTransactionsResponse>>,
                         response: Response<List<UserTransactionsResponse>>
@@ -102,14 +71,20 @@ class HistoryViewModel : ViewModel() {
                         _isLoading.postValue(false)
                         if (response.code() == 200) {
                             val allData: SparseArray<HistoryModel> = SparseArray<HistoryModel>()
-                            val receivedData: SparseArray<HistoryModel> = SparseArray<HistoryModel>()
+                            val receivedData: SparseArray<HistoryModel> =
+                                SparseArray<HistoryModel>()
                             val sendedData: SparseArray<HistoryModel> = SparseArray<HistoryModel>()
                             val history: List<UserTransactionsResponse>? = response.body()
                             if (history != null) {
                                 for (item in history) {
                                     try {
                                         val dateTime: LocalDateTime =
-                                            LocalDateTime.parse(item.updatedAt.replace("+03:00", ""))
+                                            LocalDateTime.parse(
+                                                item.updatedAt.replace(
+                                                    "+03:00",
+                                                    ""
+                                                )
+                                            )
                                         val day = dateTime.dayOfYear
 
                                         if (allData.containsKey(day)) {
@@ -120,7 +95,10 @@ class HistoryViewModel : ViewModel() {
                                         } else {
                                             allData.put(day, HistoryModel(day, listOf(item)))
                                         }
-                                        if (item.sender.sender_tg_name != null && item.sender.sender_tg_name.equals(user)) {
+                                        if (item.sender.sender_tg_name != null && item.sender.sender_tg_name.equals(
+                                                user
+                                            )
+                                        ) {
                                             if (sendedData.containsKey(day)) {
                                                 val model = sendedData.get(day)
                                                 var data = model.data
@@ -136,7 +114,10 @@ class HistoryViewModel : ViewModel() {
                                                 data = data.plusElement(item)
                                                 receivedData.put(day, HistoryModel(day, data))
                                             } else {
-                                                receivedData.put(day, HistoryModel(day, listOf(item)))
+                                                receivedData.put(
+                                                    day,
+                                                    HistoryModel(day, listOf(item))
+                                                )
                                             }
                                         }
 
@@ -153,7 +134,10 @@ class HistoryViewModel : ViewModel() {
                         }
                     }
 
-                    override fun onFailure(call: Call<List<UserTransactionsResponse>>, t: Throwable) {
+                    override fun onFailure(
+                        call: Call<List<UserTransactionsResponse>>,
+                        t: Throwable
+                    ) {
                         _isLoading.postValue(false)
                         _transactionsLoadingError.postValue(t.message)
                     }
@@ -162,19 +146,27 @@ class HistoryViewModel : ViewModel() {
     }
 
 
-    fun cancelUserTransaction(token: String, transactionId: String, status: String) {
+    fun cancelUserTransaction(transactionId: String, status: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { cancelUserTransactionEndpoint(token, transactionId, status, Dispatchers.Default) }
+        viewModelScope.launch {
+            cancelUserTransactionEndpoint(
+                transactionId,
+                status,
+                Dispatchers.Default
+            )
+        }
     }
 
     private suspend fun cancelUserTransactionEndpoint(
-        token: String,
         transactionId: String,
         status: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.cancelTransaction("Token $token", transactionId, CancelTransactionRequest(status))?.enqueue(object : Callback<CancelTransactionResponse> {
+            thanksApi.cancelTransaction(
+                transactionId,
+                CancelTransactionRequest(status)
+            ).enqueue(object : Callback<CancelTransactionResponse> {
                 override fun onResponse(
                     call: Call<CancelTransactionResponse>,
                     response: Response<CancelTransactionResponse>

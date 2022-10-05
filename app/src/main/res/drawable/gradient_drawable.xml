@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="oval"
+            android:innerRadius="50dp">
+
+            <corners android:radius="10dp"/>
+
+            <gradient
+                android:type="linear"
+                android:angle="-45"
+                android:startColor="@color/general_brand"
+                android:endColor="@color/general_orange_secondary" />
+        </shape>
+    </item>
+
+
+    <item
+       android:gravity="center"
+        android:drawable="@drawable/ic_send_vector">
+    </item>
+
+
+</layer-list>

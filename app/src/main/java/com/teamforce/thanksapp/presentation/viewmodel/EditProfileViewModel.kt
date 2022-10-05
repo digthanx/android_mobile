@@ -6,24 +6,37 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.network.models.Contact
-import com.teamforce.thanksapp.data.request.CreateContactRequest
-import com.teamforce.thanksapp.data.request.UpdateContactRequest
 import com.teamforce.thanksapp.data.request.UpdateProfileRequest
-import com.teamforce.thanksapp.data.response.*
+import com.teamforce.thanksapp.data.response.ProfileResponse
+import com.teamforce.thanksapp.data.response.UpdateFewContactsResponse
+import com.teamforce.thanksapp.data.response.UpdateProfileResponse
+import com.teamforce.thanksapp.domain.models.profile.ContactModel
+import com.teamforce.thanksapp.domain.models.profile.ProfileModel
+import com.teamforce.thanksapp.domain.usecases.LoadProfileUseCase
+import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.RetrofitClient
+import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.safeApiCall
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class EditProfileViewModel(): ViewModel(){
+@HiltViewModel
+class EditProfileViewModel @Inject constructor(
+    private val thanksApi: ThanksApi,
+    val userDataRepository: UserDataRepository,
+    private val loadProfileUseCase: LoadProfileUseCase
+) : ViewModel() {
 
-
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -37,8 +50,8 @@ class EditProfileViewModel(): ViewModel(){
     val isSuccessOperation: LiveData<Boolean> = _isSuccessOperation
 
 
-    private val _profile = MutableLiveData<ProfileResponse>()
-    val profile: LiveData<ProfileResponse> = _profile
+    private val _profile = MutableLiveData<ProfileModel>()
+    val profile: LiveData<ProfileModel> = _profile
     private val _profileError = MutableLiveData<String>()
     val profileError: LiveData<String> = _profileError
 
@@ -48,63 +61,60 @@ class EditProfileViewModel(): ViewModel(){
     private val _updateFewContactError = MutableLiveData<String>()
     val updateFewContactError: LiveData<String> = _updateFewContactError
 
-
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
-
-
-
-    fun loadUserProfile(token: String) {
+    fun loadUserProfile() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callProfileEndpoint(token, Dispatchers.Default) }
+        viewModelScope.launch { callProfileEndpoint(Dispatchers.Default) }
     }
 
     private suspend fun callProfileEndpoint(
-        token: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.getProfile("Token $token")?.enqueue(object : Callback<ProfileResponse> {
-                override fun onResponse(
-                    call: Call<ProfileResponse>,
-                    response: Response<ProfileResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _profile.postValue(response.body())
-                    } else {
-                        _profileError.postValue(response.message() + " " + response.code())
+
+            when (val result = loadProfileUseCase()) {
+                is ResultWrapper.Success -> {
+                    _profile.postValue(result.value!!)
+                }
+                else -> {
+                    if (result is ResultWrapper.GenericError) {
+                        _profileError.postValue(result.error + " " + result.code)
+
+                    } else if (result is ResultWrapper.NetworkError) {
+                        _profileError.postValue("Ошибка сети")
                     }
                 }
-
-                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-                    _isLoading.postValue(false)
-                    _profileError.postValue(t.message)
-                }
-            })
+            }
         }
     }
 
 
-
-    fun loadUpdateProfile(token: String, userId: String, tgName: String?, surname: String?,
-                          firstName: String?, middleName: String?, nickname: String?) {
+    fun loadUpdateProfile(
+        tgName: String?, surname: String?,
+        firstName: String?, middleName: String?, nickname: String?
+    ) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callUpdateProfileEndpoint(token, userId = userId, tgName, surname,
-            firstName, middleName, nickname, Dispatchers.Default) }
+        viewModelScope.launch {
+            if (userDataRepository.getProfileId() != null)
+                callUpdateProfileEndpoint(
+                    userDataRepository.getProfileId()!!, tgName, surname,
+                    firstName, middleName, nickname, Dispatchers.Default
+                )
+        }
     }
 
     private suspend fun callUpdateProfileEndpoint(
-        token: String,
         userId: String,
         tgName: String?, surname: String?,
         firstName: String?, middleName: String?, nickname: String?,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.updateProfile("Token $token", userId = userId, UpdateProfileRequest(tgName, surname,
-                firstName, middleName, nickname))?.enqueue(object : Callback<UpdateProfileResponse> {
+            thanksApi.updateProfile(
+                userId = userId, UpdateProfileRequest(
+                    tgName, surname,
+                    firstName, middleName, nickname
+                )
+            ).enqueue(object : Callback<UpdateProfileResponse> {
                 override fun onResponse(
                     call: Call<UpdateProfileResponse>,
                     response: Response<UpdateProfileResponse>
@@ -114,7 +124,11 @@ class EditProfileViewModel(): ViewModel(){
                         Log.d("Token", "${response.body()}")
                         _updateProfile.postValue(response.body())
                     } else {
-                        _updateProfileError.postValue(response.message() + " " + response.code())
+                        val jArrayError = JSONArray(response.errorBody()!!.string())
+                        _updateProfileError.postValue(
+                            jArrayError.toString()
+                                .subSequence(2, jArrayError.toString().length - 2).toString()
+                        )
                     }
                 }
 
@@ -127,36 +141,47 @@ class EditProfileViewModel(): ViewModel(){
     }
 
 
-
-    fun loadUpdateFewContact(token: String, listContacts: List<Contact>) {
+    fun loadUpdateFewContact(listContacts: List<ContactModel>) {
+        val contacts = listContacts.map {
+            ContactEntity(
+                id = it.id,
+                contact_id = it.contactId,
+                contact_type = it.contactType
+            )
+        }
         _isLoading.postValue(true)
-        viewModelScope.launch { callUpdateFewContactEndpoint(token, listContacts, Dispatchers.Default) }
+        viewModelScope.launch {
+            callUpdateFewContactEndpoint(
+                contacts,
+                Dispatchers.Default
+            )
+        }
     }
 
     private suspend fun callUpdateFewContactEndpoint(
-        token: String,
-        listContacts: List<Contact>,
+        listContacts: List<ContactEntity>,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi?.updateFewContact("Token $token", listContacts)?.enqueue(object : Callback<UpdateFewContactsResponse> {
-                override fun onResponse(
-                    call: Call<UpdateFewContactsResponse>,
-                    response: Response<UpdateFewContactsResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _updateFewContact.postValue(response.body())
-                    } else {
-                        _updateFewContactError.postValue(response.message() + " " + response.code())
+            thanksApi.updateFewContact(listContacts)
+                .enqueue(object : Callback<UpdateFewContactsResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateFewContactsResponse>,
+                        response: Response<UpdateFewContactsResponse>
+                    ) {
+                        _isLoading.postValue(false)
+                        if (response.code() == 200) {
+                            _updateFewContact.postValue(response.body())
+                        } else {
+                            _updateFewContactError.postValue(response.message() + " " + response.code())
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<UpdateFewContactsResponse>, t: Throwable) {
-                    _isLoading.postValue(false)
-                    _updateFewContactError.postValue(t.message)
-                }
-            })
+                    override fun onFailure(call: Call<UpdateFewContactsResponse>, t: Throwable) {
+                        _isLoading.postValue(false)
+                        _updateFewContactError.postValue(t.message)
+                    }
+                })
         }
     }
 

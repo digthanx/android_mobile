@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/feedFragment"
+        android:id="@+id/feed_graph"
         android:enabled="true"
         android:icon="@drawable/ic_feed"
         android:title="@string/feed_label"/>
     <item
-        android:id="@+id/balanceFragment"
+        android:id="@+id/balance_graph"
         android:enabled="true"
         android:icon="@drawable/ic_balance"
         android:title="@string/balance_label"/>
     <item
-        android:id="@+id/transactionFragment"
-        android:enabled="true"
-        android:icon="@drawable/ic_send_new_transaction"
-        android:title="@string/new_transaction_label"/>
+        android:id="@+id/transaction_graph"
+        android:enabled="false"
+        android:title="@string/nothing"/>
     <item
-        android:id="@+id/historyFragment"
+        android:id="@+id/history_graph"
         android:enabled="true"
         android:icon="@drawable/ic_history"
         android:title="@string/history_label"/>
+
+    <item
+        android:id="@+id/challenge_graph"
+        android:enabled="true"
+        android:icon="@drawable/ic_challenge"
+        android:title="@string/challenge_label"/>
 </menu>

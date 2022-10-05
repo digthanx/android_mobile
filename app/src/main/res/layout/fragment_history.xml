@@ -5,6 +5,7 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_dodgeInsetEdges="bottom"
     tools:context=".presentation.fragment.historyScreen.HistoryFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -23,7 +24,7 @@
             app:collapsedTitleTextColor="@color/general_background"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="32dp"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded"
+            app:expandedTitleTextAppearance="@style/Headline3.White"
             app:expandedTitleTextColor="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -44,24 +45,23 @@
                     android:layout_marginEnd="10dp"
                     android:src="@drawable/ic_app_logo" />
 
-                <com.google.android.material.card.MaterialCardView
+                <LinearLayout
                     android:id="@+id/profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginEnd="16dp"
+                    android:background="@drawable/white_circle_background"
                     android:clickable="true"
-                    android:focusable="true"
-                    app:cardCornerRadius="100dp">
+                    android:focusable="true">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:scaleType="matrix"
-                        android:src="@drawable/smile"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-                </com.google.android.material.card.MaterialCardView>
+                        android:src="@drawable/smile" />
+                </LinearLayout>
 
                 <FrameLayout
                     android:clickable="true"
@@ -117,31 +117,33 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nested_Scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="@color/general_background"
-            android:background="@color/general_background">
+            android:background="@color/general_background"
+            android:backgroundTint="@color/general_background">
 
+            
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 app:cardBackgroundColor="@color/general_brand"
                 app:cardCornerRadius="0dp"
-                app:cardElevation="0dp">
+                app:cardElevation="4dp">
 
                 <com.google.android.material.card.MaterialCardView
-                    style="@style/MyCardView"
+                    android:layout_marginBottom="-16dp"
+                    app:cardCornerRadius="16dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:elevation="0dp">
+                    android:layout_height="match_parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -153,12 +155,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            app:tabTextAppearance="@style/TextSize"
-                            app:tabMinWidth="100dp"
-                            android:layout_marginStart="16dp"
                             android:layout_marginBottom="10dp"
-                            android:background="@color/general_background"
-                            app:singleSelection="true">
+                            android:background="@color/transparent"
+                            app:singleSelection="true"
+                            app:tabMinWidth="100dp"
+                            app:tabTextAppearance="@style/Body2.White">
 
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
@@ -168,14 +169,12 @@
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/received"
-                                android:textColor="@color/history_chip_text_color_state" />
+                                android:text="@string/received" />
 
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/sended"
-                                android:textColor="@color/history_chip_text_color_state" />
+                                android:text="@string/sended" />
 
                         </com.google.android.material.tabs.TabLayout>
 
@@ -209,17 +208,16 @@
                             android:id="@+id/history_rv"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginHorizontal="16dp"/>
+                            android:layout_marginHorizontal="16dp" />
 
 
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
-
-            </com.google.android.material.card.MaterialCardView>
+             </com.google.android.material.card.MaterialCardView>
+  
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

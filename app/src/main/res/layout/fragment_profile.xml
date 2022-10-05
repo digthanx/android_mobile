@@ -1,62 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipeRefreshLayout"
-    android:backgroundTint="@color/general_background"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/general_background">
 
-        <LinearLayout
-            android:id="@+id/all_content"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:backgroundTint="@color/general_background"
-            android:orientation="vertical"
-            tools:context=".presentation.fragment.profileScreen.ProfileFragment">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbarProfile"
-                style="@style/Theme.ThanksApp.PopupOverlay"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/general_brand"
-                android:elevation="0dp"
-                app:navigationIconTint="@color/general_background"
-                app:titleTextColor="@color/white">
-
-                <ImageButton
-                    android:id="@+id/exit_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:backgroundTint="@color/general_brand"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/exit" />
-            </com.google.android.material.appbar.MaterialToolbar>
+            android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/all_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/general_background"
+                android:orientation="vertical"
+                tools:context=".presentation.fragment.profileScreen.ProfileFragment">
 
-                android:orientation="vertical">
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/general_background"
                     android:layout_marginBottom="24dp"
-                    app:cardElevation="20dp">
+                    app:cardElevation="0dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="16dp">
+                        android:paddingHorizontal="16dp"
+                        android:paddingTop="28dp">
 
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/user_avatar"
@@ -65,40 +45,28 @@
                             android:contentDescription="@string/app_name"
                             android:scaleType="fitCenter"
                             android:src="@drawable/ic_anon_avatar"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
                         <TextView
-                            android:id="@+id/user_fio"
+                            android:id="@+id/greeting_user_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginStart="12dp"
-                            android:text="@string/name"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toEndOf="@id/user_avatar"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_marginTop="24dp"
+                            android:text="@string/greeting_label"
+                            style="@style/Headline3"
+                            app:layout_constraintStart_toStartOf="@id/user_avatar"
+                            app:layout_constraintTop_toBottomOf="@id/user_avatar" />
 
-                        <TextView
-                            android:id="@+id/user_telegramId"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:text="@string/tgName"
-                            android:textColor="@color/general_brand"
-                            android:textSize="14sp"
-                            app:layout_constraintStart_toEndOf="@id/user_avatar"
-                            app:layout_constraintTop_toBottomOf="@id/user_fio" />
 
                         <ImageButton
                             android:id="@+id/edit_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
                             android:background="@color/white"
                             android:src="@drawable/ic_edit"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -112,9 +80,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="12dp"
                     android:layout_marginBottom="12dp"
-
-                    app:cardBackgroundColor="@color/minor_info_secondary"
-                    app:cardCornerRadius="12dp">
+                    app:cardBackgroundColor="@color/general_background"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -127,9 +95,55 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="12dp"
-                            android:letterSpacing="0.2"
-                            android:text="@string/information"
-                            android:textSize="10sp" />
+                            android:text="@string/contactInformation"
+                            style="@style/StandardText4Bold.Black" />
+
+                        <TextView
+                            android:id="@+id/surname_label_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            style="@style/SmallText2.Gray"
+                            android:text="@string/surname" />
+
+                        <TextView
+                            android:id="@+id/surname_value_tv"
+                            style="@style/Subtitle1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:id="@+id/firstname_label_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/firstname"
+                            style="@style/SmallText2.Gray"
+                            />
+
+                        <TextView
+                            android:id="@+id/firstName_value_tv"
+                            style="@style/Subtitle1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:id="@+id/middleName_label_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/middleName"
+                            style="@style/SmallText2.Gray"
+                            />
+
+                        <TextView
+                            android:id="@+id/middleName_value_tv"
+                            style="@style/Subtitle1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp" />
 
                         <TextView
                             android:id="@+id/email_label_tv"
@@ -137,7 +151,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:text="@string/email_label"
-                            android:textSize="12sp" />
+                            style="@style/SmallText2.Gray"/>
 
                         <TextView
                             android:id="@+id/email_value_tv"
@@ -152,7 +166,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:text="@string/mobile_label"
-                            android:textSize="12sp" />
+                            style="@style/SmallText2.Gray"
+                            />
 
                         <TextView
                             android:id="@+id/mobile_value_tv"
@@ -169,10 +184,10 @@
                     android:id="@+id/placeJob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
                     android:layout_marginHorizontal="12dp"
-                    app:cardBackgroundColor="@color/minor_info_secondary"
-                    app:cardCornerRadius="12dp">
+                    app:cardBackgroundColor="@color/general_background"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -185,9 +200,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="12dp"
-                            android:letterSpacing="0.2"
                             android:text="@string/placeJob"
-                            android:textSize="10sp" />
+                            style="@style/StandardText4Bold.Black" />
 
                         <TextView
                             android:id="@+id/company_label_tv"
@@ -195,7 +209,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:text="@string/company_label"
-                            android:textSize="12sp" />
+                            style="@style/SmallText2.Gray"
+                            />
 
                         <TextView
                             android:id="@+id/company_value_tv"
@@ -205,30 +220,16 @@
                             android:layout_marginBottom="16dp" />
 
                         <TextView
-                            android:id="@+id/department_label_tv"
+                            android:id="@+id/position_label_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
-                            android:text="@string/department_label"
-                            android:textSize="12sp" />
+                            android:text="@string/position_label"
+                            style="@style/SmallText2.Gray"
+                            />
 
                         <TextView
-                            android:id="@+id/department_value_tv"
-                            style="@style/Subtitle1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp" />
-
-                        <TextView
-                            android:id="@+id/dateStart_label_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:text="@string/hired_label"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/dateStart_value_tv"
+                            android:id="@+id/position_value_tv"
                             style="@style/Subtitle1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -238,18 +239,65 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_marginBottom="32dp"
+                    app:cardBackgroundColor="@color/general_background"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="16dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/role_label_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/role_label"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/role_value_tv"
+                            style="@style/Subtitle1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"/>
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:text="@string/lastAuth"
                     android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/exit_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="85dp"
+                    android:paddingVertical="17dp"
+                    style="@style/DefaultButtonSecondary"
+                    android:text="@string/exit" />
+
+
             </LinearLayout>
 
+        </ScrollView>
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    </ScrollView>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -22,7 +22,7 @@
             app:collapsedTitleTextColor="@color/general_background"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="32dp"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded"
+            app:expandedTitleTextAppearance="@style/Headline3.White"
             app:expandedTitleTextColor="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -43,24 +43,23 @@
                     android:layout_marginEnd="10dp"
                     android:src="@drawable/ic_app_logo" />
 
-                <com.google.android.material.card.MaterialCardView
+                <LinearLayout
                     android:id="@+id/profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginEnd="16dp"
+                    android:background="@drawable/white_circle_background"
                     android:clickable="true"
-                    android:focusable="true"
-                    app:cardCornerRadius="100dp">
+                    android:focusable="true">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:scaleType="matrix"
-                        android:src="@drawable/smile"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-                </com.google.android.material.card.MaterialCardView>
+                        android:src="@drawable/smile" />
+                </LinearLayout>
 
                 <FrameLayout
                     android:clickable="true"
@@ -117,14 +116,18 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_Scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -133,9 +136,11 @@
                 app:cardElevation="4dp">
 
                 <com.google.android.material.card.MaterialCardView
-                    style="@style/MyCardView"
                     android:layout_width="match_parent"
+                    app:cardCornerRadius="16dp"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="-16dp"
+                    app:cardBackgroundColor="@color/general_background"
                     android:elevation="0dp">
 
                     <LinearLayout
@@ -155,8 +160,10 @@
                                 android:id="@+id/chipGroup"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_marginHorizontal="20dp"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginVertical="5dp"
                                 android:background="@color/white"
+                                app:selectionRequired="true"
                                 app:singleSelection="true">
 
                                 <com.google.android.material.chip.Chip
@@ -164,8 +171,10 @@
                                     style="@style/MyChipsFeed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
                                     android:checkable="true"
-                                    android:text="@string/allEvent"/>
+                                    android:checked="true"
+                                    android:text="@string/allEvent" />
 
                                 <com.google.android.material.chip.Chip
                                     android:id="@+id/chipMineEvent"
@@ -180,18 +189,20 @@
                                     style="@style/MyChipsFeed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginEnd="10dp"
                                     android:checkable="true"
                                     android:text="@string/publicEvent" />
 
                             </com.google.android.material.chip.ChipGroup>
                         </LinearLayout>
 
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/feed_rv"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/feed_rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="60dp"
+                            tools:listitem="@layout/item_feed"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </com.google.android.material.card.MaterialCardView>

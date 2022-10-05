@@ -1,107 +1,86 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.*
-import com.teamforce.thanksapp.data.api.ThanksApi
-import com.teamforce.thanksapp.data.response.ProfileResponse
-import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
-import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
-import com.teamforce.thanksapp.utils.RetrofitClient
-import kotlinx.coroutines.*
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.File
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.teamforce.thanksapp.domain.models.profile.ProfileModel
+import com.teamforce.thanksapp.domain.repositories.ProfileRepository
+import com.teamforce.thanksapp.domain.usecases.LoadProfileUseCase
+import com.teamforce.thanksapp.utils.ResultWrapper
+import com.teamforce.thanksapp.utils.UserDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ProfileViewModel() : ViewModel() {
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val userDataRepository: UserDataRepository,
+    private val loadProfileUseCase: LoadProfileUseCase,
+    private val profileRepository: ProfileRepository
+) : ViewModel() {
 
-    private var thanksApi: ThanksApi? = null
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-    private val _profile = MutableLiveData<ProfileResponse>()
-    val profile: LiveData<ProfileResponse> = _profile
+    private val _profile = MutableLiveData<ProfileModel>()
+
+    val profile: LiveData<ProfileModel> = _profile
     private val _profileError = MutableLiveData<String>()
-    val profileError: LiveData<String> = _profileError
 
-    private val _imageUri = MutableLiveData<PutUserAvatarResponse>()
-    val imageUri: LiveData<PutUserAvatarResponse> = _imageUri
-    private val _imageUriError = MutableLiveData<String>()
-    val imageUriError: LiveData<String> = _imageUriError
-
-
-
-
-    fun initViewModel() {
-        thanksApi = RetrofitClient.getInstance()
-    }
-
-    fun loadUserProfile(token: String) {
+    fun loadUserProfile() {
         _isLoading.postValue(true)
-        viewModelScope.launch { callProfileEndpoint(token, Dispatchers.Default) }
-    }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _isLoading.postValue(true)
 
-    private suspend fun callProfileEndpoint(
-        token: String,
-        coroutineDispatcher: CoroutineDispatcher
-    ) {
-        withContext(coroutineDispatcher) {
-            thanksApi?.getProfile("Token $token")?.enqueue(object : Callback<ProfileResponse> {
-                override fun onResponse(
-                    call: Call<ProfileResponse>,
-                    response: Response<ProfileResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _profile.postValue(response.body())
-                    } else {
-                        _profileError.postValue(response.message() + " " + response.code())
+                when (val result = loadProfileUseCase()) {
+                    is ResultWrapper.Success -> {
+                        _profile.postValue(result.value!!)
+                        userDataRepository.saveProfileId(result.value.profile.id)
+                        userDataRepository.saveUsername(result.value.profile.id)
                     }
-                }
+                    is ResultWrapper.GenericError ->
+                        _profileError.postValue(result.error + " " + result.code)
 
-                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-                    _isLoading.postValue(false)
-                    _profileError.postValue(t.message)
+                    is ResultWrapper.NetworkError ->
+                        _profileError.postValue("Ошибка сети")
                 }
-            })
+                _isLoading.postValue(false)
+            }
         }
     }
 
-
-    fun loadUpdateAvatarUserProfile(token: String, userId: String, imageFilePart: MultipartBody.Part) {
-        _isLoading.postValue(true)
-        viewModelScope.launch { callUpdateAvatarProfileEndpoint(token, userId = userId, imageFilePart, Dispatchers.Default) }
-    }
-
-    private suspend fun callUpdateAvatarProfileEndpoint(
-        token: String,
-        userId: String,
-        imageFilePart: MultipartBody.Part,
-        coroutineDispatcher: CoroutineDispatcher
+    fun loadUpdateAvatarUserProfile(
+        filePath: String
     ) {
-        withContext(coroutineDispatcher) {
-            thanksApi?.putUserAvatar("Token $token", userId = userId, imageFilePart)?.enqueue(object : Callback<PutUserAvatarResponse> {
-                override fun onResponse(
-                    call: Call<PutUserAvatarResponse>,
-                    response: Response<PutUserAvatarResponse>
-                ) {
-                    _isLoading.postValue(false)
-                    if (response.code() == 200) {
-                        _imageUri.postValue(response.body())
-                    } else {
-                        _imageUriError.postValue(response.message() + " " + response.code())
-                    }
-                }
+        _isLoading.postValue(true)
+        viewModelScope.launch {
+            val userId = userDataRepository.getProfileId()
+            if (userId != null)
+                withContext(Dispatchers.IO) {
+                    _isLoading.postValue(true)
+                    when (val result = profileRepository.updateUserAvatar(userId, filePath)) {
+                        is ResultWrapper.Success -> {}
+                        else -> {
+                            if (result is ResultWrapper.GenericError) {
+                                _profileError.postValue(result.error + " " + result.code)
 
-                override fun onFailure(call: Call<PutUserAvatarResponse>, t: Throwable) {
-                    Log.d(ProfileFragment.TAG, "onFailure: $t")
+                            } else if (result is ResultWrapper.NetworkError) {
+                                _profileError.postValue("Ошибка сети")
+                            }
+                        }
+                    }
                     _isLoading.postValue(false)
-                    _profileError.postValue(t.message)
                 }
-            })
         }
     }
 
+    fun logout() {
+        userDataRepository.logout()
+    }
+
+    fun isUserAuthorized() = userDataRepository.getAuthToken() != null
 
 }
