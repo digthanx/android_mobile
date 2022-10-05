@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -16,11 +17,14 @@ import com.teamforce.thanksapp.databinding.FragmentDetailsInnerChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.DetailsInnerChallengerViewModel
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.activityNavController
+import com.teamforce.thanksapp.utils.navigateSafely
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+
 
 @AndroidEntryPoint
 class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_challenge) {
@@ -42,7 +46,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         loadChallengeData(idChallenge)
         setDataAboutChallenge()
         binding.sendReportBtn.setOnClickListener {
-
+            it.findNavController().navigate(R.id.action_global_createReportFragment)
         }
     }
 
