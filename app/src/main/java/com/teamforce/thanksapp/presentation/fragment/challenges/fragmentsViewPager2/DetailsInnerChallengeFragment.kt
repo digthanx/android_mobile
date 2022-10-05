@@ -17,6 +17,7 @@ import com.teamforce.thanksapp.databinding.FragmentDetailsInnerChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.DetailsInnerChallengerViewModel
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.activityNavController
 import com.teamforce.thanksapp.utils.navigateSafely
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +31,7 @@ import java.time.format.DateTimeFormatter
 class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_challenge) {
 
     private val binding: FragmentDetailsInnerChallengeBinding by viewBinding()
-    private val viewModel :DetailsInnerChallengerViewModel by viewModels()
+    private val viewModel: DetailsInnerChallengerViewModel by viewModels()
 
     private var idChallenge: Int? = null
 
@@ -46,17 +47,21 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         loadChallengeData(idChallenge)
         setDataAboutChallenge()
         binding.sendReportBtn.setOnClickListener {
-            it.findNavController().navigate(R.id.action_global_createReportFragment)
+            it.findNavController().navigate(
+                R.id.action_global_createReportFragment,
+                null,
+                OptionsTransaction().optionForEditProfile
+            )
         }
     }
 
-    private fun loadChallengeData(challengeId: Int?){
+    private fun loadChallengeData(challengeId: Int?) {
         challengeId?.let {
             viewModel.loadChallenge(it)
         }
     }
 
-    private fun setDataAboutChallenge(){
+    private fun setDataAboutChallenge() {
         viewModel.challenge.observe(viewLifecycleOwner) {
             binding.nameChallenge.text = it.name
             binding.descriptionChallenge.text = it.description
@@ -68,11 +73,14 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                 String.format(requireContext().getString(R.string.fund), it.fund.toString())
             binding.dateEndValue.text = convertDateToNecessaryFormat(it.end_at)
             binding.prizePoolValue.text =
-                String.format(requireContext()
-                    .getString(R.string.occupiedPrizePool), it.winners_count, it.awardees)
+                String.format(
+                    requireContext()
+                        .getString(R.string.occupiedPrizePool), it.winners_count, it.awardees
+                )
             binding.userTgName.setText(
-                String.format(requireContext().getString(R.string.tgName), it.creator_tg_name))
-            if(!it.creator_photo.isNullOrEmpty()){
+                String.format(requireContext().getString(R.string.tgName), it.creator_tg_name)
+            )
+            if (!it.creator_photo.isNullOrEmpty()) {
                 Glide.with(requireContext())
                     .load("${Consts.BASE_URL}${it.creator_photo}".toUri())
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
