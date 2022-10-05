@@ -46,6 +46,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         super.onViewCreated(view, savedInstanceState)
         loadChallengeData(idChallenge)
         setDataAboutChallenge()
+        checkReportSharedPref()
         binding.sendReportBtn.setOnClickListener {
             it.findNavController().navigate(
                 R.id.action_global_createReportFragment,
@@ -55,13 +56,30 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkReportSharedPref()
+    }
+
     private fun loadChallengeData(challengeId: Int?) {
         challengeId?.let {
             viewModel.loadChallenge(it)
         }
     }
 
+
+    private fun checkReportSharedPref(){
+        val sharedPref = requireContext().getSharedPreferences("report", 0)
+        if (!sharedPref.getString("commentReport", "").isNullOrEmpty()||
+            !sharedPref.getString("imageReport", "").isNullOrEmpty()){
+            binding.sendReportBtn.text = requireContext().getString(R.string.draft)
+        }else{
+            binding.sendReportBtn.text = requireContext().getString(R.string.sendReport)
+        }
+    }
+
     private fun setDataAboutChallenge() {
+
         viewModel.challenge.observe(viewLifecycleOwner) {
             binding.nameChallenge.text = it.name
             binding.descriptionChallenge.text = it.description
@@ -118,4 +136,5 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
             return "Не определено"
         }
     }
+
 }

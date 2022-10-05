@@ -23,16 +23,15 @@
                 android:id="@+id/status_active_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="12dp"
                 app:cardBackgroundColor="@color/minor_info">
                 <TextView
                     android:id="@+id/status_active_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginVertical="2dp"
                     android:layout_marginHorizontal="8dp"
-                    style="@style/SmallText2.White"
-                    android:textColor="@color/general_background"
+                    android:textAppearance="@style/SmallText2.White"
                     android:text="@string/active"/>
             </com.google.android.material.card.MaterialCardView>
 

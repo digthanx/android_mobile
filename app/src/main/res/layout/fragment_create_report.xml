@@ -43,7 +43,7 @@
                 android:text="@string/closeInHeader"/>
         </LinearLayout>
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/reason_value"
+            android:id="@+id/comment_value"
             android:layout_width="match_parent"
             android:layout_height="166dp"
             android:layout_marginHorizontal="16dp"
@@ -54,7 +54,7 @@
             app:strokeWidth="@dimen/stroke_size">
 
             <EditText
-                android:id="@+id/message_value_et"
+                android:id="@+id/comment_value_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="78dp"
