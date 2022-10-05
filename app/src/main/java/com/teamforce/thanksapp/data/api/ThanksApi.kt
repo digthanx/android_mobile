@@ -148,7 +148,7 @@ interface ThanksApi {
     ): Call<ChallengeModelById>
 
     @GET("/challenge-contenders/{challenge_id}/")
-    fun getChallengeContenders(
+    suspend fun getChallengeContenders(
         @Path("challenge_id") challengeId: Int
     ): GetChallengeContendersResponse
 }
