@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamforce.thanksapp.data.response.GetChallengeParticipantsResponse
-import com.teamforce.thanksapp.domain.models.profile.ProfileModel
+import com.teamforce.thanksapp.data.response.GetChallengeContendersResponse
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
 import com.teamforce.thanksapp.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,36 +14,36 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class ParticipantChallengeViewModel @Inject constructor(
+class ContendersChallengeViewModel @Inject constructor(
     private val challengeRepository: ChallengeRepository
 ) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _participants = MutableLiveData<GetChallengeParticipantsResponse>()
-    val participants: LiveData<GetChallengeParticipantsResponse> = _participants
-    private val _participantsError = MutableLiveData<String>()
-    val participantsError: LiveData<String> = _participantsError
+    private val _contenders = MutableLiveData<GetChallengeContendersResponse>()
+    val contenders: LiveData<GetChallengeContendersResponse> = _contenders
+    private val _contendersError = MutableLiveData<String>()
+    val contendersError: LiveData<String> = _contendersError
 
 
-    fun loadParticipants(
+    fun loadContenders(
         challengeId: Int
     ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _isLoading.postValue(true)
-                when (val result = challengeRepository.loadParticipants(challengeId)) {
+                when (val result = challengeRepository.loadContenders(challengeId)) {
                     is ResultWrapper.Success -> {
-                        _participants.postValue(result.value!!)
+                        _contenders.postValue(result.value!!)
                     }
                     else -> {
                         if (result is ResultWrapper.GenericError) {
-                            _participantsError.postValue(result.error + " " + result.code)
+                            _contendersError.postValue(result.error + " " + result.code)
 
                         } else if (result is ResultWrapper.NetworkError) {
-                            _participantsError.postValue("Ошибка сети")
+                            _contendersError.postValue("Ошибка сети")
                         }
                     }
                 }

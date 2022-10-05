@@ -2,7 +2,6 @@ package com.teamforce.thanksapp.data.api
 
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
-import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.model.domain.ChallengeModel
@@ -12,7 +11,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
-import java.io.File
 
 interface ThanksApi {
 
@@ -149,8 +147,8 @@ interface ThanksApi {
         @Path("challenge_id") commentId: Int
     ): Call<ChallengeModelById>
 
-    @GET("/challenge-participants/{challenge_id}/")
-    fun getChallengeParticipants(
+    @GET("/challenge-contenders/{challenge_id}/")
+    fun getChallengeContenders(
         @Path("challenge_id") challengeId: Int
-    ): GetChallengeParticipantsResponse
+    ): GetChallengeContendersResponse
 }
