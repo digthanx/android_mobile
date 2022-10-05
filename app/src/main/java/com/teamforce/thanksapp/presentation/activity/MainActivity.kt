@@ -3,19 +3,11 @@ package com.teamforce.thanksapp.presentation.activity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.data.SharedPreferences
 import com.teamforce.thanksapp.databinding.ActivityMainBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
-import com.teamforce.thanksapp.utils.UserDataRepository
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

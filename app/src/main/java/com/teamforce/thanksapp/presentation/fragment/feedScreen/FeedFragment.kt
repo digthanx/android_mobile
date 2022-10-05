@@ -1,13 +1,10 @@
 package com.teamforce.thanksapp.presentation.fragment.feedScreen
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -17,18 +14,18 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.teamforce.thanksapp.NotificationSharedViewModel
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.teamforce.thanksapp.NotificationSharedViewModel
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
 import com.teamforce.thanksapp.presentation.adapter.FeedAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
-import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.gone
+import com.teamforce.thanksapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -69,6 +66,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         }
         //  displaySnack()
 
+        binding.notifyLayout.setOnClickListener {
+            findNavController().navigate(R.id.action_feedFragment_to_notificationsFragment)
+        }
+
         sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
             if (notificationsCount == 0) {
                 binding.apply {
@@ -83,38 +84,33 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 }
             }
         }
-
-        binding.notifyLayout.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_notificationsFragment)
-        }
-
     }
 
-    private fun displaySnack() {
-        binding.notify.setOnClickListener {
-            val snack = Snackbar.make(
-                binding.root,
-                requireContext().resources.getString(R.string.joke),
-                Snackbar.LENGTH_LONG
-            )
-            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                override fun onShown(transientBottomBar: Snackbar?) {
-                    super.onShown(transientBottomBar)
-                }
-
-                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                    super.onDismissed(transientBottomBar, event)
-                }
-            })
-            snack.setTextMaxLines(3)
-                .setTextColor(context?.getColor(R.color.white)!!)
-                .setAction(context?.getString(R.string.OK)!!) {
-                    snack.dismiss()
-                }
-            snack.show()
-
-        }
-    }
+//    private fun displaySnack() {
+//        binding.notify.setOnClickListener {
+//            val snack = Snackbar.make(
+//                binding.root,
+//                requireContext().resources.getString(R.string.joke),
+//                Snackbar.LENGTH_LONG
+//            )
+//            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+//                override fun onShown(transientBottomBar: Snackbar?) {
+//                    super.onShown(transientBottomBar)
+//                }
+//
+//                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+//                    super.onDismissed(transientBottomBar, event)
+//                }
+//            })
+//            snack.setTextMaxLines(3)
+//                .setTextColor(context?.getColor(R.color.white)!!)
+//                .setAction(context?.getString(R.string.OK)!!) {
+//                    snack.dismiss()
+//                }
+//            snack.show()
+//
+//        }
+//    }
 
 
     private fun initView() {

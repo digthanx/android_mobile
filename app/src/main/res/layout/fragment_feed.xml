@@ -77,7 +77,6 @@
                         android:layout_height="wrap_content">
 
                         <ImageButton
-
                             android:clickable="false"
                             android:id="@+id/notify_active"
                             android:layout_width="wrap_content"

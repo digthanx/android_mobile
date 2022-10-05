@@ -18,20 +18,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.teamforce.thanksapp.NotificationSharedViewModel
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.teamforce.thanksapp.NotificationSharedViewModel
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
-import com.teamforce.thanksapp.utils.OptionsTransaction
-import com.teamforce.thanksapp.utils.UserDataRepository
-import com.teamforce.thanksapp.utils.gone
-import com.teamforce.thanksapp.utils.visible
-import dagger.hilt.android.AndroidEntryPoint
-import com.teamforce.thanksapp.utils.activityNavController
-import com.teamforce.thanksapp.utils.navigateSafely
+import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -44,6 +38,7 @@ class BalanceFragment : Fragment() {
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
     private val viewModel: BalanceViewModel by viewModels()
+    private val sharedViewModel: NotificationSharedViewModel by activityViewModels()
 
     private lateinit var count: TextView
     private lateinit var distributed: TextView
@@ -54,8 +49,6 @@ class BalanceFragment : Fragment() {
     private lateinit var willBurn: TextView
     private val wholeScreen: LinearLayout by lazy { binding.wholeScreen }
     private lateinit var swipeToRefresh: SwipeRefreshLayout
-
-    private val sharedViewModel: NotificationSharedViewModel by activityViewModels()
 
 
     override fun onCreateView(
@@ -83,7 +76,7 @@ class BalanceFragment : Fragment() {
         initViews(view)
         loadBalanceData()
         setBalanceData()
-       // displaySnack()
+        // displaySnack()
         viewModel.isLoading.observe(
             viewLifecycleOwner
         ) { isLoading ->
@@ -109,11 +102,7 @@ class BalanceFragment : Fragment() {
         }
 
         binding.notifyLayout.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_balanceFragment_to_notificationsFragment,
-                null,
-                optionForProfileFragment
-            )
+            findNavController().navigate(R.id.action_balanceFragment_to_notificationsFragment)
         }
 
         sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
@@ -131,35 +120,7 @@ class BalanceFragment : Fragment() {
             }
         }
 
-//    private fun displaySnack(){
-//        binding.notify.setOnClickListener {
-//            binding.fab.hide()
-//            val snack = Snackbar.make(
-//                binding.fab.rootView,
-//                requireContext().resources.getString(R.string.joke),
-//                Snackbar.LENGTH_LONG
-//            )
-//            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
-//                override fun onShown(transientBottomBar: Snackbar?) {
-//                    super.onShown(transientBottomBar)
-//                }
-//
-//                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-//                    super.onDismissed(transientBottomBar, event)
-//                    if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
-//                        binding.fab.show()
-//                    }
-//                }
-//            })
-//            snack.setTextMaxLines(3)
-//                .setTextColor(context?.getColor(R.color.white)!!)
-//                .setAction(context?.getString(R.string.OK)!!) {
-//                    snack.dismiss()
-//                }
-//            snack.show()
-//
-//        }
-//    }
+    }
 
 
     private fun loadBalanceData() {

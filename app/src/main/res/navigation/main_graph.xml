@@ -60,6 +60,9 @@
             <action
                 android:id="@+id/action_feedFragment_to_profileGraph"
                 app:destination="@id/profileGraph" />
+            <action
+                android:id="@+id/action_feedFragment_to_notificationsFragment"
+                app:destination="@id/notificationsFragment" />
         </fragment>
         <fragment
             android:id="@+id/additionalInfoFeedItemFragment"
@@ -120,6 +123,9 @@
             <action
                 android:id="@+id/action_historyFragment_to_profileGraph"
                 app:destination="@id/profileGraph" />
+            <action
+                android:id="@+id/action_historyFragment_to_notificationsFragment"
+                app:destination="@id/notificationsFragment" />
         </fragment>
         <dialog
             android:id="@+id/additionalInfoTransactionBottomSheetFragment2"
@@ -143,6 +149,9 @@
             <action
                 android:id="@+id/action_balanceFragment_to_profileGraph"
                 app:destination="@id/profileGraph" />
+            <action
+                android:id="@+id/action_balanceFragment_to_notificationsFragment"
+                app:destination="@id/notificationsFragment" />
         </fragment>
     </navigation>
     <navigation
@@ -182,4 +191,8 @@
                 app:destination="@id/challengesFragment" />
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.notifications.NotificationsFragment"
+        android:label="NotificationsFragment" />
 </navigation>

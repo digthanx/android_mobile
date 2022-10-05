@@ -61,7 +61,7 @@ class PushNotificationService : FirebaseMessagingService() {
     }
 
     private fun getRemoteView(title: String, message: String): RemoteViews {
-        val remoteView = RemoteViews("com.teamforce.thanksapp", R.layout.sample_notification)
+        val remoteView = RemoteViews(BuildConfig.APPLICATION_ID, R.layout.sample_notification)
 
         remoteView.setTextViewText(R.id.notif_title, title)
         remoteView.setTextViewText(R.id.notif_description, message)
