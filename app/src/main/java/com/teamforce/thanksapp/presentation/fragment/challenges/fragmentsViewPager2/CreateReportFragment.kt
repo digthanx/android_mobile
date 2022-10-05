@@ -12,13 +12,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.data.request.CreateReportRequest
 import com.teamforce.thanksapp.databinding.FragmentCreateReportBinding
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
+import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
+import com.teamforce.thanksapp.presentation.viewmodel.CreateReportViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.getPath
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +35,8 @@ import java.io.File
 class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
 
     private val binding: FragmentCreateReportBinding by viewBinding()
+
+    private val viewModel: CreateReportViewModel by viewModels()
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -48,16 +54,44 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
 
     private var imageFilePart: MultipartBody.Part? = null
     private var filePath: String? = null
+    private var idChallenge: Int? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.apply {
+            idChallenge = getInt(ChallengeAdapter.CHALLENGER_ID)
+        }
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         restoreSavedDateFromSP()
         attachDetachImageInPreview()
+        saveWithoutSending()
+        deleteReportStateWhenFieldsAreNull()
+        listenersSuccessResponseOfCreateReport()
+        listenersErrorCreateChallenge()
         binding.closeBtn.setOnClickListener {
             activity?.onBackPressed()
         }
 
+        binding.sendReport.setOnClickListener {
+            idChallenge?.let { it1 -> sendReport(it1) }
+        }
+
+
+    }
+
+    private fun deleteReportStateWhenFieldsAreNull(){
+        if (binding.commentValueEt.text.trim().isEmpty() ||
+            filePath.isNullOrEmpty()
+        ){
+            deleteReportState()
+        }
+    }
+
+    private fun saveWithoutSending(){
         binding.saveWithoutSendingBtn.setOnClickListener {
             if (binding.commentValueEt.text.trim().isNotEmpty() ||
                 !filePath.isNullOrEmpty()
@@ -66,15 +100,38 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
             }
             activity?.onBackPressed()
         }
-        binding.sendReport.setOnClickListener {
-
-        }
-
-        deleteReportState()
     }
 
-    private fun sendReport(){
+    private fun sendReport(challengeId: Int){
+        val comment = binding.commentValueEt.text.toString()
+        val image = imageFilePart
+        val challengeID = challengeId
+        viewModel.createReport(challengeID, comment, image)
+    }
 
+    private fun listenersSuccessResponseOfCreateReport(){
+        viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
+            if(it){
+                Toast.makeText(requireContext(),
+                    requireContext().getString(R.string.successCreateReport),
+                    Toast.LENGTH_LONG).show()
+                clearFields()
+                activity?.onBackPressed()
+            }
+        }
+    }
+
+    private fun clearFields(){
+        binding.commentValueEt.setText("")
+        binding.showAttachedImgCard.visibility = View.GONE
+        imageFilePart = null
+        filePath = null
+    }
+
+    private fun listenersErrorCreateChallenge(){
+        viewModel.createReportError.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun restoreSavedDateFromSP() {
