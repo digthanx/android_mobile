@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter
 
 class ContendersAdapter(
 
-): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(ContenderViewHolder.DiffCallback)
+): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(DiffCallback)
 {
 
     var applyClickListener: ((reportId: Int, state: Char) -> Unit)? = null
@@ -40,22 +40,7 @@ class ContendersAdapter(
     }
 
 
-    class ContenderViewHolder(
-        binding: ItemContenderBinding) : RecyclerView.ViewHolder(binding.root) {
-        var userAvatar = binding.userAvatar
-        var userName = binding.userNameLabelTv
-        var userSurname = binding.userSurnameLabelTv
-        var dateTime = binding.dateTv
-        var applyBtn = binding.applyBtn
-        var refuseBtn = binding.refuseBtn
-        var reportPhoto = binding.image
-        var reportText = binding.reportText
-
-        //val name = binding.challengeTitle
-        val root = binding.root
-        var date: String = ""
-        var time: String =  ""
-
+    companion object{
 
         object DiffCallback : DiffUtil.ItemCallback<GetChallengeContendersResponse.Contender>() {
             override fun areItemsTheSame(oldItem: GetChallengeContendersResponse.Contender, newItem: GetChallengeContendersResponse.Contender): Boolean {
@@ -67,32 +52,38 @@ class ContendersAdapter(
             }
 
         }
-
     }
 
+   inner class ContenderViewHolder(val binding: ItemContenderBinding)
+        : RecyclerView.ViewHolder(binding.root)
+
+
     override fun onBindViewHolder(holder: ContenderViewHolder, position: Int) {
-        if(!currentList[position].participant_photo.isNullOrEmpty()){
-            Glide.with(holder.root.context)
-                .load("${Consts.BASE_URL}${currentList[position].participant_photo}".toUri())
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .into(holder.userAvatar)
+        with(holder){
+            if(!currentList[position].participant_photo.isNullOrEmpty()){
+                Glide.with(holder.binding.root.context)
+                    .load("${Consts.BASE_URL}${currentList[position].participant_photo}".toUri())
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .into(holder.binding.userAvatar)
+            }
+            if(!currentList[position].report_photo.isNullOrEmpty()){
+                Glide.with(holder.binding.root.context)
+                    .load("${Consts.BASE_URL}${currentList[position].report_photo}".toUri())
+                    .centerCrop()
+                    .into(holder.binding.image)
+            }
+            binding.reportText.text = currentList[position].report_text
+            binding.userNameLabelTv.text = currentList[position].participant_name
+            binding.userSurnameLabelTv.text = currentList[position].participant_surname
+            convertDateToNecessaryFormat(holder, position)
+            binding.applyBtn.setOnClickListener {
+                applyClickListener?.invoke(currentList[position].report_id, 'W')
+            }
+            binding.refuseBtn.setOnClickListener {
+                refuseClickListener?.invoke(currentList[position].report_id, 'D')
+            }
         }
-        if(!currentList[position].report_photo.isNullOrEmpty()){
-            Glide.with(holder.root.context)
-                .load("${Consts.BASE_URL}${currentList[position].report_photo}".toUri())
-                .centerCrop()
-                .into(holder.reportPhoto)
-        }
-        holder.reportText.text = currentList[position].report_text
-        holder.userName.text = currentList[position].participant_name
-        holder.userSurname.text = currentList[position].participant_surname
-        convertDateToNecessaryFormat(holder, position)
-        holder.applyBtn.setOnClickListener {
-            applyClickListener?.invoke(currentList[position].report_id, 'W')
-        }
-        holder.refuseBtn.setOnClickListener {
-            refuseClickListener?.invoke(currentList[position].report_id, 'D')
-        }
+
 
     }
 
@@ -103,7 +94,7 @@ class ContendersAdapter(
             val dateTime: String? =
                 LocalDateTime.parse(zdt.toString(), DateTimeFormatter.ISO_DATE_TIME)
                     .format(DateTimeFormatter.ofPattern("dd.MM.y HH:mm"))
-            val date = dateTime?.subSequence(0, 10)
+            var date = dateTime?.subSequence(0, 10)
             val time = dateTime?.subSequence(11, 16)
             val today: LocalDate = LocalDate.now()
             val yesterday: String = today.minusDays(1).format(DateTimeFormatter.ISO_DATE)
@@ -113,21 +104,20 @@ class ContendersAdapter(
             val yesterdayString =
                 LocalDate.parse(yesterday, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                     .format(DateTimeFormatter.ofPattern("dd.MM.y"))
-
             if (date == todayString) {
-                holder.date = "Сегодня"
+                date = "Сегодня"
             } else if (date == yesterdayString) {
-                holder.date = "Вчера"
+                date = "Вчера"
             } else {
-                holder.date = date.toString()
+                date = date.toString()
             }
-            holder.time = time.toString()
-            holder.dateTime.text =
-                String.format(holder.root.context.getString(R.string.dateTime), holder.date, holder.time)
+            holder.binding.dateTv.text =
+                String.format(holder.binding.root.context.getString(R.string.dateTime), date, time)
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }
     }
+
 
 
 }
