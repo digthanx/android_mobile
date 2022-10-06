@@ -148,8 +148,20 @@
         <item name="android:letterSpacing">0.05</item>
     </style>
 
+    <style name="Body1.Bold" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="Body1" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/general_contrast</item>
+        <item name="fontFamily">@font/roboto_regular</item>
+
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Body1.White" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/general_background</item>
         <item name="fontFamily">@font/roboto_regular</item>
 
         <item name="android:textSize">16sp</item>
@@ -196,7 +208,7 @@
     </style>
 
 
-    <style name="DefaultButton" parent="Widget.Material3.Button.ElevatedButton">
+    <style name="DefaultButton" parent="">
         <item name="android:backgroundTint">@color/general_brand</item>
         <item name="cornerRadius">12dp</item>
         <item name="android:textColor">@color/color5</item>
@@ -204,22 +216,22 @@
         <item name="android:letterSpacing">0.03</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
-        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="textAllCaps">false</item>
     </style>
 
-    <style name="DefaultButtonSecondary" parent="Widget.Material3.Button.ElevatedButton">
+    <style name="DefaultButtonSecondary" parent="">
         <item name="android:backgroundTint">@color/general_brand_secondary</item>
         <item name="cornerRadius">12dp</item>
         <item name="android:textColor">@color/general_brand</item>
         <item name="android:textSize">16sp</item>
-        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/roboto_regular</item>
     </style>
 
 
     <style name="NotFilledButton" parent="">
         <item name="android:backgroundTint">@color/general_background</item>
         <item name="iconTint">@color/general_brand</item>
-        <item name="elevation">0dp</item>
         <item name="strokeWidth">1dp</item>
         <item name="textAllCaps">false</item>
         <item name="strokeColor">@color/general_brand</item>

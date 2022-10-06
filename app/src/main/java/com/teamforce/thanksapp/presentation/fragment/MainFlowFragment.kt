@@ -98,7 +98,8 @@ class MainFlowFragment : BaseFlowFragment(
                 destination.id == R.id.additionalInfoFeedItemFragment ||
                 destination.id == R.id.editProfileBottomSheetFragment ||
                 destination.id == R.id.createChallengeFragment ||
-                destination.id == R.id.detailsMainChallengeFragment){
+                destination.id == R.id.detailsMainChallengeFragment ||
+                destination.id == R.id.createReportFragment){
                 hideBottomNavigation()
             }else{
                 showBottomNavigation()

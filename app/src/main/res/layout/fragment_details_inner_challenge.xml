@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.fragment.challenges.fragmentsViewPager2.DetailsInnerChallengeFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".presentation.fragment.challenges.fragmentsViewPager2.DetailsInnerChallengeFragment">
+        android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -267,18 +267,22 @@
         <LinearLayout
             android:id="@+id/action_linear"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="76dp"
             android:gravity="center"
             android:orientation="horizontal">
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/send_report_btn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="2"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
                 style="@style/DefaultButton"
-                android:text="Черновик"/>
+                android:textSize="14sp"
+                android:letterSpacing="-0.031"
+                android:text="@string/sendReport"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/like_btn"
@@ -286,6 +290,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
                 app:icon="@drawable/ic_like"
                 style="@style/ReactionBtnFeed" />
 
@@ -296,7 +302,9 @@
                 android:layout_weight="1"
                 app:cornerRadius="8dp"
                 android:textColor="@color/general_contrast"
-                android:layout_marginEnd="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
                 app:icon="@drawable/ic_dislike"
                 style="@style/ReactionBtnFeed"
                 />
