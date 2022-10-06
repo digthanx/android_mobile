@@ -22,6 +22,10 @@ class ContendersAdapter(
 ): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(ContenderViewHolder.DiffCallback)
 {
 
+    var applyClickListener: ((reportId: Int, state: Char) -> Unit)? = null
+    var refuseClickListener: ((reportId: Int, state: Char) -> Unit)? = null
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContenderViewHolder {
         val binding = ItemContenderBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
@@ -40,6 +44,8 @@ class ContendersAdapter(
         var userName = binding.userNameLabelTv
         var userSurname = binding.userSurnameLabelTv
         var dateTime = binding.dateTv
+        var applyBtn = binding.applyBtn
+        var refuseBtn = binding.refuseBtn
 
         //val name = binding.challengeTitle
         val root = binding.root
@@ -69,6 +75,13 @@ class ContendersAdapter(
         holder.userName.text = currentList[position].participant_name
         holder.userSurname.text = currentList[position].participant_surname
         convertDateToNecessaryFormat(holder, position)
+        holder.applyBtn.setOnClickListener {
+            applyClickListener?.invoke(currentList[position].report_id, 'W')
+        }
+        holder.refuseBtn.setOnClickListener {
+            refuseClickListener?.invoke(currentList[position].report_id, 'D')
+        }
+
     }
 
     private fun convertDateToNecessaryFormat(holder: ContenderViewHolder, position: Int) {
