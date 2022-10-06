@@ -38,10 +38,10 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         setData()
         binding.contendersRv.addItemDecoration(HorizontalDividerItemDecoration(16, adapter.itemCount))
         adapter.applyClickListener = {reportId: Int, state: Char ->
-            // Принятие отчета
+            viewModel.checkReport(reportId, state)
         }
         adapter.refuseClickListener = {reportId: Int, state: Char ->
-            // Отклонение отчета
+            viewModel.checkReport(reportId, state)
         }
 
     }

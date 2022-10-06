@@ -36,11 +36,11 @@ class ChallengeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun checkChallengeReport(
-        challengeId: Int,
+        reportId: Int,
         state: Char
     ): ResultWrapper<CheckReportResponse> {
         return safeApiCall(Dispatchers.IO) {
-            thanksApi.checkChallengeReport(challengeId, state)
+            thanksApi.checkChallengeReport(reportId, state)
         }
     }
 }

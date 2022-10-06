@@ -19,7 +19,7 @@ interface ChallengeRepository {
     ): ResultWrapper<CreateReportResponse>
 
     suspend fun checkChallengeReport(
-        challengeId: Int,
+        reportId: Int,
         state: Char
     ): ResultWrapper<CheckReportResponse>
 

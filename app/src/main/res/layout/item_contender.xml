@@ -59,12 +59,11 @@
         app:layout_constraintTop_toBottomOf="@+id/user_name_label_tv" />
 
     <TextView
-        android:id="@+id/challenge_text"
+        android:id="@+id/report_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:textAppearance="@style/SmallText2.Black"
-        android:text="Давайте проведем часть времени в активном спортивногом состоянии. Предлагаю всем в течении недели пройти 100 км или пробежать. Кто сможет - получить форсики. Жду!"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/date_tv"/>
 
@@ -76,7 +75,7 @@
         android:visibility="visible"
         app:cardCornerRadius="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/challenge_text">
+        app:layout_constraintTop_toBottomOf="@id/report_text">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -107,6 +106,7 @@
             android:elevation="0dp"
             android:stateListAnimator="@null"
             app:strokeWidth="0dp"
+            android:textSize="12sp"
             android:layout_weight="1"
             android:text="@string/refuseInContender"
             app:layout_constraintStart_toStartOf="parent"
@@ -124,6 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:textSize="12sp"
             android:text="@string/applyInContender"
             android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"

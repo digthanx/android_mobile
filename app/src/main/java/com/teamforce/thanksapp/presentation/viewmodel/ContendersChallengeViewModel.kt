@@ -56,14 +56,14 @@ class ContendersChallengeViewModel @Inject constructor(
     }
 
     fun checkReport(
-        challengeId: Int,
+        reportId: Int,
         state: Char
     ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _isLoading.postValue(true)
-                when (val result = challengeRepository.checkChallengeReport(challengeId, state)) {
+                when (val result = challengeRepository.checkChallengeReport(reportId, state)) {
                     is ResultWrapper.Success -> {
                        // _contenders.postValue(result.value!!)
                     }

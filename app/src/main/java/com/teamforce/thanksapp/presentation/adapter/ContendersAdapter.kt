@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.GetChallengeContendersResponse
 import com.teamforce.thanksapp.databinding.ItemContenderBinding
@@ -46,6 +48,8 @@ class ContendersAdapter(
         var dateTime = binding.dateTv
         var applyBtn = binding.applyBtn
         var refuseBtn = binding.refuseBtn
+        var reportPhoto = binding.image
+        var reportText = binding.reportText
 
         //val name = binding.challengeTitle
         val root = binding.root
@@ -70,8 +74,16 @@ class ContendersAdapter(
         if(!currentList[position].participant_photo.isNullOrEmpty()){
             Glide.with(holder.root.context)
                 .load("${Consts.BASE_URL}${currentList[position].participant_photo}".toUri())
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(holder.userAvatar)
         }
+        if(!currentList[position].report_photo.isNullOrEmpty()){
+            Glide.with(holder.root.context)
+                .load("${Consts.BASE_URL}${currentList[position].report_photo}".toUri())
+                .centerCrop()
+                .into(holder.reportPhoto)
+        }
+        holder.reportText.text = currentList[position].report_text
         holder.userName.text = currentList[position].participant_name
         holder.userSurname.text = currentList[position].participant_surname
         convertDateToNecessaryFormat(holder, position)
