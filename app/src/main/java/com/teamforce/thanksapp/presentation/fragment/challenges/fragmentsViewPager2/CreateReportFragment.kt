@@ -116,6 +116,7 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
                     requireContext().getString(R.string.successCreateReport),
                     Toast.LENGTH_LONG).show()
                 clearFields()
+                deleteReportState()
                 activity?.onBackPressed()
             }
         }
