@@ -9,6 +9,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.adapter.ContendersAdapter
+import com.teamforce.thanksapp.presentation.adapter.decorators.HorizontalDividerItemDecoration
 import com.teamforce.thanksapp.presentation.viewmodel.ContendersChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,9 +32,12 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.contendersRv.adapter = ContendersAdapter()
+        val adapter = ContendersAdapter()
+        binding.contendersRv.adapter = adapter
         loadParticipants()
         setData()
+        binding.contendersRv.addItemDecoration(HorizontalDividerItemDecoration(16, adapter.itemCount))
+
     }
 
     private fun loadParticipants(){
