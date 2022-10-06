@@ -116,6 +116,9 @@ class ChallengeAdapter(
                 putInt(CHALLENGER_ID, currentList[position].id)
                 putBoolean(CHALLENGER_STATE_ACTIVE, currentList[position].active)
                 putString(CHALLENGE_BACKGROUND, currentList[position].photo)
+                currentList[position].creator_id?.let {
+                        it1 -> putInt(CHALLENGER_CREATOR_ID, it1)
+                }
             }
             holder.root.findNavController().navigate(
                 R.id.action_challengesFragment_to_detailsMainChallengeFragment,
