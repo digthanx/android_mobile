@@ -26,6 +26,9 @@ class ContendersChallengeViewModel @Inject constructor(
     private val _contendersError = MutableLiveData<String>()
     val contendersError: LiveData<String> = _contendersError
 
+    private val _checkReportError = MutableLiveData<String>()
+    val checkReportError: LiveData<String> = _checkReportError
+
 
     fun loadContenders(
         challengeId: Int
@@ -44,6 +47,32 @@ class ContendersChallengeViewModel @Inject constructor(
 
                         } else if (result is ResultWrapper.NetworkError) {
                             _contendersError.postValue("Ошибка сети")
+                        }
+                    }
+                }
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
+    fun checkReport(
+        challengeId: Int,
+        state: Char
+    ) {
+        _isLoading.postValue(true)
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _isLoading.postValue(true)
+                when (val result = challengeRepository.checkChallengeReport(challengeId, state)) {
+                    is ResultWrapper.Success -> {
+                       // _contenders.postValue(result.value!!)
+                    }
+                    else -> {
+                        if (result is ResultWrapper.GenericError) {
+                            _checkReportError.postValue(result.error + " " + result.code)
+
+                        } else if (result is ResultWrapper.NetworkError) {
+                            _checkReportError.postValue("Ошибка сети")
                         }
                     }
                 }
