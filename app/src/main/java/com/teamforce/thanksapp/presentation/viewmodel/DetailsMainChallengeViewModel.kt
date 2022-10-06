@@ -10,10 +10,10 @@ class DetailsMainChallengeViewModel @Inject constructor(
     userDataRepository: UserDataRepository
 ): ViewModel() {
 
-    private val profileId: String? = userDataRepository.getProfileId()
+    private val userRepo = userDataRepository
 
     fun getProfileId(): Int{
-        val id = profileId
+        val id = userRepo.getProfileId()
         if(!id.isNullOrEmpty()){
             return id.toInt()
         }
