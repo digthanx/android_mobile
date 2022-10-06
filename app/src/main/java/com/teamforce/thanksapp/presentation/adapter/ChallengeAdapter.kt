@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.presentation.adapter
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -54,6 +55,7 @@ class ChallengeAdapter(
         val lastUpdateChallengeCard = binding.lastUpdateChallengeCard
         var activeText = ""
         val mainCard = binding.mainCard
+        val alphaView = binding.alphaView
         val root = binding.root
         var date: String = ""
         var time: String =  ""
@@ -73,10 +75,13 @@ class ChallengeAdapter(
 
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
         if (!currentList[position].photo.isNullOrEmpty()){
             Glide.with(holder.root.context)
                 .load("${Consts.BASE_URL}${currentList[position].photo}".toUri())
+                .fitCenter()
+                .centerCrop()
                 .into(holder.backgroundImage)
             holder.apply {
                 personImage.visibility = View.INVISIBLE
@@ -89,7 +94,9 @@ class ChallengeAdapter(
                 winnersText.setTextColor(root.context.getColor(R.color.general_background))
                 lastUpdateChallengeValue.setTextColor(root.context.getColor(R.color.general_background))
                 lastUpdateChallengeCard.strokeColor = root.context.getColor(R.color.general_background)
+                lastUpdateChallengeCard.setCardBackgroundColor(holder.root.context.getColor(R.color.transparent))
                 mainCard.background = null
+                alphaView.visibility = View.VISIBLE
             }
         }
         // insert data

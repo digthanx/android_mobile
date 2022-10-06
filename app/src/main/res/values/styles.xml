@@ -418,10 +418,4 @@
         <item name="cornerSize">12dp</item>
     </style>
 
-    <style name="BackGroundImageView">
-        <item name="android:alpha">0.5</item>
-        <item name="android:scaleType">fitXY</item>
-    </style>
-
-
 </resources>
