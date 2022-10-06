@@ -18,7 +18,7 @@ class ChallengeRepositoryImpl @Inject constructor(
 
     override suspend fun loadContenders(
         challengeId: Int
-    ): ResultWrapper<GetChallengeContendersResponse> {
+    ): ResultWrapper<List<GetChallengeContendersResponse.Contender>> {
         return safeApiCall(Dispatchers.IO) {
             thanksApi.getChallengeContenders(challengeId)
         }

@@ -21,8 +21,8 @@ class ContendersChallengeViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _contenders = MutableLiveData<GetChallengeContendersResponse>()
-    val contenders: LiveData<GetChallengeContendersResponse> = _contenders
+    private val _contenders = MutableLiveData<List<GetChallengeContendersResponse.Contender>>()
+    val contenders: LiveData<List<GetChallengeContendersResponse.Contender>> = _contenders
     private val _contendersError = MutableLiveData<String>()
     val contendersError: LiveData<String> = _contendersError
 

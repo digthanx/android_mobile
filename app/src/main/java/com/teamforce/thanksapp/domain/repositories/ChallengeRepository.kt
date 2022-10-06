@@ -9,7 +9,7 @@ import okhttp3.RequestBody
 
 interface ChallengeRepository {
 
-    suspend fun loadContenders(challengeId: Int): ResultWrapper<GetChallengeContendersResponse>
+    suspend fun loadContenders(challengeId: Int): ResultWrapper<List<GetChallengeContendersResponse.Contender>>
 
     suspend fun createReport(
         photo: MultipartBody.Part?,

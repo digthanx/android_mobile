@@ -150,7 +150,7 @@ interface ThanksApi {
     ): Call<ChallengeModelById>
 
     @Multipart
-    @POST("/challenges/{challenge_id}/")
+    @POST("/create-challenge-report/")
     suspend fun createChallengeReport(
         @Part photo: MultipartBody.Part?,
         @Part("challenge") challengeId: RequestBody,
@@ -160,5 +160,5 @@ interface ThanksApi {
     @GET("/challenge-contenders/{challenge_id}/")
     suspend fun getChallengeContenders(
         @Path("challenge_id") challengeId: Int
-    ): GetChallengeContendersResponse
+    ): List<GetChallengeContendersResponse.Contender>
 }

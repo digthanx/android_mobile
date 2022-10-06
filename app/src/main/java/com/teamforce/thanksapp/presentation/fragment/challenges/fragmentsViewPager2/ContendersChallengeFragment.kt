@@ -42,7 +42,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
 
     private fun setData(){
         viewModel.contenders.observe(viewLifecycleOwner) {
-            (binding.contendersRv.adapter as ContendersAdapter).submitList(it.data)
+            (binding.contendersRv.adapter as ContendersAdapter).submitList(it)
         }
     }
 
