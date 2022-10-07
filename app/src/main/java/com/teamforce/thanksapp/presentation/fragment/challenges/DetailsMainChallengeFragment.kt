@@ -71,7 +71,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
                 when(position){
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.comments)
+                    1 -> tab.text = context?.getString(R.string.winners)
                     2 -> tab.text = context?.getString(R.string.contenders)
                 }
             }.attach()
@@ -79,7 +79,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
                 when(position){
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.comments)
+                    1 -> tab.text = context?.getString(R.string.winners)
                 }
             }.attach()
         }
