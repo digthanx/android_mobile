@@ -46,7 +46,7 @@ class ChallengeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun loadWinners(
-        challengeId: Int): ResultWrapper<GetChallengeWinnersResponse> {
+        challengeId: Int): ResultWrapper<List<GetChallengeWinnersResponse.Winner>> {
         return safeApiCall(Dispatchers.IO) {
             thanksApi.getChallengeWinners(challengeId)
         }
