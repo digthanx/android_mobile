@@ -21,6 +21,9 @@ class ContendersChallengeViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _isSuccessOperation = MutableLiveData<SuccessResultCheckReport>()
+    val isSuccessOperation: LiveData<SuccessResultCheckReport> = _isSuccessOperation
+
     private val _contenders = MutableLiveData<List<GetChallengeContendersResponse.Contender>>()
     val contenders: LiveData<List<GetChallengeContendersResponse.Contender>> = _contenders
     private val _contendersError = MutableLiveData<String>()
@@ -64,9 +67,11 @@ class ContendersChallengeViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _isLoading.postValue(true)
+                _isSuccessOperation.postValue(SuccessResultCheckReport(state, false))
                 when (val result = challengeRepository.checkChallengeReport(reportId, stateMap)) {
                     is ResultWrapper.Success -> {
-                       // _contenders.postValue(result.value!!)
+                        _isSuccessOperation.postValue(SuccessResultCheckReport(state, true))
+                        // _contenders.postValue(result.value!!)
                     }
                     else -> {
                         if (result is ResultWrapper.GenericError) {
@@ -81,4 +86,9 @@ class ContendersChallengeViewModel @Inject constructor(
             }
         }
     }
+
+     data class SuccessResultCheckReport(
+         val state: Char,
+         val successResult: Boolean
+     )
 }

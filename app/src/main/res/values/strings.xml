@@ -161,6 +161,8 @@
     <!-- Претендент фрагмент -->
     <string name="refuseInContender">Отклонить</string>
     <string name="applyInContender">Подтвердить</string>
+    <string name="applyCheckReport">Отчет был подтвержден</string>
+    <string name="deniedCheckReport">Отчет был отклонен</string>
 
     <!--Utils -->
     <string name="OK">Ок</string>

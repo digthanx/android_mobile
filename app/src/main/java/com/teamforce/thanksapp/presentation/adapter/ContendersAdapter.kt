@@ -2,6 +2,7 @@ package com.teamforce.thanksapp.presentation.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
@@ -71,6 +72,8 @@ class ContendersAdapter(
                     .load("${Consts.BASE_URL}${currentList[position].report_photo}".toUri())
                     .centerCrop()
                     .into(holder.binding.image)
+            }else{
+                binding.showAttachedImgCard.visibility = View.GONE
             }
             binding.reportText.text = currentList[position].report_text
             binding.userNameLabelTv.text = currentList[position].participant_name

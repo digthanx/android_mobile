@@ -2,6 +2,7 @@ package com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPa
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -43,7 +44,28 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         adapter.refuseClickListener = {reportId: Int, state: Char ->
             viewModel.checkReport(reportId, state)
         }
+        listeningResponse()
 
+    }
+
+    private fun listeningResponse(){
+        viewModel.contendersError.observe(viewLifecycleOwner){
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
+
+        viewModel.isSuccessOperation.observe(viewLifecycleOwner){
+            if(it.successResult)
+                if(it.state == 'W'){ Toast.makeText(requireContext(),
+                    requireContext().getString(R.string.applyCheckReport),
+                    Toast.LENGTH_LONG).show()
+                }else{
+                    Toast.makeText(requireContext(),
+                        requireContext().getString(R.string.deniedCheckReport),
+                        Toast.LENGTH_LONG).show()
+                }
+            loadParticipants()
+            setData()
+        }
     }
 
     private fun loadParticipants(){
