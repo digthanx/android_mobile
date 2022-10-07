@@ -84,11 +84,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
     private fun listenersBtn(){
         binding.closeBtn.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_detailsMainChallengeFragment_to_challengesFragment,
-                null,
-                OptionsTransaction().optionForProfileFromEditProfile
-            )
+            activity?.onBackPressed()
         }
     }
 
