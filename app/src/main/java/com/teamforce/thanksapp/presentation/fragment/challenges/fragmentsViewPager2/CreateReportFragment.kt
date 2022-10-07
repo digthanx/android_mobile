@@ -21,6 +21,7 @@ import com.teamforce.thanksapp.data.request.CreateReportRequest
 import com.teamforce.thanksapp.databinding.FragmentCreateReportBinding
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.CreateReportViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
@@ -59,7 +60,7 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
-            idChallenge = getInt(ChallengeAdapter.CHALLENGER_ID)
+            idChallenge = getInt(CHALLENGER_ID)
         }
     }
 

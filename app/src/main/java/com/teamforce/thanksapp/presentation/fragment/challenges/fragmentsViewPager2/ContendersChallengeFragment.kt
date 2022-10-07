@@ -11,6 +11,7 @@ import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.adapter.ContendersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.HorizontalDividerItemDecoration
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.viewmodel.ContendersChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +28,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            idChallenge = it.getInt(ChallengeAdapter.CHALLENGER_ID)
+            idChallenge = it.getInt(CHALLENGER_ID)
         }
     }
 

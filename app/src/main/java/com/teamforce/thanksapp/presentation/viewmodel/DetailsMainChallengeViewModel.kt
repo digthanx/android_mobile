@@ -7,13 +7,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsMainChallengeViewModel @Inject constructor(
-    userDataRepository: UserDataRepository
+   private val userDataRepository: UserDataRepository
 ): ViewModel() {
 
-    private val userRepo = userDataRepository
 
     fun getProfileId(): Int{
-        val id = userRepo.getProfileId()
+        val id = userDataRepository.getProfileId()
         if(!id.isNullOrEmpty()){
             return id.toInt()
         }
