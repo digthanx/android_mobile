@@ -36,9 +36,9 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         super.onViewCreated(view, savedInstanceState)
         val adapter = ContendersAdapter()
         binding.contendersRv.adapter = adapter
+        binding.contendersRv.addItemDecoration(HorizontalDividerItemDecoration(16, adapter.itemCount))
         loadParticipants()
         setData()
-        binding.contendersRv.addItemDecoration(HorizontalDividerItemDecoration(16, adapter.itemCount))
         adapter.applyClickListener = {reportId: Int, state: Char ->
             viewModel.checkReport(reportId, state)
         }
