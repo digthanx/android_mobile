@@ -8,6 +8,7 @@ data class ChallengeModel(
     val states: List<String?>?,
     val start_balance: Int?,
     val creator_id: Int?,
+    val winners_count: Int,
     val parameters: List<ParameterModel>?,
     val approved_reports_amount: Int?,
     val fund: Int,
