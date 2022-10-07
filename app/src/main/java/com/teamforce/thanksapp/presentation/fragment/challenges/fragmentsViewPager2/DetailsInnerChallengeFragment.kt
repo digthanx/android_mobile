@@ -86,6 +86,13 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
             binding.nameChallenge.text = it.name
             binding.descriptionChallenge.text = it.description
             binding.stateAboutReports.text = it.status
+            if(it.active){
+                binding.stateAboutAddParticipants.text =
+                    requireContext().getString(R.string.gettingReportsActive)
+            }else{
+                binding.stateAboutAddParticipants.text =
+                    requireContext().getString(R.string.gettingReportsFinished)
+            }
             // Сделать динамическую подстановку чипов(по статусам транзакции)
             // пробегаться по массиву статусов и ставить чипы
             // Установить организатора
