@@ -49,7 +49,12 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
 
     private fun setData(){
         viewModel.winners.observe(viewLifecycleOwner) {
-            (binding.winnersRv.adapter as WinnersAdapter).submitList(it)
+            if (it != null && it.isNotEmpty()) {
+                binding.noWinners.visibility = View.GONE
+                (binding.winnersRv.adapter as WinnersAdapter).submitList(it)
+            }else{
+                binding.noWinners.visibility = View.VISIBLE
+            }
         }
     }
 
