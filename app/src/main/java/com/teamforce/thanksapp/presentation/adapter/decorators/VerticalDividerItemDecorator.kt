@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class HorizontalDividerItemDecoration(
+class VerticalDividerItemDecorator(
     private val divider: Int,
     private val size: Int
 ): RecyclerView.ItemDecoration() {
@@ -23,11 +23,11 @@ class HorizontalDividerItemDecoration(
             left = divider
         }
         // Для первого элемента устанавливаем отдельный отступ
-        if(parent.getChildAdapterPosition(view) == 0){
+        if(parent.getChildLayoutPosition(view) == 0){
             outRect.top = 20
         }
         // Для последнего элемента устанавливаем отдельный отступ
-        if(parent.getChildAdapterPosition(view) == size - 1){
+        if(parent.getChildLayoutPosition(view) == size - 1){
             outRect.bottom = 30
         }
     }

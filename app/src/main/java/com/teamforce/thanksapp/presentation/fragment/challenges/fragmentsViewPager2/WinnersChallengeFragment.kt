@@ -7,13 +7,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
 import com.teamforce.thanksapp.databinding.FragmentWinnersChallengeBinding
-import com.teamforce.thanksapp.presentation.adapter.ContendersAdapter
 import com.teamforce.thanksapp.presentation.adapter.WinnersAdapter
-import com.teamforce.thanksapp.presentation.adapter.decorators.HorizontalDividerItemDecoration
+import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
-import com.teamforce.thanksapp.presentation.viewmodel.ContendersChallengeViewModel
 import com.teamforce.thanksapp.presentation.viewmodel.WinnersChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +35,7 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
         val adapter = WinnersAdapter()
         binding.winnersRv.adapter = adapter
         binding.winnersRv.addItemDecoration(
-            HorizontalDividerItemDecoration(16, adapter.itemCount)
+            VerticalDividerItemDecorator(16, adapter.itemCount)
         )
         loadWinners()
         setData()

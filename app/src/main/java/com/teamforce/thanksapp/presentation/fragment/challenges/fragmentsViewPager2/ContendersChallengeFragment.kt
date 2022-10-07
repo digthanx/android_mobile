@@ -8,9 +8,8 @@ import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
-import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.adapter.ContendersAdapter
-import com.teamforce.thanksapp.presentation.adapter.decorators.HorizontalDividerItemDecoration
+import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.viewmodel.ContendersChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +35,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         super.onViewCreated(view, savedInstanceState)
         val adapter = ContendersAdapter()
         binding.contendersRv.adapter = adapter
-        binding.contendersRv.addItemDecoration(HorizontalDividerItemDecoration(16, adapter.itemCount))
+        binding.contendersRv.addItemDecoration(VerticalDividerItemDecorator(16, adapter.itemCount))
         loadParticipants()
         setData()
         adapter.applyClickListener = {reportId: Int, state: Char ->
