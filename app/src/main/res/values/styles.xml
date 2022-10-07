@@ -269,6 +269,10 @@
         <item name="cornerSize">30%</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
+        <item name="cornerSize">5%</item>
+    </style>
+
 
 
     <style name="BottomSheetDialogWithoutBackground" parent="Theme.AppCompat.Light.Dialog">

@@ -69,6 +69,7 @@ class ChallengeAdapter(
                 binding.lastUpdateChallengeCard.strokeColor = binding.root.context.getColor(R.color.general_background)
                 binding.lastUpdateChallengeCard.setCardBackgroundColor(binding.root.context.getColor(R.color.transparent))
                 binding.mainCard.background = null
+                binding.imageRelative.visibility = View.VISIBLE
                 binding.alphaView.visibility = View.VISIBLE
             }
         }
