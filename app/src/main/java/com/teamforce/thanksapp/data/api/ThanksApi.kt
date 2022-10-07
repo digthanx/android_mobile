@@ -161,4 +161,10 @@ interface ThanksApi {
     suspend fun getChallengeContenders(
         @Path("challenge_id") challengeId: Int
     ): List<GetChallengeContendersResponse.Contender>
+
+    @PUT("/check-challenge-report/{challenge_id}/")
+    suspend fun checkChallengeReport(
+        @Path("challenge_id") challengeId: Int,
+        @Body state: Map<String, Char>
+    ): CheckReportResponse
 }

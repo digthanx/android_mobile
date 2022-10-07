@@ -2,6 +2,7 @@ package com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPa
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -10,6 +11,7 @@ import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.adapter.ContendersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.HorizontalDividerItemDecoration
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.viewmodel.ContendersChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +28,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            idChallenge = it.getInt(ChallengeAdapter.CHALLENGER_ID)
+            idChallenge = it.getInt(CHALLENGER_ID)
         }
     }
 
@@ -37,7 +39,34 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         loadParticipants()
         setData()
         binding.contendersRv.addItemDecoration(HorizontalDividerItemDecoration(16, adapter.itemCount))
+        adapter.applyClickListener = {reportId: Int, state: Char ->
+            viewModel.checkReport(reportId, state)
+        }
+        adapter.refuseClickListener = {reportId: Int, state: Char ->
+            viewModel.checkReport(reportId, state)
+        }
+        listeningResponse()
 
+    }
+
+    private fun listeningResponse(){
+        viewModel.contendersError.observe(viewLifecycleOwner){
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
+
+        viewModel.isSuccessOperation.observe(viewLifecycleOwner){
+            if(it.successResult)
+                if(it.state == 'W'){ Toast.makeText(requireContext(),
+                    requireContext().getString(R.string.applyCheckReport),
+                    Toast.LENGTH_LONG).show()
+                }else{
+                    Toast.makeText(requireContext(),
+                        requireContext().getString(R.string.deniedCheckReport),
+                        Toast.LENGTH_LONG).show()
+                }
+            loadParticipants()
+            setData()
+        }
     }
 
     private fun loadParticipants(){

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -14,29 +15,38 @@ import com.teamforce.thanksapp.databinding.FragmentChallengesBinding
 import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.adapter.FragmentDetailChallengeStateAdapter
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_CREATOR_ID
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_STATE_ACTIVE
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_STATUS
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGE_BACKGROUND
+import com.teamforce.thanksapp.presentation.viewmodel.DetailsMainChallengeViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
+import dagger.hilt.android.AndroidEntryPoint
 
-private const val CHALLENGE_STATUS = ChallengeAdapter.CHALLENGER_STATUS
-private const val CHALLENGE_ID = ChallengeAdapter.CHALLENGER_ID
-private const val CHALLENGE_ACTIVE = ChallengeAdapter.CHALLENGER_STATE_ACTIVE
-private const val CHALLENGE_BACKGROUND = ChallengeAdapter.CHALLENGE_BACKGROUND
 
+
+@AndroidEntryPoint
 class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_challenge) {
 
     private val binding: FragmentDetailsMainChallengeBinding by viewBinding()
+
+    private val viewModel: DetailsMainChallengeViewModel by viewModels()
 
     private var statusChallenge: String? = null
     private var idChallenge: Int? = null
     private var challengeActive: Boolean? = null
     private var challengeBackground: String? = null
+    private var creatorId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            statusChallenge = it.getString(CHALLENGE_STATUS)
-            idChallenge = it.getInt(CHALLENGE_ID)
-            challengeActive = it.getBoolean(CHALLENGE_ACTIVE)
+            statusChallenge = it.getString(CHALLENGER_STATUS)
+            idChallenge = it.getInt(CHALLENGER_ID)
+            challengeActive = it.getBoolean(CHALLENGER_STATE_ACTIVE)
             challengeBackground = it.getString(CHALLENGE_BACKGROUND)
+            creatorId = it.getInt(CHALLENGER_CREATOR_ID)
         }
     }
 
@@ -54,13 +64,22 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
         val detailInnerFragment = FragmentDetailChallengeStateAdapter(requireActivity())
         idChallenge?.let { detailInnerFragment.setChallengeId(it) }
         binding.pager.adapter = detailInnerFragment
-        TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
-            when(position){
-                0 -> tab.text = context?.getString(R.string.details)
-                1 -> tab.text = context?.getString(R.string.comments)
-                2 -> tab.text = context?.getString(R.string.contenders)
-            }
-        }.attach()
+        if(creatorId == viewModel.getProfileId()){
+            TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
+                when(position){
+                    0 -> tab.text = context?.getString(R.string.details)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.contenders)
+                }
+            }.attach()
+        }else{
+            TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
+                when(position){
+                    0 -> tab.text = context?.getString(R.string.details)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                }
+            }.attach()
+        }
     }
 
     private fun listenersBtn(){

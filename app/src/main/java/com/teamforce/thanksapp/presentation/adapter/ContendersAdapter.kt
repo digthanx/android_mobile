@@ -2,12 +2,15 @@ package com.teamforce.thanksapp.presentation.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.GetChallengeContendersResponse
 import com.teamforce.thanksapp.databinding.ItemContenderBinding
@@ -19,8 +22,12 @@ import java.time.format.DateTimeFormatter
 
 class ContendersAdapter(
 
-): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(ContenderViewHolder.DiffCallback)
+): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(DiffCallback)
 {
+
+    var applyClickListener: ((reportId: Int, state: Char) -> Unit)? = null
+    var refuseClickListener: ((reportId: Int, state: Char) -> Unit)? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContenderViewHolder {
         val binding = ItemContenderBinding
@@ -34,18 +41,7 @@ class ContendersAdapter(
     }
 
 
-    class ContenderViewHolder(
-        binding: ItemContenderBinding) : RecyclerView.ViewHolder(binding.root) {
-        var userAvatar = binding.userAvatar
-        var userName = binding.userNameLabelTv
-        var userSurname = binding.userSurnameLabelTv
-        var dateTime = binding.dateTv
-
-        //val name = binding.challengeTitle
-        val root = binding.root
-        var date: String = ""
-        var time: String =  ""
-
+    companion object{
 
         object DiffCallback : DiffUtil.ItemCallback<GetChallengeContendersResponse.Contender>() {
             override fun areItemsTheSame(oldItem: GetChallengeContendersResponse.Contender, newItem: GetChallengeContendersResponse.Contender): Boolean {
@@ -57,18 +53,41 @@ class ContendersAdapter(
             }
 
         }
-
     }
 
+   inner class ContenderViewHolder(val binding: ItemContenderBinding)
+        : RecyclerView.ViewHolder(binding.root)
+
+
     override fun onBindViewHolder(holder: ContenderViewHolder, position: Int) {
-        if(!currentList[position].participant_photo.isNullOrEmpty()){
-            Glide.with(holder.root.context)
-                .load("${Consts.BASE_URL}${currentList[position].participant_photo}".toUri())
-                .into(holder.userAvatar)
+        with(holder){
+            if(!currentList[position].participant_photo.isNullOrEmpty()){
+                Glide.with(holder.binding.root.context)
+                    .load("${Consts.BASE_URL}${currentList[position].participant_photo}".toUri())
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .into(holder.binding.userAvatar)
+            }
+            if(!currentList[position].report_photo.isNullOrEmpty()){
+                Glide.with(holder.binding.root.context)
+                    .load("${Consts.BASE_URL}${currentList[position].report_photo}".toUri())
+                    .centerCrop()
+                    .into(holder.binding.image)
+            }else{
+                binding.showAttachedImgCard.visibility = View.GONE
+            }
+            binding.reportText.text = currentList[position].report_text
+            binding.userNameLabelTv.text = currentList[position].participant_name
+            binding.userSurnameLabelTv.text = currentList[position].participant_surname
+            convertDateToNecessaryFormat(holder, position)
+            binding.applyBtn.setOnClickListener {
+                applyClickListener?.invoke(currentList[position].report_id, 'W')
+            }
+            binding.refuseBtn.setOnClickListener {
+                refuseClickListener?.invoke(currentList[position].report_id, 'D')
+            }
         }
-        holder.userName.text = currentList[position].participant_name
-        holder.userSurname.text = currentList[position].participant_surname
-        convertDateToNecessaryFormat(holder, position)
+
+
     }
 
     private fun convertDateToNecessaryFormat(holder: ContenderViewHolder, position: Int) {
@@ -78,7 +97,7 @@ class ContendersAdapter(
             val dateTime: String? =
                 LocalDateTime.parse(zdt.toString(), DateTimeFormatter.ISO_DATE_TIME)
                     .format(DateTimeFormatter.ofPattern("dd.MM.y HH:mm"))
-            val date = dateTime?.subSequence(0, 10)
+            var date = dateTime?.subSequence(0, 10)
             val time = dateTime?.subSequence(11, 16)
             val today: LocalDate = LocalDate.now()
             val yesterday: String = today.minusDays(1).format(DateTimeFormatter.ISO_DATE)
@@ -88,21 +107,20 @@ class ContendersAdapter(
             val yesterdayString =
                 LocalDate.parse(yesterday, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                     .format(DateTimeFormatter.ofPattern("dd.MM.y"))
-
             if (date == todayString) {
-                holder.date = "Сегодня"
+                date = "Сегодня"
             } else if (date == yesterdayString) {
-                holder.date = "Вчера"
+                date = "Вчера"
             } else {
-                holder.date = date.toString()
+                date = date.toString()
             }
-            holder.time = time.toString()
-            holder.dateTime.text =
-                String.format(holder.root.context.getString(R.string.dateTime), holder.date, holder.time)
+            holder.binding.dateTv.text =
+                String.format(holder.binding.root.context.getString(R.string.dateTime), date, time)
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }
     }
+
 
 
 }

@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsInnerChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.viewmodel.DetailsInnerChallengerViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
@@ -36,7 +37,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            idChallenge = it.getInt(ChallengeAdapter.CHALLENGER_ID)
+            idChallenge = it.getInt(CHALLENGER_ID)
         }
     }
 
@@ -52,7 +53,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         checkReportSharedPref()
         binding.sendReportBtn.setOnClickListener {
             val bundle = Bundle()
-            idChallenge?.let { it1 -> bundle.putInt(ChallengeAdapter.CHALLENGER_ID, it1) }
+            idChallenge?.let { it1 -> bundle.putInt(CHALLENGER_ID, it1) }
             it.findNavController().navigate(
                 R.id.action_global_createReportFragment,
                 bundle,

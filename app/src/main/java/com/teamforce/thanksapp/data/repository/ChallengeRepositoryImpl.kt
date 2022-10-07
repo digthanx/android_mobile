@@ -2,6 +2,7 @@ package com.teamforce.thanksapp.data.repository
 
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CreateReportRequest
+import com.teamforce.thanksapp.data.response.CheckReportResponse
 import com.teamforce.thanksapp.data.response.CreateReportResponse
 import com.teamforce.thanksapp.data.response.GetChallengeContendersResponse
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
@@ -31,6 +32,15 @@ class ChallengeRepositoryImpl @Inject constructor(
     ): ResultWrapper<CreateReportResponse> {
         return safeApiCall(Dispatchers.IO) {
             thanksApi.createChallengeReport(photo, challengeId, comment)
+        }
+    }
+
+    override suspend fun checkChallengeReport(
+        reportId: Int,
+        state: Map<String, Char>
+    ): ResultWrapper<CheckReportResponse> {
+        return safeApiCall(Dispatchers.IO) {
+            thanksApi.checkChallengeReport(reportId, state)
         }
     }
 }

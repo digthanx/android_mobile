@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.CommentsChallengeFragment
 import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.ContendersChallengeFragment
 import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.DetailsInnerChallengeFragment
@@ -19,7 +20,7 @@ class FragmentDetailChallengeStateAdapter(fragment: FragmentActivity): FragmentS
     override fun createFragment(position: Int): Fragment {
         val bundle = Bundle()
         bundle.apply {
-            putInt(ChallengeAdapter.CHALLENGER_ID, challengeId)
+            putInt(CHALLENGER_ID, challengeId)
         }
         return when(position) {
             0 -> {

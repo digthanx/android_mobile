@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainCard"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="201dp"
     android:layout_marginBottom="8dp"
-    android:focusable="true"
+    android:background="@drawable/background_for_constraint_item_challenger"
     android:clickable="true"
-    android:background="@drawable/background_for_constraint_item_challenger">
+    android:focusable="true">
+
     <RelativeLayout
         android:id="@+id/imageRelative"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="-10dp"
+        android:layout_marginEnd="-10dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imageBackground"
-            style="@style/BackGroundImageView"
             android:layout_width="match_parent"
             android:layout_height="210dp"
             tools:ignore="ContentDescription" />
+
+        <View
+            android:id="@+id/alphaView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.2"
+            android:background="@color/general_contrast"
+            android:visibility="gone" />
+
 
     </RelativeLayout>
 
