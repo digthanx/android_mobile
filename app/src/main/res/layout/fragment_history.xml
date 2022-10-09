@@ -5,6 +5,7 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/general_brand"
     app:layout_dodgeInsetEdges="bottom"
     tools:context=".presentation.fragment.historyScreen.HistoryFragment">
 
@@ -34,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
+                app:title="@string/history_label"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="enterAlways"
                 app:titleTextColor="@color/white">
@@ -79,106 +81,34 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/background_white_rounded_top"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested_Scroll"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabGroup"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/general_background"
-            android:backgroundTint="@color/general_background">
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:singleSelection="true"
+            app:tabMode="fixed"
+            app:tabTextAppearance="@style/Body2.White" />
 
-            
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/general_brand"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="4dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_marginBottom="-16dp"
-                    app:cardCornerRadius="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.tabs.TabLayout
-                            android:id="@+id/tabGroup"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginBottom="10dp"
-                            android:background="@color/transparent"
-                            app:singleSelection="true"
-                            app:tabMinWidth="100dp"
-                            app:tabTextAppearance="@style/Body2.White">
-
-                            <com.google.android.material.tabs.TabItem
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/allHistory" />
-
-                            <com.google.android.material.tabs.TabItem
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/received" />
-
-                            <com.google.android.material.tabs.TabItem
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/sended" />
-
-                        </com.google.android.material.tabs.TabLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/textField"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_x"
-                            android:focusable="false"
-                            android:hint="@string/period"
-                            android:textColorHint="@color/general_color_grey"
-                            android:visibility="gone"
-                            app:boxBackgroundColor="@color/color5"
-                            app:boxCornerRadiusBottomEnd="15dp"
-                            app:boxCornerRadiusBottomStart="15dp"
-                            app:boxCornerRadiusTopEnd="15dp"
-                            app:boxCornerRadiusTopStart="15dp"
-                            app:boxStrokeWidth="0.5dp">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/period_et"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:drawableEnd="@drawable/ic_calendar" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:nestedScrollingEnabled="false"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabGroup" />
 
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/history_rv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginHorizontal="16dp" />
-
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-             </com.google.android.material.card.MaterialCardView>
-  
-        </androidx.core.widget.NestedScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

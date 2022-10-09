@@ -14,6 +14,7 @@ object Consts {
     const val LINK_TO_BOT = "https://t.me/DigitalRefBot"
     const val LINK_TO_BOT_Name = "LinkToBot"
     const val SELECT_PICTURE = 200
+
     // Аргументы в расширенную инфу о траназкции
     const val DATE_TRANSACTION = "date-transaction"
     const val DESCRIPTION_TRANSACTION_1 = "description-transaction"
@@ -38,4 +39,5 @@ object Consts {
     private const val SP_ARG_TELEGRAM = "Telegram"
     private const val SP_ARG_TOKEN = "Token"
 
+    const val PAGE_SIZE = 5
 }
