@@ -31,7 +31,7 @@ class HistoryListViewModel @Inject constructor(
         MutableLiveData<Result<Int>>()
     val cancellationResult: LiveData<Result<Int>> = _cancellationResult
 
-    fun cancelUserTransaction(id: Int, position: Int) {
+    fun cancelUserTransaction(id: Int) {
         viewModelScope.launch {
 
             when (historyRepository.cancelTransaction(
@@ -40,7 +40,7 @@ class HistoryListViewModel @Inject constructor(
             )) {
                 is ResultWrapper.GenericError -> {}
                 ResultWrapper.NetworkError -> {}
-                is ResultWrapper.Success -> _cancellationResult.postValue(Result.Success(position))
+                is ResultWrapper.Success -> _cancellationResult.postValue(Result.Success(0))
             }
 
         }
@@ -75,10 +75,7 @@ class HistoryListViewModel @Inject constructor(
                             )
 
                         val label = getDateTimeLabel(afterTime)
-
-
                         return@insertSeparators HistoryItem.DateTimeSeparator(label)
-
                     }
 
                     val beforeTime: LocalDateTime =

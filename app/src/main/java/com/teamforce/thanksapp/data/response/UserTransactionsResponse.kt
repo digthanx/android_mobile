@@ -2,8 +2,9 @@ package com.teamforce.thanksapp.data.response
 
 import com.google.gson.annotations.SerializedName
 import com.teamforce.thanksapp.model.domain.TagModel
+import java.util.*
 
-public sealed class HistoryItem {
+sealed class HistoryItem {
     data class UserTransactionsResponse(
         val id: Int,
         val sender: Sender,
@@ -52,7 +53,8 @@ public sealed class HistoryItem {
     }
 
     data class DateTimeSeparator(
-        val date: String
+        val date: String,
+        val uuid: UUID = UUID.randomUUID()
     ) : HistoryItem()
 }
 

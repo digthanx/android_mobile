@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.data.response.HistoryItem
 import com.teamforce.thanksapp.databinding.FragmentHistoryListBinding
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryPageAdapter
@@ -66,6 +65,7 @@ class HistoryListFragment : Fragment(R.layout.fragment_history_list) {
         viewModel.cancellationResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Success -> {
+                    listAdapter?.refresh()
                 }
                 else -> {}
             }
@@ -94,11 +94,11 @@ class HistoryListFragment : Fragment(R.layout.fragment_history_list) {
         }
     }
 
-    private fun onCancelClicked(id: Int, position: Int) {
-        showAlertDialogForCancelTransaction(id, position)
+    private fun onCancelClicked(id: Int) {
+        showAlertDialogForCancelTransaction(id)
     }
 
-    private fun showAlertDialogForCancelTransaction(idTransaction: Int, position: Int) {
+    private fun showAlertDialogForCancelTransaction(idTransaction: Int) {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(requireContext().resources?.getString(R.string.cancelTransaction))
 
@@ -107,7 +107,7 @@ class HistoryListFragment : Fragment(R.layout.fragment_history_list) {
             }
             .setPositiveButton(requireContext().resources.getString(R.string.accept)) { dialog, which ->
                 dialog.cancel()
-                viewModel.cancelUserTransaction(idTransaction, position)
+                viewModel.cancelUserTransaction(idTransaction)
             }
             .show()
     }

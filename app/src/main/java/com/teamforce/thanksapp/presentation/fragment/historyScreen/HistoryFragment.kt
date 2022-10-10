@@ -28,9 +28,11 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
             viewPager.adapter = pagerAdapter
 
             mediator = TabLayoutMediator(tabGroup, viewPager) { tab, pos ->
-                if (pos == 0) tab.text = getString(R.string.allHistory)
-                if (pos == 1) tab.text = getString(R.string.received)
-                else tab.text = getString(R.string.sended)
+                when (pos) {
+                    0 -> tab.text = getString(R.string.allHistory)
+                    1 -> tab.text = getString(R.string.received)
+                    else -> tab.text = getString(R.string.sended)
+                }
             }
 
             mediator?.attach()

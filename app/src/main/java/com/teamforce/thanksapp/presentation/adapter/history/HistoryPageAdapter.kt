@@ -26,12 +26,46 @@ import java.lang.UnsupportedOperationException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class HistoryPageAdapter(
     private val username: String,
-    private val onCancelClicked: (id: Int, position: Int) -> Unit
-) :
-    PagingDataAdapter<HistoryItem, RecyclerView.ViewHolder>(DiffCallback) {
+    private val onCancelClicked: (id: Int) -> Unit
+) : PagingDataAdapter<HistoryItem, RecyclerView.ViewHolder>(DiffCallback) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            R.layout.item_transfer -> {
+                val binding = ItemTransferBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+                HistoryItemViewHolder(binding)
+            }
+            else -> {
+                val binding = SeparatorDateTimeBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+                SeparatorViewHolder(binding)
+            }
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = getItem(position)
+        if (item != null) {
+            when (item) {
+                is HistoryItem.DateTimeSeparator -> {
+                    val viewHolder = holder as SeparatorViewHolder
+                    viewHolder.bind(item)
+                }
+                is HistoryItem.UserTransactionsResponse -> {
+                    val viewHolder = holder as HistoryItemViewHolder
+                    viewHolder.bind(item, username, onCancelClicked)
+                }
+
+            }
+        }
+    }
 
     class SeparatorViewHolder(
         private val binding: SeparatorDateTimeBinding
@@ -50,9 +84,7 @@ class HistoryPageAdapter(
         var photoFromSender: String? = null
         var userId: Int? = null
 
-        val view: View = binding.root
         var dateGetInfo: String = "null"
-        var who: String = "null"
         var labelStatusTransaction: String = "null"
         var descr_transaction_1: String = "null"
         var comingStatusTransaction: String = "null"
@@ -62,9 +94,10 @@ class HistoryPageAdapter(
 
         fun bind(
             data: HistoryItem.UserTransactionsResponse, username: String,
-            onCancelClicked: (id: Int, position: Int) -> Unit
+            onCancelClicked: (id: Int) -> Unit
         ) {
             binding.apply {
+                root.id = data.id
                 val status = data.transaction_status.id
                 transferIconIv.setImageResource(R.drawable.ic_anon_avatar)
                 if (data.sender.sender_tg_name != "anonymous" && data.sender.sender_tg_name == username
@@ -74,8 +107,11 @@ class HistoryPageAdapter(
                         refuseTransactionBtn.visibility = View.VISIBLE
                         refuseTransactionBtn.setOnClickListener {
 //                            showAlertDialogForCancelTransaction(dataSet[position].id)
-                            onCancelClicked(data.id, layoutPosition)
+                            onCancelClicked(data.id)
                         }
+                    } else {
+                        refuseTransactionBtn.visibility = View.GONE
+
                     }
                     valueTransfer.text = " " + data.amount
                     tgNameUser.text = String.format(
@@ -224,12 +260,15 @@ class HistoryPageAdapter(
                     }
                 }
 
-                data.tags?.let { setTags(chipGroup, it) }
+                chipGroup.removeAllViews()
+
+                if (!data.tags.isNullOrEmpty()) {
+                    setTags(chipGroup, data.tags)
+                }
 
                 convertDataToNecessaryFormat(data)
                 transactionToAnotherProfile(username, data)
 
-                view.tag = data
                 photoFromSender = data.photo
                 standardGroup.setOnClickListener { v ->
                     val bundle = Bundle()
@@ -342,51 +381,16 @@ class HistoryPageAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = getItem(position)
-        if (item != null) {
-            when (item) {
-                is HistoryItem.DateTimeSeparator -> {
-                    val viewHolder = holder as SeparatorViewHolder
-                    viewHolder.bind(item)
-                }
-                is HistoryItem.UserTransactionsResponse -> {
-                    val viewHolder = holder as HistoryItemViewHolder
-                    holder.bind(item, username, onCancelClicked)
-                }
-
-            }
-        }
-    }
-
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is HistoryItem.UserTransactionsResponse -> R.layout.item_history
+            is HistoryItem.UserTransactionsResponse -> R.layout.item_transfer
             is HistoryItem.DateTimeSeparator -> R.layout.separator_date_time
             null -> throw UnsupportedOperationException("Unknown view")
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            R.layout.item_history -> {
-                val binding = ItemTransferBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-                )
-                HistoryItemViewHolder(binding)
-            }
-            else -> {
-                val binding = SeparatorDateTimeBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-                )
-                SeparatorViewHolder(binding)
-            }
-        }
-
-    }
-
     companion object {
-        object DiffCallback : DiffUtil.ItemCallback<HistoryItem>() {
+        private val DiffCallback = object : DiffUtil.ItemCallback<HistoryItem>() {
             override fun areItemsTheSame(
                 oldItem: HistoryItem,
                 newItem: HistoryItem
@@ -396,7 +400,7 @@ class HistoryPageAdapter(
                         oldItem.id == newItem.id) ||
                         (oldItem is HistoryItem.DateTimeSeparator &&
                                 newItem is HistoryItem.DateTimeSeparator &&
-                                oldItem.date == newItem.date)
+                                oldItem.uuid == newItem.uuid)
             }
 
             override fun areContentsTheSame(
