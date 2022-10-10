@@ -172,4 +172,9 @@ interface ThanksApi {
     suspend fun getChallengeWinners(
         @Path("challenge_id") challengeId: Int,
     ): List<GetChallengeWinnersResponse.Winner>
+
+    @GET("/challenge-result/{challenge_id}/")
+    suspend fun getChallengeResult(
+        @Path("challenge_id") challengeId: Int
+    ): GetChallengeResultResponse
 }
