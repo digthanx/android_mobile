@@ -17,10 +17,15 @@
         <item name="android:textColor">@color/general_background</item>
     </style>
 
-    <style name="VerySmallText1.Gray" parent="BaseTextFont">
+    <style name="VerySmallText1.Gray.WithLetterSpacing" parent="BaseTextFont">
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/general_secondary</item>
         <item name="android:letterSpacing">0.25</item>
+    </style>
+
+    <style name="VerySmallText1.Gray" parent="BaseTextFont">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/general_secondary</item>
     </style>
 
 
@@ -110,6 +115,12 @@
 
     <style name="Headline3" parent="TextAppearance.MaterialComponents.Headline3">
         <item name="android:textColor">@color/general_contrast</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="Headline3.Green" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:textColor">@color/minor_success</item>
         <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:textSize">32sp</item>
     </style>
