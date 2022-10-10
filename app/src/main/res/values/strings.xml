@@ -144,12 +144,15 @@
     <string name="details">Детали</string>
     <string name="participants">Участники</string>
     <string name="contenders">Претенденты</string>
+    <string name="winners">Победители</string>
     <string name="fund">%s форсиков</string>
     <string name="occupiedPrizePool">%s / %s</string>
     <string name="PrizePool">Призовых мест</string>
     <string name="dateEnd">Дата завершения</string>
     <string name="prizeFund">Призовой фонд</string>
     <string name="draft">Черновик</string>
+    <string name="gettingReportsActive">Производится прием отчетов</string>
+    <string name="gettingReportsFinished">Прием отчетов завершен</string>
     <!-- Создание отчета фрагмент -->
     <string name="spaceSevenTimes">\u0020\u0020\u0020\u0020\u0020\u0020\u0020</string>
     <string name="result">Результат</string>

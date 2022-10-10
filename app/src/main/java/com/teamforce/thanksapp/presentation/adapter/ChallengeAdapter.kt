@@ -69,13 +69,14 @@ class ChallengeAdapter(
                 binding.lastUpdateChallengeCard.strokeColor = binding.root.context.getColor(R.color.general_background)
                 binding.lastUpdateChallengeCard.setCardBackgroundColor(binding.root.context.getColor(R.color.transparent))
                 binding.mainCard.background = null
+                binding.imageRelative.visibility = View.VISIBLE
                 binding.alphaView.visibility = View.VISIBLE
             }
         }
         // insert data
         holder.apply {
             binding.challengeTitle.setText(currentList[position].name)
-            currentList[position].awardees?.let { binding.winnersValue.text = it.toString() }
+            binding.winnersValue.text = currentList[position].winners_count.toString()
             if( currentList[position].parameters?.get(0)?.id == 1){
                 currentList[position].parameters?.get(1)?.let { binding.prizePoolValue.setText(it.value.toString()) }
             }else{

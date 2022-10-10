@@ -8,8 +8,10 @@
     tools:context=".presentation.fragment.challenges.DetailsMainChallengeFragment">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/standard_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         app:cardBackgroundColor="@color/general_brand_secondary"
         android:layout_marginBottom="32dp"
         app:cardCornerRadius="12dp">
@@ -50,13 +52,84 @@
                 android:text="@string/closeInHeader"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/secondary_card"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="12dp"
+        android:layout_height="199dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/status_active_card_secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardBackgroundColor="@color/general_background">
+                <TextView
+                    android:id="@+id/status_active_text_secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="2dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:textAppearance="@style/SmallText2.Black"
+                    android:text="@string/active"/>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/close_btn_secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:elevation="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/general_brand"
+                android:text="@string/closeInHeader"/>
+
+        <RelativeLayout
+            android:id="@+id/imageRelative"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize5PercentBottom"
+                tools:ignore="ContentDescription" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/alphaView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.6"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize5PercentBottom"
+                android:background="@color/general_contrast" />
+
+
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="38dp"
         app:tabMode="scrollable"
-        app:tabTextAppearance="@style/SmallText2Medium.Black"
+        android:elevation="50dp"
+        android:background="@color/transparent"
+        app:tabTextAppearance="@style/StandardText3Medium.Black"
         android:layout_marginHorizontal="16dp"
         style="@style/MyTabChallenge">
 
@@ -96,6 +169,7 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:elevation="50dp"
         android:layout_weight="1"/>
 
 </LinearLayout>

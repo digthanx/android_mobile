@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentChallengesBinding
@@ -21,6 +23,7 @@ import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragme
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_STATUS
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGE_BACKGROUND
 import com.teamforce.thanksapp.presentation.viewmodel.DetailsMainChallengeViewModel
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,7 +71,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
                 when(position){
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.comments)
+                    1 -> tab.text = context?.getString(R.string.winners)
                     2 -> tab.text = context?.getString(R.string.contenders)
                 }
             }.attach()
@@ -76,7 +79,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
                 when(position){
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.comments)
+                    1 -> tab.text = context?.getString(R.string.winners)
                 }
             }.attach()
         }
@@ -84,11 +87,10 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
     private fun listenersBtn(){
         binding.closeBtn.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_detailsMainChallengeFragment_to_challengesFragment,
-                null,
-                OptionsTransaction().optionForProfileFromEditProfile
-            )
+            activity?.onBackPressed()
+        }
+        binding.closeBtnSecondary.setOnClickListener {
+            activity?.onBackPressed()
         }
     }
 
@@ -96,12 +98,24 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
         //if(challengeBackground.isNullOrEmpty())
         if(challengeActive == true){
             binding.statusActiveText.text = requireContext().getString(R.string.active)
+            binding.statusActiveTextSecondary.text = requireContext().getString(R.string.active)
             binding.statusActiveCard
-                .setBackgroundColor(requireContext().getColor(R.color.minor_info))
+                .setCardBackgroundColor(requireContext().getColor(R.color.minor_info))
         }else{
             binding.statusActiveText.text = requireContext().getString(R.string.completed)
+            binding.statusActiveTextSecondary.text = requireContext().getString(R.string.completed)
             binding.statusActiveCard
-                .setBackgroundColor(requireContext().getColor(R.color.minor_success))
+                .setCardBackgroundColor(requireContext().getColor(R.color.minor_success))
+        }
+        if(!challengeBackground.isNullOrEmpty()){
+            binding.standardCard.visibility = View.GONE
+            binding.secondaryCard.visibility = View.VISIBLE
+            binding.closeBtnSecondary.setTextColor(requireContext().getColor(R.color.general_background))
+            Glide.with(requireContext())
+                .load("${Consts.BASE_URL}${challengeBackground}".toUri())
+                .fitCenter()
+                .centerCrop()
+                .into(binding.imageBackground)
         }
     }
 

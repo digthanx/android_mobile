@@ -57,7 +57,7 @@
                         android:layout_marginVertical="8dp"
                         android:layout_marginHorizontal="12dp"
                         style="@style/SmallText2.Black"
-                        android:text="Производиться регистрация участников"/>
+                        android:text="Производится регистрация участников"/>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
@@ -72,8 +72,7 @@
                         android:textColor="@color/minor_info"
                         android:layout_marginVertical="8dp"
                         android:layout_marginHorizontal="12dp"
-                        style="@style/SmallText2.Black"
-                        android:text="Производиться прием отчетов"/>
+                        style="@style/SmallText2.Black" />
                 </com.google.android.material.card.MaterialCardView>
 
 
