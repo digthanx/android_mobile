@@ -100,12 +100,12 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             binding.statusActiveText.text = requireContext().getString(R.string.active)
             binding.statusActiveTextSecondary.text = requireContext().getString(R.string.active)
             binding.statusActiveCard
-                .setBackgroundColor(requireContext().getColor(R.color.minor_info))
+                .setCardBackgroundColor(requireContext().getColor(R.color.minor_info))
         }else{
             binding.statusActiveText.text = requireContext().getString(R.string.completed)
             binding.statusActiveTextSecondary.text = requireContext().getString(R.string.completed)
             binding.statusActiveCard
-                .setBackgroundColor(requireContext().getColor(R.color.minor_success))
+                .setCardBackgroundColor(requireContext().getColor(R.color.minor_success))
         }
         if(!challengeBackground.isNullOrEmpty()){
             binding.standardCard.visibility = View.GONE
