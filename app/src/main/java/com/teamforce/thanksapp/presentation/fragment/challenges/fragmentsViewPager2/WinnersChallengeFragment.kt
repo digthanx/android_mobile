@@ -63,4 +63,15 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
     }
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance(challengeId: Int) =
+            WinnersChallengeFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ChallengesFragment.CHALLENGER_ID, challengeId)
+                }
+            }
+    }
 }

@@ -146,4 +146,15 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         }
     }
 
+    companion object {
+
+        @JvmStatic
+        fun newInstance(challengeId: Int) =
+            DetailsInnerChallengeFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(CHALLENGER_ID, challengeId)
+                }
+            }
+    }
+
 }
