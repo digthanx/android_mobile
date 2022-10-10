@@ -127,7 +127,9 @@
         android:layout_width="match_parent"
         android:layout_height="38dp"
         app:tabMode="scrollable"
-        app:tabTextAppearance="@style/SmallText2Medium.Black"
+        android:elevation="50dp"
+        android:background="@color/transparent"
+        app:tabTextAppearance="@style/StandardText3Medium.Black"
         android:layout_marginHorizontal="16dp"
         style="@style/MyTabChallenge">
 
@@ -167,6 +169,7 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:elevation="50dp"
         android:layout_weight="1"/>
 
 </LinearLayout>

@@ -417,6 +417,7 @@
     <style name="MyTabChallenge" parent="Widget.Design.TabLayout">
         <item name="tabBackground">@drawable/selector_tab</item>
         <item name="tabIndicatorColor">@color/transparent</item>
+        <item name="tabRippleColor">@color/transparent</item>
         <item name="android:textAppearance">@style/SmallText2Medium.Black</item>
         <item name="tabTextColor">@color/general_contrast</item>
         <item name="tabSelectedTextColor">@color/general_background</item>
