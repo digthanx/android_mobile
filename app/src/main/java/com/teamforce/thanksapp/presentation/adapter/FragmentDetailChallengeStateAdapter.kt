@@ -8,6 +8,7 @@ import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragme
 import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.CommentsChallengeFragment
 import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.ContendersChallengeFragment
 import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.DetailsInnerChallengeFragment
+import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.WinnersChallengeFragment
 
 class FragmentDetailChallengeStateAdapter(fragment: FragmentActivity): FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = 3
@@ -28,7 +29,11 @@ class FragmentDetailChallengeStateAdapter(fragment: FragmentActivity): FragmentS
                 fragment.arguments = bundle
                 return fragment
             }
-            1 -> CommentsChallengeFragment()
+            1 -> {
+                val fragment = WinnersChallengeFragment()
+                fragment.arguments = bundle
+                return fragment
+            }
             2 -> {
                val fragment = ContendersChallengeFragment()
                 fragment.arguments = bundle
