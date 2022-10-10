@@ -1,14 +1,21 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.insertSeparators
 import androidx.paging.map
+import com.teamforce.thanksapp.data.request.CancelTransactionRequest
 import com.teamforce.thanksapp.data.response.HistoryItem
 import com.teamforce.thanksapp.domain.repositories.HistoryRepository
+import com.teamforce.thanksapp.utils.Result
+import com.teamforce.thanksapp.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -19,6 +26,26 @@ class HistoryListViewModel @Inject constructor(
     private val historyRepository: HistoryRepository,
     private val userDataRepository: com.teamforce.thanksapp.utils.UserDataRepository
 ) : ViewModel() {
+
+    private val _cancellationResult: MutableLiveData<Result<Int>> =
+        MutableLiveData<Result<Int>>()
+    val cancellationResult: LiveData<Result<Int>> = _cancellationResult
+
+    fun cancelUserTransaction(id: Int, position: Int) {
+        viewModelScope.launch {
+
+            when (historyRepository.cancelTransaction(
+                id.toString(),
+                CancelTransactionRequest("D")
+            )) {
+                is ResultWrapper.GenericError -> {}
+                ResultWrapper.NetworkError -> {}
+                is ResultWrapper.Success -> _cancellationResult.postValue(Result.Success(position))
+            }
+
+        }
+
+    }
 
     fun getHistory(
         sentOnly: Int,
@@ -78,7 +105,7 @@ class HistoryListViewModel @Inject constructor(
             }
     }
 
-    fun getDateTimeLabel(dateTime: LocalDateTime): String {
+    private fun getDateTimeLabel(dateTime: LocalDateTime): String {
         val title = dateTime.dayOfMonth.toString() + " " + getMonth(dateTime)
         val result = dateTime.toString().subSequence(0, 10)
         val today: LocalDate = LocalDate.now()

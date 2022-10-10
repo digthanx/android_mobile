@@ -88,10 +88,10 @@ interface ThanksApi {
 
 
     @PUT("/cancel-transaction/{id}/")
-    fun cancelTransaction(
+    suspend fun cancelTransaction(
         @Path("id") transactionId: String,
         @Body status: CancelTransactionRequest
-    ): Call<CancelTransactionResponse>
+    ): CancelTransactionResponse
 
 
     @PUT("/update-profile-by-user/{id}/")

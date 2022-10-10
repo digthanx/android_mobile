@@ -1,9 +1,10 @@
-package com.teamforce.thanksapp.presentation.fragment.historyScreen
+package com.teamforce.thanksapp.presentation.adapter.history
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.teamforce.thanksapp.presentation.fragment.historyScreen.HistoryListFragment
 
 class PagerAdapter(
     fragmentManager: FragmentManager,

@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.fragment.historyScreen
+package com.teamforce.thanksapp.presentation.adapter.history
 
 import android.os.Bundle
 import android.util.Log
@@ -28,7 +28,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class HistoryPageAdapter(
-    private val username: String
+    private val username: String,
+    private val onCancelClicked: (id: Int, position: Int) -> Unit
 ) :
     PagingDataAdapter<HistoryItem, RecyclerView.ViewHolder>(DiffCallback) {
 
@@ -59,7 +60,10 @@ class HistoryPageAdapter(
         var avatar: String? = null
         var date: String = ""
 
-        fun bind(data: HistoryItem.UserTransactionsResponse, username: String) {
+        fun bind(
+            data: HistoryItem.UserTransactionsResponse, username: String,
+            onCancelClicked: (id: Int, position: Int) -> Unit
+        ) {
             binding.apply {
                 val status = data.transaction_status.id
                 transferIconIv.setImageResource(R.drawable.ic_anon_avatar)
@@ -70,7 +74,7 @@ class HistoryPageAdapter(
                         refuseTransactionBtn.visibility = View.VISIBLE
                         refuseTransactionBtn.setOnClickListener {
 //                            showAlertDialogForCancelTransaction(dataSet[position].id)
-                            // TODO:
+                            onCancelClicked(data.id, layoutPosition)
                         }
                     }
                     valueTransfer.text = " " + data.amount
@@ -348,7 +352,7 @@ class HistoryPageAdapter(
                 }
                 is HistoryItem.UserTransactionsResponse -> {
                     val viewHolder = holder as HistoryItemViewHolder
-                    holder.bind(item, username)
+                    holder.bind(item, username, onCancelClicked)
                 }
 
             }
