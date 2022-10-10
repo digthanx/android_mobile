@@ -129,7 +129,7 @@
         app:tabMode="scrollable"
         android:elevation="50dp"
         android:background="@color/transparent"
-        app:tabTextAppearance="@style/SmallText2Medium.Black"
+        app:tabTextAppearance="@style/StandardText3Medium.Black"
         android:layout_marginHorizontal="16dp"
         style="@style/MyTabChallenge">
 
