@@ -39,7 +39,7 @@ class MyResultChallengeViewModel @Inject constructor(
                 _isLoading.postValue(true)
                 when (val result = challengeRepository.loadChallengeResult(challengeId)) {
                     is ResultWrapper.Success -> {
-                        _myResult.postValue(result.value)
+                        _myResult.postValue(result.value[0])
                     }
                     else -> {
                         if (result is ResultWrapper.GenericError) {

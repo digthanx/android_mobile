@@ -181,5 +181,5 @@ interface ThanksApi {
     @GET("/challenge-result/{challenge_id}/")
     suspend fun getChallengeResult(
         @Path("challenge_id") challengeId: Int
-    ): GetChallengeResultResponse
+    ): List<GetChallengeResultResponse>
 }

@@ -12,14 +12,14 @@ class FragmentDetailChallengeStateAdapter(
     fragment: FragmentActivity,
     val creatorId: Int,
     val profileId: Int,
-    val statusChallenge: String
+    val myResultWasReceivedSuccessfully: Boolean
 ) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
-        return if (profileId == creatorId && statusChallenge == "Отчет подтвержден") {
+        return if (profileId == creatorId && myResultWasReceivedSuccessfully) {
             4
         } else if (profileId == creatorId) {
             4
-        } else if (statusChallenge == "Отчет подтвержден") {
+        } else if (myResultWasReceivedSuccessfully) {
             3
         } else {
             2
@@ -33,7 +33,7 @@ class FragmentDetailChallengeStateAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        if (creatorId == profileId && statusChallenge == "Отчет подтвержден") {
+        if (creatorId == profileId && myResultWasReceivedSuccessfully) {
             return when (position) {
                 0 -> DetailsInnerChallengeFragment.newInstance(challengeId)
 
@@ -56,7 +56,7 @@ class FragmentDetailChallengeStateAdapter(
                     DetailsInnerChallengeFragment.newInstance(challengeId)
                 }
             }
-        } else if (statusChallenge == "Отчет подтвержден") {
+        } else if (myResultWasReceivedSuccessfully) {
             return when (position) {
                 0 -> DetailsInnerChallengeFragment.newInstance(challengeId)
                 1 -> WinnersChallengeFragment.newInstance(challengeId)
