@@ -9,6 +9,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/first_card"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -37,7 +38,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
                     android:layout_marginVertical="2dp"
-                    android:text="Подтвержден"
                     android:textAppearance="@style/SmallText2.White"
                     android:textColor="@color/minor_success" />
             </com.google.android.material.card.MaterialCardView>
@@ -46,7 +46,6 @@
                 android:id="@+id/date_et"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Обновлено 23 сентября в 13:00"
                 android:textAppearance="@style/VerySmallText1.Gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -86,6 +85,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/secondary_card"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -112,7 +112,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="12dp"
-                android:text="+55"
                 android:textAppearance="@style/Headline3.Green" />
 
             <ImageView
