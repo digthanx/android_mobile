@@ -40,7 +40,6 @@ class HistoryPagingSource(
                 if (response.isEmpty()) {
                     null
                 } else {
-                    pageIndex + 1
                     pageIndex + (params.loadSize / Consts.PAGE_SIZE)
                 }
             LoadResult.Page(
