@@ -8,6 +8,7 @@
     tools:context=".presentation.fragment.challenges.fragmentsViewPager2.MyResultChallengeFragment">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/first_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -22,14 +23,14 @@
             android:layout_margin="16dp">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_et"
+                android:id="@+id/card_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 app:cardBackgroundColor="@color/minor_success_secondary"
                 app:cardCornerRadius="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-
                 <TextView
                     android:id="@+id/state_et"
                     android:layout_width="wrap_content"
@@ -55,11 +56,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="Давайте проведем часть времени в активном спортивногом состоянии. Предлагаю всем в течении недели пройти 100 км или пробежать. Кто сможет - получить форсики. Жду!"
+                android:textAlignment="textStart"
+                android:text="Давайте"
+                android:gravity="start"
                 android:textAppearance="@style/SmallText2.Black"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/card_et" />
+                app:layout_constraintTop_toBottomOf="@id/card_status" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/show_attached_img_card"
@@ -83,6 +85,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/secondary_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -104,6 +107,7 @@
                 android:textAppearance="@style/StandardText4Medium.Black" />
 
             <TextView
+                android:id="@+id/value_et"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -112,6 +116,7 @@
                 android:textAppearance="@style/Headline3.Green" />
 
             <ImageView
+                android:id="@+id/image_currency"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
@@ -119,6 +124,22 @@
                 android:src="@drawable/ic_currency"
                 app:tint="@color/minor_success" />
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/noData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardElevation="20dp"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            style="@style/Body1.Bold"
+            android:text="Вашего результата пока нет"/>
     </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

@@ -30,7 +30,7 @@ class MyResultChallengeViewModel @Inject constructor(
 
 
 
-    fun loadWinners(
+    fun loadChallengeResult(
         challengeId: Int
     ) {
         _isLoading.postValue(true)

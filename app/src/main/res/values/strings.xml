@@ -167,6 +167,9 @@
     <string name="applyInContender">Подтвердить</string>
     <string name="applyCheckReport">Отчет был подтвержден</string>
     <string name="deniedCheckReport">Отчет был отклонен</string>
+    <!--Мой результат -->
+    <string name="thanksWasGot">+%s</string>
+    <string name="updatedDateTime">Обновлено %s в %s</string>
 
     <!--Utils -->
     <string name="OK">Ок</string>
