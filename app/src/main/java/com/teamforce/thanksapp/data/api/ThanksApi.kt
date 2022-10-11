@@ -63,7 +63,12 @@ interface ThanksApi {
     ): Call<SendCoinsResponse>
 
     @GET("/user/transactions/")
-    fun getUserTransactions(): Call<List<UserTransactionsResponse>>
+    suspend fun getUserTransactions(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+        @Query("sent_only") sentOnly: Int?,
+        @Query("received_only") receivedOnly: Int?
+    ): List<HistoryItem.UserTransactionsResponse>
 
     @GET("/feed/")
     fun getFeed(): Call<List<FeedResponse>>
@@ -83,10 +88,10 @@ interface ThanksApi {
 
 
     @PUT("/cancel-transaction/{id}/")
-    fun cancelTransaction(
+    suspend fun cancelTransaction(
         @Path("id") transactionId: String,
         @Body status: CancelTransactionRequest
-    ): Call<CancelTransactionResponse>
+    ): CancelTransactionResponse
 
 
     @PUT("/update-profile-by-user/{id}/")
@@ -155,7 +160,7 @@ interface ThanksApi {
         @Part photo: MultipartBody.Part?,
         @Part("challenge") challengeId: RequestBody,
         @Part("text") comment: RequestBody
-        ): CreateReportResponse
+    ): CreateReportResponse
 
     @GET("/challenge-contenders/{challenge_id}/")
     suspend fun getChallengeContenders(
