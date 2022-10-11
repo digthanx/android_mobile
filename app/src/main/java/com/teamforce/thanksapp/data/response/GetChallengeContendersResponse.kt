@@ -1,7 +1,7 @@
 package com.teamforce.thanksapp.data.response
 
 data class GetChallengeContendersResponse(
-    val data: List<Contender>
+    val data: List<Contender>?
 ){
     data class Contender(
         val participant_id: Int,
