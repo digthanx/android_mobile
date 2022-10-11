@@ -64,15 +64,44 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
     private fun initTabLayoutMediator(){
         // Нужно добавить изменения в количестве вкладок в зависимости от статуса чалика
-        val detailInnerFragment = FragmentDetailChallengeStateAdapter(requireActivity())
-        idChallenge?.let { detailInnerFragment.setChallengeId(it) }
+        val detailInnerFragment = creatorId?.let { creatorId ->
+            statusChallenge?.let { statusChallenge ->
+                FragmentDetailChallengeStateAdapter(
+                    requireActivity(),
+                    creatorId = creatorId,
+                    profileId = viewModel.getProfileId(),
+                    statusChallenge = statusChallenge
+                )
+            }
+        }
+        idChallenge?.let { detailInnerFragment?.setChallengeId(it) }
         binding.pager.adapter = detailInnerFragment
-        if(creatorId == viewModel.getProfileId()){
+        if(creatorId == viewModel.getProfileId() && statusChallenge == "Отчет подтвержден"){
             TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
                 when(position){
                     0 -> tab.text = context?.getString(R.string.details)
                     1 -> tab.text = context?.getString(R.string.winners)
                     2 -> tab.text = context?.getString(R.string.contenders)
+                    3 -> tab.text = context?.getString(R.string.myResult)
+                }
+            }.attach()
+        }else if(creatorId == viewModel.getProfileId()){
+            // Пока что если ты создать
+            // я всегда буду показывать мой результат пока от бека нет поля
+            TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
+                when(position){
+                    0 -> tab.text = context?.getString(R.string.details)
+                    1 -> tab.text = context?.getString(R.string.winners)
+                    2 -> tab.text = context?.getString(R.string.contenders)
+                    3 -> tab.text = context?.getString(R.string.myResult)
+                }
+            }.attach()
+        }else if(statusChallenge == "Отчет подтвержден"){
+            TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
+                when(position){
+                    0 -> tab.text = context?.getString(R.string.details)
+                    1 -> tab.text = context?.getString(R.string.winners)
+                    2 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
         }else{

@@ -2,10 +2,7 @@ package com.teamforce.thanksapp.data.repository
 
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CreateReportRequest
-import com.teamforce.thanksapp.data.response.CheckReportResponse
-import com.teamforce.thanksapp.data.response.CreateReportResponse
-import com.teamforce.thanksapp.data.response.GetChallengeContendersResponse
-import com.teamforce.thanksapp.data.response.GetChallengeWinnersResponse
+import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
 import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.safeApiCall
@@ -49,6 +46,12 @@ class ChallengeRepositoryImpl @Inject constructor(
         challengeId: Int): ResultWrapper<List<GetChallengeWinnersResponse.Winner>> {
         return safeApiCall(Dispatchers.IO) {
             thanksApi.getChallengeWinners(challengeId)
+        }
+    }
+
+    override suspend fun loadChallengeResult(challengeId: Int): ResultWrapper<GetChallengeResultResponse> {
+        return safeApiCall(Dispatchers.IO) {
+            thanksApi.getChallengeResult(challengeId)
         }
     }
 }

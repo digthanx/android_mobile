@@ -10,6 +10,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ContendersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.viewmodel.ContendersChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,6 +77,17 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         viewModel.contenders.observe(viewLifecycleOwner) {
             (binding.contendersRv.adapter as ContendersAdapter).submitList(it)
         }
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance(challengeId: Int) =
+            ContendersChallengeFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ChallengesFragment.CHALLENGER_ID, challengeId)
+                }
+            }
     }
 
 

@@ -144,6 +144,7 @@
     <string name="details">Детали</string>
     <string name="participants">Участники</string>
     <string name="contenders">Претенденты</string>
+    <string name="myResult">Мой результат</string>
     <string name="winners">Победители</string>
     <string name="fund">%s форсиков</string>
     <string name="occupiedPrizePool">%s / %s</string>
@@ -166,6 +167,9 @@
     <string name="applyInContender">Подтвердить</string>
     <string name="applyCheckReport">Отчет был подтвержден</string>
     <string name="deniedCheckReport">Отчет был отклонен</string>
+    <!--Мой результат -->
+    <string name="thanksWasGot">+%s</string>
+    <string name="updatedDateTime">Обновлено %s в %s</string>
 
     <!--Utils -->
     <string name="OK">Ок</string>
