@@ -16,7 +16,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         app:defaultNavHost="true"
-        android:layout_marginBottom="55dp"
         app:navGraph="@navigation/main_graph" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
