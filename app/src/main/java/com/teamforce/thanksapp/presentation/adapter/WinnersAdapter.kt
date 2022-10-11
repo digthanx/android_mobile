@@ -65,7 +65,9 @@ class WinnersAdapter
            convertDateToNecessaryFormat(holder, position)
             binding.amountThanks.text =
                 String.format(binding.root.context.getString(R.string.amountThanks), currentList[position].total_received)
-            binding.tgNameUser.text = String.format(binding.root.context.getString(R.string.tgName), currentList[position].nickname)
+            binding.tgNameUser.text = currentList[position]?.nickname
+                    ?: (currentList[position].participant_surname + " " + currentList[position].participant_name)
+
             if(!currentList[position].participant_photo.isNullOrEmpty()){
                 Glide.with(binding.root.context)
                     .load("${Consts.BASE_URL}${currentList[position].participant_photo}".toUri())
