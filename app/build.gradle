@@ -103,7 +103,14 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     // Import the Firebase BoM
-    implementation platform(libs.firebase.bom)
+//    implementation platform(libs.firebase.bom)
+
+    implementation platform('com.google.firebase:firebase-bom:30.5.0')
+
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
 
     //implementation libs.appcompat.v7
     implementation libs.compose.runtime
