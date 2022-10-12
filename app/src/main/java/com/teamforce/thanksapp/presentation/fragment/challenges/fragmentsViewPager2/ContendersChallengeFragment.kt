@@ -14,6 +14,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.data.response.GetChallengeContendersResponse
 import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ContendersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
@@ -30,6 +31,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
     private val viewModel: ContendersChallengeViewModel by viewModels()
 
     private var idChallenge: Int? = null
+    private var listOfContenders: MutableList<GetChallengeContendersResponse.Contender> = mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,33 +48,39 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         binding.contendersRv.addItemDecoration(VerticalDividerItemDecorator(16, contendersAdapter.itemCount))
         loadParticipants()
         setData()
-        contendersAdapter.applyClickListener = { reportId: Int, state: Char ->
+        var currentPositionItem = -1 // Нужно чтобы вызывать под листенером notifyItemRemoved()
+        contendersAdapter.applyClickListener = { reportId: Int, state: Char, position: Int ->
+            currentPositionItem = position
             viewModel.checkReport(reportId, state, " ")
+            listeningResponse(adapter = contendersAdapter, currentPositionItem)
         }
-        contendersAdapter.refuseClickListener = { reportId: Int, state: Char ->
+        contendersAdapter.refuseClickListener = { reportId: Int, state: Char, position: Int ->
+            currentPositionItem = position
             createDialog(reportId, state)
+            listeningResponse(adapter = contendersAdapter, currentPositionItem)
         }
-        listeningResponse()
-
     }
 
-    private fun listeningResponse(){
+    private fun listeningResponse(adapter: ContendersAdapter, currentPositionItem: Int){
         viewModel.contendersError.observe(viewLifecycleOwner){
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
 
         viewModel.isSuccessOperation.observe(viewLifecycleOwner){
             if(it.successResult)
-                if(it.state == 'W'){ Toast.makeText(requireContext(),
-                    requireContext().getString(R.string.applyCheckReport),
+                if(it.state == 'W'){
+                    listOfContenders.removeAt(currentPositionItem)
+                    adapter.submitList(listOfContenders)
+                    Toast.makeText(requireContext(), requireContext().getString(R.string.applyCheckReport),
                     Toast.LENGTH_LONG).show()
                 }else{
+                    listOfContenders.removeAt(currentPositionItem)
+                    adapter.submitList(listOfContenders)
                     Toast.makeText(requireContext(),
                         requireContext().getString(R.string.deniedCheckReport),
                         Toast.LENGTH_LONG).show()
                 }
-            loadParticipants()
-            setData()
+
         }
     }
 
@@ -84,6 +92,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         viewModel.contenders.observe(viewLifecycleOwner) {
             if(!it.isNullOrEmpty()){
                 binding.noData.visibility = View.GONE
+                listOfContenders = it.toMutableList()
                 (binding.contendersRv.adapter as ContendersAdapter).submitList(it)
             }else{
                 binding.noData.visibility = View.VISIBLE

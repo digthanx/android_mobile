@@ -25,8 +25,8 @@ class ContendersAdapter(
 ): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(DiffCallback)
 {
 
-    var applyClickListener: ((reportId: Int, state: Char) -> Unit)? = null
-    var refuseClickListener: ((reportId: Int, state: Char) -> Unit)? = null
+    var applyClickListener: ((reportId: Int, state: Char, position: Int) -> Unit)? = null
+    var refuseClickListener: ((reportId: Int, state: Char, position: Int) -> Unit)? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContenderViewHolder {
@@ -80,14 +80,18 @@ class ContendersAdapter(
             binding.userSurnameLabelTv.text = currentList[position].participant_surname
             convertDateToNecessaryFormat(holder, position)
             binding.applyBtn.setOnClickListener {
-                applyClickListener?.invoke(currentList[position].report_id, 'W')
+                applyClickListener?.invoke(currentList[position].report_id, 'W', position)
             }
             binding.refuseBtn.setOnClickListener {
-                refuseClickListener?.invoke(currentList[position].report_id, 'D')
+                refuseClickListener?.invoke(currentList[position].report_id, 'D', position)
             }
         }
 
 
+    }
+
+    fun deleteItemByPosition(position: Int){
+        notifyItemRemoved(position)
     }
 
     private fun convertDateToNecessaryFormat(holder: ContenderViewHolder, position: Int) {
