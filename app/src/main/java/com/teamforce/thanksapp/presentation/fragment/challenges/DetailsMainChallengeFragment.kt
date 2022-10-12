@@ -28,7 +28,6 @@ import com.teamforce.thanksapp.utils.OptionsTransaction
 import dagger.hilt.android.AndroidEntryPoint
 
 
-
 @AndroidEntryPoint
 class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_challenge) {
 
@@ -55,58 +54,59 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadDataFromDb()
         setData()
-        initTabLayoutMediator()
+        listenersForRequestedData()
         listenersBtn()
 
 
     }
 
-    private fun initTabLayoutMediator(){
+    private fun initTabLayoutMediator(myResultWasReceivedSuccessfully: Boolean) {
         // Нужно добавить изменения в количестве вкладок в зависимости от статуса чалика
-        val detailInnerFragment = creatorId?.let { creatorId ->
+        val detailInnerAdapter = creatorId?.let { creatorId ->
             statusChallenge?.let { statusChallenge ->
                 FragmentDetailChallengeStateAdapter(
                     requireActivity(),
                     creatorId = creatorId,
                     profileId = viewModel.getProfileId(),
-                    statusChallenge = statusChallenge
+                    myResultWasReceivedSuccessfully = myResultWasReceivedSuccessfully
                 )
             }
         }
-        idChallenge?.let { detailInnerFragment?.setChallengeId(it) }
-        binding.pager.adapter = detailInnerFragment
-        if(creatorId == viewModel.getProfileId() && statusChallenge == "Отчет подтвержден"){
-            TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
-                when(position){
+        idChallenge?.let { detailInnerAdapter?.setChallengeId(it) }
+        binding.pager.adapter = detailInnerAdapter
+        if (creatorId == viewModel.getProfileId() && myResultWasReceivedSuccessfully) {
+            TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+                when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
                     1 -> tab.text = context?.getString(R.string.winners)
                     2 -> tab.text = context?.getString(R.string.contenders)
                     3 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
-        }else if(creatorId == viewModel.getProfileId()){
+        } else if (creatorId == viewModel.getProfileId()) {
             // Пока что если ты создать
             // я всегда буду показывать мой результат пока от бека нет поля
-            TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
-                when(position){
+            TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+                when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
                     1 -> tab.text = context?.getString(R.string.winners)
                     2 -> tab.text = context?.getString(R.string.contenders)
                     3 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
-        }else if(statusChallenge == "Отчет подтвержден"){
-            TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
-                when(position){
+        } else if (myResultWasReceivedSuccessfully) {
+            TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+                when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
                     1 -> tab.text = context?.getString(R.string.winners)
                     2 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
-        }else{
-            TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
-                when(position){
+        } else {
+            TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+                when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
                     1 -> tab.text = context?.getString(R.string.winners)
                 }
@@ -114,7 +114,13 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
         }
     }
 
-    private fun listenersBtn(){
+    private fun loadDataFromDb(){
+        idChallenge?.let {
+            viewModel.loadChallengeResult(it)
+        }
+    }
+
+    private fun listenersBtn() {
         binding.closeBtn.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -123,20 +129,30 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
         }
     }
 
-    private fun setData(){
+    private fun listenersForRequestedData(){
+        viewModel.isSuccessOperationMyResult.observe(viewLifecycleOwner) {
+            if(it){
+                initTabLayoutMediator(it)
+            }else if(it == false){
+                initTabLayoutMediator(it)
+            }
+        }
+    }
+
+    private fun setData() {
         //if(challengeBackground.isNullOrEmpty())
-        if(challengeActive == true){
+        if (challengeActive == true) {
             binding.statusActiveText.text = requireContext().getString(R.string.active)
             binding.statusActiveTextSecondary.text = requireContext().getString(R.string.active)
             binding.statusActiveCard
                 .setCardBackgroundColor(requireContext().getColor(R.color.minor_info))
-        }else{
+        } else {
             binding.statusActiveText.text = requireContext().getString(R.string.completed)
             binding.statusActiveTextSecondary.text = requireContext().getString(R.string.completed)
             binding.statusActiveCard
                 .setCardBackgroundColor(requireContext().getColor(R.color.minor_success))
         }
-        if(!challengeBackground.isNullOrEmpty()){
+        if (!challengeBackground.isNullOrEmpty()) {
             binding.standardCard.visibility = View.GONE
             binding.secondaryCard.visibility = View.VISIBLE
             binding.closeBtnSecondary.setTextColor(requireContext().getColor(R.color.general_background))

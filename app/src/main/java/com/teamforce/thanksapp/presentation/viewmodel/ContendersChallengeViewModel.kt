@@ -25,7 +25,7 @@ class ContendersChallengeViewModel @Inject constructor(
     val isSuccessOperation: LiveData<SuccessResultCheckReport> = _isSuccessOperation
 
     private val _contenders = MutableLiveData<List<GetChallengeContendersResponse.Contender>>()
-    val contenders: LiveData<List<GetChallengeContendersResponse.Contender>> = _contenders
+    val contenders: LiveData<List<GetChallengeContendersResponse.Contender>?> = _contenders
     private val _contendersError = MutableLiveData<String>()
     val contendersError: LiveData<String> = _contendersError
 

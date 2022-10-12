@@ -27,6 +27,6 @@ interface ChallengeRepository {
 
     suspend fun loadChallengeResult(
         challengeId: Int,
-    ): ResultWrapper<GetChallengeResultResponse>
+    ): ResultWrapper<List<GetChallengeResultResponse>>
 
 }

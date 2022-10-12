@@ -75,7 +75,12 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
 
     private fun setData(){
         viewModel.contenders.observe(viewLifecycleOwner) {
-            (binding.contendersRv.adapter as ContendersAdapter).submitList(it)
+            if(!it.isNullOrEmpty()){
+                binding.noData.visibility = View.GONE
+                (binding.contendersRv.adapter as ContendersAdapter).submitList(it)
+            }else{
+                binding.noData.visibility = View.VISIBLE
+            }
         }
     }
 

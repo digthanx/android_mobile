@@ -44,8 +44,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/SmallText2Medium.Black"
-            android:textColor="@color/general_brand"
-            android:text="/@Nyama"
             app:layout_constraintStart_toStartOf="@id/date_tv"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
