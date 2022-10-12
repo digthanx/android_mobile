@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/StandardText4Medium.Black"
-                android:text="Основная инофрмация"/>
+                android:text="Основная информация"/>
 
             <TextView
                 android:layout_width="wrap_content"

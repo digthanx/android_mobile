@@ -1,12 +1,20 @@
 package com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.data.response.GetChallengeContendersResponse
 import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ContendersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
@@ -23,6 +31,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
     private val viewModel: ContendersChallengeViewModel by viewModels()
 
     private var idChallenge: Int? = null
+    private var listOfContenders: MutableList<GetChallengeContendersResponse.Contender> = mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,38 +43,44 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = ContendersAdapter()
-        binding.contendersRv.adapter = adapter
-        binding.contendersRv.addItemDecoration(VerticalDividerItemDecorator(16, adapter.itemCount))
+        val contendersAdapter = ContendersAdapter()
+        binding.contendersRv.adapter = contendersAdapter
+        binding.contendersRv.addItemDecoration(VerticalDividerItemDecorator(16, contendersAdapter.itemCount))
         loadParticipants()
         setData()
-        adapter.applyClickListener = {reportId: Int, state: Char ->
-            viewModel.checkReport(reportId, state)
+        var currentPositionItem = -1 // Нужно чтобы вызывать под листенером notifyItemRemoved()
+        contendersAdapter.applyClickListener = { reportId: Int, state: Char, position: Int ->
+            currentPositionItem = position
+            viewModel.checkReport(reportId, state, " ")
+            listeningResponse(adapter = contendersAdapter, currentPositionItem)
         }
-        adapter.refuseClickListener = {reportId: Int, state: Char ->
-            viewModel.checkReport(reportId, state)
+        contendersAdapter.refuseClickListener = { reportId: Int, state: Char, position: Int ->
+            currentPositionItem = position
+            createDialog(reportId, state)
+            listeningResponse(adapter = contendersAdapter, currentPositionItem)
         }
-        listeningResponse()
-
     }
 
-    private fun listeningResponse(){
+    private fun listeningResponse(adapter: ContendersAdapter, currentPositionItem: Int){
         viewModel.contendersError.observe(viewLifecycleOwner){
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
 
         viewModel.isSuccessOperation.observe(viewLifecycleOwner){
             if(it.successResult)
-                if(it.state == 'W'){ Toast.makeText(requireContext(),
-                    requireContext().getString(R.string.applyCheckReport),
+                if(it.state == 'W'){
+                    listOfContenders.removeAt(currentPositionItem)
+                    adapter.submitList(listOfContenders)
+                    Toast.makeText(requireContext(), requireContext().getString(R.string.applyCheckReport),
                     Toast.LENGTH_LONG).show()
                 }else{
+                    listOfContenders.removeAt(currentPositionItem)
+                    adapter.submitList(listOfContenders)
                     Toast.makeText(requireContext(),
                         requireContext().getString(R.string.deniedCheckReport),
                         Toast.LENGTH_LONG).show()
                 }
-            loadParticipants()
-            setData()
+
         }
     }
 
@@ -77,10 +92,43 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         viewModel.contenders.observe(viewLifecycleOwner) {
             if(!it.isNullOrEmpty()){
                 binding.noData.visibility = View.GONE
+                listOfContenders = it.toMutableList()
                 (binding.contendersRv.adapter as ContendersAdapter).submitList(it)
             }else{
                 binding.noData.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun createDialog(reportId: Int, state: Char) {
+        val builderDialog = AlertDialog.Builder(context, R.style.FullscreenDialogTheme)
+        val inflater = requireActivity().layoutInflater
+        val newListValues = inflater.inflate(R.layout.dialog_reason_for_rejection_report, null)
+        builderDialog.setView(newListValues)
+        val dialog = builderDialog.create()
+        dialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+        dialog.show()
+
+        val refuseBtn = dialog.findViewById<MaterialButton>(R.id.refuse_btn)
+        val closeDialogBtn = dialog.findViewById<MaterialButton>(R.id.closeDialog_btn)
+        refuseBtn.setOnClickListener {
+            if(dialog.findViewById<TextInputEditText>(R.id.description_et)
+                    .text?.trim()?.isNotEmpty() == true){
+                viewModel.checkReport(
+                    reportId, state,
+                    dialog.findViewById<TextInputEditText>(R.id.description_et).text.toString()
+                )
+                dialog.cancel()
+            }else{
+                Toast.makeText(requireContext(),
+                    requireContext().getString(R.string.reasonOfRejectionIsNecessary),
+                    Toast.LENGTH_LONG).show()
+            }
+
+        }
+        closeDialogBtn.setOnClickListener {
+            dialog.dismiss()
         }
     }
 

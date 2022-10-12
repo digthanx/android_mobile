@@ -24,7 +24,7 @@ class ContendersChallengeViewModel @Inject constructor(
     private val _isSuccessOperation = MutableLiveData<SuccessResultCheckReport>()
     val isSuccessOperation: LiveData<SuccessResultCheckReport> = _isSuccessOperation
 
-    private val _contenders = MutableLiveData<List<GetChallengeContendersResponse.Contender>>()
+    private val _contenders = MutableLiveData<List<GetChallengeContendersResponse.Contender>?>()
     val contenders: LiveData<List<GetChallengeContendersResponse.Contender>?> = _contenders
     private val _contendersError = MutableLiveData<String>()
     val contendersError: LiveData<String> = _contendersError
@@ -42,7 +42,7 @@ class ContendersChallengeViewModel @Inject constructor(
                 _isLoading.postValue(true)
                 when (val result = challengeRepository.loadContenders(challengeId)) {
                     is ResultWrapper.Success -> {
-                        _contenders.postValue(result.value!!)
+                        _contenders.postValue(result.value)
                     }
                     else -> {
                         if (result is ResultWrapper.GenericError) {
@@ -60,7 +60,8 @@ class ContendersChallengeViewModel @Inject constructor(
 
     fun checkReport(
         reportId: Int,
-        state: Char
+        state: Char,
+        reasonOfReject: String?
     ) {
         val stateMap = mapOf<String, Char>("state" to state)
         _isLoading.postValue(true)
@@ -68,10 +69,9 @@ class ContendersChallengeViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 _isLoading.postValue(true)
                 _isSuccessOperation.postValue(SuccessResultCheckReport(state, false))
-                when (val result = challengeRepository.checkChallengeReport(reportId, stateMap)) {
+                when (val result = challengeRepository.checkChallengeReport(reportId, stateMap, reasonOfReject)) {
                     is ResultWrapper.Success -> {
                         _isSuccessOperation.postValue(SuccessResultCheckReport(state, true))
-                        // _contenders.postValue(result.value!!)
                     }
                     else -> {
                         if (result is ResultWrapper.GenericError) {

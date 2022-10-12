@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.data.repository
 
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.data.request.CheckChallengeReportRequest
 import com.teamforce.thanksapp.data.request.CreateReportRequest
 import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
@@ -35,10 +36,12 @@ class ChallengeRepositoryImpl @Inject constructor(
 
     override suspend fun checkChallengeReport(
         reportId: Int,
-        state: Map<String, Char>
+        state: Map<String, Char>,
+        reasonOfReject: String?
     ): ResultWrapper<CheckReportResponse> {
+        val request = state["state"]?.let { CheckChallengeReportRequest(it, text = reasonOfReject) }
         return safeApiCall(Dispatchers.IO) {
-            thanksApi.checkChallengeReport(reportId, state)
+            thanksApi.checkChallengeReport(reportId, request)
         }
     }
 

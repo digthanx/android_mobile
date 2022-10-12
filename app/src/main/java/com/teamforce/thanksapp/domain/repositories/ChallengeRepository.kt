@@ -18,7 +18,8 @@ interface ChallengeRepository {
 
     suspend fun checkChallengeReport(
         reportId: Int,
-        state: Map<String, Char>
+        state: Map<String, Char>,
+        reasonOfReject: String?
     ): ResultWrapper<CheckReportResponse>
 
     suspend fun loadWinners(
