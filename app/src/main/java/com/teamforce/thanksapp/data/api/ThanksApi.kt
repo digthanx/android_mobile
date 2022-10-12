@@ -105,9 +105,9 @@ interface ThanksApi {
         @Body data: List<ContactEntity>?,
     ): Call<UpdateFewContactsResponse>
 
-    @GET("/tags/")
+    @GET("/send-coins-settings/")
     fun getTags(
-    ): Call<List<TagModel>>
+    ): Call<GetTagsResponse>
 
     @GET("/profile/{user_id}/")
     fun getAnotherProfile(
