@@ -167,6 +167,10 @@
     <string name="applyInContender">Подтвердить</string>
     <string name="applyCheckReport">Отчет был подтвержден</string>
     <string name="deniedCheckReport">Отчет был отклонен</string>
+    <string name="closeMyChoice">Отменить</string>
+    <string name="describeReason">Укажите причину</string>
+    <string name="rejectReport">Отклонить заявку</string>
+    <string name="reasonOfRejectionIsNecessary">Причина отклонения обязательна</string>
     <!--Мой результат -->
     <string name="thanksWasGot">+%s</string>
     <string name="updatedDateTime">Обновлено %s в %s</string>
