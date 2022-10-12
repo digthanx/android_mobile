@@ -116,8 +116,9 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                     .into(binding.userAvatar)
             }
             it.status?.let { status ->
-                binding.sendReportBtn.text = status
+               // binding.sendReportBtn.text = status
                 enableOrDisableSentReportButton(status)
+                binding.stateAboutReports.text = status
             }
         }
     }
