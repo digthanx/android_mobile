@@ -64,6 +64,12 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadWinners()
+        setData()
+    }
+
     companion object {
 
         @JvmStatic
