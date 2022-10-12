@@ -15,6 +15,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsInnerChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesStatus
 import com.teamforce.thanksapp.presentation.viewmodel.DetailsInnerChallengerViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
@@ -70,12 +71,13 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     }
 
 
-    private fun checkReportSharedPref(){
+    private fun checkReportSharedPref() {
         val sharedPref = requireContext().getSharedPreferences("report", 0)
-        if (!sharedPref.getString("commentReport", "").isNullOrEmpty()||
-            !sharedPref.getString("imageReport", "").isNullOrEmpty()){
+        if (!sharedPref.getString("commentReport", "").isNullOrEmpty() ||
+            !sharedPref.getString("imageReport", "").isNullOrEmpty()
+        ) {
             binding.sendReportBtn.text = requireContext().getString(R.string.draft)
-        }else{
+        } else {
             binding.sendReportBtn.text = requireContext().getString(R.string.sendReport)
         }
     }
@@ -86,10 +88,10 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
             binding.nameChallenge.text = it.name
             binding.descriptionChallenge.text = it.description
             binding.stateAboutReports.text = it.status
-            if(it.active){
+            if (it.active) {
                 binding.stateAboutAddParticipants.text =
                     requireContext().getString(R.string.gettingReportsActive)
-            }else{
+            } else {
                 binding.stateAboutAddParticipants.text =
                     requireContext().getString(R.string.gettingReportsFinished)
             }
@@ -113,7 +115,18 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(binding.userAvatar)
             }
+            it.status?.let { status ->
+               // binding.sendReportBtn.text = status
+                enableOrDisableSentReportButton(status)
+                binding.stateAboutReports.text = status
+            }
         }
+    }
+
+    private fun enableOrDisableSentReportButton(statusChallenge: String) {
+        binding.sendReportBtn.isEnabled = statusChallenge == ChallengesStatus.YOU_ARE_CREATER.value ||
+                statusChallenge == ChallengesStatus.YOU_CAN_SENT_REPORT.value ||
+                statusChallenge == ChallengesStatus.REPORT_REFUSED.value
     }
 
     private fun convertDateToNecessaryFormat(dateChallenge: String): String {

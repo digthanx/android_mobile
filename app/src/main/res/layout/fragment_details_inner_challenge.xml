@@ -269,19 +269,21 @@
             android:layout_height="76dp"
             android:gravity="center"
             android:orientation="horizontal">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/send_report_btn"
+                style="@style/DefaultButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
-                style="@style/DefaultButton"
-                android:textSize="14sp"
+                android:backgroundTint="@color/background_active_and_disabled_btn"
+                android:layout_weight="2"
                 android:letterSpacing="-0.031"
-                android:text="@string/sendReport"/>
+                android:text="@string/sendReport"
+                android:textSize="14sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/like_btn"
