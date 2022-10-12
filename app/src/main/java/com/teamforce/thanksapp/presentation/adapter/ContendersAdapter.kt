@@ -45,7 +45,7 @@ class ContendersAdapter(
 
         object DiffCallback : DiffUtil.ItemCallback<GetChallengeContendersResponse.Contender>() {
             override fun areItemsTheSame(oldItem: GetChallengeContendersResponse.Contender, newItem: GetChallengeContendersResponse.Contender): Boolean {
-                return oldItem.participant_id == newItem.participant_id
+                return oldItem.report_id == newItem.report_id
             }
 
             override fun areContentsTheSame(oldItem: GetChallengeContendersResponse.Contender, newItem: GetChallengeContendersResponse.Contender): Boolean {

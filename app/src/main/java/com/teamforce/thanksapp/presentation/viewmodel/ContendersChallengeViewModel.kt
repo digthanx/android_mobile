@@ -60,7 +60,8 @@ class ContendersChallengeViewModel @Inject constructor(
 
     fun checkReport(
         reportId: Int,
-        state: Char
+        state: Char,
+        reasonOfReject: String?
     ) {
         val stateMap = mapOf<String, Char>("state" to state)
         _isLoading.postValue(true)
@@ -68,7 +69,7 @@ class ContendersChallengeViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 _isLoading.postValue(true)
                 _isSuccessOperation.postValue(SuccessResultCheckReport(state, false))
-                when (val result = challengeRepository.checkChallengeReport(reportId, stateMap)) {
+                when (val result = challengeRepository.checkChallengeReport(reportId, stateMap, reasonOfReject)) {
                     is ResultWrapper.Success -> {
                         _isSuccessOperation.postValue(SuccessResultCheckReport(state, true))
                         // _contenders.postValue(result.value!!)

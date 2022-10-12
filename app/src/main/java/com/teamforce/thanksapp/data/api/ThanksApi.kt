@@ -170,7 +170,7 @@ interface ThanksApi {
     @PUT("/check-challenge-report/{challenge_id}/")
     suspend fun checkChallengeReport(
         @Path("challenge_id") challengeId: Int,
-        @Body state: Map<String, Char>
+        @Body data: CheckChallengeReportRequest?
     ): CheckReportResponse
 
     @GET("/challenge-winners/{challenge_id}/")

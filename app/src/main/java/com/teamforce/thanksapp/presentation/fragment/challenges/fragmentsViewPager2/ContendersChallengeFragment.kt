@@ -47,7 +47,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         loadParticipants()
         setData()
         contendersAdapter.applyClickListener = { reportId: Int, state: Char ->
-            viewModel.checkReport(reportId, state)
+            viewModel.checkReport(reportId, state, " ")
         }
         contendersAdapter.refuseClickListener = { reportId: Int, state: Char ->
             createDialog(reportId, state)
@@ -106,7 +106,10 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         refuseBtn.setOnClickListener {
             if(dialog.findViewById<TextInputEditText>(R.id.description_et)
                     .text?.trim()?.isNotEmpty() == true){
-                viewModel.checkReport(reportId, state)
+                viewModel.checkReport(
+                    reportId, state,
+                    dialog.findViewById<TextInputEditText>(R.id.description_et).text.toString()
+                )
                 dialog.cancel()
             }else{
                 Toast.makeText(requireContext(),
