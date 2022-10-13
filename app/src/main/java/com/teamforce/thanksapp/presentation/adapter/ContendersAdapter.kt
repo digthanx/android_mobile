@@ -90,10 +90,6 @@ class ContendersAdapter(
 
     }
 
-    fun deleteItemByPosition(position: Int){
-        notifyItemRemoved(position)
-    }
-
     private fun convertDateToNecessaryFormat(holder: ContenderViewHolder, position: Int) {
         try {
             val zdt: ZonedDateTime =
