@@ -2,36 +2,26 @@ package com.teamforce.thanksapp.presentation.fragment.newTransactionScreen
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
-import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.teamforce.thanksapp.R
@@ -39,12 +29,10 @@ import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.databinding.FragmentTransactionBinding
 import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
-import com.teamforce.thanksapp.presentation.adapter.ValuesAdapter
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
-import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.getPath
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
@@ -95,13 +83,31 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         )
         binding.toolbarTransaction.setupWithNavController(navController, appBarConfiguration)
         shouldMeGoToHistoryFragment()
-        initViews(view)
+        initViews()
         dropDownMenuUserInput(binding.usersEt)
         loadValuesFromDB()
         setValuesFromDb()
         appealToDB()
         checkedChip()
-        openValuesEt()
+        userBalance()
+        listenersBtn()
+
+
+    }
+
+    private fun listenersBtn() {
+        binding.attachImageBtn.setOnClickListener {
+            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            addPhotoFromIntent()
+        }
+
+        binding.detachImgBtn.setOnClickListener {
+            binding.showAttachedImgCard.visibility = View.GONE
+            imageFilePart = null
+        }
+    }
+
+    private fun userBalance() {
         viewModel.loadUserBalance()
 
         viewModel.balance.observe(viewLifecycleOwner) {
@@ -112,50 +118,23 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             }
 
         }
-
-        binding.attachImageBtn.setOnClickListener {
-            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            addPhotoFromIntent()
-        }
-
-        binding.detachImgBtn.setOnClickListener {
-            binding.showAttachedImgCard.visibility = View.GONE
-            imageFilePart = null
-        }
-        binding.etValue.inputType = InputType.TYPE_NULL
-        binding.etValue.setOnClickListener {
-            clearTags()
-            createDialog(listValues, listCheckedValues)
-        }
-        binding.etValue.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                clearTags()
-                createDialog(listValues, listCheckedValues)
-            }
-        }
-
     }
 
-    private fun tagsToIdTags() {
-        listCheckedValues.forEach {
-            listCheckedIdTags.add(it.id)
+    private fun loadValuesFromDB() {
+        viewModel.loadTags()
+    }
+
+
+    private fun setValuesFromDb() {
+        viewModel.tags.observe(viewLifecycleOwner) {
+            Log.d("Token", " Вывод тегов ${it}")
+            listValues = it
+            setTags(it)
         }
-        Log.d("Token", "Список id tags ${listCheckedIdTags}")
     }
 
-    private fun clearTags() {
-        binding.tagsChipGroup.removeAllViews()
-        binding.etValue.setText("")
-    }
-
-    private fun clearTagsWithListOfCheckedTags() {
-        clearTags()
-        listCheckedValues.clear()
-    }
-
-    private fun setTags(tagList: MutableList<TagModel>) {
+    private fun setTags(tagList: List<TagModel>) {
         for (i in tagList.indices) {
-            val tagModel = tagList[i]
             val tagName = tagList[i].name
             val chip: Chip = LayoutInflater.from(binding.tagsChipGroup.context)
                 .inflate(
@@ -167,106 +146,13 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 setText(tagName)
                 setEnsureMinTouchTargetSize(true)
                 minimumWidth = 0
-                setOnCloseIconClickListener {
-                    val anim = AlphaAnimation(1f, 0f)
-                    anim.duration = 250
-                    anim.setAnimationListener(object : Animation.AnimationListener {
-                        override fun onAnimationRepeat(animation: Animation?) {}
-
-                        override fun onAnimationEnd(animation: Animation?) {
-                            binding.tagsChipGroup.removeView(it)
-                        }
-
-                        override fun onAnimationStart(animation: Animation?) {}
-                    })
-
-                    it.startAnimation(anim)
-                    tagList.remove(tagModel)
-                    setTextInValuesEditText()
-                }
             }
-
             binding.tagsChipGroup.addView(chip)
-            setTextInValuesEditText()
-        }
-    }
-
-    private fun setTextInValuesEditText() {
-        if (listCheckedValues.size > 0) {
-            binding.etValue.setText(
-                String.format(
-                    requireContext().getString(R.string.addedSomeValues), listCheckedValues.size
-                )
-            )
-        } else if (listCheckedValues.size == 1) {
-            binding.etValue.setText(
-                String.format(
-                    requireContext().getString(R.string.addedOneValue), listCheckedValues.size
-                )
-            )
-        } else {
-            binding.etValue.setText("")
-        }
-    }
-
-    private fun loadValuesFromDB() {
-        viewModel.loadTags()
-    }
-
-    private fun setValuesFromDb() {
-        viewModel.tags.observe(viewLifecycleOwner) {
-            Log.d("Token", " Вывод тегов ${it}")
-            listValues = it
-        }
-    }
-
-    private fun createDialog(list: List<TagModel>, listOfCheckedValues: MutableList<TagModel>) {
-        val builderDialog = AlertDialog.Builder(context, R.style.FullscreenDialogTheme)
-        val inflater = requireActivity().layoutInflater
-        val newListValues = inflater.inflate(R.layout.fragment_list_of_values, null)
-        val recyclerViewDialog = newListValues.findViewById<RecyclerView>(R.id.values_rv)
-        val adapter = ValuesAdapter(list, listCheckedValues, requireContext())
-        recyclerViewDialog.adapter = adapter
-        builderDialog.setView(newListValues)
-            .setPositiveButton(
-                getString(R.string.applyValues),
-                DialogInterface.OnClickListener { dialog, which ->
-                    listCheckedValues = adapter.listCheckedValues
-                    setTags(listCheckedValues)
-                    Log.d("Token", " Список выбранных ценностей ${listCheckedValues}")
-                    dialog.cancel()
-                })
-            .setNeutralButton(
-                getString(R.string.applyValues),
-                DialogInterface.OnClickListener { dialog, which ->
-                    dialog.cancel()
-                })
-
-        val dialog = builderDialog.create()
-
-        dialog.show()
-        val neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
-        neutralButton.visibility = View.GONE
-        val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-        val parent: LinearLayout = positiveButton.parent as LinearLayout
-        parent.gravity = Gravity.CENTER_HORIZONTAL
-        val leftSpacer = parent.getChildAt(1)
-        leftSpacer.visibility = View.GONE
-    }
-
-    private fun openValuesEt() {
-        binding.addValues.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                binding.textInputLayoutValue.visibility = View.VISIBLE
-            } else {
-                binding.textInputLayoutValue.visibility = View.GONE
-                clearTagsWithListOfCheckedTags()
-            }
         }
     }
 
 
-    private fun initViews(view: View) {
+    private fun initViews() {
         binding.sendCoinBtn.setOnClickListener(this)
         viewModel.isLoading.observe(
             viewLifecycleOwner,
@@ -428,6 +314,13 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         viewModel.usersLoadingError.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun tagsToIdTags() {
+        listCheckedValues.forEach {
+            listCheckedIdTags.add(it.id)
+        }
+        Log.d("Token", "Список id tags ${listCheckedIdTags}")
     }
 
     override fun onClick(v: View?) {
