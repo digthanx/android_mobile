@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -63,9 +64,12 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         }
 
 
-    private var listValues: List<TagModel> = listOf()
-    private var listCheckedValues: MutableList<TagModel> = mutableListOf()
+    private var listValues: List<TagModel> = listOf() // Изначальный списко полученных tags
+    var listCheckedIdByOrder = mutableListOf<Int>() // Список id chips выбранных
+    // Конечный список id tags который отправиться в запрос
     private var listCheckedIdTags: MutableList<Int> = mutableListOf()
+    // Число на которое нужно будет вычесть(порядковый id первого чипа)
+    private var numberForSubtraction = 0
 
     private var imageFilePart: MultipartBody.Part? = null
     private var user: UserBean? = null
@@ -91,7 +95,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         checkedChip()
         userBalance()
         listenersBtn()
-
+        listenerForChips()
 
     }
 
@@ -148,6 +152,14 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 minimumWidth = 0
             }
             binding.tagsChipGroup.addView(chip)
+        }
+    }
+
+    private fun listenerForChips() {
+        binding.tagsChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+            // Сохраняем id чипов(их id начинаются с 29 самый первый чип)
+            listCheckedIdByOrder = checkedIds
+            Log.d("Token", "list of checked chips ${checkedIds}")
         }
     }
 
@@ -317,10 +329,11 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     }
 
     private fun tagsToIdTags() {
-        listCheckedValues.forEach {
-            listCheckedIdTags.add(it.id)
+        for (i in listCheckedIdByOrder.indices) {
+            // Берем из списка id chip который начинается с неизвестного числа и всегда его вычитаем
+            // чтобы получить id позицию выбранного в массиве тега где все начинается с 0
+            listCheckedIdTags.add(listValues[listCheckedIdByOrder[i] - listCheckedIdByOrder[0]].id)
         }
-        Log.d("Token", "Список id tags ${listCheckedIdTags}")
     }
 
     override fun onClick(v: View?) {
