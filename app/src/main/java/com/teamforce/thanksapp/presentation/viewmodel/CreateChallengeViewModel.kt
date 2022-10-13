@@ -44,7 +44,7 @@ class CreateChallengeViewModel @Inject constructor(
     fun createChallenge(
         name: String,
         description: String,
-        endAt: String,
+        endAt: String?,
         amountFund: Int,
         photo: MultipartBody.Part?,
         parameter_id: Int,
@@ -62,7 +62,7 @@ class CreateChallengeViewModel @Inject constructor(
     private suspend fun callCreateChallengeEndpoint(
         name: String,
         description: String,
-        endAt: String,
+        endAt: String?,
         amountFund: Int,
         photo: MultipartBody.Part?,
         parameter_id: Int,
@@ -74,7 +74,7 @@ class CreateChallengeViewModel @Inject constructor(
             val descriptionB =
                 RequestBody.create(MediaType.parse("multipart/form-data"), description)
             val endAtB =
-                RequestBody.create(MediaType.parse("multipart/form-data"), endAt)
+                endAt?.let { RequestBody.create(MediaType.parse("multipart/form-data"), it) }
             val amountFundB =
                 RequestBody.create(MediaType.parse("multipart/form-data"), amountFund.toString())
             val parameter_idB =

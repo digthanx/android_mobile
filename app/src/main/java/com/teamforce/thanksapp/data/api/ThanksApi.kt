@@ -140,7 +140,7 @@ interface ThanksApi {
         @Part photo: MultipartBody.Part?,
         @Part("name") name: RequestBody,
         @Part("description") description: RequestBody,
-        @Part("end_at") endAt: RequestBody,
+        @Part("end_at") endAt: RequestBody?,
         @Part("start_balance") amountFund: RequestBody,
         @Part("parameter_id") parameter_id: RequestBody,
         @Part("parameter_value") parameter_value: RequestBody,

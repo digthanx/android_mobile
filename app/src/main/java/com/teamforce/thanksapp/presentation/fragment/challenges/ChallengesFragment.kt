@@ -39,6 +39,13 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
         loadingChallenge()
         updatingChallenges()
 
+        binding.profile.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_challengesFragment_to_profileGraph, null,
+                OptionsTransaction().optionForProfileFragment
+            )
+        }
+
         binding.createBtn.setOnClickListener {
             findNavController().navigate(
                 R.id.action_challengesFragment_to_createChallengeFragment,
