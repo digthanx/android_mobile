@@ -65,14 +65,12 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     private fun initTabLayoutMediator(myResultWasReceivedSuccessfully: Boolean) {
         // Нужно добавить изменения в количестве вкладок в зависимости от статуса чалика
         val detailInnerAdapter = creatorId?.let { creatorId ->
-            statusChallenge?.let { statusChallenge ->
-                FragmentDetailChallengeStateAdapter(
-                    requireActivity(),
-                    creatorId = creatorId,
-                    profileId = viewModel.getProfileId(),
-                    myResultWasReceivedSuccessfully = myResultWasReceivedSuccessfully
-                )
-            }
+            FragmentDetailChallengeStateAdapter(
+                requireActivity(),
+                creatorId = creatorId,
+                profileId = viewModel.getProfileId(),
+                myResultWasReceivedSuccessfully = myResultWasReceivedSuccessfully
+            )
         }
         idChallenge?.let { detailInnerAdapter?.setChallengeId(it) }
         binding.pager.adapter = detailInnerAdapter
@@ -114,7 +112,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
         }
     }
 
-    private fun loadDataFromDb(){
+    private fun loadDataFromDb() {
         idChallenge?.let {
             viewModel.loadChallengeResult(it)
         }
@@ -129,11 +127,11 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
         }
     }
 
-    private fun listenersForRequestedData(){
+    private fun listenersForRequestedData() {
         viewModel.isSuccessOperationMyResult.observe(viewLifecycleOwner) {
-            if(it){
+            if (it) {
                 initTabLayoutMediator(it)
-            }else if(it == false){
+            } else if (it == false) {
                 initTabLayoutMediator(it)
             }
         }
