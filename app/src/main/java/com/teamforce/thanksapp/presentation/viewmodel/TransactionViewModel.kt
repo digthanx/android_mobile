@@ -9,6 +9,7 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.UserListWithoutInputRequest
 import com.teamforce.thanksapp.data.request.UsersListRequest
 import com.teamforce.thanksapp.data.response.BalanceResponse
+import com.teamforce.thanksapp.data.response.GetTagsResponse
 import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.model.domain.TagModel
@@ -66,20 +67,20 @@ class TransactionViewModel @Inject constructor(
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi.getTags().enqueue(object : Callback<List<TagModel>> {
+            thanksApi.getTags().enqueue(object : Callback<GetTagsResponse> {
                 override fun onResponse(
-                    call: Call<List<TagModel>>,
-                    response: Response<List<TagModel>>
+                    call: Call<GetTagsResponse>,
+                    response: Response<GetTagsResponse>
                 ) {
                     _isLoading.postValue(false)
                     if (response.code() == 200) {
-                        _tags.postValue(response.body())
+                        _tags.postValue(response.body()?.tags)
                     } else {
                         _tagsError.postValue(response.message() + " " + response.code())
                     }
                 }
 
-                override fun onFailure(call: Call<List<TagModel>>, t: Throwable) {
+                override fun onFailure(call: Call<GetTagsResponse>, t: Throwable) {
                     _isLoading.postValue(false)
                     _tagsError.postValue(t.message)
                 }
