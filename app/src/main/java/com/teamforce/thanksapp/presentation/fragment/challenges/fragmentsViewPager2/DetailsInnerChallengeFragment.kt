@@ -115,10 +115,13 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(binding.userAvatar)
             }
-            it.status?.let { status ->
-               // binding.sendReportBtn.text = status
-                enableOrDisableSentReportButton(status)
-                binding.stateAboutReports.text = status
+
+            if(it.status.isNullOrEmpty()){
+                binding.stateAboutReports.visibility = View.GONE
+            }else{
+                binding.stateAboutReports.visibility = View.VISIBLE
+                enableOrDisableSentReportButton(it.status)
+                binding.stateAboutReports.text = it.status
             }
         }
     }
