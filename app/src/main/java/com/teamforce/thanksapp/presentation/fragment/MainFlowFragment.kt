@@ -1,11 +1,15 @@
 package com.teamforce.thanksapp.presentation.fragment
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.navigation.NavigationBarView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentMainFlowBinding
@@ -26,6 +30,10 @@ class MainFlowFragment : BaseFlowFragment(
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMainFlowBinding.inflate(inflater, container, false)
+val color =        ColorDrawable(0x000000)
+        color.alpha = 0
+        binding.bottomNavigation.findViewById<BottomNavigationItemView>(R.id.transaction_graph).background = color
+
         return binding.root
     }
 
@@ -38,6 +46,8 @@ class MainFlowFragment : BaseFlowFragment(
         binding.fab.setOnClickListener {
             navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
         }
+
+
 
         binding.bottomNavigation.menu.getItem(0).isChecked = true
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->

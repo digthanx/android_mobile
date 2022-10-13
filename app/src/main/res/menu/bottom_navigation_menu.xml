@@ -13,7 +13,7 @@
     <item
         android:id="@+id/transaction_graph"
         android:enabled="false"
-        android:title="@string/nothing"/>
+        android:title=""/>
     <item
         android:id="@+id/history_graph"
         android:enabled="true"

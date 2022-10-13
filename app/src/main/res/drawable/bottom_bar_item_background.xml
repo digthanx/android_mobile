@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Drop Shadow Stack -->
+<!--    <item>-->
+<!--        <shape>-->
+<!--            <padding android:bottom="1dp" />-->
+<!--            <solid android:color="#00ED7D2B" />-->
+<!--            <corners android:radius="20dp" />-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--    <item>-->
+<!--        <shape>-->
+<!--            <padding android:bottom="1dp" />-->
+<!--            <solid android:color="#20ED7D2B" />-->
+<!--            <corners android:radius="19dp" />-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--    <item>-->
+<!--        <shape>-->
+<!--            <padding  android:bottom="1dp" />-->
+<!--            <solid android:color="#16ED7D2B" />-->
+<!--            <corners android:radius="18dp" />-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--    <item>-->
+<!--        <shape>-->
+<!--            <padding android:bottom="1dp" />-->
+<!--            <solid android:color="#12ED7D2B" />-->
+<!--            <corners android:radius="17dp" />-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--    <item>-->
+<!--        <shape>-->
+<!--            <padding android:bottom="1dp" />-->
+<!--            <solid android:color="#08ED7D2B" />-->
+<!--            <corners android:radius="16dp" />-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--    <item>-->
+<!--        <shape>-->
+<!--            <padding  android:bottom="1dp" />-->
+<!--            <solid android:color="#03ED7D2B" />-->
+<!--            <corners android:radius="16dp" />-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--    <item>-->
+<!--        <shape>-->
+<!--            <padding   android:bottom="1dp"/>-->
+<!--            <solid android:color="#01ED7D2B" />-->
+<!--            <corners android:radius="16dp" />-->
+<!--        </shape>-->
+<!--    </item>-->
+
+    <!-- Background -->
+    <item>
+        <shape>
+            <solid android:color="#FFF0D9" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+</layer-list>
+
