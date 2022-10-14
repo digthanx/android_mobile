@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.viewmodel
+package com.teamforce.thanksapp.presentation.viewmodel.history
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

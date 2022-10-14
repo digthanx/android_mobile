@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import android.widget.Toast
@@ -22,7 +21,6 @@ import com.teamforce.thanksapp.databinding.DialogDatePickerBinding
 import com.teamforce.thanksapp.databinding.FragmentCreateChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.presentation.viewmodel.CreateChallengeViewModel
-import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.getPath
 import dagger.hilt.android.AndroidEntryPoint

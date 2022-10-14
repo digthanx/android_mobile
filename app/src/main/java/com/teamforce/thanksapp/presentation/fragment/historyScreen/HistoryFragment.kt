@@ -9,7 +9,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentHistoryBinding
 import com.teamforce.thanksapp.presentation.adapter.history.PagerAdapter
-import com.teamforce.thanksapp.presentation.viewmodel.HistoryViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.history.HistoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -4,6 +4,7 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/general_brand"
     tools:context=".presentation.fragment.feedScreen.FeedFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -77,97 +78,34 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/background_white_rounded_top"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested_Scroll"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabGroup"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:singleSelection="true"
+            app:tabMode="fixed"
+            app:tabTextAppearance="@style/Body2.White" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/general_brand"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="4dp">
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:nestedScrollingEnabled="false"
+            android:layout_height="0dp"
+            android:layout_marginBottom="55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabGroup" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    app:cardCornerRadius="16dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="-16dp"
-                    app:cardBackgroundColor="@color/general_background"
-                    android:elevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/chipBox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:orientation="horizontal"
-                            app:cardCornerRadius="15dp">
-
-                            <com.google.android.material.chip.ChipGroup
-                                android:id="@+id/chipGroup"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginHorizontal="10dp"
-                                android:layout_marginVertical="5dp"
-                                android:background="@color/white"
-                                app:selectionRequired="true"
-                                app:singleSelection="true">
-
-                                <com.google.android.material.chip.Chip
-                                    android:id="@+id/chipAllEvent"
-                                    style="@style/MyChipsFeed"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="10dp"
-                                    android:checkable="true"
-                                    android:checked="true"
-                                    android:text="@string/allEvent" />
-
-                                <com.google.android.material.chip.Chip
-                                    android:id="@+id/chipMineEvent"
-                                    style="@style/MyChipsFeed"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checkable="true"
-                                    android:text="@string/mineEvent" />
-
-                                <com.google.android.material.chip.Chip
-                                    android:id="@+id/chipPublicEvent"
-                                    style="@style/MyChipsFeed"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="10dp"
-                                    android:checkable="true"
-                                    android:text="@string/publicEvent" />
-
-                            </com.google.android.material.chip.ChipGroup>
-                        </LinearLayout>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/feed_rv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="60dp"
-                            tools:listitem="@layout/item_feed"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </com.google.android.material.card.MaterialCardView>
-        </androidx.core.widget.NestedScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

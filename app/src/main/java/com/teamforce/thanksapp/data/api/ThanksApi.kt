@@ -71,7 +71,10 @@ interface ThanksApi {
     ): List<HistoryItem.UserTransactionsResponse>
 
     @GET("/feed/")
-    fun getFeed(): Call<List<FeedResponse>>
+    suspend fun getFeed(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<FeedResponse>
 
     @POST("/users-list/")
     fun getUsersWithoutInput(

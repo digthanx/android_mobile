@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.adapter
+package com.teamforce.thanksapp.presentation.adapter.feed
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -40,7 +40,6 @@ import java.time.format.DateTimeFormatter
 
 class FeedAdapter(
     private val username: String,
-    private val context: Context
 ) : ListAdapter<FeedResponse, FeedAdapter.FeedViewHolder>(FeedViewHolder.DiffCallback) {
 
     var likeClickListener: ((mapReaction: Map<String, Int>, position: Int) -> Unit)? = null
@@ -60,11 +59,11 @@ class FeedAdapter(
 
 
     class FeedViewHolder(binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
-        val avatarUser: ImageView = binding.userAvatar
+        val userAvatar: ImageView = binding.userAvatar
         var dateTime: TextView = binding.dateTime
         val senderAndReceiver: TextView = binding.senderAndReceiver
-        val likesBtn: MaterialButton = binding.likeBtn
-        val dislikesBtn: MaterialButton = binding.dislikeBtn
+        val likeBtn: MaterialButton = binding.likeBtn
+        val dislikeBtn: MaterialButton = binding.dislikeBtn
         val commentBtn: MaterialButton = binding.commentBtn
         val chipGroup: ChipGroup = binding.chipGroup
         val standardGroup = binding.standardGroup
@@ -108,12 +107,12 @@ class FeedAdapter(
             transactionToSender(holder, position, currentList[position].transaction.sender_id)
 
         if (!currentList[position].transaction.recipient_photo.isNullOrEmpty()) {
-            Glide.with(context)
+            Glide.with(holder.view.context)
                 .load("${Consts.BASE_URL}${currentList[position].transaction.recipient_photo}".toUri())
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .into(holder.avatarUser)
+                .into(holder.userAvatar)
         } else {
-            holder.avatarUser.setImageResource(R.drawable.ic_anon_avatar)
+            holder.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
         }
 
         distinguishSenderAndReceiver(holder, position)
@@ -152,12 +151,12 @@ class FeedAdapter(
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             spannable.setSpan(
-                ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                ForegroundColorSpan(holder.view.context.getColor(R.color.general_brand)),
                 0, currentList[position].transaction.recipient.length + 1,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             spannable.setSpan(
-                ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                ForegroundColorSpan(holder.view.context.getColor(R.color.general_brand)),
                 spannable.length - currentList[position].transaction.sender.length - 1,
                 spannable.length,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
@@ -170,12 +169,12 @@ class FeedAdapter(
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             spannable.setSpan(
-                ForegroundColorSpan(context.getColor(R.color.minor_success)),
+                ForegroundColorSpan(holder.view.context.getColor(R.color.minor_success)),
                 currentList[position].transaction.recipient.length + 9,
                 spannable.length - currentList[position].transaction.sender.length - 4,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
-            holder.descriptionFeed = context.getString(
+            holder.descriptionFeed = holder.view.context.getString(
                 R.string.getFrom
             )
             holder.senderAndReceiver.text = spannable
@@ -190,7 +189,7 @@ class FeedAdapter(
                 )
             )
             spannable.setSpan(
-                ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                ForegroundColorSpan(holder.view.context.getColor(R.color.general_brand)),
                 spannable.length - currentList[position].transaction.sender.length - 1,
                 spannable.length,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
@@ -203,14 +202,14 @@ class FeedAdapter(
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             spannable.setSpan(
-                ForegroundColorSpan(context.getColor(R.color.minor_success)),
+                ForegroundColorSpan(holder.view.context.getColor(R.color.minor_success)),
                 12,
                 spannable.length - currentList[position].transaction.sender.length - 4,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             holder.senderAndReceiver.text = spannable
             holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
-            holder.descriptionFeed = context.getString(R.string.youGetFrom)
+            holder.descriptionFeed = holder.view.context.getString(R.string.youGetFrom)
             // Я получатель
         } else {
             val spannable = SpannableStringBuilder(
@@ -223,7 +222,7 @@ class FeedAdapter(
                 )
             )
             spannable.setSpan(
-                ForegroundColorSpan(context.getColor(R.color.general_brand)),
+                ForegroundColorSpan(holder.view.context.getColor(R.color.general_brand)),
                 0, currentList[position].transaction.recipient.length + 1,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
@@ -234,14 +233,14 @@ class FeedAdapter(
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             spannable.setSpan(
-                ForegroundColorSpan(context.getColor(R.color.minor_success)),
+                ForegroundColorSpan(holder.view.context.getColor(R.color.minor_success)),
                 currentList[position].transaction.recipient.length + 9,
                 spannable.length - 7,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             holder.senderAndReceiver.text = spannable
             holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
-            holder.descriptionFeed = context.getString(R.string.getFrom)
+            holder.descriptionFeed = holder.view.context.getString(R.string.getFrom)
             // Я отправитель
         }
     }
@@ -289,38 +288,38 @@ class FeedAdapter(
 
     private fun bindLikesAndComments(holder: FeedViewHolder, position: Int) {
         // Default Values
-        holder.likesBtn.text = "0"
-        holder.dislikesBtn.text = "0"
+        holder.likeBtn.text = "0"
+        holder.dislikeBtn.text = "0"
         holder.likesCount = 0
         holder.dislikesCount = 0
         holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.general_background))
 
         if (currentList[position].transaction.user_liked) {
-            holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_success_secondary))
-            holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
+            holder.likeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
+            holder.dislikeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
         } else if (currentList[position].transaction.user_disliked) {
-            holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_error_secondary))
-            holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
+            holder.dislikeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_error_secondary))
+            holder.likeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
         } else {
-            holder.dislikesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
-            holder.likesBtn.setBackgroundColor(context.getColor(R.color.minor_info_secondary))
+            holder.dislikeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
+            holder.likeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
         }
 
         holder.commentBtn.text = currentList[position].transaction.comments_amount.toString()
 
         for (i in currentList[position].transaction.reactions) {
             if (i.code == "like") {
-                holder.likesBtn.text = (i.counter).toString()
+                holder.likeBtn.text = (i.counter).toString()
                 holder.likesCount = i.counter
             } else if (i.code == "dislike") {
-                holder.dislikesBtn.text = (i.counter).toString()
+                holder.dislikeBtn.text = (i.counter).toString()
                 holder.dislikesCount = i.counter
 
             }
         }
 
 
-        holder.likesBtn.setOnClickListener {
+        holder.likeBtn.setOnClickListener {
             val mapReaction: Map<String, Int> = mapOf(
                 "like_kind" to 1,
                 "transaction" to currentList[position].transaction.id
@@ -328,7 +327,7 @@ class FeedAdapter(
             likeClickListener?.invoke(mapReaction, position)
         }
 
-        holder.dislikesBtn.setOnClickListener {
+        holder.dislikeBtn.setOnClickListener {
             val mapReaction: Map<String, Int> = mapOf(
                 "like_kind" to 2,
                 "transaction" to currentList[position].transaction.id
@@ -454,7 +453,7 @@ class FeedAdapter(
             }
             holder.time = time.toString()
             holder.dateTime.text =
-                String.format(context.getString(R.string.dateTime), holder.date, holder.time)
+                String.format(holder.view.context.getString(R.string.dateTime), holder.date, holder.time)
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
         }

@@ -13,7 +13,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentHistoryListBinding
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryPageAdapter
-import com.teamforce.thanksapp.presentation.viewmodel.HistoryListViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.history.HistoryListViewModel
 import com.teamforce.thanksapp.utils.Result
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
