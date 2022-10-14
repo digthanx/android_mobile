@@ -70,6 +70,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
             if (it.successResult)
                 if (it.state == 'W') {
                     listOfContenders.removeAt(currentPositionItem)
+                    contendersAdapter?.submitList(null)
                     contendersAdapter?.submitList(listOfContenders)
                     Toast.makeText(
                         requireContext(), requireContext().getString(R.string.applyCheckReport),
