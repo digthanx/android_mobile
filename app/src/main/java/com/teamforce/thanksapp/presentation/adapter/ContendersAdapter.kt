@@ -21,14 +21,11 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class ContendersAdapter(
+    private val applyClickListener: (reportId: Int, state: Char, position: Int) -> Unit,
+    private val refuseClickListener: (reportId: Int, state: Char, position: Int) -> Unit,
 
 ): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(DiffCallback)
 {
-
-    var applyClickListener: ((reportId: Int, state: Char, position: Int) -> Unit)? = null
-    var refuseClickListener: ((reportId: Int, state: Char, position: Int) -> Unit)? = null
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContenderViewHolder {
         val binding = ItemContenderBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
@@ -39,7 +36,6 @@ class ContendersAdapter(
     override fun getItemCount(): Int {
         return currentList.size
     }
-
 
     companion object{
 
@@ -85,7 +81,7 @@ class ContendersAdapter(
             binding.refuseBtn.setOnClickListener {
                 Log.d("Token", "Размер списка в адаптере " + currentList.size.toString())
                 Log.d("Token", "Кликнутая позиция в адаптере " + position)
-                refuseClickListener?.invoke(currentList[position].report_id, 'D', holder.layoutPosition)
+                refuseClickListener?.invoke(currentList[position].report_id, 'D', position)
             }
         }
 
