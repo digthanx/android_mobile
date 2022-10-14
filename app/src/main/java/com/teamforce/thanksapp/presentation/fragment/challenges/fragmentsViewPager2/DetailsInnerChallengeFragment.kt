@@ -127,8 +127,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     }
 
     private fun enableOrDisableSentReportButton(statusChallenge: String) {
-        binding.sendReportBtn.isEnabled = statusChallenge.trim().contains(ChallengesStatus.YOU_ARE_CREATER.value, true)  ||
-                statusChallenge.contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
+        binding.sendReportBtn.isEnabled = statusChallenge.contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
                 statusChallenge.contains(ChallengesStatus.REPORT_REFUSED.value, true)
     }
 
