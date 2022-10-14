@@ -166,8 +166,8 @@
         <fragment
             android:id="@+id/createChallengeFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.CreateChallengeFragment"
-            android:label="fragment_create_challenge"
-            tools:layout="@layout/fragment_create_challenge" >
+            android:label="@string/challenge_label"
+            tools:layout="@layout/fragment_create_challenge">
             <action
                 android:id="@+id/action_createChallengeFragment_to_challengesFragment"
                 app:destination="@id/challengesFragment" />
@@ -175,8 +175,8 @@
         <fragment
             android:id="@+id/detailsMainChallengeFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.DetailsMainChallengeFragment"
-            android:label="fragment_details_main_challenge"
-            tools:layout="@layout/fragment_details_main_challenge" >
+            android:label="@string/challenge_label"
+            tools:layout="@layout/fragment_details_main_challenge">
             <action
                 android:id="@+id/action_detailsMainChallengeFragment_to_challengesFragment"
                 app:destination="@id/challengesFragment" />
