@@ -83,7 +83,9 @@ class ContendersAdapter(
                 applyClickListener?.invoke(currentList[position].report_id, 'W', position)
             }
             binding.refuseBtn.setOnClickListener {
-                refuseClickListener?.invoke(currentList[position].report_id, 'D', position)
+                Log.d("Token", "Размер списка в адаптере " + currentList.size.toString())
+                Log.d("Token", "Кликнутая позиция в адаптере " + position)
+                refuseClickListener?.invoke(currentList[position].report_id, 'D', holder.layoutPosition)
             }
         }
 

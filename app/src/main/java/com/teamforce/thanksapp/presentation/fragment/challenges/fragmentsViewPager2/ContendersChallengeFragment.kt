@@ -3,6 +3,7 @@ package com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPa
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -56,8 +57,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         }
         contendersAdapter.refuseClickListener = { reportId: Int, state: Char, position: Int ->
             currentPositionItem = position
-            createDialog(reportId, state)
-            listeningResponse(adapter = contendersAdapter, currentPositionItem)
+            createDialog(reportId, state, contendersAdapter, currentPositionItem)
         }
     }
 
@@ -75,6 +75,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
                     Toast.LENGTH_LONG).show()
                 }else{
                     listOfContenders.removeAt(currentPositionItem)
+                    Log.d("Token", "Размер списка в фрагменте " +  listOfContenders.size.toString())
                     adapter.submitList(listOfContenders)
                     Toast.makeText(requireContext(),
                         requireContext().getString(R.string.deniedCheckReport),
@@ -100,7 +101,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         }
     }
 
-    private fun createDialog(reportId: Int, state: Char) {
+    private fun createDialog(reportId: Int, state: Char, contendersAdapter: ContendersAdapter, currentPositionItem: Int) {
         val builderDialog = AlertDialog.Builder(context, R.style.FullscreenDialogTheme)
         val inflater = requireActivity().layoutInflater
         val newListValues = inflater.inflate(R.layout.dialog_reason_for_rejection_report, null)
@@ -110,7 +111,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
 
         dialog.show()
 
-        val refuseBtn = dialog.findViewById<MaterialButton>(R.id.refuse_btn)
+        val refuseBtn = dialog.findViewById<MaterialButton>(R.id.reject_btn)
         val closeDialogBtn = dialog.findViewById<MaterialButton>(R.id.closeDialog_btn)
         refuseBtn.setOnClickListener {
             if(dialog.findViewById<TextInputEditText>(R.id.description_et)
@@ -119,6 +120,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
                     reportId, state,
                     dialog.findViewById<TextInputEditText>(R.id.description_et).text.toString()
                 )
+                listeningResponse(adapter = contendersAdapter, currentPositionItem)
                 dialog.cancel()
             }else{
                 Toast.makeText(requireContext(),
