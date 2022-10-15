@@ -73,13 +73,15 @@ class ResultChallengeAdapter(
 
     private fun handleColorOfStatus(holder: ResultChallengeViewHolder, position: Int){
         with(holder.binding){
-            if(currentList[position].status == "Получено вознаграждение" ||
-                currentList[position].status == "Подтверждено"){
+            if(currentList[position].status.contains("Получено вознаграждение") ||
+                currentList[position].status.contains("Подтверждено")){
                 stateEt.text = currentList[position].status
                 cardStatus.setCardBackgroundColor(
                     root.context.getColor(R.color.minor_success_secondary))
                 stateEt.setTextColor(root.context.getColor(R.color.minor_success))
                 valueEt.setTextColor(root.context.getColor(R.color.minor_success))
+                imageCurrency.setColorFilter(root.context.getColor(R.color.minor_success),
+                    android.graphics.PorterDuff.Mode.SRC_IN)
             }else{
                 cardStatus.setCardBackgroundColor(
                     root.context.getColor(R.color.minor_error_secondary))
