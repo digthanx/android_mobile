@@ -67,10 +67,7 @@ class ResultChallengeAdapter(
             dateEt.text = convertDateToNecessaryFormat(currentList[position].updated_at, holder)
             descriptionEt.text = currentList[position].text
             valueEt.text = currentList[position].received.toString()
-            if(currentList[position].received <= 0){
-                imageCurrency.visibility = View.GONE
-                valueEt.setTextColor(root.context.getColor(R.color.minor_error))
-            }
+            handleColorOfStatus(holder, position)
         }
     }
 
@@ -89,6 +86,8 @@ class ResultChallengeAdapter(
                 stateEt.setTextColor(root.context.getColor(R.color.minor_error))
                 valueEt.setTextColor(root.context.getColor(R.color.minor_error))
                 stateEt.text = currentList[position].status
+                imageCurrency.setColorFilter(root.context.getColor(R.color.minor_error),
+                    android.graphics.PorterDuff.Mode.SRC_IN)
             }
         }
 
