@@ -78,9 +78,10 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
                 when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.winners)
-                    2 -> tab.text = context?.getString(R.string.contenders)
-                    3 -> tab.text = context?.getString(R.string.myResult)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
+                    3 -> tab.text = context?.getString(R.string.contenders)
+                    4 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
         } else if (creatorId == viewModel.getProfileId()) {
@@ -89,24 +90,27 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
                 when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.winners)
-                    2 -> tab.text = context?.getString(R.string.contenders)
-                    3 -> tab.text = context?.getString(R.string.myResult)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
+                    3 -> tab.text = context?.getString(R.string.contenders)
+                    4 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
         } else if (myResultWasReceivedSuccessfully) {
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
                 when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.winners)
-                    2 -> tab.text = context?.getString(R.string.myResult)
+                    2 -> tab.text = context?.getString(R.string.comments)
+                    3 -> tab.text = context?.getString(R.string.winners)
+                    4 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
         } else {
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
                 when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.winners)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
                 }
             }.attach()
         }

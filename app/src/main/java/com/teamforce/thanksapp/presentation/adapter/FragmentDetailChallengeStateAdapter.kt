@@ -3,10 +3,7 @@ package com.teamforce.thanksapp.presentation.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.ContendersChallengeFragment
-import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.DetailsInnerChallengeFragment
-import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.MyResultChallengeFragment
-import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.WinnersChallengeFragment
+import com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.*
 
 class FragmentDetailChallengeStateAdapter(
     fragment: FragmentActivity,
@@ -16,13 +13,13 @@ class FragmentDetailChallengeStateAdapter(
 ) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
         return if (profileId == creatorId && myResultWasReceivedSuccessfully) {
-            4
+            5
         } else if (profileId == creatorId) {
-            4
+            5
         } else if (myResultWasReceivedSuccessfully) {
-            3
+            4
         } else {
-            2
+            3
         }
     }
 
@@ -36,10 +33,10 @@ class FragmentDetailChallengeStateAdapter(
         if (creatorId == profileId && myResultWasReceivedSuccessfully) {
             return when (position) {
                 0 -> DetailsInnerChallengeFragment.newInstance(challengeId)
-
-                1 -> WinnersChallengeFragment.newInstance(challengeId)
-                2 -> ContendersChallengeFragment.newInstance(challengeId)
-                3 -> MyResultChallengeFragment.newInstance(challengeId)
+                1 -> CommentsChallengeFragment.newInstance(challengeId)
+                2 -> WinnersChallengeFragment.newInstance(challengeId)
+                3 -> ContendersChallengeFragment.newInstance(challengeId)
+                4 -> MyResultChallengeFragment.newInstance(challengeId)
                 else -> {
                     DetailsInnerChallengeFragment.newInstance(challengeId)
                 }
@@ -49,9 +46,10 @@ class FragmentDetailChallengeStateAdapter(
             // я всегда буду показывать мой результат пока от бека нет поля
             return when (position) {
                 0 -> DetailsInnerChallengeFragment.newInstance(challengeId)
-                1 -> WinnersChallengeFragment.newInstance(challengeId)
-                2 -> ContendersChallengeFragment.newInstance(challengeId)
-                3 -> MyResultChallengeFragment.newInstance(challengeId)
+                1 -> CommentsChallengeFragment.newInstance(challengeId)
+                2 -> WinnersChallengeFragment.newInstance(challengeId)
+                3 -> ContendersChallengeFragment.newInstance(challengeId)
+                4 -> MyResultChallengeFragment.newInstance(challengeId)
                 else -> {
                     DetailsInnerChallengeFragment.newInstance(challengeId)
                 }
@@ -59,8 +57,9 @@ class FragmentDetailChallengeStateAdapter(
         } else if (myResultWasReceivedSuccessfully) {
             return when (position) {
                 0 -> DetailsInnerChallengeFragment.newInstance(challengeId)
-                1 -> WinnersChallengeFragment.newInstance(challengeId)
-                2 -> MyResultChallengeFragment.newInstance(challengeId)
+                1 -> CommentsChallengeFragment.newInstance(challengeId)
+                2 -> WinnersChallengeFragment.newInstance(challengeId)
+                3 -> MyResultChallengeFragment.newInstance(challengeId)
                 else -> {
                     DetailsInnerChallengeFragment.newInstance(challengeId)
                 }
@@ -68,7 +67,8 @@ class FragmentDetailChallengeStateAdapter(
         } else {
             return when (position) {
                 0 -> DetailsInnerChallengeFragment.newInstance(challengeId)
-                1 -> WinnersChallengeFragment.newInstance(challengeId)
+                1 -> CommentsChallengeFragment.newInstance(challengeId)
+                2 -> WinnersChallengeFragment.newInstance(challengeId)
                 else -> {
                     DetailsInnerChallengeFragment.newInstance(challengeId)
                 }
