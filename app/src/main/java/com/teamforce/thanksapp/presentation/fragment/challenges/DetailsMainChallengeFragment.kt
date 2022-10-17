@@ -138,7 +138,6 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     }
 
     private fun setData() {
-        //if(challengeBackground.isNullOrEmpty())
         if (challengeActive == true) {
             binding.statusActiveText.text = requireContext().getString(R.string.active)
             binding.statusActiveTextSecondary.text = requireContext().getString(R.string.active)
@@ -157,8 +156,9 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
         if (!challengeBackground.isNullOrEmpty()) {
             binding.standardCard.visibility = View.GONE
             binding.secondaryCard.visibility = View.VISIBLE
+            val urlPhoto = challengeBackground?.replace("_thumb", "")
             Glide.with(requireContext())
-                .load("${Consts.BASE_URL}${challengeBackground}".toUri())
+                .load("${Consts.BASE_URL}${urlPhoto}".toUri())
                 .fitCenter()
                 .centerCrop()
                 .into(binding.imageBackground)
