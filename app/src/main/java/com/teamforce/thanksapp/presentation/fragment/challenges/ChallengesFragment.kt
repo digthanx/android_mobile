@@ -18,6 +18,7 @@ import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.ChallengesViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
+import com.teamforce.thanksapp.utils.navigateSafely
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,8 +40,15 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
         loadingChallenge()
         updatingChallenges()
 
-        binding.createBtn.setOnClickListener {
+        binding.profile.setOnClickListener {
             findNavController().navigate(
+                R.id.action_challengesFragment_to_profileGraph, null,
+                OptionsTransaction().optionForProfileFragment
+            )
+        }
+
+        binding.createBtn.setOnClickListener {
+            findNavController().navigateSafely(
                 R.id.action_challengesFragment_to_createChallengeFragment,
                 null,
                 OptionsTransaction().optionForProfileFromEditProfile

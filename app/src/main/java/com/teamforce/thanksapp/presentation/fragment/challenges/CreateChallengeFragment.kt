@@ -149,7 +149,7 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
             name = nameChallenge,
             description = description,
             amountFund = prizeFund,
-            endAt = dateChallenge,
+            endAt = null,
             parameter_id = parameter_id,
             parameter_value = parameter_value,
             photo = imageFilePart

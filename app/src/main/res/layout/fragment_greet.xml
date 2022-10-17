@@ -31,16 +31,11 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="60dp"
-        android:src="@drawable/ic_greet_picture_svg"/>
+        android:src="@drawable/ic_new_logo_team_force"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="Цифровое спасибо"
-        android:textAppearance="@style/Headline6Bold"
-        android:textAlignment="center"/>
+
 
     <TextView
         android:layout_width="230dp"

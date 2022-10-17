@@ -144,16 +144,19 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             binding.statusActiveTextSecondary.text = requireContext().getString(R.string.active)
             binding.statusActiveCard
                 .setCardBackgroundColor(requireContext().getColor(R.color.minor_info))
+            binding.statusActiveCardSecondary
+                .setCardBackgroundColor(requireContext().getColor(R.color.minor_info))
         } else {
             binding.statusActiveText.text = requireContext().getString(R.string.completed)
             binding.statusActiveTextSecondary.text = requireContext().getString(R.string.completed)
             binding.statusActiveCard
                 .setCardBackgroundColor(requireContext().getColor(R.color.minor_success))
+            binding.statusActiveCardSecondary
+                .setCardBackgroundColor(requireContext().getColor(R.color.minor_success))
         }
         if (!challengeBackground.isNullOrEmpty()) {
             binding.standardCard.visibility = View.GONE
             binding.secondaryCard.visibility = View.VISIBLE
-            binding.closeBtnSecondary.setTextColor(requireContext().getColor(R.color.general_background))
             Glide.with(requireContext())
                 .load("${Consts.BASE_URL}${challengeBackground}".toUri())
                 .fitCenter()

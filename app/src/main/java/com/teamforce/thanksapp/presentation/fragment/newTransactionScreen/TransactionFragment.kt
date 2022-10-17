@@ -159,7 +159,8 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         binding.tagsChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
             // Сохраняем id чипов(их id начинаются с 29 самый первый чип)
             listCheckedIdByOrder = checkedIds
-            Log.d("Token", "list of checked chips ${checkedIds}")
+            numberForSubtraction = group.children.first().id
+            Log.d("Token", "list of checked chips ${checkedIds} и id первого дочернего элемента ${numberForSubtraction}")
         }
     }
 
@@ -332,7 +333,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         for (i in listCheckedIdByOrder.indices) {
             // Берем из списка id chip который начинается с неизвестного числа и всегда его вычитаем
             // чтобы получить id позицию выбранного в массиве тега где все начинается с 0
-            listCheckedIdTags.add(listValues[listCheckedIdByOrder[i] - listCheckedIdByOrder[0]].id)
+            listCheckedIdTags.add(listValues[listCheckedIdByOrder[i] - numberForSubtraction].id)
         }
     }
 

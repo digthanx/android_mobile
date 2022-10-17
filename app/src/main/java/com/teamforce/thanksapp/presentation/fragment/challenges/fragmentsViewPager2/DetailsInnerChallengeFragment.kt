@@ -115,18 +115,26 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(binding.userAvatar)
             }
-            it.status?.let { status ->
-               // binding.sendReportBtn.text = status
-                enableOrDisableSentReportButton(status)
-                binding.stateAboutReports.text = status
+
+            if(it.status.isNullOrEmpty()){
+                binding.stateAboutReports.visibility = View.GONE
+            }else{
+                binding.stateAboutReports.visibility = View.VISIBLE
+                enableOrDisableSentReportButton(it.status)
+                binding.stateAboutReports.text = it.status
             }
         }
     }
 
     private fun enableOrDisableSentReportButton(statusChallenge: String) {
-        binding.sendReportBtn.isEnabled = statusChallenge == ChallengesStatus.YOU_ARE_CREATER.value ||
-                statusChallenge == ChallengesStatus.YOU_CAN_SENT_REPORT.value ||
-                statusChallenge == ChallengesStatus.REPORT_REFUSED.value
+        // Для прода
+        binding.sendReportBtn.isEnabled = (statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
+                statusChallenge.trim().contains(ChallengesStatus.REPORT_REFUSED.value, true)) &&
+                !statusChallenge.trim().contains(ChallengesStatus.YOU_ARE_CREATER.value, ignoreCase = true)
+        // Для разработки
+//        binding.sendReportBtn.isEnabled =
+//            statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
+//                statusChallenge.trim().contains(ChallengesStatus.REPORT_REFUSED.value, true)
     }
 
     private fun convertDateToNecessaryFormat(dateChallenge: String): String {
