@@ -5,13 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.teamforce.thanksapp.data.api.ThanksApi
-import com.teamforce.thanksapp.data.response.BalanceResponse
-import com.teamforce.thanksapp.data.response.CreateChallengeResponse
 import com.teamforce.thanksapp.model.domain.ChallengeModel
-import com.teamforce.thanksapp.utils.RetrofitClient
-import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
