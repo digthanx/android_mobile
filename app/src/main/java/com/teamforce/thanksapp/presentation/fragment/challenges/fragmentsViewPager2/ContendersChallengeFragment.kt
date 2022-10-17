@@ -65,6 +65,9 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         viewModel.contendersError.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
+        viewModel.checkReportError.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
 
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
             if (it.successResult)
