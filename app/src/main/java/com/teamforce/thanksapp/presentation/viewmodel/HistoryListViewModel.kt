@@ -50,7 +50,7 @@ class HistoryListViewModel @Inject constructor(
     }
 
 
-    //вот так делать три поля с потоками не надо. Надо передать параметр. Исправить
+    //todo исправить. вот так делать три поля с потоками не надо. Надо передать параметр. Исправить
     val allHistory = historyRepository.getHistory(
         receivedOnly = null,
         sentOnly = null
