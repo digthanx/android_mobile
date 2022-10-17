@@ -17,7 +17,7 @@ import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ContendersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
-import com.teamforce.thanksapp.presentation.viewmodel.ContendersChallengeViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.ContendersChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

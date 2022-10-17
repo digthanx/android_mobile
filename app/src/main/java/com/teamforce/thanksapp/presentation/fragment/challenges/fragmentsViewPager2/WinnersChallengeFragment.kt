@@ -11,7 +11,7 @@ import com.teamforce.thanksapp.databinding.FragmentWinnersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.WinnersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
-import com.teamforce.thanksapp.presentation.viewmodel.WinnersChallengeViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.WinnersChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

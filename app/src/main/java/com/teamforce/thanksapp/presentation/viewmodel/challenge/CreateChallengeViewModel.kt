@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.viewmodel
+package com.teamforce.thanksapp.presentation.viewmodel.challenge
 
 import android.util.Log
 import androidx.lifecycle.LiveData
