@@ -45,7 +45,7 @@ class ChallengeAdapter(
     }
 
 
-    inner class ChallengeViewHolder(val binding: ItemChallengeBinding)
+    class ChallengeViewHolder(val binding: ItemChallengeBinding)
         : RecyclerView.ViewHolder(binding.root)
 
     @SuppressLint("UseCompatLoadingForDrawables")

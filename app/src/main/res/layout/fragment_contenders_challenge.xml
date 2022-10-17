@@ -23,6 +23,8 @@
         android:layout_height="wrap_content"
         app:cardElevation="20dp"
         android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_gravity="center">
         <TextView
             android:layout_width="wrap_content"

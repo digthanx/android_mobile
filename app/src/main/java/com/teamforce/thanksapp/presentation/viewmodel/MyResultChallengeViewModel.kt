@@ -23,8 +23,8 @@ class MyResultChallengeViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _myResult = MutableLiveData<GetChallengeResultResponse?>()
-    val myResult: LiveData<GetChallengeResultResponse?> = _myResult
+    private val _myResult = MutableLiveData<List<GetChallengeResultResponse>?>()
+    val myResult: LiveData<List<GetChallengeResultResponse>?> = _myResult
     private val _myResultError = MutableLiveData<String>()
     val myResultError: LiveData<String> = _myResultError
 
@@ -39,7 +39,7 @@ class MyResultChallengeViewModel @Inject constructor(
                 _isLoading.postValue(true)
                 when (val result = challengeRepository.loadChallengeResult(challengeId)) {
                     is ResultWrapper.Success -> {
-                        _myResult.postValue(result.value[0])
+                        _myResult.postValue(result.value)
                     }
                     else -> {
                         if (result is ResultWrapper.GenericError) {
