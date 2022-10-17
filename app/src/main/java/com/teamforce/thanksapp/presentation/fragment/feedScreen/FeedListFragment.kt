@@ -15,56 +15,59 @@ import com.teamforce.thanksapp.databinding.FragmentFeedListBinding
 import com.teamforce.thanksapp.presentation.adapter.feed.FeedPageAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.feed.FeedListViewModel
+import com.teamforce.thanksapp.utils.ViewLifecycleDelegate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FeedListFragment() : Fragment(R.layout.fragment_feed_list) {
+class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
 
     private val binding: FragmentFeedListBinding by viewBinding()
     private val viewModel: FeedListViewModel by viewModels()
-    private var listAdapter: FeedPageAdapter? = null
+    private val listAdapter by ViewLifecycleDelegate {
+        FeedPageAdapter(
+            viewModel.getUsername(),
+            ::onLikeClicked,
+            ::onDislikeClicked
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mineOnly = arguments?.getInt(MINE_ONLY_KEY)
-        val publicOnly = arguments?.getInt(PUBLIC_ONLY_KEY)
-
-        listAdapter = FeedPageAdapter(viewModel.getUsername(), ::onLikeClicked, ::onDislikeClicked)
+        viewModel.mineOnly = arguments?.getInt(MINE_ONLY_KEY)
+        viewModel.publicOnly = arguments?.getInt(PUBLIC_ONLY_KEY)
 
         binding.list.apply {
-            this.adapter = listAdapter?.withLoadStateHeaderAndFooter(
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+            this.adapter = listAdapter.withLoadStateHeaderAndFooter(
                 header = HistoryLoadStateAdapter(),
                 footer = HistoryLoadStateAdapter()
             )
-            layoutManager = LinearLayoutManager(requireContext())
         }
 
-        listAdapter?.addLoadStateListener { state ->
+        listAdapter.addLoadStateListener { state ->
             binding.refreshLayout.isRefreshing = state.refresh == LoadState.Loading
         }
 
         binding.refreshLayout.setOnRefreshListener {
-            listAdapter?.refresh()
+            listAdapter.refresh()
             binding.refreshLayout.isRefreshing = true
         }
 
-        lifecycleScope.launch {
-            viewModel.getFeed(
-                mineOnly = mineOnly!!,
-                publicOnly = publicOnly!!
-            ).collect() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.feed.collectLatest {
                 binding.refreshLayout.isRefreshing = false
-                listAdapter?.submitData(it)
+                listAdapter.submitData(it)
             }
         }
     }
 
     override fun onDestroyView() {
         binding.list.adapter = null
-        listAdapter = null
         super.onDestroyView()
     }
 

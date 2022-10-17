@@ -129,8 +129,6 @@ class FeedPageAdapter(
                 data.transaction.sender_id?.let {
                     this.putInt("userIdSender", it)
                 }
-
-
             }
             root.findNavController()
                 .navigate(
