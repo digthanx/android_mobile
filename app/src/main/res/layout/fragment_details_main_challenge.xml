@@ -117,9 +117,7 @@
         android:layout_width="match_parent"
         android:layout_height="38dp"
         app:tabMode="scrollable"
-        android:elevation="50dp"
         app:tabGravity="start"
-        android:background="@color/transparent"
         app:tabTextAppearance="@style/StandardText3Medium.Black"
         android:layout_marginHorizontal="16dp"
         style="@style/MyTabChallenge">
@@ -127,31 +125,31 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Детали"
+            android:text="@string/details"
             />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Кандидаты"
+            android:text="@string/contenders"
             />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Победители"
+            android:text="@string/winners"
             />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Участники"
+            android:text="@string/participants"
             />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Комментарии"
+            android:text="@string/comments"
             />
 
     </com.google.android.material.tabs.TabLayout>

@@ -46,7 +46,7 @@ class CommentsChallengeViewModel @Inject constructor(
     fun loadComments(
         challengeId: Int
     ) {
-        _isLoading.postValue(true)
+        _createCommentsLoading.postValue(true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 when (val result = challengeRepository.loadChallengeComments(challengeId)) {
@@ -62,7 +62,7 @@ class CommentsChallengeViewModel @Inject constructor(
                         }
                     }
                 }
-                _isLoading.postValue(false)
+                _createCommentsLoading.postValue(false)
             }
         }
     }

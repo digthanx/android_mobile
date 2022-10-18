@@ -1,7 +1,5 @@
 package com.teamforce.thanksapp.domain.repositories
 
-import com.teamforce.thanksapp.data.request.CreateChallengeCommentRequest
-import com.teamforce.thanksapp.data.request.CreateReportRequest
 import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.utils.ResultWrapper
 import okhttp3.MultipartBody

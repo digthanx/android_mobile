@@ -11,6 +11,7 @@
         android:id="@+id/comments_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
         android:layout_marginBottom="110dp"
         tools:listitem="@layout/item_comment"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
