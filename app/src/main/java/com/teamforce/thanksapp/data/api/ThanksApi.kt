@@ -182,4 +182,19 @@ interface ThanksApi {
     suspend fun getChallengeResult(
         @Path("challenge_id") challengeId: Int
     ): List<GetChallengeResultResponse>
+
+    @POST("/get-comments/")
+    fun getChallengeComments(
+        @Body challenge_id: GetChallengeCommentsRequest
+    ): GetChallengeCommentsResponse
+
+    @POST("/create-comment/")
+    fun createChallengeComment(
+        @Body data: CreateChallengeCommentRequest
+    ): CancelTransactionResponse
+
+    @DELETE("/delete-comment/{comment_id}/")
+    fun deleteChallengeComment(
+        @Path("comment_id") commentId: Int
+    ): CancelTransactionResponse
 }

@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.domain.repositories
 
+import com.teamforce.thanksapp.data.request.CreateChallengeCommentRequest
 import com.teamforce.thanksapp.data.request.CreateReportRequest
 import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.utils.ResultWrapper
@@ -29,5 +30,18 @@ interface ChallengeRepository {
     suspend fun loadChallengeResult(
         challengeId: Int,
     ): ResultWrapper<List<GetChallengeResultResponse>>
+
+    suspend fun loadChallengeComments(
+        challengeId: Int
+    ): ResultWrapper<GetChallengeCommentsResponse>
+
+    suspend fun createChallengeComment(
+        challenge_id: Int,
+        text: String
+    ): ResultWrapper<CancelTransactionResponse>
+
+    suspend fun deleteChallengeComment(
+        commentId: Int
+    ): ResultWrapper<CancelTransactionResponse>
 
 }

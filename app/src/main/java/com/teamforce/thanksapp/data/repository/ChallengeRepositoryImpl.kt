@@ -2,7 +2,9 @@ package com.teamforce.thanksapp.data.repository
 
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CheckChallengeReportRequest
+import com.teamforce.thanksapp.data.request.CreateChallengeCommentRequest
 import com.teamforce.thanksapp.data.request.CreateReportRequest
+import com.teamforce.thanksapp.data.request.GetChallengeCommentsRequest
 import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
 import com.teamforce.thanksapp.utils.ResultWrapper
@@ -55,6 +57,28 @@ class ChallengeRepositoryImpl @Inject constructor(
     override suspend fun loadChallengeResult(challengeId: Int): ResultWrapper<List<GetChallengeResultResponse>> {
         return safeApiCall(Dispatchers.IO) {
             thanksApi.getChallengeResult(challengeId)
+        }
+    }
+
+    override suspend fun loadChallengeComments(challengeId: Int): ResultWrapper<GetChallengeCommentsResponse> {
+        return safeApiCall(Dispatchers.IO){
+            thanksApi.getChallengeComments(GetChallengeCommentsRequest(challengeId))
+        }
+    }
+
+    override suspend fun createChallengeComment(
+        challenge_id: Int,
+        text: String
+    ): ResultWrapper<CancelTransactionResponse> {
+        val data = CreateChallengeCommentRequest(challenge_id, text)
+        return safeApiCall(Dispatchers.IO){
+            thanksApi.createChallengeComment(data)
+        }
+    }
+
+    override suspend fun deleteChallengeComment(commentId: Int): ResultWrapper<CancelTransactionResponse> {
+        return safeApiCall(Dispatchers.IO){
+            thanksApi.deleteChallengeComment(commentId)
         }
     }
 }
