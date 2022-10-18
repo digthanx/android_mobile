@@ -1,15 +1,23 @@
 package com.teamforce.thanksapp.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CheckChallengeReportRequest
 import com.teamforce.thanksapp.data.request.CreateChallengeCommentRequest
 import com.teamforce.thanksapp.data.request.CreateReportRequest
 import com.teamforce.thanksapp.data.request.GetChallengeCommentsRequest
 import com.teamforce.thanksapp.data.response.*
+import com.teamforce.thanksapp.data.sources.challenge.ChallengeCommentsPagingSource
+import com.teamforce.thanksapp.data.sources.history.HistoryPagingSource
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
+import com.teamforce.thanksapp.model.domain.CommentModel
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.safeApiCall
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -60,10 +68,23 @@ class ChallengeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun loadChallengeComments(challengeId: Int): ResultWrapper<GetChallengeCommentsResponse> {
-        return safeApiCall(Dispatchers.IO){
-            thanksApi.getChallengeComments(GetChallengeCommentsRequest(challengeId))
-        }
+    override fun loadChallengeComments(
+        challengeId: Int
+    ): Flow<PagingData<CommentModel>> {
+        return Pager(
+            config = PagingConfig(
+                initialLoadSize = Consts.PAGE_SIZE,
+                prefetchDistance = 1,
+                pageSize = Consts.PAGE_SIZE,
+                enablePlaceholders = false,
+            ),
+            pagingSourceFactory = {
+                ChallengeCommentsPagingSource(
+                    api = thanksApi,
+                    challengeId
+                )
+            }
+        ).flow
     }
 
     override suspend fun createChallengeComment(

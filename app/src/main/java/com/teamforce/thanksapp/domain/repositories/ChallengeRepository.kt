@@ -1,7 +1,10 @@
 package com.teamforce.thanksapp.domain.repositories
 
+import androidx.paging.PagingData
 import com.teamforce.thanksapp.data.response.*
+import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.utils.ResultWrapper
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
@@ -29,9 +32,9 @@ interface ChallengeRepository {
         challengeId: Int,
     ): ResultWrapper<List<GetChallengeResultResponse>>
 
-    suspend fun loadChallengeComments(
+    fun loadChallengeComments(
         challengeId: Int
-    ): ResultWrapper<GetChallengeCommentsResponse>
+    ): Flow<PagingData<CommentModel>>
 
     suspend fun createChallengeComment(
         challenge_id: Int,

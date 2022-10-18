@@ -9,21 +9,25 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentCommentsChallengeBinding
 import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.presentation.adapter.CommentsAdapter
+import com.teamforce.thanksapp.presentation.adapter.challenge.ChallengeCommentAdapter
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.CommentsChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge) {
 
     private val binding: FragmentCommentsChallengeBinding by viewBinding()
     private val viewModel: CommentsChallengeViewModel by viewModels()
+    private var listAdapter: ChallengeCommentAdapter? = null
 
     private var idChallenge: Int? = null
     private var allComments: List<CommentModel> = listOf()
@@ -37,15 +41,20 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadCommentFromDb(idChallenge)
+        //listAdapter = ChallengeCommentAdapter()
+        lifecycleScope.launch() {
+            idChallenge?.let {
+                viewModel.loadComments(it).collect() {
+
+                }
+            }
+        }
+
         initRvAdapter()
         setCommentFromDb()
         listeners()
     }
 
-    private fun loadCommentFromDb(challengeId: Int?) {
-        challengeId?.let { viewModel.loadComments(it) }
-    }
 
     private fun initRvAdapter() {
         binding.commentsRv.adapter = CommentsAdapter(requireContext())
@@ -85,9 +94,6 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
                             closeKeyboard()
                             binding.messageValueEt.text?.clear()
 
-                            viewModel.createCommentsLoading.observe(viewLifecycleOwner) { loading ->
-                                if (!loading) loadCommentFromDb(challengeId)
-                            }
                         }
 
                     }

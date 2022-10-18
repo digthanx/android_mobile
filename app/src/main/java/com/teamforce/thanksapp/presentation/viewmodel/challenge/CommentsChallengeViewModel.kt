@@ -4,13 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.GetChallengeCommentsResponse
 import com.teamforce.thanksapp.data.response.GetCommentsResponse
+import com.teamforce.thanksapp.data.response.HistoryItem
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
+import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -45,27 +50,35 @@ class CommentsChallengeViewModel @Inject constructor(
 
     fun loadComments(
         challengeId: Int
-    ) {
-        _createCommentsLoading.postValue(true)
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                when (val result = challengeRepository.loadChallengeComments(challengeId)) {
-                    is ResultWrapper.Success -> {
-                        _comments.postValue(result.value)
-                    }
-                    else -> {
-                        if (result is ResultWrapper.GenericError) {
-                            _commentsLoadingError.postValue(result.error + " " + result.code)
-
-                        } else if (result is ResultWrapper.NetworkError) {
-                            _commentsLoadingError.postValue("Ошибка сети")
-                        }
-                    }
-                }
-                _createCommentsLoading.postValue(false)
-            }
-        }
+    ): Flow<PagingData<CommentModel>> {
+       return challengeRepository.loadChallengeComments(
+           challengeId
+       ).map { it }
     }
+
+//    fun loadComments(
+//        challengeId: Int
+//    ) {
+//        _createCommentsLoading.postValue(true)
+//        viewModelScope.launch {
+//            withContext(Dispatchers.IO) {
+//                when (val result = challengeRepository.loadChallengeComments(challengeId)) {
+//                    is ResultWrapper.Success -> {
+//                        _comments.postValue(result.value)
+//                    }
+//                    else -> {
+//                        if (result is ResultWrapper.GenericError) {
+//                            _commentsLoadingError.postValue(result.error + " " + result.code)
+//
+//                        } else if (result is ResultWrapper.NetworkError) {
+//                            _commentsLoadingError.postValue("Ошибка сети")
+//                        }
+//                    }
+//                }
+//                _isLoading.postValue(false)
+//            }
+//        }
+//    }
 
     fun createComment(
         challengeId: Int,

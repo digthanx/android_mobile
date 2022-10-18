@@ -2,7 +2,9 @@ package com.teamforce.thanksapp.presentation.adapter
 
 import android.content.Context
 import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
@@ -23,8 +25,9 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class CommentsAdapter
-    (private val context: Context): ListAdapter<CommentModel, CommentsAdapter.CommentViewHolder>(CommentViewHolder.DiffCallback)
+class CommentsAdapter(
+    private val context: Context
+    ): ListAdapter<CommentModel, CommentsAdapter.CommentViewHolder>(CommentViewHolder.DiffCallback)
 {
     var onDeleteCommentClickListener: ((commentId: Int) -> Unit)? = null
 

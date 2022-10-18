@@ -6,5 +6,10 @@ data class GetChallengeCommentsRequest(
     @SerializedName("challenge_id")
     val challenge_id: Int,
     @SerializedName("include_name")
-    val include_name: Boolean = true
+    val include_name: Boolean = true,
+    @SerializedName("limit")
+    val limit: Int,
+    @SerializedName("include_name")
+    val offset: Int
+
 )
