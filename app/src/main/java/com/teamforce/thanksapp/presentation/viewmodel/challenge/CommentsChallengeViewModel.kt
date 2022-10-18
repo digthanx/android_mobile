@@ -22,7 +22,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CommentsChallengeViewModel @Inject constructor(
-    private val challengeRepository: ChallengeRepository
+    private val challengeRepository: ChallengeRepository,
+    private val userDataRepository: com.teamforce.thanksapp.utils.UserDataRepository
+
 ): ViewModel(){
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -47,6 +49,7 @@ class CommentsChallengeViewModel @Inject constructor(
     private val _createCommentsLoading = MutableLiveData<Boolean>()
     val createCommentsLoading: LiveData<Boolean> = _createCommentsLoading
 
+    fun getProfileId() = userDataRepository.getProfileId()
 
     fun loadComments(
         challengeId: Int

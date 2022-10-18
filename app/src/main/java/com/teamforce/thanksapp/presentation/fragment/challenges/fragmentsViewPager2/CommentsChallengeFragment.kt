@@ -57,7 +57,7 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
 
 
     private fun initRvAdapter() {
-        binding.commentsRv.adapter = CommentsAdapter(requireContext())
+        binding.commentsRv.adapter = CommentsAdapter(requireContext(), viewModel.getProfileId()!!)
     }
 
     private fun setCommentFromDb() {

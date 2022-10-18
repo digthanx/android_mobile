@@ -61,6 +61,8 @@ class AdditionalInfoFeedItemViewModel @Inject constructor(
         }
     }
 
+    fun getProfileId() = userDataRepository.getProfileId()
+
 
     private suspend fun deleteCommentEndpoint(
         commentId: Int,
