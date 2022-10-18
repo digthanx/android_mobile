@@ -1,9 +1,11 @@
 package com.teamforce.thanksapp.presentation.adapter.challenge
 
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.paging.PagingDataAdapter
@@ -16,7 +18,6 @@ import com.google.android.material.card.MaterialCardView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemCommentBinding
 import com.teamforce.thanksapp.model.domain.CommentModel
-import com.teamforce.thanksapp.presentation.adapter.CommentsAdapter
 import com.teamforce.thanksapp.utils.Consts
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -24,7 +25,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class ChallengeCommentAdapter(
-    private val username: String,
+    private val profileId: String,
     private val onDeleteLongClicked: (id: Int) -> Unit
 ) : PagingDataAdapter<CommentModel, RecyclerView.ViewHolder>(DiffCallback) {
 
@@ -39,7 +40,7 @@ class ChallengeCommentAdapter(
         val item = getItem(position)
         if (item != null) {
             val viewHolder = holder as CommentItemViewHolder
-            viewHolder.bind(item, username, onDeleteLongClicked)
+            viewHolder.bind(item, profileId, onDeleteLongClicked)
         }
     }
 
@@ -58,66 +59,88 @@ class ChallengeCommentAdapter(
         val root = binding.root
 
         fun bind(
-            data: CommentModel, username: String,
-            onCancelClicked: (id: Int) -> Unit
+            data: CommentModel, profileId: String,
+            onDeleteLongClicked: (id: Int) -> Unit
         ) {
-            binding.apply {
+            bindAvatar(binding, data)
+            bindBaseInfo(binding, data)
+            bindDate(binding, data)
+            // Если имя пользователя совпадает с именем владельца коммента
+            if(profileId == data.user.id.toString()){
+                binding.mainCardView.setOnLongClickListener {
+                    val popup: PopupMenu = PopupMenu(binding.root.context, binding.fioSender)
+                    popup.menuInflater.inflate(R.menu.comment_context_menu, popup.menu)
+                    popup.gravity = Gravity.START
 
+                    popup.setOnMenuItemClickListener {
+                        when(it.itemId) {
+                            R.id.delete -> {
+                                onDeleteLongClicked(data.id)
+                            }
+                        }
+                        true
+                    }
+                    popup.show()
+                    true
+                }
+            }
+        }
+
+        private fun bindBaseInfo(binding: ItemCommentBinding, data: CommentModel){
+            binding.fioSender.text =
+                String.format(binding.root.context.getString(R.string.fioSender),
+                    data.user.surname, data.user.name)
+            binding.message.text = data.text
+        }
+
+        private fun bindAvatar(binding: ItemCommentBinding, data: CommentModel){
+            if (!data.user.avatar.isNullOrEmpty()) {
+                Glide.with(binding.root.context)
+                    .load("${Consts.BASE_URL}${data.user.avatar}".toUri())
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .into(binding.userAvatar)
+            } else {
+                binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+            }
+        }
+
+        private fun bindDate(binding: ItemCommentBinding, data: CommentModel){
+            try {
+                val zdt: ZonedDateTime =
+                    ZonedDateTime.parse(data.created, DateTimeFormatter.ISO_DATE_TIME)
+                val dateTime: String? =
+                    LocalDateTime.parse(zdt.toString(), DateTimeFormatter.ISO_DATE_TIME)
+                        .format(DateTimeFormatter.ofPattern("dd.MM.y HH:mm"))
+                val dateInner = dateTime?.subSequence(0, 10)
+                val timeInner = dateTime?.subSequence(11, 16)
+                val today: LocalDate = LocalDate.now()
+                val yesterday: String = today.minusDays(1).format(DateTimeFormatter.ISO_DATE)
+                val todayString =
+                    LocalDate.parse(today.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        .format(DateTimeFormatter.ofPattern("dd.MM.y"))
+                val yesterdayString =
+                    LocalDate.parse(yesterday, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        .format(DateTimeFormatter.ofPattern("dd.MM.y"))
+
+                if (dateInner == todayString) {
+                    date = "Сегодня"
+                } else if (dateInner == yesterdayString) {
+                    date = "Вчера"
+                } else {
+                    date = dateInner.toString()
+                }
+                time = timeInner.toString()
+                binding.dateTime.text =
+                    String.format(
+                        binding.root.context.getString(R.string.dateTime), date, time)
+            } catch (e: Exception) {
+                Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
             }
         }
 
     }
 
-//    private fun bindBaseInfo(holder: CommentsAdapter.CommentViewHolder, position: Int){
-//        holder.fioSender.text =
-//            String.format(context.getString(R.string.fioSender),
-//                currentList[position].user.surname, currentList[position].user.name)
-//        holder.message.text = currentList[position].text
-//    }
-//
-//    private fun bindAvatar(holder: CommentsAdapter.CommentViewHolder, position: Int){
-//        if (!currentList[position].user.avatar.isNullOrEmpty()) {
-//            Glide.with(context)
-//                .load("${Consts.BASE_URL}${currentList[position].user.avatar}".toUri())
-//                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-//                .into(holder.avatarUser)
-//        } else {
-//            holder.avatarUser.setImageResource(R.drawable.ic_anon_avatar)
-//        }
-//    }
-//
-//    private fun bindDate(holder: CommentsAdapter.CommentViewHolder, position: Int){
-//        try {
-//            val zdt: ZonedDateTime =
-//                ZonedDateTime.parse(currentList[position].created, DateTimeFormatter.ISO_DATE_TIME)
-//            val dateTime: String? =
-//                LocalDateTime.parse(zdt.toString(), DateTimeFormatter.ISO_DATE_TIME)
-//                    .format(DateTimeFormatter.ofPattern("dd.MM.y HH:mm"))
-//            val date = dateTime?.subSequence(0, 10)
-//            val time = dateTime?.subSequence(11, 16)
-//            val today: LocalDate = LocalDate.now()
-//            val yesterday: String = today.minusDays(1).format(DateTimeFormatter.ISO_DATE)
-//            val todayString =
-//                LocalDate.parse(today.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-//                    .format(DateTimeFormatter.ofPattern("dd.MM.y"))
-//            val yesterdayString =
-//                LocalDate.parse(yesterday, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-//                    .format(DateTimeFormatter.ofPattern("dd.MM.y"))
-//
-//            if (date == todayString) {
-//                holder.date = "Сегодня"
-//            } else if (date == yesterdayString) {
-//                holder.date = "Вчера"
-//            } else {
-//                holder.date = date.toString()
-//            }
-//            holder.time = time.toString()
-//            holder.dateTime.text =
-//                String.format(context.getString(R.string.dateTime), holder.date, holder.time)
-//        } catch (e: Exception) {
-//            Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
-//        }
-//    }
+
 
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<CommentModel>() {

@@ -20,6 +20,7 @@ import com.teamforce.thanksapp.presentation.adapter.challenge.ChallengeCommentAd
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.CommentsChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -41,31 +42,28 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //listAdapter = ChallengeCommentAdapter()
-        lifecycleScope.launch() {
-            idChallenge?.let {
-                viewModel.loadComments(it).collect() {
-
-                }
-            }
-        }
-
-        initRvAdapter()
-        setCommentFromDb()
+        listAdapter = ChallengeCommentAdapter(viewModel.getProfileId()!!, ::deleteComment)
+        binding.commentsRv.adapter = listAdapter
+        idChallenge?.let { loadComment(it) }
         listeners()
     }
 
+    private fun loadComment(challengeId: Int) {
+        lifecycleScope.launch() {
+            viewModel.loadComments(challengeId).collectLatest() {
+                listAdapter?.submitData(it)
+            }
 
-    private fun initRvAdapter() {
-        binding.commentsRv.adapter = CommentsAdapter(requireContext(), viewModel.getProfileId()!!)
-    }
-
-    private fun setCommentFromDb() {
-        viewModel.comments.observe(viewLifecycleOwner) {
-            allComments = it?.comments!!
-            (binding.commentsRv.adapter as CommentsAdapter).submitList(it.comments)
         }
     }
+
+
+//    private fun setCommentFromDb() {
+//        viewModel.comments.observe(viewLifecycleOwner) {
+//            allComments = it?.comments!!
+//            (binding.commentsRv.adapter as CommentsAdapter).submitList(it.comments)
+//        }
+//    }
 
     private fun createComment(challengeId: Int, text: String) {
         viewModel.createComment(challengeId, text)
@@ -73,7 +71,9 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
 
     private fun listeners() {
         inputMessage()
-
+        viewModel.isLoading.observe(viewLifecycleOwner){
+            if(!it) idChallenge?.let { it1 -> loadComment(it1) }
+        }
     }
 
     private fun deleteComment(commentId: Int) {
@@ -93,7 +93,6 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
                             createComment(challengeId, binding.messageValueEt.text.toString())
                             closeKeyboard()
                             binding.messageValueEt.text?.clear()
-
                         }
 
                     }
