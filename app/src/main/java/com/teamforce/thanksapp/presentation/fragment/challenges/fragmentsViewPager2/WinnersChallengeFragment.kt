@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentWinnersChallengeBinding
@@ -47,6 +49,9 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
                     putInt(CHALLENGER_ID, idChallenge!!)
                     putParcelable(CHALLENGER_WINNER, dataOfWinner)
                 }
+                view.findNavController().navigate(
+                    R.id.action_global_challengesWinnersDetailFragment,
+                    bundle)
             }
         }
 
