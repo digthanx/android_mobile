@@ -180,8 +180,8 @@ interface ThanksApi {
         @Path("challenge_id") challengeId: Int
     ): List<GetChallengeResultResponse>
 
-    @GET("/challenge-report/{challenge_id}/")
+    @GET("/challenge-report/{challenge_report_id}/")
     suspend fun getChallengeWinnerReportDetails(
-        @Path("challenge_id") challengeId: Int,
+        @Path("challenge_report_id") challengeReportId: Int,
     ): GetChallengeWinnersReportDetailsResponse
 }

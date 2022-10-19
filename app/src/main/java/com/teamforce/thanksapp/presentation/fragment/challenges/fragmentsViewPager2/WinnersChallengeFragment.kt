@@ -47,6 +47,7 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
             adapter.onWinnerClicked = { dataOfWinner ->
                 val bundle = Bundle()
                 with(bundle){
+                    // Нужно передавать challenge_report_id
                     putInt(CHALLENGER_ID, idChallenge!!)
                     putParcelable(CHALLENGER_WINNER, dataOfWinner)
                 }
