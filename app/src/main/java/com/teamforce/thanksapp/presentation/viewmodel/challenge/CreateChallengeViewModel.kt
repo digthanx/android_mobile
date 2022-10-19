@@ -78,7 +78,7 @@ class CreateChallengeViewModel @Inject constructor(
                 RequestBody.create(MediaType.parse("multipart/form-data"), parameter_value.toString())
 
 
-            thanksApi?.createChallenge(
+            thanksApi.createChallenge(
                 photo,
                 nameB,
                 descriptionB,
@@ -86,7 +86,7 @@ class CreateChallengeViewModel @Inject constructor(
                 amountFundB,
                 parameter_idB,
                 parameter_valueB
-            )?.enqueue(object : Callback<ChallengeModel> {
+            ).enqueue(object : Callback<ChallengeModel> {
                 override fun onResponse(
                     call: Call<ChallengeModel>,
                     response: Response<ChallengeModel>

@@ -140,6 +140,10 @@
     <string name="lastUpdateChallenge">Обновлен: %s</string>
     <string name="active">Активен</string>
     <string name="completed">Завершён</string>
+    <!-- Создать Челлендж фрагмент -->
+    <string name="allFieldsAreRequired">Все поля обязательны</string>
+    <string name="challengeWasCreated">Челлендж успешно создан</string>
+
     <!-- Челлендж фрагмент детали -->
     <string name="details">Детали</string>
     <string name="participants">Участники</string>

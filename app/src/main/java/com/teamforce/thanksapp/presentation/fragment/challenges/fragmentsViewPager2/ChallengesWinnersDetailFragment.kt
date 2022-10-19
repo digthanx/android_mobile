@@ -43,7 +43,7 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        challengeId?.let { viewModel.loadChallengeWinnerReportDetail(it) }
+        dataOfWinner?.reportId?.let { viewModel.loadChallengeWinnerReportDetail(it) }
         viewModel.winnerReport.observe(viewLifecycleOwner){
             binding.nameChallenge.text = it?.challenge?.name
             binding.descriptionChallenge.text = it?.challengeText

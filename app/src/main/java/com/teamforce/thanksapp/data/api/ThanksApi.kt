@@ -170,7 +170,7 @@ interface ThanksApi {
         @Body data: CheckChallengeReportRequest?
     ): CheckReportResponse
 
-    @GET("/challenge-winners/{challenge_id}/")
+    @GET("/challenge-winners-reports/{challenge_id}/")
     suspend fun getChallengeWinners(
         @Path("challenge_id") challengeId: Int,
     ): List<GetChallengeWinnersResponse.Winner>
@@ -180,6 +180,7 @@ interface ThanksApi {
         @Path("challenge_id") challengeId: Int
     ): List<GetChallengeResultResponse>
 
+    @GET("/challenge-report/{challenge_report_id}/")
     @POST("/get-comments/")
     suspend fun getChallengeComments(
         @Body challenge_id: GetChallengeCommentsRequest
@@ -197,6 +198,6 @@ interface ThanksApi {
 
     @GET("/challenge-report/{challenge_id}/")
     suspend fun getChallengeWinnerReportDetails(
-        @Path("challenge_id") challengeId: Int,
+        @Path("challenge_report_id") challengeReportId: Int,
     ): GetChallengeWinnersReportDetailsResponse
 }

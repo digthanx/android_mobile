@@ -69,15 +69,27 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
                 !binding.prizeFundEt.text.isNullOrEmpty() &&
                 !binding.prizePoolEt.text.isNullOrEmpty()
             ){
+                binding.continueBtn.isEnabled = false
                 uploadDataToDb()
+            }else{
+                Toast.makeText(requireContext(),
+                    requireContext().getString(R.string.allFieldsAreRequired),
+                    Toast.LENGTH_SHORT).show()
             }
         }
         uploadImageFromGallery()
 
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
-            findNavController().navigate(
-                R.id.action_createChallengeFragment_to_challengesFragment, null,
-                OptionsTransaction().optionForEditProfile)
+            if (it == true){
+                binding.continueBtn.isEnabled = true
+                Toast.makeText(requireContext(),
+                    requireContext().getString(R.string.challengeWasCreated),
+                    Toast.LENGTH_LONG).show()
+                findNavController().navigate(
+                    R.id.action_createChallengeFragment_to_challengesFragment, null,
+                    OptionsTransaction().optionForEditProfile)
+            }
+
         }
 
 
