@@ -37,6 +37,9 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
         binding.winnersRv.addItemDecoration(
             VerticalDividerItemDecorator(16, adapter.itemCount)
         )
+        adapter.onWinnerClicked = { dataOfWinner ->
+
+        }
         loadWinners()
         setData()
         listeningResponse()
