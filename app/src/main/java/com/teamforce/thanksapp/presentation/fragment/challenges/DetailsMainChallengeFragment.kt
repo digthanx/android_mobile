@@ -150,8 +150,9 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
         if (!challengeBackground.isNullOrEmpty()) {
             binding.standardCard.visibility = View.GONE
             binding.secondaryCard.visibility = View.VISIBLE
+            val urlPhoto = challengeBackground?.replace("_thumb", "")
             Glide.with(requireContext())
-                .load("${Consts.BASE_URL}${challengeBackground}".toUri())
+                .load("${Consts.BASE_URL}${urlPhoto}".toUri())
                 .centerCrop()
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.imageBackground)
