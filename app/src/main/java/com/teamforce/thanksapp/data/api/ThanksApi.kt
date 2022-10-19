@@ -170,7 +170,7 @@ interface ThanksApi {
         @Body data: CheckChallengeReportRequest?
     ): CheckReportResponse
 
-    @GET("/challenge-winners/{challenge_id}/")
+    @GET("/challenge-winners-reports/{challenge_id}/")
     suspend fun getChallengeWinners(
         @Path("challenge_id") challengeId: Int,
     ): List<GetChallengeWinnersResponse.Winner>
