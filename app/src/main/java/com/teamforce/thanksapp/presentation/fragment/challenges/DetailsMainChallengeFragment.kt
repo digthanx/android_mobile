@@ -116,7 +116,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
         binding.closeBtn.setOnClickListener {
             activity?.onBackPressed()
         }
-        binding.closeBtnSecondary.setOnClickListener {
+        binding.closeCardSecondary.setOnClickListener {
             activity?.onBackPressed()
         }
     }
@@ -132,7 +132,6 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     }
 
     private fun setData() {
-        //if(challengeBackground.isNullOrEmpty())
         if (challengeActive == true) {
             binding.statusActiveText.text = requireContext().getString(R.string.active)
             binding.statusActiveTextSecondary.text = requireContext().getString(R.string.active)
@@ -156,6 +155,9 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                 .centerCrop()
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.imageBackground)
+        }else{
+            binding.standardCard.visibility = View.VISIBLE
+            binding.secondaryCard.visibility = View.GONE
         }
     }
 
