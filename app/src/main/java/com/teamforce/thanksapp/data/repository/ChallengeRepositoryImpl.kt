@@ -57,4 +57,10 @@ class ChallengeRepositoryImpl @Inject constructor(
             thanksApi.getChallengeResult(challengeId)
         }
     }
+
+    override suspend fun loadChallengeWinnerReportDetails(challengeId: Int): ResultWrapper<GetChallengeWinnersReportDetailsResponse> {
+        return safeApiCall(Dispatchers.IO){
+            thanksApi.getChallengeWinnerReportDetails(challengeId)
+        }
+    }
 }
