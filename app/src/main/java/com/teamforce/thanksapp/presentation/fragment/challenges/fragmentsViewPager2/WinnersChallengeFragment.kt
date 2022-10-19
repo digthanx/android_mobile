@@ -10,6 +10,9 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentWinnersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.WinnersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_WINNER
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
 import com.teamforce.thanksapp.presentation.viewmodel.WinnersChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +29,7 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            idChallenge = it.getInt(ChallengesFragment.CHALLENGER_ID)
+            idChallenge = it.getInt(CHALLENGER_ID)
         }
     }
 
@@ -37,9 +40,16 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
         binding.winnersRv.addItemDecoration(
             VerticalDividerItemDecorator(16, adapter.itemCount)
         )
-        adapter.onWinnerClicked = { dataOfWinner ->
-
+        if (idChallenge != null){
+            adapter.onWinnerClicked = { dataOfWinner ->
+                val bundle = Bundle()
+                with(bundle){
+                    putInt(CHALLENGER_ID, idChallenge!!)
+                    putParcelable(CHALLENGER_WINNER, dataOfWinner)
+                }
+            }
         }
+
         loadWinners()
         setData()
         listeningResponse()
@@ -79,7 +89,7 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
         fun newInstance(challengeId: Int) =
             WinnersChallengeFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ChallengesFragment.CHALLENGER_ID, challengeId)
+                    putInt(CHALLENGER_ID, challengeId)
                 }
             }
     }

@@ -189,6 +189,6 @@
             android:id="@+id/challengesWinnersDetailFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.ChallengesWinnersDetailFragment"
             android:label="fragment_challenges_winners_detail"
-            tools:layout="@layout/fragment_challenges_winners_detail" />
+            tools:layout="@layout/fragment_challenges_winners_detail" /><action android:id="@+id/action_global_challengesWinnersDetailFragment" app:destination="@id/challengesWinnersDetailFragment"/>
     </navigation>
 </navigation>
