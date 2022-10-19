@@ -15,11 +15,11 @@ import com.bumptech.glide.Glide
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_CREATOR_ID
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_STATE_ACTIVE
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_STATUS
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGE_BACKGROUND
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_CREATOR_ID
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_STATE_ACTIVE
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_STATUS
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGE_BACKGROUND
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import java.time.LocalDate

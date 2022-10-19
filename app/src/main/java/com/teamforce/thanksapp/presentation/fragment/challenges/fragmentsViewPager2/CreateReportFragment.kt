@@ -15,10 +15,10 @@ import com.bumptech.glide.Glide
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentCreateReportBinding
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.CreateReportViewModel
 import com.teamforce.thanksapp.utils.getPath
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -226,7 +226,7 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
         fun newInstance(challengeId: Int) =
             CreateReportFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ChallengesFragment.CHALLENGER_ID, challengeId)
+                    putInt(CHALLENGER_ID, challengeId)
                 }
             }
     }

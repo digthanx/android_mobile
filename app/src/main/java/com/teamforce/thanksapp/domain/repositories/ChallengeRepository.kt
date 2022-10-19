@@ -45,4 +45,8 @@ interface ChallengeRepository {
         commentId: Int
     ): ResultWrapper<CancelTransactionResponse>
 
+    suspend fun loadChallengeWinnerReportDetails(
+        challengeId: Int,
+    ): ResultWrapper<GetChallengeWinnersReportDetailsResponse>
+
 }
