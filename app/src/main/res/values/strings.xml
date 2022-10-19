@@ -176,6 +176,7 @@
     <string name="updatedDateTime">Обновлено %s в %s</string>
     <!--Детали отчета челленджа -->
     <string name="reportHolder">Отправитель</string>
+    <string name="userSurnameAndName">%s %s</string>
 
     <!--Utils -->
     <string name="OK">Ок</string>

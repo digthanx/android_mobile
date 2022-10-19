@@ -7,13 +7,22 @@
     android:orientation="vertical"
     tools:context=".presentation.fragment.challenges.fragmentsViewPager2.ChallengesWinnersDetailFragment">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageBackground"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/secondary_card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="200dp"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize5PercentBottom"
-        tools:ignore="ContentDescription" />
+        android:layout_height="199dp"
+        android:layout_marginBottom="12dp"
+        android:background="@color/transparent"
+        android:visibility="visible">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize5PercentBottom"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <ScrollView
@@ -136,10 +145,10 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="@color/background_active_and_disabled_btn"
-                android:letterSpacing="-0.031"
-                android:text="@string/close"
                 android:elevation="10dp"
+                android:letterSpacing="-0.031"
                 android:stateListAnimator="@null"
+                android:text="@string/close"
                 android:textSize="14sp" />
 
 

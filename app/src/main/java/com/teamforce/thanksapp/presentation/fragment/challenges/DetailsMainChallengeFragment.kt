@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
@@ -152,8 +153,8 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             binding.secondaryCard.visibility = View.VISIBLE
             Glide.with(requireContext())
                 .load("${Consts.BASE_URL}${challengeBackground}".toUri())
-                .fitCenter()
                 .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.imageBackground)
         }
     }
