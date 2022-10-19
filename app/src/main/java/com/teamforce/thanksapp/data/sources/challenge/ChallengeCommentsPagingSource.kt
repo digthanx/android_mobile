@@ -23,11 +23,11 @@ class ChallengeCommentsPagingSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CommentModel> {
-        var pageIndex = params.key ?: 1
+        var pageIndex = params.key ?: 0
 
-        if (params is LoadParams.Refresh) {
-            pageIndex = 1
-        }
+//        if (params is LoadParams.Refresh) {
+//            pageIndex = 0
+//        }
 
         return try {
             val response = api.getChallengeComments(
@@ -41,11 +41,11 @@ class ChallengeCommentsPagingSource(
                 if (response.comments.isEmpty()) {
                     null
                 } else {
-                    pageIndex + (params.loadSize / Consts.PAGE_SIZE)
+                    pageIndex + (Consts.PAGE_SIZE)
                 }
             LoadResult.Page(
                 data = response.comments,
-                prevKey = if (pageIndex == 1) null else pageIndex,
+                prevKey = if (pageIndex == 0) null else pageIndex,
                 nextKey = nextKey
             )
         } catch (exception: IOException) {
