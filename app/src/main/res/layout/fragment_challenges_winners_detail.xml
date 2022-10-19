@@ -136,7 +136,7 @@
 
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/send_report_btn"
+                android:id="@+id/close_btn"
                 style="@style/DefaultButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -151,7 +151,9 @@
                 android:text="@string/close"
                 android:textSize="14sp" />
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
         </LinearLayout>
     </ScrollView>
 

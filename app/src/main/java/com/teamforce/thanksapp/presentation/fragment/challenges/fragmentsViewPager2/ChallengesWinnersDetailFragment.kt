@@ -71,6 +71,10 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
                 .error(R.drawable.ic_anon_avatar)
                 .into(binding.userAvatar)
         }
+
+        binding.closeBtn.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
     }
 
 
