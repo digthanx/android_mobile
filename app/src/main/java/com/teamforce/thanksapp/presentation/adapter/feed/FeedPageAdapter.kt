@@ -431,4 +431,43 @@ class FeedPageAdapter(
 
         }
     }
+
+    fun like(position: Int) {
+        if (getItem(position) != null) {
+            if (!getItem(position)!!.transaction.user_liked) {
+                getItem(position)!!.transaction.apply {
+                    reactions[1].counter++
+                    user_liked = true
+                }
+                if (getItem(position)!!.transaction.user_disliked) {
+                    getItem(position)!!.transaction.apply {
+                        reactions[0].counter--
+                        user_disliked = false
+                    }
+                }
+                notifyItemChanged(position)
+            }
+        }
+    }
+
+    fun dislike(position: Int) {
+
+        if (getItem(position) != null) {
+            if(!getItem(position)!!.transaction.user_disliked) {
+                getItem(position)!!.transaction.apply {
+                    reactions[0].counter++
+                    user_disliked = true
+                }
+
+                if(getItem(position)!!.transaction.user_liked) {
+                    getItem(position)!!.transaction.apply {
+                        reactions[1].counter--
+                        user_liked = false
+                    }
+                }
+                notifyItemChanged(position)
+            }
+
+        }
+    }
 }

@@ -88,10 +88,10 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
     }
 
     private fun onLikeClicked(item: FeedResponse, position: Int) {
-
+        listAdapter.like(position)
     }
 
     private fun onDislikeClicked(item: FeedResponse, position: Int) {
-
+        listAdapter.dislike(position)
     }
 }
