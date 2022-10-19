@@ -68,7 +68,6 @@ class ChallengeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun loadChallengeWinnerReportDetails(challengeReportId: Int): ResultWrapper<GetChallengeWinnersReportDetailsResponse> {
     override fun loadChallengeComments(
         challengeId: Int
     ): Flow<PagingData<CommentModel>> {
@@ -104,7 +103,7 @@ class ChallengeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun loadChallengeWinnerReportDetails(challengeId: Int): ResultWrapper<GetChallengeWinnersReportDetailsResponse> {
+    override suspend fun loadChallengeWinnerReportDetails(challengeReportId: Int): ResultWrapper<GetChallengeWinnersReportDetailsResponse> {
         return safeApiCall(Dispatchers.IO){
             thanksApi.getChallengeWinnerReportDetails(challengeReportId)
         }

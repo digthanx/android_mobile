@@ -15,8 +15,8 @@ import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentCommentsChallengeBinding
 import com.teamforce.thanksapp.model.domain.CommentModel
-import com.teamforce.thanksapp.presentation.adapter.CommentsAdapter
 import com.teamforce.thanksapp.presentation.adapter.challenge.ChallengeCommentAdapter
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.CommentsChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +36,7 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            idChallenge = it.getInt(ChallengesFragment.CHALLENGER_ID)
+            idChallenge = it.getInt(CHALLENGER_ID)
         }
     }
 
@@ -133,7 +133,7 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
         fun newInstance(challengeId: Int) =
             CommentsChallengeFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ChallengesFragment.CHALLENGER_ID, challengeId)
+                    putInt(CHALLENGER_ID, challengeId)
                 }
             }
     }

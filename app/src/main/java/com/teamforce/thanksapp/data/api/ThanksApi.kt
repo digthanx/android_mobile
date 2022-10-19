@@ -180,7 +180,6 @@ interface ThanksApi {
         @Path("challenge_id") challengeId: Int
     ): List<GetChallengeResultResponse>
 
-    @GET("/challenge-report/{challenge_report_id}/")
     @POST("/get-comments/")
     suspend fun getChallengeComments(
         @Body challenge_id: GetChallengeCommentsRequest
@@ -196,7 +195,7 @@ interface ThanksApi {
         @Path("comment_id") commentId: Int
     ): CancelTransactionResponse
 
-    @GET("/challenge-report/{challenge_id}/")
+    @GET("/challenge-report/{challenge_report_id}/")
     suspend fun getChallengeWinnerReportDetails(
         @Path("challenge_report_id") challengeReportId: Int,
     ): GetChallengeWinnersReportDetailsResponse
