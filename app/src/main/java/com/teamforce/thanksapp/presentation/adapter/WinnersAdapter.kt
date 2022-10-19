@@ -22,9 +22,11 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class WinnersAdapter
+class WinnersAdapter(
+)
     : ListAdapter<GetChallengeWinnersResponse.Winner, WinnersAdapter.WinnerViewHolder>(DiffCallback)
 {
+     var onWinnerClicked: ((dataOfWinner: GetChallengeWinnersResponse.Winner) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WinnerViewHolder {
         val binding = ItemWinnerBinding
@@ -73,6 +75,9 @@ class WinnersAdapter
                     .load("${Consts.BASE_URL}${currentList[position].participant_photo}".toUri())
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(binding.userAvatar)
+            }
+            binding.userItem.setOnClickListener {
+                onWinnerClicked?.invoke(currentList[position])
             }
         }
 

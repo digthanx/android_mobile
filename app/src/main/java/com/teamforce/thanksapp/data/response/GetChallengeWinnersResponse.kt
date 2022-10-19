@@ -1,8 +1,12 @@
 package com.teamforce.thanksapp.data.response
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 data class GetChallengeWinnersResponse(
     val data: List<Winner>
 ){
+    @Parcelize
     data class Winner(
         val participant_id: Int,
         val participant_photo: String?,
@@ -12,5 +16,5 @@ data class GetChallengeWinnersResponse(
         val nickname: String?,
         val total_received: Int?,
 
-    )
+    ) : Parcelable
 }

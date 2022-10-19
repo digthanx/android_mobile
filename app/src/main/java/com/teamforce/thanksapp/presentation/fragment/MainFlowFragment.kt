@@ -109,7 +109,8 @@ val color =        ColorDrawable(0x000000)
                 destination.id == R.id.editProfileBottomSheetFragment ||
                 destination.id == R.id.createChallengeFragment ||
                 destination.id == R.id.detailsMainChallengeFragment ||
-                destination.id == R.id.createReportFragment){
+                destination.id == R.id.createReportFragment ||
+                destination.id == R.id.challengesWinnersDetailFragment){
                 hideBottomNavigation()
             }else{
                 showBottomNavigation()

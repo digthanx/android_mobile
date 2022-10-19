@@ -185,5 +185,10 @@
             android:id="@+id/createReportFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.CreateReportFragment"
             android:label="CreateReportFragment" /><action android:id="@+id/action_global_createReportFragment" app:destination="@id/createReportFragment"/>
+        <fragment
+            android:id="@+id/challengesWinnersDetailFragment"
+            android:name="com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.ChallengesWinnersDetailFragment"
+            android:label="fragment_challenges_winners_detail"
+            tools:layout="@layout/fragment_challenges_winners_detail" /><action android:id="@+id/action_global_challengesWinnersDetailFragment" app:destination="@id/challengesWinnersDetailFragment"/>
     </navigation>
 </navigation>
