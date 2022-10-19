@@ -17,6 +17,7 @@ import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_WINNER
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
 import com.teamforce.thanksapp.presentation.viewmodel.WinnersChallengeViewModel
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,7 +52,8 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
                 }
                 view.findNavController().navigate(
                     R.id.action_global_challengesWinnersDetailFragment,
-                    bundle)
+                    bundle,
+                    OptionsTransaction().optionForAdditionalInfoFeedFragment)
             }
         }
 
