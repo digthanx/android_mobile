@@ -66,7 +66,7 @@ class WinnersAdapter(
         with(holder){
            convertDateToNecessaryFormat(holder, position)
             binding.amountThanks.text =
-                String.format(binding.root.context.getString(R.string.amountThanks), currentList[position].total_received)
+                String.format(binding.root.context.getString(R.string.amountThanks), currentList[position].award)
             binding.tgNameUser.text = currentList[position]?.nickname
                     ?: (currentList[position].participant_surname + " " + currentList[position].participant_name)
 

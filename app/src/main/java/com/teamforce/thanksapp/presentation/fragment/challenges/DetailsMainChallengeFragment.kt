@@ -1,9 +1,9 @@
 package com.teamforce.thanksapp.presentation.fragment.challenges
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -12,12 +12,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.FragmentDetailChallengeStateAdapter
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsMainChallengeViewModel
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_CREATOR_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_STATE_ACTIVE
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_STATUS
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGE_BACKGROUND
-import com.teamforce.thanksapp.presentation.viewmodel.DetailsMainChallengeViewModel
 import com.teamforce.thanksapp.utils.Consts
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,9 +72,10 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
                 when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.winners)
-                    2 -> tab.text = context?.getString(R.string.contenders)
-                    3 -> tab.text = context?.getString(R.string.myResult)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
+                    3 -> tab.text = context?.getString(R.string.contenders)
+                    4 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
         } else if (creatorId == viewModel.getProfileId()) {
@@ -83,24 +84,27 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
                 when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.winners)
-                    2 -> tab.text = context?.getString(R.string.contenders)
-                    3 -> tab.text = context?.getString(R.string.myResult)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
+                    3 -> tab.text = context?.getString(R.string.contenders)
+                    4 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
         } else if (myResultWasReceivedSuccessfully) {
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
                 when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.winners)
-                    2 -> tab.text = context?.getString(R.string.myResult)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
+                    3 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
         } else {
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
                 when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
-                    1 -> tab.text = context?.getString(R.string.winners)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
                 }
             }.attach()
         }
@@ -150,8 +154,9 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
         if (!challengeBackground.isNullOrEmpty()) {
             binding.standardCard.visibility = View.GONE
             binding.secondaryCard.visibility = View.VISIBLE
+            val urlPhoto = challengeBackground?.replace("_thumb", "")
             Glide.with(requireContext())
-                .load("${Consts.BASE_URL}${challengeBackground}".toUri())
+                .load("${Consts.BASE_URL}${urlPhoto}".toUri())
                 .centerCrop()
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.imageBackground)

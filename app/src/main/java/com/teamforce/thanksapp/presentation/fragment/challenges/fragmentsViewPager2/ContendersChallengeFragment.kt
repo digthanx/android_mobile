@@ -17,7 +17,7 @@ import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ContendersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
-import com.teamforce.thanksapp.presentation.viewmodel.ContendersChallengeViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.ContendersChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,6 +63,9 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         setData()
 
         viewModel.contendersError.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
+        viewModel.checkReportError.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
 

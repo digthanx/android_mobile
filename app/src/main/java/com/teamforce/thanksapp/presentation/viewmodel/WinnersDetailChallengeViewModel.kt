@@ -29,13 +29,13 @@ class WinnersDetailChallengeViewModel @Inject constructor(
     val winnerReportError: LiveData<String> = _winnerReportError
 
     fun loadChallengeWinnerReportDetail(
-        challengeId: Int
+        challengeReportId: Int
     ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _isLoading.postValue(true)
-                when (val result = challengeRepository.loadChallengeWinnerReportDetails(challengeId)) {
+                when (val result = challengeRepository.loadChallengeWinnerReportDetails(challengeReportId)) {
                     is ResultWrapper.Success -> {
                         _winnerReport.postValue(result.value)
                     }

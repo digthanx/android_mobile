@@ -13,7 +13,6 @@ import com.teamforce.thanksapp.data.response.GetTagsResponse
 import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.model.domain.TagModel
-import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +23,6 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONArray
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

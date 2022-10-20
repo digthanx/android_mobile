@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.adapter
+package com.teamforce.thanksapp.presentation.adapter.challenge
 
 import android.annotation.SuppressLint
 import android.os.Bundle

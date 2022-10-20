@@ -15,7 +15,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsInnerChallengeBinding
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesStatus
-import com.teamforce.thanksapp.presentation.viewmodel.DetailsInnerChallengerViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsInnerChallengerViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import dagger.hilt.android.AndroidEntryPoint
@@ -127,13 +127,13 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
 
     private fun enableOrDisableSentReportButton(statusChallenge: String) {
         // Для прода
-//        binding.sendReportBtn.isEnabled = (statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
-//                statusChallenge.trim().contains(ChallengesStatus.REPORT_REFUSED.value, true)) &&
-//                !statusChallenge.trim().contains(ChallengesStatus.YOU_ARE_CREATER.value, ignoreCase = true)
+        binding.sendReportBtn.isEnabled = (statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
+                statusChallenge.trim().contains(ChallengesStatus.REPORT_REFUSED.value, true)) &&
+                !statusChallenge.trim().contains(ChallengesStatus.YOU_ARE_CREATER.value, ignoreCase = true)
         // Для разработки
-        binding.sendReportBtn.isEnabled =
-            statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
-                statusChallenge.trim().contains(ChallengesStatus.REPORT_REFUSED.value, true)
+//        binding.sendReportBtn.isEnabled =
+//            statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
+//                statusChallenge.trim().contains(ChallengesStatus.REPORT_REFUSED.value, true)
     }
 
     private fun convertDateToNecessaryFormat(dateChallenge: String): String {

@@ -36,7 +36,7 @@ suspend fun <T> safeApiCall(
                 is IOException -> ResultWrapper.NetworkError
                 is HttpException -> {
                     val code = throwable.code()
-                    val errorResponse = (throwable.response()?.body().toString())
+                    val errorResponse = (throwable.response()?.errorBody().toString())
                     ResultWrapper.GenericError(code, errorResponse)
                 }
                 else -> {

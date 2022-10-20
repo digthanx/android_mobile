@@ -1,11 +1,9 @@
 package com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -15,11 +13,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.GetChallengeWinnersResponse
 import com.teamforce.thanksapp.databinding.FragmentChallengesWinnersDetailBinding
-import com.teamforce.thanksapp.databinding.FragmentContendersChallengeBinding
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_WINNER
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
-import com.teamforce.thanksapp.presentation.viewmodel.ContendersChallengeViewModel
 import com.teamforce.thanksapp.presentation.viewmodel.WinnersDetailChallengeViewModel
 import com.teamforce.thanksapp.utils.Consts
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,14 +38,14 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        challengeId?.let { viewModel.loadChallengeWinnerReportDetail(it) }
+        dataOfWinner?.reportId?.let { viewModel.loadChallengeWinnerReportDetail(it) }
         viewModel.winnerReport.observe(viewLifecycleOwner){
             binding.nameChallenge.text = it?.challenge?.name
             binding.descriptionChallenge.text = it?.challengeText
             Glide.with(requireContext())
                 .load("${Consts.BASE_URL}${it?.challengePhoto}".toUri())
                 .transition(DrawableTransitionOptions.withCrossFade())
-                .centerCrop()
+                .fitCenter()
                 .error(R.drawable.ic_anon_avatar)
                 .into(binding.imageBackground)
         }

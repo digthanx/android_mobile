@@ -8,5 +8,6 @@ object ChallengesConsts {
     const val CHALLENGER_STATUS = "challenger_status"
     const val CHALLENGER_ID = "challenger_id"
     const val CHALLENGER_WINNER = "challenger_winner"
+    const val CHALLENGER_REPORT_ID = "challenger_report_id"
 
 }

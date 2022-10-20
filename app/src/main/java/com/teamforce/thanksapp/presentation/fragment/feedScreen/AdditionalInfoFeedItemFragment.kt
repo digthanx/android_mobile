@@ -136,7 +136,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     private fun createRecycler() {
         val rv = binding.commentsRv
-        val commentsAdapter = CommentsAdapter(requireContext())
+        val commentsAdapter = CommentsAdapter(requireContext(), viewModel.getProfileId()!!)
         rv.adapter = commentsAdapter
     }
 

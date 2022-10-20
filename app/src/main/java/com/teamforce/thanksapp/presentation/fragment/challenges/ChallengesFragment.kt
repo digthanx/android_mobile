@@ -15,8 +15,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentChallengesBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
-import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
-import com.teamforce.thanksapp.presentation.viewmodel.ChallengesViewModel
+import com.teamforce.thanksapp.presentation.adapter.challenge.ChallengeAdapter
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.ChallengesViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.navigateSafely
 import dagger.hilt.android.AndroidEntryPoint

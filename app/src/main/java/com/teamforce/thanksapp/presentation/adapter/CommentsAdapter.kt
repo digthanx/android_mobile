@@ -2,7 +2,9 @@ package com.teamforce.thanksapp.presentation.adapter
 
 import android.content.Context
 import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
@@ -23,8 +25,10 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class CommentsAdapter
-    (private val context: Context): ListAdapter<CommentModel, CommentsAdapter.CommentViewHolder>(CommentViewHolder.DiffCallback)
+class CommentsAdapter(
+    private val context: Context,
+    private val profileId: String
+    ): ListAdapter<CommentModel, CommentsAdapter.CommentViewHolder>(CommentViewHolder.DiffCallback)
 {
     var onDeleteCommentClickListener: ((commentId: Int) -> Unit)? = null
 
@@ -70,22 +74,25 @@ class CommentsAdapter
         bindDate(holder, position)
 
         // Если имя пользователя совпадает с именем владельца коммента
-        holder.mainCardView.setOnLongClickListener {
-            val popup: PopupMenu = PopupMenu(context, holder.fioSender)
-            popup.menuInflater.inflate(R.menu.comment_context_menu, popup.menu)
-            popup.gravity = Gravity.START
+        if(profileId == currentList[position].user.id.toString()){
+            holder.mainCardView.setOnLongClickListener {
+                val popup: PopupMenu = PopupMenu(context, holder.fioSender)
+                popup.menuInflater.inflate(R.menu.comment_context_menu, popup.menu)
+                popup.gravity = Gravity.START
 
-            popup.setOnMenuItemClickListener {
-                when(it.itemId) {
-                     R.id.delete -> {
-                         onDeleteCommentClickListener?.invoke(currentList[position].id)
+                popup.setOnMenuItemClickListener {
+                    when(it.itemId) {
+                        R.id.delete -> {
+                            onDeleteCommentClickListener?.invoke(currentList[position].id)
+                        }
                     }
+                    true
                 }
+                popup.show()
                 true
             }
-            popup.show()
-            true
         }
+
     }
 
 //    private val onEditMenu =
