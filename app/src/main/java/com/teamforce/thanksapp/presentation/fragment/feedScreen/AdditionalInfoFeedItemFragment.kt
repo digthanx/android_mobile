@@ -224,8 +224,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                         transactionId?.let { transactionId ->
                             addComment(transactionId, binding.messageValueEt.text.toString())
                             closeKeyboard()
-                            binding.messageValueEt.text?.clear()
-
+                            binding.messageValueEt.clearFocus()
                             viewModel.createCommentsLoading.observe(viewLifecycleOwner) { loading ->
                                 if (!loading) loadCommentFromDb(transactionId)
                             }

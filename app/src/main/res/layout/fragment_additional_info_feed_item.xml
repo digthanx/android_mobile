@@ -278,10 +278,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="6"
             android:minLines="1"
-            android:gravity="top|start"
-            android:maxLines="10"
             android:scrollbars="vertical"
             android:layout_marginTop="@dimen/margin_x"
             android:layout_marginHorizontal="8dp"
@@ -301,13 +298,10 @@
                 android:id="@+id/message_value_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="6"
                 android:minLines="1"
                 android:gravity="top|start"
-                android:maxLines="10"
                 android:scrollbars="vertical"
-                android:scrollHorizontally="false"
-                android:inputType="textCapSentences|textMultiLine"
+                android:inputType="textCapSentences|textLongMessage|textMultiLine"
                 android:drawableEnd="@drawable/ic_emotion"/>
 
         </com.google.android.material.textfield.TextInputLayout>
