@@ -183,18 +183,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 updateOutlookLike()
             }
         }
-
-        binding.dislikeBtn.setOnClickListener {
-            transactionId?.let {
-                val mapReaction: Map<String, Int> = mapOf(
-                    "like_kind" to 2,
-                    "transaction" to it
-                )
-                viewModel.pressLike(mapReaction)
-                updateOutlookDislike()
-            }
-        }
-
         inputMessage()
 
         (binding.commentsRv.adapter as CommentsAdapter).onDeleteCommentClickListener =
@@ -286,39 +274,10 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 likesCountReal += 1
                 binding.likeBtn.text = likesCountReal.toString()
                 binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
-                if (isDisliked == true) {
-                    isDisliked = false
-                    binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
-                    dislikesCountReal -= 1
-                    binding.dislikeBtn.text = dislikesCountReal.toString()
-                    return
-                }
             } else {
                 likesCountReal -= 1
                 binding.likeBtn.text = likesCountReal.toString()
                 binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
-
-            }
-        }
-    }
-
-    private fun updateOutlookDislike() {
-        if (isLiked != null && isDisliked != null) {
-            isDisliked = !isDisliked!!
-            if (isDisliked == true) {
-                dislikesCountReal += 1
-                binding.dislikeBtn.text = dislikesCountReal.toString()
-                binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_error_secondary))
-                if (isLiked == true) {
-                    isLiked = false
-                    binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
-                    likesCountReal -= 1
-                    binding.likeBtn.text = likesCountReal.toString()
-                }
-            } else {
-                dislikesCountReal -= 1
-                binding.dislikeBtn.text = dislikesCountReal.toString()
-                binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
 
             }
         }
@@ -383,15 +342,11 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             }
         }
         binding.likeBtn.text = likesCountReal.toString()
-        binding.dislikeBtn.text = dislikesCountReal.toString()
         if (isLiked == true) {
             binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
-            binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
         } else if (isDisliked == true) {
-            binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_error_secondary))
             binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
         } else {
-            binding.dislikeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
             binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
         }
     }
