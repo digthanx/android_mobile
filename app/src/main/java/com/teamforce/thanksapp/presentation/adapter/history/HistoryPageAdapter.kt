@@ -103,7 +103,7 @@ class HistoryPageAdapter(
                 if (data.sender?.sender_tg_name != "anonymous" && data.sender?.sender_tg_name == username
                 ) {
                     // Ты отправитель
-                    if (data.canUserCancel) {
+                    if (data.canUserCancel == true) {
                         refuseTransactionBtn.visibility = View.VISIBLE
                         refuseTransactionBtn.setOnClickListener {
 //                            showAlertDialogForCancelTransaction(dataSet[position].id)
