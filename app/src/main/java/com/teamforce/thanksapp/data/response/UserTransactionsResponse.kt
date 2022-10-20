@@ -7,9 +7,9 @@ import java.util.*
 sealed class HistoryItem {
     data class UserTransactionsResponse(
         val id: Int,
-        val sender: Sender,
+        val sender: Sender?,
         val sender_id: Int?,
-        val recipient: Recipient,
+        val recipient: Recipient?,
         val recipient_id: Int?,
         val transaction_status: TransactionStatus,
         @SerializedName("transaction_class") val transactionClass: TransactionClass,
@@ -24,7 +24,7 @@ sealed class HistoryItem {
     ) : HistoryItem() {
         data class Sender(
             val sender_id: Int,
-            val sender_tg_name: String,
+            val sender_tg_name: String?,
             val sender_first_name: String,
             val sender_surname: String,
             val sender_photo: String?
@@ -33,7 +33,7 @@ sealed class HistoryItem {
 
         data class Recipient(
             val recipient_id: Int,
-            val recipient_tg_name: String,
+            val recipient_tg_name: String?,
             val recipient_first_name: String,
             val recipient_surname: String,
             val recipient_photo: String?
