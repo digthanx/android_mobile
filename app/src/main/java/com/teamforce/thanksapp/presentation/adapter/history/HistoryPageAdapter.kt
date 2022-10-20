@@ -100,10 +100,10 @@ class HistoryPageAdapter(
                 root.id = data.id
                 val status = data.transaction_status.id
                 transferIconIv.setImageResource(R.drawable.ic_anon_avatar)
-                if (data.sender.sender_tg_name != "anonymous" && data.sender.sender_tg_name == username
+                if (data.sender?.sender_tg_name != "anonymous" && data.sender?.sender_tg_name == username
                 ) {
                     // Ты отправитель
-                    if (data.canUserCancel) {
+                    if (data.canUserCancel == true) {
                         refuseTransactionBtn.visibility = View.VISIBLE
                         refuseTransactionBtn.setOnClickListener {
 //                            showAlertDialogForCancelTransaction(dataSet[position].id)
@@ -116,17 +116,17 @@ class HistoryPageAdapter(
                     valueTransfer.text = " " + data.amount
                     tgNameUser.text = String.format(
                         binding.root.context.getString(R.string.tgName),
-                        data.recipient.recipient_tg_name
+                        data.recipient?.recipient_tg_name
                     )
                     descr_transaction_1 = binding.root.context.getString(R.string.youSended)
                     labelStatusTransaction = binding.root.context.getString(R.string.statusTransfer)
-                    if (!data.recipient.recipient_photo.isNullOrEmpty()) {
+                    if (!data.recipient?.recipient_photo.isNullOrEmpty()) {
                         Glide.with(binding.root.context)
-                            .load("${Consts.BASE_URL}${data.recipient.recipient_photo}".toUri())
+                            .load("${Consts.BASE_URL}${data.recipient?.recipient_photo}".toUri())
                             .apply(RequestOptions.bitmapTransform(CircleCrop()))
                             .into(transferIconIv)
                         avatar =
-                            "${Consts.BASE_URL}${data.recipient.recipient_photo}"
+                            "${Consts.BASE_URL}${data.recipient?.recipient_photo}"
                     }
 
                     if (status.equals("A")) {
@@ -186,7 +186,7 @@ class HistoryPageAdapter(
                         //holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
                     }
                 } else {
-                    if (data.sender.sender_tg_name == "anonymous") {
+                    if (data.sender?.sender_tg_name == "anonymous") {
                         descr_transaction_1 = binding.root.context.getString(R.string.youGot)
                         tgNameUser.text = " Аноним"
                         labelStatusTransaction =
@@ -196,19 +196,19 @@ class HistoryPageAdapter(
                             binding.root.context.getString(R.string.comingTransfer)
                     } else {
                         // Ты получатель
-                        if (!data.sender.sender_photo.isNullOrEmpty()) {
+                        if (!data.sender?.sender_photo.isNullOrEmpty()) {
                             Glide.with(binding.root.context)
-                                .load("${Consts.BASE_URL}${data.sender.sender_photo}".toUri())
+                                .load("${Consts.BASE_URL}${data.sender?.sender_photo}".toUri())
                                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                                 .into(transferIconIv)
                             avatar =
-                                "${Consts.BASE_URL}${data.sender.sender_photo}"
+                                "${Consts.BASE_URL}${data.sender?.sender_photo}"
                         }
                         descr_transaction_1 = binding.root.context.getString(R.string.youGot)
 
                         tgNameUser.text = String.format(
                             binding.root.context.getString(R.string.tgName),
-                            data.sender.sender_tg_name
+                            data.sender?.sender_tg_name
                         )
                         labelStatusTransaction =
                             binding.root.context.getString(R.string.typeTransfer)
@@ -359,9 +359,9 @@ class HistoryPageAdapter(
             username: String,
             data: HistoryItem.UserTransactionsResponse
         ) {
-            if (data.sender.sender_tg_name == username) {
+            if (data.sender?.sender_tg_name == username) {
                 userId = data.recipient_id
-            } else if ((data.sender.sender_tg_name != "anonymous" && data.recipient.recipient_tg_name == username)) {
+            } else if ((data.sender?.sender_tg_name != "anonymous" && data.recipient?.recipient_tg_name == username)) {
                 userId = data.sender_id
             }
 
