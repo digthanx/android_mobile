@@ -118,37 +118,20 @@
                     android:textColor="@color/general_brand" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/toggleButtonGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@id/date_time"
-                app:layout_constraintTop_toBottomOf="@id/senderAndReceiver">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/dislike_btn"
-                    android:layout_width="121dp"
-                    android:layout_height="wrap_content"
-                    app:cornerRadius="8dp"
-                    android:textColor="@color/general_contrast"
-                    android:layout_marginEnd="4dp"
-                    app:icon="@drawable/ic_dislike"
-                    app:iconGravity="textStart"
-                    android:textSize="12sp"
-                    style="@style/ReactionBtnFeed"
-                    />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/like_btn"
-                    android:layout_width="121dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/ic_like"
                     app:iconGravity="textStart"
+                    android:layout_marginHorizontal="16dp"
                     android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@id/date_time"
+                    app:layout_constraintTop_toBottomOf="@id/senderAndReceiver"
                     style="@style/ReactionBtnFeed" />
 
-            </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/linear_info"
