@@ -15,9 +15,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentChallengesBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
-import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
-import com.teamforce.thanksapp.presentation.viewmodel.ChallengesViewModel
+import com.teamforce.thanksapp.presentation.adapter.challenge.ChallengeAdapter
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.ChallengesViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
+import com.teamforce.thanksapp.utils.navigateSafely
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,8 +40,15 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
         loadingChallenge()
         updatingChallenges()
 
-        binding.createBtn.setOnClickListener {
+        binding.profile.setOnClickListener {
             findNavController().navigate(
+                R.id.action_challengesFragment_to_profileGraph, null,
+                OptionsTransaction().optionForProfileFragment
+            )
+        }
+
+        binding.createBtn.setOnClickListener {
+            findNavController().navigateSafely(
                 R.id.action_challengesFragment_to_createChallengeFragment,
                 null,
                 OptionsTransaction().optionForProfileFromEditProfile
@@ -127,15 +135,4 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
 //            }
 //        )
     }
-
-    companion object {
-        const val CHALLENGER_STATE_ACTIVE = "challenger_state_active"
-        const val CHALLENGER_CREATOR_ID = "challenger_creator_id"
-        const val CHALLENGE_BACKGROUND = "challenge_background"
-        const val CHALLENGER_STATUS = "challenger_status"
-        const val CHALLENGER_ID = "challenger_id"
-    }
-
-
-
 }

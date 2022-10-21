@@ -1,10 +1,9 @@
-package com.teamforce.thanksapp.presentation.viewmodel
+package com.teamforce.thanksapp.presentation.viewmodel.challenge
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamforce.thanksapp.data.response.GetChallengeContendersResponse
 import com.teamforce.thanksapp.data.response.GetChallengeWinnersResponse
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
 import com.teamforce.thanksapp.utils.ResultWrapper

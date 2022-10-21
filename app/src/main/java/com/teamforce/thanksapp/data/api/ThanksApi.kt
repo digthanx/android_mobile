@@ -2,17 +2,14 @@ package com.teamforce.thanksapp.data.api
 
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
-import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.ChallengeModelById
-import com.teamforce.thanksapp.model.domain.TagModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
-import java.io.File
 
 interface ThanksApi {
 
@@ -143,7 +140,7 @@ interface ThanksApi {
         @Part photo: MultipartBody.Part?,
         @Part("name") name: RequestBody,
         @Part("description") description: RequestBody,
-        @Part("end_at") endAt: RequestBody,
+        @Part("end_at") endAt: RequestBody?,
         @Part("start_balance") amountFund: RequestBody,
         @Part("parameter_id") parameter_id: RequestBody,
         @Part("parameter_value") parameter_value: RequestBody,
@@ -176,7 +173,7 @@ interface ThanksApi {
         @Body data: CheckChallengeReportRequest?
     ): CheckReportResponse
 
-    @GET("/challenge-winners/{challenge_id}/")
+    @GET("/challenge-winners-reports/{challenge_id}/")
     suspend fun getChallengeWinners(
         @Path("challenge_id") challengeId: Int,
     ): List<GetChallengeWinnersResponse.Winner>
@@ -185,4 +182,24 @@ interface ThanksApi {
     suspend fun getChallengeResult(
         @Path("challenge_id") challengeId: Int
     ): List<GetChallengeResultResponse>
+
+    @POST("/get-comments/")
+    suspend fun getChallengeComments(
+        @Body challenge_id: GetChallengeCommentsRequest
+    ): GetChallengeCommentsResponse
+
+    @POST("/create-comment/")
+    suspend fun createChallengeComment(
+        @Body data: CreateChallengeCommentRequest
+    ): CancelTransactionResponse
+
+    @DELETE("/delete-comment/{comment_id}/")
+    suspend fun deleteChallengeComment(
+        @Path("comment_id") commentId: Int
+    ): CancelTransactionResponse
+
+    @GET("/challenge-report/{challenge_report_id}/")
+    suspend fun getChallengeWinnerReportDetails(
+        @Path("challenge_report_id") challengeReportId: Int,
+    ): GetChallengeWinnersReportDetailsResponse
 }

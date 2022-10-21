@@ -13,10 +13,9 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsInnerChallengeBinding
-import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesStatus
-import com.teamforce.thanksapp.presentation.viewmodel.DetailsInnerChallengerViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsInnerChallengerViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import dagger.hilt.android.AndroidEntryPoint
@@ -115,18 +114,26 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(binding.userAvatar)
             }
-            it.status?.let { status ->
-               // binding.sendReportBtn.text = status
-                enableOrDisableSentReportButton(status)
-                binding.stateAboutReports.text = status
+
+            if(it.status.isNullOrEmpty()){
+                binding.stateAboutReports.visibility = View.GONE
+            }else{
+                binding.stateAboutReports.visibility = View.VISIBLE
+                enableOrDisableSentReportButton(it.status)
+                binding.stateAboutReports.text = it.status
             }
         }
     }
 
     private fun enableOrDisableSentReportButton(statusChallenge: String) {
-        binding.sendReportBtn.isEnabled = statusChallenge == ChallengesStatus.YOU_ARE_CREATER.value ||
-                statusChallenge == ChallengesStatus.YOU_CAN_SENT_REPORT.value ||
-                statusChallenge == ChallengesStatus.REPORT_REFUSED.value
+        // Для прода
+        binding.sendReportBtn.isEnabled = (statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
+                statusChallenge.trim().contains(ChallengesStatus.REPORT_REFUSED.value, true)) &&
+                !statusChallenge.trim().contains(ChallengesStatus.YOU_ARE_CREATER.value, ignoreCase = true)
+        // Для разработки
+//        binding.sendReportBtn.isEnabled =
+//            statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
+//                statusChallenge.trim().contains(ChallengesStatus.REPORT_REFUSED.value, true)
     }
 
     private fun convertDateToNecessaryFormat(dateChallenge: String): String {

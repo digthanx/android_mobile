@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.response.GetChallengeResultResponse
+import com.teamforce.thanksapp.data.response.GetChallengeWinnersReportDetailsResponse
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
-import com.teamforce.thanksapp.model.domain.ChallengeModelById
 import com.teamforce.thanksapp.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,37 +15,36 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MyResultChallengeViewModel @Inject constructor(
+class WinnersDetailChallengeViewModel @Inject constructor(
     private val challengeRepository: ChallengeRepository
 ): ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _myResult = MutableLiveData<List<GetChallengeResultResponse>?>()
-    val myResult: LiveData<List<GetChallengeResultResponse>?> = _myResult
-    private val _myResultError = MutableLiveData<String>()
-    val myResultError: LiveData<String> = _myResultError
+    private val _winnerReport = MutableLiveData<GetChallengeWinnersReportDetailsResponse?>()
+    val winnerReport: LiveData<GetChallengeWinnersReportDetailsResponse?> = _winnerReport
 
+    private val _winnerReportError = MutableLiveData<String>()
+    val winnerReportError: LiveData<String> = _winnerReportError
 
-
-    fun loadChallengeResult(
-        challengeId: Int
+    fun loadChallengeWinnerReportDetail(
+        challengeReportId: Int
     ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _isLoading.postValue(true)
-                when (val result = challengeRepository.loadChallengeResult(challengeId)) {
+                when (val result = challengeRepository.loadChallengeWinnerReportDetails(challengeReportId)) {
                     is ResultWrapper.Success -> {
-                        _myResult.postValue(result.value)
+                        _winnerReport.postValue(result.value)
                     }
                     else -> {
                         if (result is ResultWrapper.GenericError) {
-                            _myResultError.postValue(result.error + " " + result.code)
+                            _winnerReportError.postValue(result.error + " " + result.code)
 
                         } else if (result is ResultWrapper.NetworkError) {
-                            _myResultError.postValue("Ошибка сети")
+                            _winnerReportError.postValue("Ошибка сети")
                         }
                     }
                 }

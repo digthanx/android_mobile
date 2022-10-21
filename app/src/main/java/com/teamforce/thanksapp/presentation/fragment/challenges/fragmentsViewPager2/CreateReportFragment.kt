@@ -3,30 +3,22 @@ package com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPa
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.data.request.CreateReportRequest
 import com.teamforce.thanksapp.databinding.FragmentCreateReportBinding
-import com.teamforce.thanksapp.databinding.FragmentProfileBinding
-import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment.Companion.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
-import com.teamforce.thanksapp.presentation.viewmodel.CreateReportViewModel
-import com.teamforce.thanksapp.utils.OptionsTransaction
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.CreateReportViewModel
 import com.teamforce.thanksapp.utils.getPath
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -234,7 +226,7 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
         fun newInstance(challengeId: Int) =
             CreateReportFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ChallengesFragment.CHALLENGER_ID, challengeId)
+                    putInt(CHALLENGER_ID, challengeId)
                 }
             }
     }

@@ -22,9 +22,11 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class WinnersAdapter
+class WinnersAdapter(
+)
     : ListAdapter<GetChallengeWinnersResponse.Winner, WinnersAdapter.WinnerViewHolder>(DiffCallback)
 {
+     var onWinnerClicked: ((dataOfWinner: GetChallengeWinnersResponse.Winner) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WinnerViewHolder {
         val binding = ItemWinnerBinding
@@ -64,7 +66,7 @@ class WinnersAdapter
         with(holder){
            convertDateToNecessaryFormat(holder, position)
             binding.amountThanks.text =
-                String.format(binding.root.context.getString(R.string.amountThanks), currentList[position].total_received)
+                String.format(binding.root.context.getString(R.string.amountThanks), currentList[position].award)
             binding.tgNameUser.text = currentList[position]?.nickname
                     ?: (currentList[position].participant_surname + " " + currentList[position].participant_name)
 
@@ -73,6 +75,9 @@ class WinnersAdapter
                     .load("${Consts.BASE_URL}${currentList[position].participant_photo}".toUri())
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(binding.userAvatar)
+            }
+            binding.userItem.setOnClickListener {
+                onWinnerClicked?.invoke(currentList[position])
             }
         }
 

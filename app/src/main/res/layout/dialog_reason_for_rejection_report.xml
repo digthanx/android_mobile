@@ -52,7 +52,7 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/refuse_btn"
+        android:id="@+id/reject_btn"
         style="@style/DefaultButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

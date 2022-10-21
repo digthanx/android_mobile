@@ -16,6 +16,7 @@ import com.teamforce.thanksapp.presentation.adapter.history.HistoryPageAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.history.HistoryListViewModel
 import com.teamforce.thanksapp.utils.Result
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -25,12 +26,11 @@ class HistoryListFragment : Fragment(R.layout.fragment_history_list) {
     private val viewModel: HistoryListViewModel by viewModels()
     private var listAdapter: HistoryPageAdapter? = null
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sentOnly = arguments?.getInt(SENT_ONLY_KEY)
-        val receivedOnly = arguments?.getInt(RECEIVED_ONLY)
+        val sentOnly = arguments?.getInt(SENT_ONLY_KEY)!!
+        val receivedOnly = arguments?.getInt(RECEIVED_ONLY)!!
 
         listAdapter = HistoryPageAdapter(viewModel.getUsername()!!, ::onCancelClicked)
 
@@ -51,14 +51,23 @@ class HistoryListFragment : Fragment(R.layout.fragment_history_list) {
             binding.refreshLayout.isRefreshing = true
         }
 
-        lifecycleScope.launch {
-            viewModel.getHistory(
-                sentOnly!!,
-                receivedOnly!!
-            ).collect() {
-                binding.refreshLayout.isRefreshing = false
+        viewLifecycleOwner.lifecycleScope.launch {
 
-                listAdapter?.submitData(it)
+            if (sentOnly == -1 && receivedOnly == -1) {
+                binding.refreshLayout.isRefreshing = false
+                viewModel.allHistory.collectLatest {
+                    listAdapter?.submitData(it)
+                }
+            } else if (sentOnly == 1 && receivedOnly == -1) {
+                binding.refreshLayout.isRefreshing = false
+                viewModel.sent.collectLatest {
+                    listAdapter?.submitData(it)
+                }
+            } else {
+                binding.refreshLayout.isRefreshing = false
+                viewModel.received.collectLatest {
+                    listAdapter?.submitData(it)
+                }
             }
         }
 
