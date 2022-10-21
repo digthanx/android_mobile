@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
 import com.teamforce.thanksapp.model.domain.ChallengeModel
@@ -35,9 +36,13 @@ class ChallengesViewModel @Inject constructor(
     private val _getChallengesError = MutableLiveData<String>()
     val getChallengesError: LiveData<String> = _getChallengesError
 
-    fun loadActiveChallenges(): Flow<PagingData<ChallengeModel>> {
-        return challengeRepository.loadChallenge().cachedIn(viewModelScope)
-    }
+    val allChallenge = challengeRepository.loadChallenge().stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = PagingData.empty()
+        ).cachedIn(viewModelScope).map {
+            it.map { it }
+        }
 
 
     fun loadChallenges(){

@@ -50,8 +50,6 @@ interface ChallengeRepository {
         challengeReportId: Int,
     ): ResultWrapper<GetChallengeWinnersReportDetailsResponse>
 
-    fun loadChallenge(
-
-    ): Flow<PagingData<ChallengeModel>>
+    fun loadChallenge(): Flow<PagingData<ChallengeModel>>
 
 }

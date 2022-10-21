@@ -6,12 +6,9 @@ import androidx.paging.PagingData
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CheckChallengeReportRequest
 import com.teamforce.thanksapp.data.request.CreateChallengeCommentRequest
-import com.teamforce.thanksapp.data.request.CreateReportRequest
-import com.teamforce.thanksapp.data.request.GetChallengeCommentsRequest
 import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.data.sources.challenge.ChallengeCommentsPagingSource
 import com.teamforce.thanksapp.data.sources.challenge.ChallengePagingSource
-import com.teamforce.thanksapp.data.sources.history.HistoryPagingSource
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.CommentModel
