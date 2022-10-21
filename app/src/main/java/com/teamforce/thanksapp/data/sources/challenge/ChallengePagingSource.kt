@@ -29,7 +29,7 @@ class ChallengePagingSource(
         }
 
         return try {
-            val response = api.getChallengesWithInfinityScroll(
+            val response = api.getChallenges(
                 limit = Consts.PAGE_SIZE,
                 offset = pageIndex
             )

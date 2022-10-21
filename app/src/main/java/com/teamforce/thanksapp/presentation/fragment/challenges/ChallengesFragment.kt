@@ -76,7 +76,6 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
         val toolbar = binding.toolbar
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setupWithNavController(toolbar, navController, appBarConfiguration)
-
     }
 
     private fun initAdapter(){
@@ -121,60 +120,4 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
         }
     }
 
-//    private fun loadingChallenge(){
-//        viewModel.isLoading.observe(
-//            viewLifecycleOwner,
-//            Observer { isLoading ->
-//                if (isLoading) {
-//                    binding.challengeRv.visibility = View.VISIBLE
-//                    binding.swipeRefreshLayout.isRefreshing = true
-//                } else {
-//                    binding.challengeRv.visibility = View.VISIBLE
-//                    binding.swipeRefreshLayout.isRefreshing = false
-//                   // (binding.challengeRv.adapter as ChallengeAdapter).submitList(allChallenges)
-//
-//                }
-//            }
-//        )
-//    }
-
-//    private fun updatingChallenges(){
-//
-//        viewLifecycleOwner.lifecycleScope.launch{
-//            viewModel.loadActiveChallenges().collectLatest { challenges ->
-//                listAdapter?.submitData(challenges)
-//            }
-//        }
-//
-//        viewModel.challenges.observe(
-//            viewLifecycleOwner,
-//            Observer {
-//                allChallenges = it!!
-//                if (binding.chipGroup.checkedChipId != R.id.chipAllChallenge) {
-//                    Log.d("Token", " Challenges ${allChallenges}")
-//                    (binding.challengeRv.adapter as ChallengePagerAdapter).submitData(allChallenges)
-//                }
-//                (binding.challengeRv.adapter as ChallengePagerAdapter).submitData(it)
-//            }
-//        )
-
-//        viewModel.allFeeds.observe(
-//            viewLifecycleOwner,
-//            Observer {
-//                allFeedsList = it!!
-//                if (binding.chipGroup.checkedChipId == R.id.chipAllEvent) {
-//                    (binding.feedRv.adapter as FeedAdapter).submitList(allFeedsList)
-//                }
-//            }
-//        )
-//        viewModel.myFeeds.observe(
-//            viewLifecycleOwner,
-//            Observer {
-//                mineFeedsList = it
-//                if (binding.chipGroup.checkedChipId == R.id.chipMineEvent) {
-//                    (binding.feedRv.adapter as FeedAdapter).submitList(mineFeedsList)
-//                }
-//            }
-//        )
-//    }
 }
