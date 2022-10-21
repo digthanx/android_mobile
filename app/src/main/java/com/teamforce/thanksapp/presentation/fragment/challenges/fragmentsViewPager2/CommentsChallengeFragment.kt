@@ -87,31 +87,43 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
                     binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_CUSTOM
                     binding.textFieldMessage.endIconDrawable =
                         context?.getDrawable(R.drawable.ic_send_vector)
-                    binding.textFieldMessage.setEndIconOnClickListener {
-                        Log.d("Token", "Отправка сообщения")
-                        idChallenge?.let { challengeId ->
-                            createComment(challengeId, binding.messageValueEt.text.toString())
-                            closeKeyboard()
-                            binding.messageValueEt.text?.clear()
-                        }
-
-                    }
                 } else {
-                    binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
+                    binding.textFieldMessage.endIconDrawable =
+                        context?.getDrawable(R.drawable.ic_emotion)
+                }
+                binding.textFieldMessage.setEndIconOnClickListener {
+                    sendMessage()
                 }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
 
-            override fun afterTextChanged(s: Editable) {}
+            override fun afterTextChanged(s: Editable) {
+
+            }
         })
+
         if (binding.messageValueEt.text?.trim().toString().isEmpty()) {
             // Запретить отправку
             binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
             binding.textFieldMessage.isEndIconCheckable = false
         }
+        idChallenge?.let { challengeId ->
+            viewModel.createCommentsLoading.observe(viewLifecycleOwner) { loading ->
+                if (!loading) loadComment(challengeId)
+            }
+        }
+    }
 
+    private fun sendMessage(){
+        idChallenge?.let { challengeId ->
+            if(binding.messageValueEt.text?.trim()?.length!! > 0){
+                createComment(challengeId, binding.messageValueEt.text.toString())
+            }
+            binding.messageValueEt.text?.clear()
+            closeKeyboard()
+        }
     }
 
     private fun closeKeyboard() {

@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.net.toUri
+import androidx.core.view.updatePadding
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -198,8 +200,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     }
 
-
-
     private fun inputMessage() {
         binding.messageValueEt.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -207,56 +207,43 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                     binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_CUSTOM
                     binding.textFieldMessage.endIconDrawable =
                         context?.getDrawable(R.drawable.ic_send_vector)
-                    binding.textFieldMessage.setEndIconOnClickListener {
-                        Log.d("Token", "Отправка сообщения")
-                        transactionId?.let { transactionId ->
-                            addComment(transactionId, binding.messageValueEt.text.toString())
-                            closeKeyboard()
-                            binding.messageValueEt.text?.clear()
-
-                            viewModel.createCommentsLoading.observe(viewLifecycleOwner) { loading ->
-                                if (!loading) loadCommentFromDb(transactionId)
-                            }
-                        }
-
-                    }
                 } else {
-                    binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
+                    binding.textFieldMessage.endIconDrawable =
+                        context?.getDrawable(R.drawable.ic_emotion)
+                }
+                binding.textFieldMessage.setEndIconOnClickListener {
+                    sendMessage()
                 }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
 
-            override fun afterTextChanged(s: Editable) {}
+            override fun afterTextChanged(s: Editable) {
+
+            }
         })
+
         if (binding.messageValueEt.text?.trim().toString().isEmpty()) {
             // Запретить отправку
             binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
             binding.textFieldMessage.isEndIconCheckable = false
         }
+        transactionId?.let { transactionId ->
+            viewModel.createCommentsLoading.observe(viewLifecycleOwner) { loading ->
+                if (!loading) loadCommentFromDb(transactionId)
+            }
+        }
+    }
 
-//        viewModel.createCommentsLoadingError.observe(viewLifecycleOwner) {
-////            binding.sendCoinLinear.visibility = View.GONE
-////            binding.textField.visibility = View.VISIBLE
-////            binding.messageValueEt.setText("")
-////            binding.countValueEt.setText("")
-//            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-//            val snack = Snackbar.make(
-//                requireView(),
-//                it,
-//                Snackbar.LENGTH_LONG
-//            )
-////            binding.sendCoinBtn.isClickable = true
-////            binding.sendCoinBtn.isEnabled = true
-//            snack.setTextMaxLines(3)
-//                .setTextColor(context?.getColor(R.color.white)!!)
-//                .setAction(context?.getString(R.string.OK)!!) {
-//                    snack.dismiss()
-//                }
-//            snack.show()
-//        }
-
+    private fun sendMessage(){
+        transactionId?.let { transactionId ->
+            if(binding.messageValueEt.text?.trim()?.length!! > 0){
+                addComment(transactionId, binding.messageValueEt.text.toString())
+            }
+            binding.messageValueEt.text?.clear()
+            closeKeyboard()
+        }
     }
 
     private fun closeKeyboard() {

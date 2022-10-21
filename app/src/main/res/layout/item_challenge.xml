@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainCard"
     android:layout_width="match_parent"
-    android:layout_height="201dp"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     app:cardBackgroundColor="@color/general_brand_secondary"
     app:cardCornerRadius="12dp">
@@ -44,13 +44,14 @@
         <TextView
             android:id="@+id/challenge_title"
             style="@style/StandardText4Medium.Black"
-            android:layout_width="wrap_content"
+            android:layout_width="205dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="Пробежать 100км"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/state_challenge_card"/>
 
         <LinearLayout
             android:id="@+id/winners_linear"
