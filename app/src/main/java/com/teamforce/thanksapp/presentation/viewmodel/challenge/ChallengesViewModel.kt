@@ -5,11 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -20,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChallengesViewModel @Inject constructor(
     private val thanksApi: ThanksApi,
+    private val challengeRepository: ChallengeRepository
 ): ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -29,6 +34,10 @@ class ChallengesViewModel @Inject constructor(
     val challenges: LiveData<List<ChallengeModel>> = _challenges
     private val _getChallengesError = MutableLiveData<String>()
     val getChallengesError: LiveData<String> = _getChallengesError
+
+    fun loadActiveChallenges(): Flow<PagingData<ChallengeModel>> {
+        return challengeRepository.loadChallenge().cachedIn(viewModelScope)
+    }
 
 
     fun loadChallenges(){
@@ -66,5 +75,7 @@ class ChallengesViewModel @Inject constructor(
                 })
         }
     }
+
+
 
 }

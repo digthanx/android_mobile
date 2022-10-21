@@ -146,6 +146,12 @@ interface ThanksApi {
     @GET("/challenges/")
     fun getChallenges(): Call<List<ChallengeModel>>
 
+    @GET("/challenges/")
+    suspend fun getChallengesWithInfinityScroll(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): List<ChallengeModel>
+
     @GET("/challenges/{challenge_id}/")
     fun getChallenge(
         @Path("challenge_id") commentId: Int
