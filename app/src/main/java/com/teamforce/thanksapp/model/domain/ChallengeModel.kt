@@ -1,5 +1,9 @@
 package com.teamforce.thanksapp.model.domain
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class ChallengeModel(
     val id: Int,
     val name: String?,
@@ -17,4 +21,4 @@ data class ChallengeModel(
     val prize_size: Int?,
     val awardees: Int?,
     val active: Boolean
-)
+): Parcelable
