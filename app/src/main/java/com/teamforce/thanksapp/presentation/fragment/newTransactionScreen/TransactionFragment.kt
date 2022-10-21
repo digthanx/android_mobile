@@ -263,7 +263,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         userInput.addTextChangedListener(object : TextWatcher {
             // TODO Возможно стоит будет оптимизировать вызов списка пользователей
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.trim().isNotEmpty() && count > before && s.toString() != user?.tgName) {
+                if (s.trim().isNotEmpty() && s.toString() != user?.tgName) {
                     viewModel.loadUsersList(s.toString())
 
                 } else if (binding.usersEt.text?.trim().toString().isEmpty()) {
