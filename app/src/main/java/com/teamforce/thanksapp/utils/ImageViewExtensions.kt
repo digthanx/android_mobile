@@ -16,7 +16,7 @@ fun ImageView.viewSinglePhoto(image: String, context: Context) {
     StfalconImageViewer.Builder<String>(context, images){ imageView, image ->
         Glide.with(this)
             .load("${Consts.BASE_URL}${image}".toUri())
-            .centerCrop()
+            .fitCenter()
             .transition(DrawableTransitionOptions.withCrossFade())
             .error(R.drawable.ic_anon_avatar)
             .into(imageView)
@@ -30,7 +30,7 @@ fun ShapeableImageView.viewSinglePhoto(image: String, context: Context) {
     StfalconImageViewer.Builder<String>(context, images) { imageView, image ->
         Glide.with(this)
             .load("${Consts.BASE_URL}${image}".toUri())
-            .centerCrop()
+            .fitCenter()
             .transition(DrawableTransitionOptions.withCrossFade())
             .error(R.drawable.ic_anon_avatar)
             .into(imageView)
