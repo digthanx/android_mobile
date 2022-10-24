@@ -18,7 +18,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.imageview.ShapeableImageView
+import com.stfalcon.imageviewer.StfalconImageViewer
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
@@ -142,6 +145,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     .into(binding.userAvatar)
             } else {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+            }
+
+            binding.userAvatar.setOnClickListener { view ->
+                it.profile.photo?.let { photo ->
+                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                }
             }
         }
     }
