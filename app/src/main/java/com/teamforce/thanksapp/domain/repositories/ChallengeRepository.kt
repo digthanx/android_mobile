@@ -2,6 +2,7 @@ package com.teamforce.thanksapp.domain.repositories
 
 import androidx.paging.PagingData
 import com.teamforce.thanksapp.data.response.*
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.utils.ResultWrapper
 import kotlinx.coroutines.flow.Flow
@@ -48,5 +49,7 @@ interface ChallengeRepository {
     suspend fun loadChallengeWinnerReportDetails(
         challengeReportId: Int,
     ): ResultWrapper<GetChallengeWinnersReportDetailsResponse>
+
+    fun loadChallenge(): Flow<PagingData<ChallengeModel>>
 
 }

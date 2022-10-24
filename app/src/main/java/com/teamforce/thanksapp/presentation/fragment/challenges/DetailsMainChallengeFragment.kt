@@ -11,13 +11,10 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.presentation.adapter.FragmentDetailChallengeStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsMainChallengeViewModel
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_CREATOR_ID
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_STATE_ACTIVE
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_STATUS
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGE_BACKGROUND
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_DATA
 import com.teamforce.thanksapp.utils.Consts
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,20 +26,13 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
     private val viewModel: DetailsMainChallengeViewModel by viewModels()
 
-    private var statusChallenge: String? = null
-    private var idChallenge: Int? = null
-    private var challengeActive: Boolean? = null
-    private var challengeBackground: String? = null
-    private var creatorId: Int? = null
+
+    private var dataOfChallenge: ChallengeModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            statusChallenge = it.getString(CHALLENGER_STATUS)
-            idChallenge = it.getInt(CHALLENGER_ID)
-            challengeActive = it.getBoolean(CHALLENGER_STATE_ACTIVE)
-            challengeBackground = it.getString(CHALLENGE_BACKGROUND)
-            creatorId = it.getInt(CHALLENGER_CREATOR_ID)
+            dataOfChallenge = it.getParcelable(CHALLENGER_DATA)
         }
     }
 
@@ -58,7 +48,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
     private fun initTabLayoutMediator(myResultWasReceivedSuccessfully: Boolean) {
         // Нужно добавить изменения в количестве вкладок в зависимости от статуса чалика
-        val detailInnerAdapter = creatorId?.let { creatorId ->
+        val detailInnerAdapter = dataOfChallenge?.creator_id?.let { creatorId ->
             FragmentDetailChallengeStateAdapter(
                 requireActivity(),
                 creatorId = creatorId,
@@ -66,9 +56,9 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                 myResultWasReceivedSuccessfully = myResultWasReceivedSuccessfully
             )
         }
-        idChallenge?.let { detailInnerAdapter?.setChallengeId(it) }
+        dataOfChallenge?.id?.let { detailInnerAdapter?.setChallengeId(it) }
         binding.pager.adapter = detailInnerAdapter
-        if (creatorId == viewModel.getProfileId() && myResultWasReceivedSuccessfully) {
+        if (dataOfChallenge?.creator_id == viewModel.getProfileId() && myResultWasReceivedSuccessfully) {
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
                 when (position) {
                     0 -> tab.text = context?.getString(R.string.details)
@@ -78,7 +68,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                     4 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
-        } else if (creatorId == viewModel.getProfileId()) {
+        } else if (dataOfChallenge?.creator_id == viewModel.getProfileId()) {
             // Пока что если ты создать
             // я всегда буду показывать мой результат пока от бека нет поля
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
@@ -111,7 +101,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     }
 
     private fun loadDataFromDb() {
-        idChallenge?.let {
+        dataOfChallenge?.id?.let {
             viewModel.loadChallengeResult(it)
         }
     }
@@ -136,7 +126,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     }
 
     private fun setData() {
-        if (challengeActive == true) {
+        if (dataOfChallenge?.active == true) {
             binding.statusActiveText.text = requireContext().getString(R.string.active)
             binding.statusActiveTextSecondary.text = requireContext().getString(R.string.active)
             binding.statusActiveCard
@@ -151,10 +141,10 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
             binding.statusActiveCardSecondary
                 .setCardBackgroundColor(requireContext().getColor(R.color.minor_success))
         }
-        if (!challengeBackground.isNullOrEmpty()) {
+        if (!dataOfChallenge?.photo.isNullOrEmpty()) {
             binding.standardCard.visibility = View.GONE
             binding.secondaryCard.visibility = View.VISIBLE
-            val urlPhoto = challengeBackground?.replace("_thumb", "")
+            val urlPhoto = dataOfChallenge?.photo?.replace("_thumb", "")
             Glide.with(requireContext())
                 .load("${Consts.BASE_URL}${urlPhoto}".toUri())
                 .centerCrop()

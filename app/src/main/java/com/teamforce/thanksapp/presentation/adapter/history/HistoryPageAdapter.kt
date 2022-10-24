@@ -100,19 +100,18 @@ class HistoryPageAdapter(
                 root.id = data.id
                 val status = data.transaction_status.id
                 transferIconIv.setImageResource(R.drawable.ic_anon_avatar)
+                if (data.canUserCancel == true) {
+                    refuseTransactionBtn.visibility = View.VISIBLE
+                    refuseTransactionBtn.setOnClickListener {
+                        onCancelClicked(data.id)
+                    }
+                } else {
+                    refuseTransactionBtn.visibility = View.GONE
+
+                }
                 if (data.sender?.sender_tg_name != "anonymous" && data.sender?.sender_tg_name == username
                 ) {
                     // Ты отправитель
-                    if (data.canUserCancel == true) {
-                        refuseTransactionBtn.visibility = View.VISIBLE
-                        refuseTransactionBtn.setOnClickListener {
-//                            showAlertDialogForCancelTransaction(dataSet[position].id)
-                            onCancelClicked(data.id)
-                        }
-                    } else {
-                        refuseTransactionBtn.visibility = View.GONE
-
-                    }
                     valueTransfer.text = " " + data.amount
                     tgNameUser.text = String.format(
                         binding.root.context.getString(R.string.tgName),

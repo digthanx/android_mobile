@@ -6,12 +6,11 @@ import androidx.paging.PagingData
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CheckChallengeReportRequest
 import com.teamforce.thanksapp.data.request.CreateChallengeCommentRequest
-import com.teamforce.thanksapp.data.request.CreateReportRequest
-import com.teamforce.thanksapp.data.request.GetChallengeCommentsRequest
 import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.data.sources.challenge.ChallengeCommentsPagingSource
-import com.teamforce.thanksapp.data.sources.history.HistoryPagingSource
+import com.teamforce.thanksapp.data.sources.challenge.ChallengePagingSource
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.ResultWrapper
@@ -107,5 +106,21 @@ class ChallengeRepositoryImpl @Inject constructor(
         return safeApiCall(Dispatchers.IO){
             thanksApi.getChallengeWinnerReportDetails(challengeReportId)
         }
+    }
+
+    override fun loadChallenge(): Flow<PagingData<ChallengeModel>> {
+        return Pager(
+            config = PagingConfig(
+                initialLoadSize = Consts.PAGE_SIZE,
+                prefetchDistance = 1,
+                pageSize = Consts.PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                ChallengePagingSource(
+                    api = thanksApi
+                )
+            }
+        ).flow
     }
 }
