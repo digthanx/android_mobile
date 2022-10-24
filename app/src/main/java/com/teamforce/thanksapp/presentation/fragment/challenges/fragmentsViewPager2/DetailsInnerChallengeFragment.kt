@@ -48,6 +48,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.scrollView.setFooterView(R.id.user_item)
         loadChallengeData(idChallenge)
         setDataAboutChallenge()
         checkReportSharedPref()
