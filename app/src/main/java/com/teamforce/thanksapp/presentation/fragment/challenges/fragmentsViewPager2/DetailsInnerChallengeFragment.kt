@@ -48,6 +48,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.scrollView.setFooterView(R.id.user_item)
         loadChallengeData(idChallenge)
         setDataAboutChallenge()
         checkReportSharedPref()
@@ -60,6 +61,15 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                 OptionsTransaction().optionForEditProfile
             )
         }
+    }
+
+    private fun transactionToProfileOfCreator(creatorId: Int, view: View){
+        val bundle = Bundle()
+        bundle.putInt(Consts.USER_ID, creatorId)
+        view.findNavController().navigate(
+            R.id.action_global_someonesProfileFragment,
+            bundle,
+            OptionsTransaction().optionForTransactionWithSaveBackStack)
     }
 
 
@@ -121,6 +131,12 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                 binding.stateAboutReports.visibility = View.VISIBLE
                 enableOrDisableSentReportButton(it.status)
                 binding.stateAboutReports.text = it.status
+            }
+
+            binding.userItem.setOnClickListener { view ->
+                it.creator_id?.let { id ->
+                    transactionToProfileOfCreator(id, view)
+                }
             }
         }
     }
