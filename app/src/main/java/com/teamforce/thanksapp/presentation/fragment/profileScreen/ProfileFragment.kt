@@ -52,11 +52,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-                Log.d(TAG, "${result.data?.data}:")
+                Log.d(ProfileFragment.TAG, "${result.data?.data}:")
                 val path = getPath(requireContext(), result.data?.data!!)
                 val imageUri = result.data!!.data
-                if (imageUri != null && path != null)
+                if (imageUri != null && path != null) {
                     uriToMultipart(imageUri, path)
+                }
+
             }
         }
 

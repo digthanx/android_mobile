@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
@@ -19,6 +20,7 @@ import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_STATUS
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGE_BACKGROUND
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -160,6 +162,12 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                 .centerCrop()
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.imageBackground)
+
+            binding.imageBackground.setOnClickListener { view ->
+                urlPhoto?.let { photo ->
+                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                }
+            }
         }else{
             binding.standardCard.visibility = View.VISIBLE
             binding.secondaryCard.visibility = View.GONE
