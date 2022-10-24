@@ -5,8 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.net.toUri
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -26,7 +26,7 @@ import com.teamforce.thanksapp.utils.Consts.REASON_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.STATUS_TRANSACTION
 import com.teamforce.thanksapp.utils.Consts.WE_REFUSED_YOUR_OPERATION
 import com.teamforce.thanksapp.utils.OptionsTransaction
-
+import com.teamforce.thanksapp.utils.viewSinglePhoto
 
 
 class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment() {
@@ -114,6 +114,12 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
         }else{
             binding.photoTv.visibility = View.GONE
             binding.cardViewImg.visibility = View.GONE
+        }
+
+        binding.senderImage.setOnClickListener { view ->
+            photo_from_sender?.let { photo ->
+                (view as ImageView).viewSinglePhoto(photo, requireContext())
+            }
         }
 
         binding.descriptionTransactionWho.setOnClickListener {

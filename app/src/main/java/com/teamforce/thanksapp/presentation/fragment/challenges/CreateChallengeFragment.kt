@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import android.widget.Toast
@@ -68,26 +69,37 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
                 !binding.descriptionEt.text.isNullOrEmpty() &&
                 !binding.prizeFundEt.text.isNullOrEmpty() &&
                 !binding.prizePoolEt.text.isNullOrEmpty()
-            ){
+            ) {
                 binding.continueBtn.isEnabled = false
                 uploadDataToDb()
-            }else{
-                Toast.makeText(requireContext(),
+            } else {
+                Toast.makeText(
+                    requireContext(),
                     requireContext().getString(R.string.allFieldsAreRequired),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
+                // Set errors for empty fields
+                binding.titleEt.error = requireContext().getString(R.string.requiredField)
+                binding.descriptionEt.error = requireContext().getString(R.string.requiredField)
+                binding.prizeFundEt.error = requireContext().getString(R.string.requiredField)
+                binding.prizePoolEt.error = requireContext().getString(R.string.requiredField)
+                binding.prizeFundTextField.endIconDrawable = null
             }
         }
         uploadImageFromGallery()
 
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
-            if (it == true){
+            if (it == true) {
                 binding.continueBtn.isEnabled = true
-                Toast.makeText(requireContext(),
+                Toast.makeText(
+                    requireContext(),
                     requireContext().getString(R.string.challengeWasCreated),
-                    Toast.LENGTH_LONG).show()
+                    Toast.LENGTH_LONG
+                ).show()
                 findNavController().navigate(
                     R.id.action_createChallengeFragment_to_challengesFragment, null,
-                    OptionsTransaction().optionForEditProfile)
+                    OptionsTransaction().optionForEditProfile
+                )
             }
 
         }
@@ -96,7 +108,8 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
         binding.closeBtn.setOnClickListener {
             findNavController().navigate(
                 R.id.action_createChallengeFragment_to_challengesFragment, null,
-            OptionsTransaction().optionForEditProfile)
+                OptionsTransaction().optionForEditProfile
+            )
         }
 
     }
@@ -121,13 +134,11 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
                     DialogInterface.OnClickListener { dialog, which ->
                         // Сохранения значения в переменную
                         dateForTextView = "${binding.datePicker.dayOfMonth}" +
-                                ".${binding.datePicker.month}" +
+                                ".${binding.datePicker.month + 1}" +
                                 ".${binding.datePicker.year}"
-                        translateDateAndTime(
-                            binding.datePicker.dayOfMonth,
-                            binding.datePicker.month,
-                            binding.datePicker.year
-                        )
+                        dateForSendingFormatted = "${binding.datePicker.year}" +
+                                "-${binding.datePicker.month + 1}" +
+                                "-${binding.datePicker.dayOfMonth}"
                         dialog.cancel()
                         myBinding.dateEt.setText(dateForTextView)
                     })
@@ -153,30 +164,20 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
         val prizePool = binding.prizePoolEt.text?.trim().toString().toInt()
         val parameter_id = 2
         val parameter_value = prizePool
-        val dateChallenge = dateForSendingFormatted.toString()
         // Отправка данных о чалике
         viewModel.createChallenge(
             name = nameChallenge,
             description = description,
             amountFund = prizeFund,
-            endAt = null,
+            endAt = dateForSendingFormatted,
             parameter_id = parameter_id,
             parameter_value = parameter_value,
             photo = imageFilePart
         )
-        viewModel.createChallenge.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer {
-                createChallengeResult = it
-            })
+        viewModel.createChallenge.observe(viewLifecycleOwner) {
+            createChallengeResult = it
+        }
 
-    }
-
-    private fun translateDateAndTime(day: Int, month: Int, year: Int) {
-        val timeNow = LocalTime.now()
-        val dateSelected = LocalDate.of(year, month, day)
-        val dateAndTime = LocalDateTime.of(dateSelected, timeNow).toString()
-        dateForSendingFormatted = dateAndTime
     }
 
     private fun uploadImageFromGallery() {
@@ -201,7 +202,7 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
                         .load(imageUri)
                         .centerCrop()
                         .into(binding.image)
-                    uriToMultipart(imageUri, path)
+                    uriToMultipart(path)
                 }
 
             }
@@ -214,13 +215,7 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
     }
 
 
-    private fun uriToMultipart(imageURI: Uri, filePath: String) {
-//         Хардовая вставка картинки с самого начала
-//         Убрать как только сделаю обновление по свайпам
-//        Glide.with(this)
-//            .load(imageURI)
-//            .centerCrop()
-//            .into(binding.image)
+    private fun uriToMultipart(filePath: String) {
         val file = File(filePath)
         val requestFile: RequestBody =
             RequestBody.create(MediaType.parse("multipart/form-data"), file)

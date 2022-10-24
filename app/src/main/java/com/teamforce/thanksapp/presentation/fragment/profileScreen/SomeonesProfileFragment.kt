@@ -15,11 +15,13 @@ import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentSomeonesProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.SomeonesProfileViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -122,6 +124,12 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
                     .into(binding.userAvatar)
             } else {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+            }
+
+            binding.userAvatar.setOnClickListener { view ->
+                it.profile.photo?.let { photo ->
+                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                }
             }
         }
     }

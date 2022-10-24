@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
@@ -51,11 +52,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-                Log.d(TAG, "${result.data?.data}:")
+                Log.d(ProfileFragment.TAG, "${result.data?.data}:")
                 val path = getPath(requireContext(), result.data?.data!!)
                 val imageUri = result.data!!.data
-                if (imageUri != null && path != null)
+                if (imageUri != null && path != null) {
                     uriToMultipart(imageUri, path)
+                }
+
             }
         }
 
@@ -142,6 +145,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     .into(binding.userAvatar)
             } else {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+            }
+
+            binding.userAvatar.setOnClickListener { view ->
+                it.profile.photo?.let { photo ->
+                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                }
             }
         }
     }
