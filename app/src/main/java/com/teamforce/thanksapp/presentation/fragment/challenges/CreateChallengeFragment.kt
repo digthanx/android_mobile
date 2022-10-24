@@ -21,7 +21,6 @@ import com.teamforce.thanksapp.databinding.DialogDatePickerBinding
 import com.teamforce.thanksapp.databinding.FragmentCreateChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.CreateChallengeViewModel
-import com.teamforce.thanksapp.presentation.viewmodel.CreateChallengeViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.getPath
 import dagger.hilt.android.AndroidEntryPoint
