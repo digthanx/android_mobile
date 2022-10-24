@@ -2,9 +2,11 @@ package com.teamforce.thanksapp.domain.models.feed
 
 import com.google.android.datatransport.cct.StringMerger
 
-sealed class FeedModel {
+sealed class FeedModel(
+    open val id: Int,
+) {
     data class ChallengeFeedEvent(
-        val id: Int,
+        override val id: Int,
         val commentAmount: Int?,
         val eventObjectId: Int?,
         val eventRecordId: Int?,
@@ -20,10 +22,10 @@ sealed class FeedModel {
         val challengeName: String,
         val challengePhoto: String?,
         val userLiked: Boolean
-    ) : FeedModel()
+    ) : FeedModel(id)
 
     data class TransactionFeedEvent(
-        val id: Int,
+        override val id: Int,
         val commentAmount: Int?,
         val eventObjectId: Int?,
         val eventRecordId: Int?,
@@ -41,10 +43,10 @@ sealed class FeedModel {
         val userLiked: Boolean,
         val transactionUpdatedAt: String,
         val transactionTags: List<String>
-    ) : FeedModel()
+    ) : FeedModel(id)
 
     data class WinnerFeedEvent(
-        val id: Int,
+        override val id: Int,
         val commentAmount: Int?,
         val eventObjectId: Int?,
         val eventRecordId: Int?,
@@ -60,5 +62,5 @@ sealed class FeedModel {
         val winnerPhoto: String?,
         val winnerSurname: String?,
         val winnerTgName: String?
-        ) : FeedModel()
+    ) : FeedModel(id)
 }

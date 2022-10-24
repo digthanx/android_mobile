@@ -69,4 +69,10 @@ class FeedMapper @Inject constructor() {
             )
         }
     }
+
+    fun mapList(from: List<FeedItemEntity>): List<FeedModel> {
+        return from.map {
+            map(it)
+        }
+    }
 }

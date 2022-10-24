@@ -205,5 +205,8 @@ interface ThanksApi {
     ): GetChallengeWinnersReportDetailsResponse
 
     @GET("/events/")
-    suspend fun getEvents(): List<FeedItemEntity>
+    suspend fun getEvents(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<FeedItemEntity>
 }

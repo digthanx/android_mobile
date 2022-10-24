@@ -42,4 +42,10 @@ class FeedListViewModel @Inject constructor(
         super.onCleared()
     }
 
+    val feedNew = feedRepository.getEvents().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = PagingData.empty()
+    )
+
 }

@@ -17,7 +17,6 @@ import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdap
 import com.teamforce.thanksapp.presentation.viewmodel.feed.FeedListViewModel
 import com.teamforce.thanksapp.utils.ViewLifecycleDelegate
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -94,4 +93,11 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
     private fun onDislikeClicked(item: FeedResponse, position: Int) {
         listAdapter.dislike(position)
     }
+}
+
+enum class FeedCategory {
+    all,
+    transactions,
+    winners,
+    challenges
 }
