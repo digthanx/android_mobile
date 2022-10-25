@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.canhub.cropper.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
@@ -50,11 +51,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var contactValue2: String? = null
 
     private val resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-                Log.d(ProfileFragment.TAG, "${result.data?.data}:")
-                val path = getPath(requireContext(), result.data?.data!!)
-                val imageUri = result.data!!.data
+        registerForActivityResult(CropImageContract()) { result ->
+            if (result.isSuccessful && result.uriContent != null) {
+                Log.d(ProfileFragment.TAG, "${result.uriContent}:")
+                val path = result.getUriFilePath(requireContext())
+               // val path = getPath(requireContext(), result.uriContent)
+                val imageUri = result.uriContent
                 if (imageUri != null && path != null) {
                     uriToMultipart(imageUri, path)
                 }
@@ -82,7 +84,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun addPhotoFromIntent() {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.type = "image/*"
-        resultLauncher.launch(pickIntent)
+        resultLauncher.launch(
+            CropImageContractOptions(
+                pickIntent.data, CropImageOptions(
+                    imageSourceIncludeGallery = true,
+                    imageSourceIncludeCamera = true,
+                    guidelines = CropImageView.Guidelines.ON,
+                    backgroundColor = requireContext().getColor(R.color.general_contrast),
+                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast),
+
+                )
+            )
+        )
     }
 
 
