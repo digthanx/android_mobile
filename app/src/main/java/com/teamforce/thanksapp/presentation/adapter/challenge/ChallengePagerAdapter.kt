@@ -78,6 +78,7 @@ class ChallengePagerAdapter(
                     prizeFundText.setTextColor(binding.root.context.getColor(R.color.general_background))
                     prizePoolText.setTextColor(binding.root.context.getColor(R.color.general_background))
                     challengeTitle.setTextColor(binding.root.context.getColor(R.color.general_background))
+                    challengeCreator.setTextColor(binding.root.context.getColor(R.color.general_background))
                     winnersValue.setTextColor(binding.root.context.getColor(R.color.general_background))
                     winnersText.setTextColor(binding.root.context.getColor(R.color.general_background))
                     lastUpdateChallengeValue.setTextColor(binding.root.context.getColor(R.color.general_background))
@@ -96,6 +97,13 @@ class ChallengePagerAdapter(
             // insert data
             binding.apply {
                 challengeTitle.setText(data.name)
+                challengeCreator.setText(
+                    String.format(
+                        binding.root.context.getString(R.string.creatorOfChallenge),
+                        data.creator_surname,
+                        data.creator_name
+                    )
+                )
                 winnersValue.text = data.winners_count.toString()
                 if (data.parameters?.get(0)?.id == 1) {
                     data.parameters?.get(1)?.let { prizePoolValue.setText(it.value.toString()) }
