@@ -11,7 +11,7 @@ data class ChallengeModel(
     val updated_at: String?,
     val states: List<String?>?,
     val start_balance: Int?,
-    val creator_id: Int?,
+    val creator_id: Int,
     val creator_name: String,
     val creator_surname: String,
     val winners_count: Int,
