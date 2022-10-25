@@ -209,4 +209,22 @@ interface ThanksApi {
         @Query("limit") limit: Int,
         @Query("offset") offset: Int,
     ): List<FeedItemEntity>
+
+    @GET("/events/transactions/")
+    suspend fun getEventsTransactions(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<FeedItemEntity>
+
+    @GET("/events/winners/")
+    suspend fun getEventsWinners(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<FeedItemEntity>
+
+    @GET("/events/challenges/")
+    suspend fun getEventsChallenges(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<FeedItemEntity>
 }

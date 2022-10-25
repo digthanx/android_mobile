@@ -22,12 +22,25 @@ class FeedListViewModel @Inject constructor(
         return userDataRepository.getUserName()!!
     }
 
-    override fun onCleared() {
-        Log.d("FeedFragment", "onCleared: ")
-        super.onCleared()
-    }
+    val all = feedRepository.getEvents().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = PagingData.empty()
+    )
 
-    val feedNew = feedRepository.getEvents().stateIn(
+    val transactions = feedRepository.getTransactions().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = PagingData.empty()
+    )
+
+    val winners = feedRepository.getWinners().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = PagingData.empty()
+    )
+
+    val challenges = feedRepository.getChallenges().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = PagingData.empty()

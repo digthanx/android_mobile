@@ -11,6 +11,11 @@ interface FeedRepository {
         publicOnly: Int?
     ): Flow<PagingData<FeedResponse>>
 
-    fun getEvents(
-    ): Flow<PagingData<FeedModel>>
+    fun getEvents(): Flow<PagingData<FeedModel>>
+
+    fun getWinners(): Flow<PagingData<FeedModel>>
+
+    fun getChallenges(): Flow<PagingData<FeedModel>>
+    
+    fun getTransactions(): Flow<PagingData<FeedModel>>
 }

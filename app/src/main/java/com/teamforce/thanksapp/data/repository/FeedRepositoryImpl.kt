@@ -40,4 +40,19 @@ class FeedRepositoryImpl @Inject constructor(
         val result = thanksApi.getEvents(limit = page, offset = Consts.PAGE_SIZE)
         feedMapper.mapList(result)
     }.flow
+
+    override fun getWinners() = createPager { page ->
+        val result = thanksApi.getEventsWinners(limit = page, offset = Consts.PAGE_SIZE)
+        feedMapper.mapList(result)
+    }.flow
+
+    override fun getChallenges() = createPager { page ->
+        val result = thanksApi.getEventsChallenges(limit = page, offset = Consts.PAGE_SIZE)
+        feedMapper.mapList(result)
+    }.flow
+
+    override fun getTransactions() = createPager { page ->
+        val result = thanksApi.getEventsTransactions(limit = page, offset = Consts.PAGE_SIZE)
+        feedMapper.mapList(result)
+    }.flow
 }

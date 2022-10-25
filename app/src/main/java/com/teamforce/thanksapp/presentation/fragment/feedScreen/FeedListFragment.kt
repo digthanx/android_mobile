@@ -30,6 +30,8 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val category = FeedCategory.valueOf(arguments?.getString("category")!!)
+
         binding.list.apply {
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
@@ -48,12 +50,42 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
             binding.refreshLayout.isRefreshing = true
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.feedNew.collectLatest {
-                binding.refreshLayout.isRefreshing = false
-                listAdapter.submitData(it)
+        when (category) {
+            FeedCategory.all -> {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.all.collectLatest {
+                        binding.refreshLayout.isRefreshing = false
+                        listAdapter.submitData(it)
+                    }
+                }
+            }
+            FeedCategory.challenges -> {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.challenges.collectLatest {
+                        binding.refreshLayout.isRefreshing = false
+                        listAdapter.submitData(it)
+                    }
+                }
+            }
+            FeedCategory.transactions -> {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.transactions.collectLatest {
+                        binding.refreshLayout.isRefreshing = false
+                        listAdapter.submitData(it)
+                    }
+                }
+            }
+            FeedCategory.winners -> {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.winners.collectLatest {
+                        binding.refreshLayout.isRefreshing = false
+                        listAdapter.submitData(it)
+                    }
+                }
             }
         }
+
+
     }
 
     override fun onDestroyView() {
@@ -63,7 +95,13 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
 
     companion object {
         @JvmStatic
-        fun newInstance() = FeedListFragment()
+        fun newInstance(
+            feedCategory: FeedCategory
+        ) = FeedListFragment().apply {
+            arguments = Bundle().apply {
+                putString("category", feedCategory.name)
+            }
+        }
     }
 
 //    private fun onLikeClicked(item: FeedResponse, position: Int) {
