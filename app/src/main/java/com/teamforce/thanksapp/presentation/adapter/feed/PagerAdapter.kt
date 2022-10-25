@@ -14,9 +14,9 @@ class PagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> FeedListFragment.newInstance(mine = -1, public = -1)
-            1 -> FeedListFragment.newInstance(mine = -1, public = -1)
-            2 -> FeedListFragment.newInstance(mine = -1, public = -1)
+            0 -> FeedListFragment.newInstance()
+            1 -> FeedListFragment.newInstance()
+            2 -> FeedListFragment.newInstance()
             else -> Fragment()
         }
     }

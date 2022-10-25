@@ -1,8 +1,11 @@
 package com.teamforce.thanksapp.presentation.adapter.feed
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
+import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
@@ -240,6 +243,8 @@ class FeedPageAdapter(
         return clickableSpanSender
     }
 
+
+
     private fun setTags(tagsChipGroup: ChipGroup, tagList: List<TagModel>) {
         if (tagsChipGroup.children.none()) {
             for (i in tagList.indices) {
@@ -453,13 +458,13 @@ class FeedPageAdapter(
     fun dislike(position: Int) {
 
         if (getItem(position) != null) {
-            if(!getItem(position)!!.transaction.user_disliked) {
+            if (!getItem(position)!!.transaction.user_disliked) {
                 getItem(position)!!.transaction.apply {
                     reactions[0].counter++
                     user_disliked = true
                 }
 
-                if(getItem(position)!!.transaction.user_liked) {
+                if (getItem(position)!!.transaction.user_liked) {
                     getItem(position)!!.transaction.apply {
                         reactions[1].counter--
                         user_liked = false

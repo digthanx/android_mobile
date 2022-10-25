@@ -22,21 +22,6 @@ class FeedListViewModel @Inject constructor(
         return userDataRepository.getUserName()!!
     }
 
-    var mineOnly: Int? = null
-        set(value) {
-            field = if (value == -1) null else value
-        }
-    var publicOnly: Int? = null
-        set(value) {
-            field = if (value == -1) null else value
-        }
-
-    val feed = feedRepository.getFeed(mineOnly = mineOnly, publicOnly = publicOnly).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = PagingData.empty()
-    ).cachedIn(viewModelScope)
-
     override fun onCleared() {
         Log.d("FeedFragment", "onCleared: ")
         super.onCleared()
@@ -47,5 +32,4 @@ class FeedListViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = PagingData.empty()
     )
-
 }

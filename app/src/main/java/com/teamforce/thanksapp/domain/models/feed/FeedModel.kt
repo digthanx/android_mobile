@@ -17,7 +17,7 @@ sealed class FeedModel(
         val challengeCreatorFirstName: String,
         val challengeCreatorSurname: String,
         val challengeCreatorId: Int,
-        val challengeCreatorTgName: String?,
+        val challengeCreatorTgName: String,
         val challengeId: Int,
         val challengeName: String,
         val challengePhoto: String?,
@@ -37,12 +37,13 @@ sealed class FeedModel(
         val transactionIsAnonymous: Boolean,
         val transactionRecipientId: Int,
         val transactionRecipientPhoto: String?,
-        val transactionRecipientTgName: String?,
+        val transactionRecipientTgName: String,
         val transactionSenderId: Int?,
-        val transactionSenderTgName: String?,
+        val transactionSenderTgName: String,
         val userLiked: Boolean,
         val transactionUpdatedAt: String,
-        val transactionTags: List<String>
+        val transactionTags: List<String>,
+        val isForMe: Boolean
     ) : FeedModel(id)
 
     data class WinnerFeedEvent(
@@ -61,6 +62,6 @@ sealed class FeedModel(
         val winnerId: Int,
         val winnerPhoto: String?,
         val winnerSurname: String?,
-        val winnerTgName: String?
+        val winnerTgName: String
     ) : FeedModel(id)
 }
