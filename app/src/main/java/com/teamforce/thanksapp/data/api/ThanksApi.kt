@@ -148,7 +148,10 @@ interface ThanksApi {
     ): Call<ChallengeModel>
 
     @GET("/challenges/")
-    fun getChallenges(): Call<List<ChallengeModel>>
+    suspend fun getChallenges(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): List<ChallengeModel>
 
     @GET("/challenges/{challenge_id}/")
     fun getChallenge(

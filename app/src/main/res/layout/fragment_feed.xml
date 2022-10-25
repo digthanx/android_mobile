@@ -33,6 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
+                app:title="@string/feed_label"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="enterAlways"
                 app:titleTextColor="@color/white">

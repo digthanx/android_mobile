@@ -1,12 +1,10 @@
 package com.teamforce.thanksapp.presentation.fragment
 
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -44,7 +42,7 @@ val color =        ColorDrawable(0x000000)
 
 
         binding.fab.setOnClickListener {
-            navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
+            navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransactionWithSaveBackStack)
         }
 
 
@@ -87,7 +85,7 @@ val color =        ColorDrawable(0x000000)
                     return@OnItemReselectedListener
                 }
                 R.id.transaction_graph -> {
-                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
+                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransactionWithSaveBackStack)
                     return@OnItemReselectedListener
                 }
                 R.id.history_graph -> {

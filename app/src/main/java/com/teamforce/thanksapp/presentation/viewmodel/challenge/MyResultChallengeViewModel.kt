@@ -1,13 +1,11 @@
-package com.teamforce.thanksapp.presentation.viewmodel
+package com.teamforce.thanksapp.presentation.viewmodel.challenge
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.response.GetChallengeResultResponse
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
-import com.teamforce.thanksapp.model.domain.ChallengeModelById
 import com.teamforce.thanksapp.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

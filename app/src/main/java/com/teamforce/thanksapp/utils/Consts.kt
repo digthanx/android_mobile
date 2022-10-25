@@ -14,6 +14,7 @@ object Consts {
     const val LINK_TO_BOT = "https://t.me/DigitalRefBot"
     const val LINK_TO_BOT_Name = "LinkToBot"
     const val SELECT_PICTURE = 200
+    const val USER_ID = "userId"
 
     // Аргументы в расширенную инфу о траназкции
     const val DATE_TRANSACTION = "date-transaction"

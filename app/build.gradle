@@ -82,6 +82,14 @@ android {
 }
 dependencies {
 
+
+    // Library for sticky scroll
+    implementation 'com.github.amarjain07:StickyScrollView:1.0.3'
+
+    // Stfa Icon Image Viewer
+    implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
+
+
     // Library from Rozov
     // reflection-based flavor
     implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.6'

@@ -11,8 +11,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentMyResultChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.ResultChallengeAdapter
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
-import com.teamforce.thanksapp.presentation.viewmodel.MyResultChallengeViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.MyResultChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

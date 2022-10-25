@@ -107,6 +107,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="12dp"
                     android:layout_marginBottom="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:cardBackgroundColor="@color/general_background"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="10dp">
@@ -210,6 +212,8 @@
                     android:id="@+id/placeJob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:layout_marginHorizontal="12dp"
                     app:cardBackgroundColor="@color/general_background"
                     app:cardCornerRadius="12dp"
