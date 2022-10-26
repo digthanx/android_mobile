@@ -57,6 +57,11 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
             }
+            binding.imageBackground.setOnClickListener { view ->
+                it?.challengePhoto?.let { photo ->
+                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                }
+            }
         }
         dataOfWinner?.let {
             binding.userNameLabelTv.text =
