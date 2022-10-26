@@ -88,9 +88,31 @@ class ChallengePagerAdapter(
                             R.color.transparent
                         )
                     )
-                    mainCard.background = null
+                    mainCard.setCardBackgroundColor(null)
                     imageRelative.visibility = View.VISIBLE
                     alphaView.visibility = View.VISIBLE
+                }
+            }else {
+                binding.apply {
+                    successfulPersonImage.visibility = View.VISIBLE
+                    prizeFundValue.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    prizePoolValue.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    prizeFundText.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    prizePoolText.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    challengeTitle.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    winnersValue.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    winnersText.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    lastUpdateChallengeValue.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    lastUpdateChallengeCard.strokeColor =
+                        binding.root.context.getColor(R.color.general_contrast)
+                    lastUpdateChallengeCard.setCardBackgroundColor(
+                        binding.root.context.getColor(
+                            R.color.general_brand_secondary
+                        )
+                    )
+                    mainCard.setCardBackgroundColor(binding.root.context.getColor(R.color.general_brand_secondary))
+                    imageRelative.visibility = View.GONE
+                    alphaView.visibility = View.GONE
                 }
             }
             // insert data
