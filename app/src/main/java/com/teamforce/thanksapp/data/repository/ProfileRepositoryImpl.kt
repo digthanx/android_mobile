@@ -34,7 +34,7 @@ class ProfileRepositoryImpl @Inject constructor(
             val requestFile: RequestBody =
                 RequestBody.create(MediaType.parse("multipart/form-data"), file)
             val requestFileCropped = RequestBody.create(MediaType.parse("multipart/form-data"), fileCropped)
-            val bodyCropped = MultipartBody.Part.createFormData("cropped_photo", file.name + "_thumb", requestFileCropped)
+            val bodyCropped = MultipartBody.Part.createFormData("cropped_photo", fileCropped.name, requestFileCropped)
             val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
             thanksApi.putUserAvatar(userId, body, bodyCropped)
             // Отправляю ориг и обрезку на бек, протестировать с Андреем

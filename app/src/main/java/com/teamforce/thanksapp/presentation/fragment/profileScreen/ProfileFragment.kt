@@ -53,14 +53,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private val resultLauncher =
         registerForActivityResult(CropImageContract()) { result ->
             if (result.isSuccessful && result.uriContent != null) {
-                Log.d(ProfileFragment.TAG, "${result.uriContent}:")
-                val pathCroppedPhoto = result.getUriFilePath(requireContext())
-                val pathOrigPhoto = result.originalUri?.let { getPath(requireContext(), it) }
+                val pathOrigPhoto = result.getUriFilePath(requireContext())
+                val pathCroppedPhoto = result.originalUri?.let { getPath(requireContext(), it) }
                 Log.d("Token", "OrigPhoto - ${pathOrigPhoto}")
                 Log.d("Token", "CroppedPhoto - ${pathCroppedPhoto}")
                 val imageUri = result.uriContent
                 if (imageUri != null && pathCroppedPhoto != null && pathOrigPhoto != null) {
-                    uriToMultipart(imageUri, pathCroppedPhoto, pathOrigPhoto)
+                    uriToMultipart(imageUri, pathOrigPhoto, pathCroppedPhoto)
                 }
 
             }
@@ -93,8 +92,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     imageSourceIncludeCamera = true,
                     guidelines = CropImageView.Guidelines.ON,
                     backgroundColor = requireContext().getColor(R.color.general_contrast),
-                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast),
-
+                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast)
+                // TODO: Затестить овал
                 )
             )
         )
