@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <TextView
+        style="@style/StandardText4Medium.Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="17dp"
+        android:gravity="end"
+        android:text="@string/rejectReport" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/descriptionTextField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:minHeight="250dp"
+        android:layout_marginBottom="16dp"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeColor="@color/general_color_grey"
+        app:boxStrokeWidth="0.5dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/description_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="180dp"
+            android:gravity="top|start"
+            android:hint="@string/describeReason"
+            android:inputType="textCapSentences|textMultiLine"
+            android:scrollbars="vertical" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/reject_btn"
+        style="@style/DefaultButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="17dp"
+        android:text="@string/refuseInContender" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/closeDialog_btn"
+        style="@style/NotFilledButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        android:paddingVertical="17dp"
+        android:stateListAnimator="@null"
+        android:text="@string/closeMyChoice"
+        app:strokeWidth="0dp" />
+
+</LinearLayout>

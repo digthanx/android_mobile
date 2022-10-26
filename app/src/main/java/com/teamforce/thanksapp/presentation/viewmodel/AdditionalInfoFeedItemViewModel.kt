@@ -9,18 +9,13 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CreateCommentRequest
 import com.teamforce.thanksapp.data.request.GetCommentsRequest
 import com.teamforce.thanksapp.data.response.CancelTransactionResponse
-import com.teamforce.thanksapp.data.response.CreateCommentError
-import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.data.response.GetCommentsResponse
-import com.teamforce.thanksapp.model.domain.CommentModel
-import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -65,6 +60,8 @@ class AdditionalInfoFeedItemViewModel @Inject constructor(
             deleteCommentEndpoint(commentId, Dispatchers.Default)
         }
     }
+
+    fun getProfileId() = userDataRepository.getProfileId()
 
 
     private suspend fun deleteCommentEndpoint(

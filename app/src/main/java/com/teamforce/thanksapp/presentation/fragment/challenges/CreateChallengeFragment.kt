@@ -17,12 +17,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.DialogDatePickerBinding
 import com.teamforce.thanksapp.databinding.FragmentCreateChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
-import com.teamforce.thanksapp.presentation.viewmodel.CreateChallengeViewModel
-import com.teamforce.thanksapp.presentation.viewmodel.FeedViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.CreateChallengeViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.getPath
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,23 +73,47 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
                 !binding.descriptionEt.text.isNullOrEmpty() &&
                 !binding.prizeFundEt.text.isNullOrEmpty() &&
                 !binding.prizePoolEt.text.isNullOrEmpty()
-            ){
+            ) {
+                binding.continueBtn.isEnabled = false
                 uploadDataToDb()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    requireContext().getString(R.string.allFieldsAreRequired),
+                    Toast.LENGTH_SHORT
+                ).show()
+                // Set errors for empty fields
+                binding.titleEt.error = requireContext().getString(R.string.requiredField)
+                binding.descriptionEt.error = requireContext().getString(R.string.requiredField)
+                binding.prizeFundEt.error = requireContext().getString(R.string.requiredField)
+                binding.prizePoolEt.error = requireContext().getString(R.string.requiredField)
+                binding.prizeFundTextField.endIconDrawable = null
             }
         }
         uploadImageFromGallery()
 
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
-            findNavController().navigate(
-                R.id.action_createChallengeFragment_to_challengesFragment, null,
-                OptionsTransaction().optionForEditProfile)
+            if (it == true) {
+                binding.continueBtn.isEnabled = true
+                Toast.makeText(
+                    requireContext(),
+                    requireContext().getString(R.string.challengeWasCreated),
+                    Toast.LENGTH_LONG
+                ).show()
+                findNavController().navigate(
+                    R.id.action_createChallengeFragment_to_challengesFragment, null,
+                    OptionsTransaction().optionForEditProfile
+                )
+            }
+
         }
 
 
         binding.closeBtn.setOnClickListener {
             findNavController().navigate(
                 R.id.action_createChallengeFragment_to_challengesFragment, null,
-            OptionsTransaction().optionForEditProfile)
+                OptionsTransaction().optionForEditProfile
+            )
         }
 
     }
@@ -111,13 +138,11 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
                     DialogInterface.OnClickListener { dialog, which ->
                         // Сохранения значения в переменную
                         dateForTextView = "${binding.datePicker.dayOfMonth}" +
-                                ".${binding.datePicker.month}" +
+                                ".${binding.datePicker.month + 1}" +
                                 ".${binding.datePicker.year}"
-                        translateDateAndTime(
-                            binding.datePicker.dayOfMonth,
-                            binding.datePicker.month,
-                            binding.datePicker.year
-                        )
+                        dateForSendingFormatted = "${binding.datePicker.year}" +
+                                "-${binding.datePicker.month + 1}" +
+                                "-${binding.datePicker.dayOfMonth}"
                         dialog.cancel()
                         myBinding.dateEt.setText(dateForTextView)
                     })
@@ -141,30 +166,22 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
         val description = binding.descriptionEt.text.toString()
         val prizeFund = binding.prizeFundEt.text?.trim().toString().toInt()
         val prizePool = binding.prizePoolEt.text?.trim().toString().toInt()
-        val parameters = listOf<Map<String, Int>>(mapOf("id" to 2, "value" to prizePool))
-        val dateChallenge = dateForSendingFormatted.toString()
+        val parameter_id = 2
+        val parameter_value = prizePool
         // Отправка данных о чалике
         viewModel.createChallenge(
             name = nameChallenge,
             description = description,
             amountFund = prizeFund,
-            endAt = dateChallenge,
-            parameters = parameters,
+            endAt = dateForSendingFormatted,
+            parameter_id = parameter_id,
+            parameter_value = parameter_value,
             photo = imageFilePart
         )
-        viewModel.createChallenge.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer {
-                createChallengeResult = it
-            })
+        viewModel.createChallenge.observe(viewLifecycleOwner) {
+            createChallengeResult = it
+        }
 
-    }
-
-    private fun translateDateAndTime(day: Int, month: Int, year: Int) {
-        val timeNow = LocalTime.now()
-        val dateSelected = LocalDate.of(year, month, day)
-        val dateAndTime = LocalDateTime.of(dateSelected, timeNow).toString()
-        dateForSendingFormatted = dateAndTime
     }
 
     private fun uploadImageFromGallery() {
@@ -179,17 +196,17 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
     }
 
     private val resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-                val path = getPath(requireContext(), result.data?.data!!)
-                val imageUri = result.data!!.data
+        registerForActivityResult(CropImageContract()) { result ->
+            if (result.isSuccessful && result.uriContent != null) {
+                val path = result.getUriFilePath(requireContext())
+                val imageUri = result.uriContent
                 if (imageUri != null && path != null) {
                     binding.showAttachedImgCard.visibility = View.VISIBLE
                     Glide.with(this)
                         .load(imageUri)
                         .centerCrop()
                         .into(binding.image)
-                    uriToMultipart(imageUri, path)
+                    uriToMultipart(path)
                 }
 
             }
@@ -198,17 +215,22 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
     private fun addPhotoFromIntent() {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.type = "image/*"
-        resultLauncher.launch(pickIntent)
+        resultLauncher.launch(
+            CropImageContractOptions(
+                pickIntent.data, CropImageOptions(
+                    imageSourceIncludeGallery = true,
+                    imageSourceIncludeCamera = true,
+                    guidelines = CropImageView.Guidelines.ON,
+                    backgroundColor = requireContext().getColor(R.color.general_contrast),
+                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast),
+                    maxCropResultHeight = 1990
+                )
+            )
+        )
     }
 
 
-    private fun uriToMultipart(imageURI: Uri, filePath: String) {
-//         Хардовая вставка картинки с самого начала
-//         Убрать как только сделаю обновление по свайпам
-//        Glide.with(this)
-//            .load(imageURI)
-//            .centerCrop()
-//            .into(binding.image)
+    private fun uriToMultipart(filePath: String) {
         val file = File(filePath)
         val requestFile: RequestBody =
             RequestBody.create(MediaType.parse("multipart/form-data"), file)

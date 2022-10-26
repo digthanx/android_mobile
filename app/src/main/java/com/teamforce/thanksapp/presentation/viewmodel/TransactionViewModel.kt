@@ -9,10 +9,10 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.UserListWithoutInputRequest
 import com.teamforce.thanksapp.data.request.UsersListRequest
 import com.teamforce.thanksapp.data.response.BalanceResponse
+import com.teamforce.thanksapp.data.response.GetTagsResponse
 import com.teamforce.thanksapp.data.response.SendCoinsResponse
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.model.domain.TagModel
-import com.teamforce.thanksapp.utils.RetrofitClient
 import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,7 +23,6 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONArray
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -66,20 +65,20 @@ class TransactionViewModel @Inject constructor(
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi.getTags().enqueue(object : Callback<List<TagModel>> {
+            thanksApi.getTags().enqueue(object : Callback<GetTagsResponse> {
                 override fun onResponse(
-                    call: Call<List<TagModel>>,
-                    response: Response<List<TagModel>>
+                    call: Call<GetTagsResponse>,
+                    response: Response<GetTagsResponse>
                 ) {
                     _isLoading.postValue(false)
                     if (response.code() == 200) {
-                        _tags.postValue(response.body())
+                        _tags.postValue(response.body()?.tags)
                     } else {
                         _tagsError.postValue(response.message() + " " + response.code())
                     }
                 }
 
-                override fun onFailure(call: Call<List<TagModel>>, t: Throwable) {
+                override fun onFailure(call: Call<GetTagsResponse>, t: Throwable) {
                     _isLoading.postValue(false)
                     _tagsError.postValue(t.message)
                 }

@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserBean
@@ -35,6 +36,8 @@ class UsersAdapter(
             Glide.with(holder.view)
                 .load("${Consts.BASE_URL}/media/${dataSet[position].photo}".toUri())
                 .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .error(R.drawable.ic_anon_avatar)
                 .into(holder.userPhoto)
         }
         holder.view.setOnClickListener { v -> listener.onClick(v) }

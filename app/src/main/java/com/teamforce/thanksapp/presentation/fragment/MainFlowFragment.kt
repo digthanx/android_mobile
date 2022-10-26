@@ -1,11 +1,13 @@
 package com.teamforce.thanksapp.presentation.fragment
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.navigation.NavigationBarView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentMainFlowBinding
@@ -26,6 +28,10 @@ class MainFlowFragment : BaseFlowFragment(
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMainFlowBinding.inflate(inflater, container, false)
+val color =        ColorDrawable(0x000000)
+        color.alpha = 0
+        binding.bottomNavigation.findViewById<BottomNavigationItemView>(R.id.transaction_graph).background = color
+
         return binding.root
     }
 
@@ -36,8 +42,10 @@ class MainFlowFragment : BaseFlowFragment(
 
 
         binding.fab.setOnClickListener {
-            navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
+            navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransactionWithSaveBackStack)
         }
+
+
 
         binding.bottomNavigation.menu.getItem(0).isChecked = true
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
@@ -77,7 +85,7 @@ class MainFlowFragment : BaseFlowFragment(
                     return@OnItemReselectedListener
                 }
                 R.id.transaction_graph -> {
-                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransaction2)
+                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransactionWithSaveBackStack)
                     return@OnItemReselectedListener
                 }
                 R.id.history_graph -> {
@@ -98,7 +106,9 @@ class MainFlowFragment : BaseFlowFragment(
                 destination.id == R.id.additionalInfoFeedItemFragment ||
                 destination.id == R.id.editProfileBottomSheetFragment ||
                 destination.id == R.id.createChallengeFragment ||
-                destination.id == R.id.detailsMainChallengeFragment){
+                destination.id == R.id.detailsMainChallengeFragment ||
+                destination.id == R.id.createReportFragment ||
+                destination.id == R.id.challengesWinnersDetailFragment){
                 hideBottomNavigation()
             }else{
                 showBottomNavigation()

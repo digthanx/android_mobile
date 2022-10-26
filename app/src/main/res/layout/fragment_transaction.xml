@@ -287,7 +287,7 @@
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="20dp"
                 android:layout_weight="1"
                 app:singleSelection="true">
 
@@ -328,6 +328,17 @@
                     android:checkable="true"
                     android:layoutDirection="rtl"
                     android:text="25" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/tagsChipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                app:chipSpacingVertical="0dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginVertical="8dp">
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -395,41 +406,6 @@
                 android:text="@string/addPhoto"
                 app:icon="@drawable/ic_attach"
                 app:iconGravity="textStart" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                android:visibility="visible">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="@string/addValues"
-                    android:textColor="@color/general_contrast"
-                    android:textSize="16sp" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/addValues"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end" />
-            </LinearLayout>
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/tagsChipGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                app:chipSpacingVertical="0dp"
-                android:layout_marginVertical="8dp">
-
-
-            </com.google.android.material.chip.ChipGroup>
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_value"

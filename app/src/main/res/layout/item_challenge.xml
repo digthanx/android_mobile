@@ -1,179 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainCard"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="210dp"
     android:layout_marginBottom="8dp"
-    android:focusable="true"
-    android:clickable="true"
-    android:background="@drawable/background_for_constraint_item_challenger">
+    android:layout_marginHorizontal="16dp"
+    app:cardBackgroundColor="@color/general_brand_secondary"
+    app:cardCornerRadius="12dp">
+
     <RelativeLayout
         android:id="@+id/imageRelative"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        >
-
-        <ImageView
-            android:id="@+id/imageBackground"
-            style="@style/BackGroundImageView"
-            android:layout_width="match_parent"
-            android:layout_height="210dp"
-            tools:ignore="ContentDescription" />
-
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/challenge_title"
-        style="@style/StandardText4Medium.Black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Пробежать 100км"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/winners_linear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/challenge_title">
-
-        <TextView
-            android:id="@+id/winners_value"
-            style="@style/StandardText3Medium.Black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="xxx" />
-
-        <TextView
-            android:id="@+id/winners_text"
-            style="@style/SmallText2.Black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Победителей" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/prizeFund_linear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/winners_linear">
-
-        <TextView
-            android:id="@+id/prizeFund_value"
-            style="@style/StandardText3Medium.Black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="xxx" />
-
-        <TextView
-            android:id="@+id/prizeFund_text"
-            style="@style/SmallText2.Black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Призовой фонд спасибок" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/prizePool_linear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="30dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/prizeFund_linear">
-
-        <TextView
-            android:id="@+id/prizePool_value"
-            style="@style/StandardText3Medium.Black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="xxx" />
-
-        <TextView
-            android:id="@+id/prizePool_text"
-            style="@style/SmallText2.Black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Призовых мест" />
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/successfulPersonImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:layout_marginBottom="14dp"
-        android:src="@drawable/ic_successful_person"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/state_challenge_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        app:cardBackgroundColor="@color/general_background"
-        app:cardCornerRadius="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/state_challenge_value"
-            style="@style/SmallText2.Black"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginVertical="6dp"
-            android:text="Активен" />
-    </com.google.android.material.card.MaterialCardView>
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+            tools:ignore="ContentDescription" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/lastUpdate_challenge_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="@color/general_brand_secondary"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:strokeColor="@color/general_contrast"
-        app:strokeWidth="1dp">
-
-        <TextView
-            android:id="@+id/lastUpdate_challenge_value"
-            style="@style/SmallText2.Black"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/alphaView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginVertical="6dp"
-            android:text="@string/lastUpdateChallenge" />
-    </com.google.android.material.card.MaterialCardView>
+            android:alpha="0.6"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+            android:background="@color/general_contrast"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/challenge_title"
+            style="@style/StandardText4Medium.Black"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:maxLines="2"
+            android:text="Название челленджа"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/challenge_creator"
+            style="@style/StandardText4Medium.Black"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:maxLines="1"
+            android:text="Создатель челленджа"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/challenge_title"
+            app:layout_constraintRight_toLeftOf="@+id/state_challenge_card"/>
+
+        <LinearLayout
+            android:id="@+id/winners_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/challenge_creator">
+
+            <TextView
+                android:id="@+id/winners_value"
+                style="@style/StandardText3Medium.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="xxx" />
+
+            <TextView
+                android:id="@+id/winners_text"
+                style="@style/SmallText2.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Победителей" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/prizeFund_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/winners_linear">
+
+            <TextView
+                android:id="@+id/prizeFund_value"
+                style="@style/StandardText3Medium.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="xxx" />
+
+            <TextView
+                android:id="@+id/prizeFund_text"
+                style="@style/SmallText2.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Призовой фонд спасибок" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/prizePool_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="30dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/prizeFund_linear">
+
+            <TextView
+                android:id="@+id/prizePool_value"
+                style="@style/StandardText3Medium.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="xxx" />
+
+            <TextView
+                android:id="@+id/prizePool_text"
+                style="@style/SmallText2.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Призовых мест" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/successfulPersonImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:layout_marginBottom="14dp"
+            android:src="@drawable/ic_successful_person"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/state_challenge_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/general_background"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/state_challenge_value"
+                style="@style/SmallText2.Black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="6dp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/lastUpdate_challenge_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            app:cardBackgroundColor="@color/general_brand_secondary"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:strokeColor="@color/general_contrast"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:id="@+id/lastUpdate_challenge_value"
+                style="@style/SmallText2.Black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="6dp"
+                android:text="@string/lastUpdateChallenge" />
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
 

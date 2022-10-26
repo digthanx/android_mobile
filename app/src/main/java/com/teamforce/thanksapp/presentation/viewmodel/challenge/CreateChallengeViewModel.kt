@@ -1,17 +1,12 @@
-package com.teamforce.thanksapp.presentation.viewmodel
+package com.teamforce.thanksapp.presentation.viewmodel.challenge
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.teamforce.thanksapp.data.api.ThanksApi
-import com.teamforce.thanksapp.data.response.BalanceResponse
-import com.teamforce.thanksapp.data.response.CreateChallengeResponse
 import com.teamforce.thanksapp.model.domain.ChallengeModel
-import com.teamforce.thanksapp.utils.RetrofitClient
-import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -44,15 +39,16 @@ class CreateChallengeViewModel @Inject constructor(
     fun createChallenge(
         name: String,
         description: String,
-        endAt: String,
+        endAt: String?,
         amountFund: Int,
         photo: MultipartBody.Part?,
-        parameters: List<Map<String, Int>>
+        parameter_id: Int,
+        parameter_value: Int
     ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             callCreateChallengeEndpoint(
-                name, description, endAt, amountFund, photo, parameters, Dispatchers.Default
+                name, description, endAt, amountFund, photo, parameter_id, parameter_value, Dispatchers.Default
             )
         }
 
@@ -61,10 +57,11 @@ class CreateChallengeViewModel @Inject constructor(
     private suspend fun callCreateChallengeEndpoint(
         name: String,
         description: String,
-        endAt: String,
+        endAt: String?,
         amountFund: Int,
         photo: MultipartBody.Part?,
-        parameters: List<Map<String, Int>>,
+        parameter_id: Int,
+        parameter_value: Int,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
@@ -72,22 +69,24 @@ class CreateChallengeViewModel @Inject constructor(
             val descriptionB =
                 RequestBody.create(MediaType.parse("multipart/form-data"), description)
             val endAtB =
-                RequestBody.create(MediaType.parse("multipart/form-data"), endAt)
+                endAt?.let { RequestBody.create(MediaType.parse("multipart/form-data"), it) }
             val amountFundB =
                 RequestBody.create(MediaType.parse("multipart/form-data"), amountFund.toString())
-            val parametersJson = Gson().toJson(parameters)
-            val parametersB =
-                RequestBody.create(MediaType.parse("application/json"), parametersJson)
+            val parameter_idB =
+                RequestBody.create(MediaType.parse("multipart/form-data"), parameter_id.toString())
+            val parameter_valueB =
+                RequestBody.create(MediaType.parse("multipart/form-data"), parameter_value.toString())
 
 
-            thanksApi?.createChallenge(
+            thanksApi.createChallenge(
                 photo,
                 nameB,
                 descriptionB,
                 endAtB,
                 amountFundB,
-                parametersB
-            )?.enqueue(object : Callback<ChallengeModel> {
+                parameter_idB,
+                parameter_valueB
+            ).enqueue(object : Callback<ChallengeModel> {
                 override fun onResponse(
                     call: Call<ChallengeModel>,
                     response: Response<ChallengeModel>

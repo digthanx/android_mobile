@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.fragment.challenges.fragmentsViewPager2.MyResultChallengeFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listOfResults"
+        android:paddingHorizontal="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_result_challenge" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/noData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardElevation="20dp"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            style="@style/Body1.Bold"
+            android:text="Вашего результата пока нет"/>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

@@ -2,87 +2,165 @@ package com.teamforce.thanksapp.presentation.fragment.challenges
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.navigation.fragment.findNavController
+import androidx.core.net.toUri
+import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.databinding.FragmentChallengesBinding
 import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
-import com.teamforce.thanksapp.presentation.adapter.ChallengeAdapter
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.presentation.adapter.FragmentDetailChallengeStateAdapter
-import com.teamforce.thanksapp.utils.OptionsTransaction
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsMainChallengeViewModel
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_DATA
+import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.viewSinglePhoto
+import dagger.hilt.android.AndroidEntryPoint
 
-private const val CHALLENGE_STATUS = ChallengeAdapter.CHALLENGER_STATUS
-private const val CHALLENGE_ID = ChallengeAdapter.CHALLENGER_ID
-private const val CHALLENGE_ACTIVE = ChallengeAdapter.CHALLENGER_STATE_ACTIVE
-private const val CHALLENGE_BACKGROUND = ChallengeAdapter.CHALLENGE_BACKGROUND
 
+@AndroidEntryPoint
 class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_challenge) {
 
     private val binding: FragmentDetailsMainChallengeBinding by viewBinding()
 
-    private var statusChallenge: String? = null
-    private var idChallenge: Int? = null
-    private var challengeActive: Boolean? = null
-    private var challengeBackground: String? = null
+    private val viewModel: DetailsMainChallengeViewModel by viewModels()
+
+
+    private var dataOfChallenge: ChallengeModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            statusChallenge = it.getString(CHALLENGE_STATUS)
-            idChallenge = it.getInt(CHALLENGE_ID)
-            challengeActive = it.getBoolean(CHALLENGE_ACTIVE)
-            challengeBackground = it.getString(CHALLENGE_BACKGROUND)
+            dataOfChallenge = it.getParcelable(CHALLENGER_DATA)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadDataFromDb()
         setData()
-        initTabLayoutMediator()
+        listenersForRequestedData()
         listenersBtn()
 
 
     }
 
-    private fun initTabLayoutMediator(){
+    private fun initTabLayoutMediator(myResultWasReceivedSuccessfully: Boolean) {
         // Нужно добавить изменения в количестве вкладок в зависимости от статуса чалика
-        val detailInnerFragment = FragmentDetailChallengeStateAdapter(requireActivity())
-        idChallenge?.let { detailInnerFragment.setChallengeId(it) }
-        binding.pager.adapter = detailInnerFragment
-        TabLayoutMediator(binding.tabLayout, binding.pager){ tab, position ->
-            when(position){
-                0 -> tab.text = context?.getString(R.string.details)
-                1 -> tab.text = context?.getString(R.string.comments)
-                2 -> tab.text = context?.getString(R.string.participants)
-            }
-        }.attach()
-    }
-
-    private fun listenersBtn(){
-        binding.closeBtn.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_detailsMainChallengeFragment_to_challengesFragment,
-                null,
-                OptionsTransaction().optionForProfileFromEditProfile
+        val detailInnerAdapter = dataOfChallenge?.creator_id?.let { creatorId ->
+            FragmentDetailChallengeStateAdapter(
+                requireActivity(),
+                creatorId = creatorId,
+                profileId = viewModel.getProfileId(),
+                myResultWasReceivedSuccessfully = myResultWasReceivedSuccessfully
             )
+        }
+        dataOfChallenge?.id?.let { detailInnerAdapter?.setChallengeId(it) }
+        binding.pager.adapter = detailInnerAdapter
+        if (dataOfChallenge?.creator_id == viewModel.getProfileId() && myResultWasReceivedSuccessfully) {
+            TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+                when (position) {
+                    0 -> tab.text = context?.getString(R.string.details)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
+                    3 -> tab.text = context?.getString(R.string.contenders)
+                    4 -> tab.text = context?.getString(R.string.myResult)
+                }
+            }.attach()
+        } else if (dataOfChallenge?.creator_id == viewModel.getProfileId()) {
+            // Пока что если ты создать
+            // я всегда буду показывать мой результат пока от бека нет поля
+            TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+                when (position) {
+                    0 -> tab.text = context?.getString(R.string.details)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
+                    3 -> tab.text = context?.getString(R.string.contenders)
+                    4 -> tab.text = context?.getString(R.string.myResult)
+                }
+            }.attach()
+        } else if (myResultWasReceivedSuccessfully) {
+            TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+                when (position) {
+                    0 -> tab.text = context?.getString(R.string.details)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
+                    3 -> tab.text = context?.getString(R.string.myResult)
+                }
+            }.attach()
+        } else {
+            TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+                when (position) {
+                    0 -> tab.text = context?.getString(R.string.details)
+                    1 -> tab.text = context?.getString(R.string.comments)
+                    2 -> tab.text = context?.getString(R.string.winners)
+                }
+            }.attach()
         }
     }
 
-    private fun setData(){
-        //if(challengeBackground.isNullOrEmpty())
-        if(challengeActive == true){
+    private fun loadDataFromDb() {
+        dataOfChallenge?.id?.let {
+            viewModel.loadChallengeResult(it)
+        }
+    }
+
+    private fun listenersBtn() {
+        binding.closeBtn.setOnClickListener {
+            activity?.onBackPressed()
+        }
+        binding.closeCardSecondary.setOnClickListener {
+            activity?.onBackPressed()
+        }
+    }
+
+    private fun listenersForRequestedData() {
+        viewModel.isSuccessOperationMyResult.observe(viewLifecycleOwner) {
+            if (it) {
+                initTabLayoutMediator(it)
+            } else if (it == false) {
+                initTabLayoutMediator(it)
+            }
+        }
+    }
+
+    private fun setData() {
+        if (dataOfChallenge?.active == true) {
             binding.statusActiveText.text = requireContext().getString(R.string.active)
+            binding.statusActiveTextSecondary.text = requireContext().getString(R.string.active)
             binding.statusActiveCard
-                .setBackgroundColor(requireContext().getColor(R.color.minor_info))
-        }else{
+                .setCardBackgroundColor(requireContext().getColor(R.color.minor_info))
+            binding.statusActiveCardSecondary
+                .setCardBackgroundColor(requireContext().getColor(R.color.minor_info))
+        } else {
             binding.statusActiveText.text = requireContext().getString(R.string.completed)
+            binding.statusActiveTextSecondary.text = requireContext().getString(R.string.completed)
             binding.statusActiveCard
-                .setBackgroundColor(requireContext().getColor(R.color.minor_success))
+                .setCardBackgroundColor(requireContext().getColor(R.color.minor_success))
+            binding.statusActiveCardSecondary
+                .setCardBackgroundColor(requireContext().getColor(R.color.minor_success))
+        }
+        if (!dataOfChallenge?.photo.isNullOrEmpty()) {
+            binding.standardCard.visibility = View.GONE
+            binding.secondaryCard.visibility = View.VISIBLE
+            val urlPhoto = dataOfChallenge?.photo?.replace("_thumb", "")
+            Glide.with(requireContext())
+                .load("${Consts.BASE_URL}${urlPhoto}".toUri())
+                .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(binding.imageBackground)
+
+            binding.imageBackground.setOnClickListener { view ->
+                urlPhoto?.let { photo ->
+                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                }
+            }
+        }else{
+            binding.standardCard.visibility = View.VISIBLE
+            binding.secondaryCard.visibility = View.GONE
         }
     }
 

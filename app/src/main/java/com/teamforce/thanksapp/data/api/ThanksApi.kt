@@ -2,17 +2,14 @@ package com.teamforce.thanksapp.data.api
 
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
-import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.ChallengeModelById
-import com.teamforce.thanksapp.model.domain.TagModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
-import java.io.File
 
 interface ThanksApi {
 
@@ -63,7 +60,12 @@ interface ThanksApi {
     ): Call<SendCoinsResponse>
 
     @GET("/user/transactions/")
-    fun getUserTransactions(): Call<List<UserTransactionsResponse>>
+    suspend fun getUserTransactions(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+        @Query("sent_only") sentOnly: Int?,
+        @Query("received_only") receivedOnly: Int?
+    ): List<HistoryItem.UserTransactionsResponse>
 
     @GET("/feed/")
     fun getFeed(): Call<List<FeedResponse>>
@@ -78,15 +80,16 @@ interface ThanksApi {
     @POST("/update-profile-image/{id}/")
     suspend fun putUserAvatar(
         @Path("id") userId: String,
-        @Part photo: MultipartBody.Part
+        @Part photo: MultipartBody.Part,
+        @Part cropped_photo: MultipartBody.Part
     ): PutUserAvatarResponse
 
 
     @PUT("/cancel-transaction/{id}/")
-    fun cancelTransaction(
+    suspend fun cancelTransaction(
         @Path("id") transactionId: String,
         @Body status: CancelTransactionRequest
-    ): Call<CancelTransactionResponse>
+    ): CancelTransactionResponse
 
 
     @PUT("/update-profile-by-user/{id}/")
@@ -100,9 +103,9 @@ interface ThanksApi {
         @Body data: List<ContactEntity>?,
     ): Call<UpdateFewContactsResponse>
 
-    @GET("/tags/")
+    @GET("/send-coins-settings/")
     fun getTags(
-    ): Call<List<TagModel>>
+    ): Call<GetTagsResponse>
 
     @GET("/profile/{user_id}/")
     fun getAnotherProfile(
@@ -135,16 +138,69 @@ interface ThanksApi {
         @Part photo: MultipartBody.Part?,
         @Part("name") name: RequestBody,
         @Part("description") description: RequestBody,
-        @Part("end_at") endAt: RequestBody,
+        @Part("end_at") endAt: RequestBody?,
         @Part("start_balance") amountFund: RequestBody,
-        @Part("parameters") parameters: RequestBody,
+        @Part("parameter_id") parameter_id: RequestBody,
+        @Part("parameter_value") parameter_value: RequestBody,
     ): Call<ChallengeModel>
 
     @GET("/challenges/")
-    fun getChallenges(): Call<List<ChallengeModel>>
+    suspend fun getChallenges(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): List<ChallengeModel>
 
     @GET("/challenges/{challenge_id}/")
     fun getChallenge(
         @Path("challenge_id") commentId: Int
     ): Call<ChallengeModelById>
+
+    @Multipart
+    @POST("/create-challenge-report/")
+    suspend fun createChallengeReport(
+        @Part photo: MultipartBody.Part?,
+        @Part("challenge") challengeId: RequestBody,
+        @Part("text") comment: RequestBody
+    ): CreateReportResponse
+
+    @GET("/challenge-contenders/{challenge_id}/")
+    suspend fun getChallengeContenders(
+        @Path("challenge_id") challengeId: Int
+    ): List<GetChallengeContendersResponse.Contender>
+
+    @PUT("/check-challenge-report/{challenge_id}/")
+    suspend fun checkChallengeReport(
+        @Path("challenge_id") challengeId: Int,
+        @Body data: CheckChallengeReportRequest?
+    ): CheckReportResponse
+
+    @GET("/challenge-winners-reports/{challenge_id}/")
+    suspend fun getChallengeWinners(
+        @Path("challenge_id") challengeId: Int,
+    ): List<GetChallengeWinnersResponse.Winner>
+
+    @GET("/challenge-result/{challenge_id}/")
+    suspend fun getChallengeResult(
+        @Path("challenge_id") challengeId: Int
+    ): List<GetChallengeResultResponse>
+
+    @POST("/get-comments/")
+    suspend fun getChallengeComments(
+        @Body challenge_id: GetChallengeCommentsRequest
+    ): GetChallengeCommentsResponse
+
+    @POST("/create-comment/")
+    suspend fun createChallengeComment(
+        @Body data: CreateChallengeCommentRequest
+    ): CancelTransactionResponse
+
+    @DELETE("/delete-comment/{comment_id}/")
+    suspend fun deleteChallengeComment(
+        @Path("comment_id") commentId: Int
+    ): CancelTransactionResponse
+
+    @GET("/challenge-report/{challenge_report_id}/")
+    suspend fun getChallengeWinnerReportDetails(
+        @Path("challenge_report_id") challengeReportId: Int,
+    ): GetChallengeWinnersReportDetailsResponse
 }

@@ -61,7 +61,7 @@
     <string name="enter_button_label">Вход</string>
     <string name="user_name_label">Имя пользователя</string>
     <string name="balance_label">Баланс</string>
-    <string name="feed_label">Лента</string>
+    <string name="feed_label">Благодарности</string>
     <string name="new_transaction_label">Новая благодарность</string>
     <string name="transaction_result_label">Отправлено</string>
     <string name="period">Выберите период</string>
@@ -140,15 +140,49 @@
     <string name="lastUpdateChallenge">Обновлен: %s</string>
     <string name="active">Активен</string>
     <string name="completed">Завершён</string>
+    <!-- Создать Челлендж фрагмент -->
+    <string name="allFieldsAreRequired">Не все поля заполнены</string>
+    <string name="challengeWasCreated">Челлендж успешно создан</string>
+    <string name="requiredField">Поле обязательно</string>
+    <string name="creatorOfChallenge">от %s %s</string>
+
     <!-- Челлендж фрагмент детали -->
     <string name="details">Детали</string>
     <string name="participants">Участники</string>
-    <string name="fund">%s форсиков</string>
+    <string name="contenders">Претенденты</string>
+    <string name="myResult">Мой результат</string>
+    <string name="winners">Победители</string>
+    <string name="fund">%s спасибок</string>
     <string name="occupiedPrizePool">%s / %s</string>
     <string name="PrizePool">Призовых мест</string>
     <string name="dateEnd">Дата завершения</string>
     <string name="prizeFund">Призовой фонд</string>
-
+    <string name="draft">Черновик</string>
+    <string name="gettingReportsActive">Производится прием отчетов</string>
+    <string name="gettingReportsFinished">Прием отчетов завершен</string>
+    <!-- Создание отчета фрагмент -->
+    <string name="spaceSevenTimes">\u0020\u0020\u0020\u0020\u0020\u0020\u0020</string>
+    <string name="result">Результат</string>
+    <string name="closeInHeader">Закрыть</string>
+    <string name="sendReport">Отправить результат</string>
+    <string name="saveWithoutSending">Сохранить без отправки</string>
+    <string name="notToPublicResult">Не публиковать результат</string>
+    <string name="successCreateReport">Отчет успешно создан</string>
+    <!-- Претендент фрагмент -->
+    <string name="refuseInContender">Отклонить</string>
+    <string name="applyInContender">Подтвердить</string>
+    <string name="applyCheckReport">Отчет был подтвержден</string>
+    <string name="deniedCheckReport">Отчет был отклонен</string>
+    <string name="closeMyChoice">Отменить</string>
+    <string name="describeReason">Укажите причину</string>
+    <string name="rejectReport">Отклонить заявку</string>
+    <string name="reasonOfRejectionIsNecessary">Причина отклонения обязательна</string>
+    <!--Мой результат -->
+    <string name="thanksWasGot">+%s</string>
+    <string name="updatedDateTime">Обновлено %s в %s</string>
+    <!--Детали отчета челленджа -->
+    <string name="reportHolder">Отправитель</string>
+    <string name="userSurnameAndName">%s %s</string>
 
     <!--Utils -->
     <string name="OK">Ок</string>
@@ -180,7 +214,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="detailOfTransaction">Детали транзакции</string>
+    <string name="detailOfTransaction">Благодарность</string>
     <string name="someonesProfile">Профиль пользователя</string>
     <string name="profile">Профиль</string>
     <string name="history_label">История</string>

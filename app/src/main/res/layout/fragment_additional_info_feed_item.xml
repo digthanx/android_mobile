@@ -118,37 +118,20 @@
                     android:textColor="@color/general_brand" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/toggleButtonGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@id/date_time"
-                app:layout_constraintTop_toBottomOf="@id/senderAndReceiver">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/dislike_btn"
-                    android:layout_width="121dp"
-                    android:layout_height="wrap_content"
-                    app:cornerRadius="8dp"
-                    android:textColor="@color/general_contrast"
-                    android:layout_marginEnd="4dp"
-                    app:icon="@drawable/ic_dislike"
-                    app:iconGravity="textStart"
-                    android:textSize="12sp"
-                    style="@style/ReactionBtnFeed"
-                    />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/like_btn"
-                    android:layout_width="121dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/ic_like"
                     app:iconGravity="textStart"
+                    android:layout_marginHorizontal="16dp"
                     android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@id/date_time"
+                    app:layout_constraintTop_toBottomOf="@id/senderAndReceiver"
                     style="@style/ReactionBtnFeed" />
 
-            </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/linear_info"
@@ -278,9 +261,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="6"
             android:minLines="1"
-            android:gravity="top|start"
             android:maxLines="10"
             android:scrollbars="vertical"
             android:layout_marginTop="@dimen/margin_x"
@@ -288,6 +269,8 @@
             android:layout_marginBottom="18dp"
             android:hint="@string/comment"
             app:endIconTint="@color/general_brand"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_emotion"
             android:textColorHint="@color/general_secondary"
             app:boxStrokeColor="@color/general_color_grey"
             app:boxBackgroundColor="@color/color5"
@@ -301,15 +284,14 @@
                 android:id="@+id/message_value_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="6"
                 android:minLines="1"
-                android:gravity="top|start"
                 android:maxLines="10"
+                android:gravity="top|start"
                 android:scrollbars="vertical"
-                android:scrollHorizontally="false"
                 android:inputType="textCapSentences|textMultiLine"
                 android:drawableEnd="@drawable/ic_emotion"/>
 
         </com.google.android.material.textfield.TextInputLayout>
+
     </com.google.android.material.card.MaterialCardView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

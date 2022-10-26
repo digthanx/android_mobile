@@ -60,9 +60,6 @@
             <action
                 android:id="@+id/action_feedFragment_to_profileGraph"
                 app:destination="@id/profileGraph" />
-            <action
-                android:id="@+id/action_feedFragment_to_notificationsFragment"
-                app:destination="@id/notificationsFragment" />
         </fragment>
         <fragment
             android:id="@+id/additionalInfoFeedItemFragment"
@@ -123,9 +120,6 @@
             <action
                 android:id="@+id/action_historyFragment_to_profileGraph"
                 app:destination="@id/profileGraph" />
-            <action
-                android:id="@+id/action_historyFragment_to_notificationsFragment"
-                app:destination="@id/notificationsFragment" />
         </fragment>
         <dialog
             android:id="@+id/additionalInfoTransactionBottomSheetFragment2"
@@ -149,9 +143,6 @@
             <action
                 android:id="@+id/action_balanceFragment_to_profileGraph"
                 app:destination="@id/profileGraph" />
-            <action
-                android:id="@+id/action_balanceFragment_to_notificationsFragment"
-                app:destination="@id/notificationsFragment" />
         </fragment>
     </navigation>
     <navigation
@@ -175,8 +166,8 @@
         <fragment
             android:id="@+id/createChallengeFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.CreateChallengeFragment"
-            android:label="fragment_create_challenge"
-            tools:layout="@layout/fragment_create_challenge" >
+            android:label="@string/challenge_label"
+            tools:layout="@layout/fragment_create_challenge">
             <action
                 android:id="@+id/action_createChallengeFragment_to_challengesFragment"
                 app:destination="@id/challengesFragment" />
@@ -184,15 +175,20 @@
         <fragment
             android:id="@+id/detailsMainChallengeFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.DetailsMainChallengeFragment"
-            android:label="fragment_details_main_challenge"
-            tools:layout="@layout/fragment_details_main_challenge" >
+            android:label="@string/challenge_label"
+            tools:layout="@layout/fragment_details_main_challenge">
             <action
                 android:id="@+id/action_detailsMainChallengeFragment_to_challengesFragment"
                 app:destination="@id/challengesFragment" />
         </fragment>
-    </navigation>
-    <fragment
-        android:id="@+id/notificationsFragment"
-        android:name="com.teamforce.thanksapp.presentation.fragment.notifications.NotificationsFragment"
-        android:label="NotificationsFragment" />
+        <fragment
+            android:id="@+id/createReportFragment"
+            android:name="com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.CreateReportFragment"
+            android:label="CreateReportFragment" /><action android:id="@+id/action_global_createReportFragment" app:destination="@id/createReportFragment"/>
+        <fragment
+            android:id="@+id/challengesWinnersDetailFragment"
+            android:name="com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.ChallengesWinnersDetailFragment"
+            android:label="fragment_challenges_winners_detail"
+            tools:layout="@layout/fragment_challenges_winners_detail" /><action android:id="@+id/action_global_challengesWinnersDetailFragment" app:destination="@id/challengesWinnersDetailFragment"/>
+    </navigation><action android:id="@+id/action_global_someonesProfileFragment" app:destination="@id/someonesProfileFragment"/>
 </navigation>
