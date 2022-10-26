@@ -80,7 +80,8 @@ interface ThanksApi {
     @POST("/update-profile-image/{id}/")
     suspend fun putUserAvatar(
         @Path("id") userId: String,
-        @Part photo: MultipartBody.Part
+        @Part photo: MultipartBody.Part,
+        @Part cropped_photo: MultipartBody.Part
     ): PutUserAvatarResponse
 
 

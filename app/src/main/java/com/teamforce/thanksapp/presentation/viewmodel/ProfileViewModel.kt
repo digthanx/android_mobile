@@ -53,7 +53,8 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun loadUpdateAvatarUserProfile(
-        filePath: String
+        filePath: String,
+        filePathCropped: String
     ) {
         _isLoading.postValue(true)
         viewModelScope.launch {
@@ -61,7 +62,7 @@ class ProfileViewModel @Inject constructor(
             if (userId != null)
                 withContext(Dispatchers.IO) {
                     _isLoading.postValue(true)
-                    when (val result = profileRepository.updateUserAvatar(userId, filePath)) {
+                    when (val result = profileRepository.updateUserAvatar(userId, filePath, filePathCropped)) {
                         is ResultWrapper.Success -> {}
                         else -> {
                             if (result is ResultWrapper.GenericError) {
