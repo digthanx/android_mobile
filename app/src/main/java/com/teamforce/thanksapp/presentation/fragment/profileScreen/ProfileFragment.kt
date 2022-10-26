@@ -54,11 +54,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         registerForActivityResult(CropImageContract()) { result ->
             if (result.isSuccessful && result.uriContent != null) {
                 Log.d(ProfileFragment.TAG, "${result.uriContent}:")
-                val path = result.getUriFilePath(requireContext())
-               // val path = getPath(requireContext(), result.uriContent)
+                val pathCroppedPhoto = result.getUriFilePath(requireContext())
+                val pathOrigPhoto = result.originalUri?.let { getPath(requireContext(), it) }
+                Log.d("Token", "OrigPhoto - ${pathOrigPhoto}")
+                Log.d("Token", "CroppedPhoto - ${pathCroppedPhoto}")
                 val imageUri = result.uriContent
-                if (imageUri != null && path != null) {
-                    uriToMultipart(imageUri, path)
+                if (imageUri != null && pathCroppedPhoto != null && pathOrigPhoto != null) {
+                    uriToMultipart(imageUri, pathCroppedPhoto, pathOrigPhoto)
                 }
 
             }
@@ -99,12 +101,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
 
-    private fun uriToMultipart(imageURI: Uri, filePath: String) {
+    private fun uriToMultipart(imageURI: Uri, filePath: String, filePathCropped: String) {
         Glide.with(this)
             .load(imageURI)
             .centerCrop()
             .into(binding.userAvatar)
-        viewModel.loadUpdateAvatarUserProfile(filePath)
+        viewModel.loadUpdateAvatarUserProfile(filePath, filePathCropped)
     }
 
     private fun requestData() {
