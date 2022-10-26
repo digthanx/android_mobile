@@ -97,6 +97,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
             binding.nameChallenge.text = it.name
             binding.descriptionChallenge.text = it.description
             binding.stateAboutReports.text = it.status
+            likedBtnPressedOrNot(it.user_liked)
             if (it.active) {
                 binding.stateAboutAddParticipants.text =
                     requireContext().getString(R.string.gettingReportsActive)
@@ -138,6 +139,26 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                     transactionToProfileOfCreator(id, view)
                 }
             }
+            binding.likeBtn.setOnClickListener { view ->
+                likedBtnClicked(it.user_liked, it.likes_amount)
+            }
+        }
+    }
+
+    private fun likedBtnPressedOrNot(isLiked: Boolean){
+        if(isLiked){
+            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success))
+        }else{
+            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
+        }
+    }
+    private fun likedBtnClicked(isLiked: Boolean, likesAmount: Int){
+        if(!isLiked){
+            binding.likeBtn.text = (likesAmount + 1).toString()
+            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success))
+        }else{
+            binding.likeBtn.text = (likesAmount - 1).toString()
+            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
         }
     }
 
