@@ -89,11 +89,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             CropImageContractOptions(
                 pickIntent.data, CropImageOptions(
                     imageSourceIncludeGallery = true,
-                    imageSourceIncludeCamera = true,
+                    imageSourceIncludeCamera = false,
                     guidelines = CropImageView.Guidelines.ON,
                     backgroundColor = requireContext().getColor(R.color.general_contrast),
                     activityBackgroundColor = requireContext().getColor(R.color.general_contrast)
-                // TODO: Затестить овал
+                // TODO: Затестить овал, поправить вылет при обрезке с камеры
                 )
             )
         )
