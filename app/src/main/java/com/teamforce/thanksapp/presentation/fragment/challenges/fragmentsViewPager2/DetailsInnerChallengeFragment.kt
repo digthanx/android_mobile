@@ -32,6 +32,9 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     private val viewModel: DetailsInnerChallengerViewModel by viewModels()
 
     private var idChallenge: Int? = null
+    private var likesCountInner: Int = 0
+    private var isLikedInner: Boolean? = null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +53,9 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         super.onViewCreated(view, savedInstanceState)
         binding.scrollView.setFooterView(R.id.user_item)
         loadChallengeData(idChallenge)
-        setDataAboutChallenge()
+        setDataAboutChallengeInListener()
         checkReportSharedPref()
+        handleLike()
         binding.sendReportBtn.setOnClickListener {
             val bundle = Bundle()
             idChallenge?.let { it1 -> bundle.putInt(CHALLENGER_ID, it1) }
@@ -91,13 +95,14 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         }
     }
 
-    private fun setDataAboutChallenge() {
+    private fun setDataAboutChallengeInListener() {
 
         viewModel.challenge.observe(viewLifecycleOwner) {
             binding.nameChallenge.text = it.name
             binding.descriptionChallenge.text = it.description
             binding.stateAboutReports.text = it.status
-            likedBtnPressedOrNot(it.user_liked)
+            setLikes(it.likes_amount, it.user_liked)
+            binding.likeBtn.text = it.likes_amount.toString()
             if (it.active) {
                 binding.stateAboutAddParticipants.text =
                     requireContext().getString(R.string.gettingReportsActive)
@@ -105,9 +110,6 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                 binding.stateAboutAddParticipants.text =
                     requireContext().getString(R.string.gettingReportsFinished)
             }
-            // Сделать динамическую подстановку чипов(по статусам транзакции)
-            // пробегаться по массиву статусов и ставить чипы
-            // Установить организатора
             binding.prizeFundValue.text =
                 String.format(requireContext().getString(R.string.fund), it.fund.toString())
             binding.dateEndValue.text = convertDateToNecessaryFormat(it.end_at)
@@ -139,25 +141,49 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                     transactionToProfileOfCreator(id, view)
                 }
             }
-            binding.likeBtn.setOnClickListener { view ->
-                likedBtnClicked(it.user_liked, it.likes_amount)
+
+        }
+    }
+
+    private fun handleLike(){
+        binding.likeBtn.setOnClickListener { view ->
+            isLikedInner?.let { likeBtnClicked(it) }
+            idChallenge?.let { challengeId -> viewModel.pressLike(challengeId) }
+        }
+        viewModel.likeResult.observe(viewLifecycleOwner){ view ->
+            // Некст две строки нужны для динамического обновления кол ва лайков
+            // Если кто то кликнул в то время, пока ты не обновлял данные
+            // TODO Мне не очень нравится реализация, можно как то лучше
+            loadChallengeData(idChallenge)
+            setDataAboutChallengeInListener()
+            isLikedInner?.let { setLikes(likesCountInner, it) }
+        }
+    }
+
+
+    private fun likeBtnClicked(isLiked: Boolean){
+        if (isLikedInner != null) {
+            isLikedInner = !isLiked
+            if (isLikedInner == true) {
+                likesCountInner += 1
+                binding.likeBtn.text = likesCountInner.toString()
+                binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
+            } else {
+                likesCountInner -= 1
+                binding.likeBtn.text = likesCountInner.toString()
+                binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
+
             }
         }
     }
 
-    private fun likedBtnPressedOrNot(isLiked: Boolean){
-        if(isLiked){
-            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success))
-        }else{
-            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
-        }
-    }
-    private fun likedBtnClicked(isLiked: Boolean, likesAmount: Int){
-        if(!isLiked){
-            binding.likeBtn.text = (likesAmount + 1).toString()
-            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success))
-        }else{
-            binding.likeBtn.text = (likesAmount - 1).toString()
+    private fun setLikes(likesAmount: Int, isLiked: Boolean) {
+        likesCountInner = likesAmount
+        isLikedInner = isLiked
+        binding.likeBtn.text =  likesCountInner.toString()
+        if (isLiked) {
+            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
+        } else {
             binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
         }
     }

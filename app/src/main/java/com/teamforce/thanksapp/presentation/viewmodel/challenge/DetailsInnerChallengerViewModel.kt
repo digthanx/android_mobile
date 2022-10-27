@@ -35,7 +35,7 @@ class DetailsInnerChallengerViewModel @Inject constructor(
     val getChallengeError: LiveData<String> = _getChallengeError
 
     private val _likeResult =  MutableLiveData<CancelTransactionResponse?>()
-    private val likeResult: LiveData<CancelTransactionResponse?> =  _likeResult
+    val likeResult: LiveData<CancelTransactionResponse?> =  _likeResult
     private val _likeError = MutableLiveData<String>()
     val likeError: LiveData<String> = _likeError
 
