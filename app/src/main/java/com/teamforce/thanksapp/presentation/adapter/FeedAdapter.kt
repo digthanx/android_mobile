@@ -422,6 +422,24 @@ class FeedAdapter(
 
                 tagsChipGroup.addView(chip)
             }
+        }else{
+            tagsChipGroup.removeAllViews()
+            for (i in tagList.indices) {
+                val tagName = tagList[i].name
+                val chip: Chip = LayoutInflater.from(tagsChipGroup.context)
+                    .inflate(
+                        R.layout.chip_tag_example_in_history_transaction,
+                        tagsChipGroup,
+                        false
+                    ) as Chip
+                with(chip) {
+                    text = String.format(context.getString(R.string.setTag), tagName)
+                    setEnsureMinTouchTargetSize(true)
+                    minimumWidth = 0
+                }
+
+                tagsChipGroup.addView(chip)
+            }
         }
 
     }

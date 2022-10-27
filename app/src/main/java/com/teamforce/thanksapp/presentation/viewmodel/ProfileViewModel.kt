@@ -26,6 +26,9 @@ class ProfileViewModel @Inject constructor(
     val isLoading: LiveData<Boolean> = _isLoading
     private val _profile = MutableLiveData<ProfileModel>()
 
+    private val _isSuccessfulOperation = MutableLiveData<Boolean>()
+    val isSuccessfulOperation: LiveData<Boolean> = _isSuccessfulOperation
+
     val profile: LiveData<ProfileModel> = _profile
     private val _profileError = MutableLiveData<String>()
 
@@ -61,9 +64,10 @@ class ProfileViewModel @Inject constructor(
             val userId = userDataRepository.getProfileId()
             if (userId != null)
                 withContext(Dispatchers.IO) {
-                    _isLoading.postValue(true)
                     when (val result = profileRepository.updateUserAvatar(userId, filePath, filePathCropped)) {
-                        is ResultWrapper.Success -> {}
+                        is ResultWrapper.Success -> {
+                            _isSuccessfulOperation.postValue(true)
+                        }
                         else -> {
                             if (result is ResultWrapper.GenericError) {
                                 _profileError.postValue(result.error + " " + result.code)

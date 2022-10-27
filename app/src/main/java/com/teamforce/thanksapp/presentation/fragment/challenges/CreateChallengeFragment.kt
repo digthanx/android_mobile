@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,14 +16,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.canhub.cropper.CropImageContract
-import com.canhub.cropper.CropImageContractOptions
-import com.canhub.cropper.CropImageOptions
-import com.canhub.cropper.CropImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.DialogDatePickerBinding
 import com.teamforce.thanksapp.databinding.FragmentCreateChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
+import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.CreateChallengeViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.getPath
@@ -33,7 +29,6 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.time.*
 import java.util.*
 
 @AndroidEntryPoint
@@ -196,10 +191,11 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
     }
 
     private val resultLauncher =
-        registerForActivityResult(CropImageContract()) { result ->
-            if (result.isSuccessful && result.uriContent != null) {
-                val path = result.getUriFilePath(requireContext())
-                val imageUri = result.uriContent
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                Log.d(ProfileFragment.TAG, "${result.data?.data}:")
+                val path = getPath(requireContext(), result.data?.data!!)
+                val imageUri = result.data!!.data
                 if (imageUri != null && path != null) {
                     binding.showAttachedImgCard.visibility = View.VISIBLE
                     Glide.with(this)
@@ -215,18 +211,19 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
     private fun addPhotoFromIntent() {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.type = "image/*"
-        resultLauncher.launch(
-            CropImageContractOptions(
-                pickIntent.data, CropImageOptions(
-                    imageSourceIncludeGallery = true,
-                    imageSourceIncludeCamera = true,
-                    guidelines = CropImageView.Guidelines.ON,
-                    backgroundColor = requireContext().getColor(R.color.general_contrast),
-                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast),
-                    maxCropResultHeight = 1990
-                )
-            )
-        )
+        resultLauncher.launch(pickIntent)
+//        resultLauncher.launch(
+//            CropImageContractOptions(
+//                pickIntent.data, CropImageOptions(
+//                    imageSourceIncludeGallery = true,
+//                    imageSourceIncludeCamera = false,
+//                    guidelines = CropImageView.Guidelines.ON,
+//                    backgroundColor = requireContext().getColor(R.color.general_contrast),
+//                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast),
+//                    maxCropResultHeight = 200
+//                )
+//            )
+//        )
     }
 
 

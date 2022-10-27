@@ -79,6 +79,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
         swipeToRefresh()
         requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        // TODO Странно работает обновление, оно идет, и все ок, но идет 1 запрос почему то
+        // Как и должно быть, но по идее должно быть много лишних запросов, но их нет, разобраться
+        viewModel.isSuccessfulOperation.observe(viewLifecycleOwner){
+            if(it){
+                requestData()
+                setData()
+            }
+        }
     }
 
 
