@@ -55,7 +55,8 @@ class ChallengeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun loadWinners(
-        challengeId: Int): ResultWrapper<List<GetChallengeWinnersResponse.Winner>> {
+        challengeId: Int
+    ): ResultWrapper<List<GetChallengeWinnersResponse.Winner>> {
         return safeApiCall(Dispatchers.IO) {
             thanksApi.getChallengeWinners(challengeId)
         }
@@ -91,19 +92,19 @@ class ChallengeRepositoryImpl @Inject constructor(
         text: String
     ): ResultWrapper<CancelTransactionResponse> {
         val data = CreateChallengeCommentRequest(challenge_id, text)
-        return safeApiCall(Dispatchers.IO){
+        return safeApiCall(Dispatchers.IO) {
             thanksApi.createChallengeComment(data)
         }
     }
 
     override suspend fun deleteChallengeComment(commentId: Int): ResultWrapper<CancelTransactionResponse> {
-        return safeApiCall(Dispatchers.IO){
+        return safeApiCall(Dispatchers.IO) {
             thanksApi.deleteChallengeComment(commentId)
         }
     }
 
     override suspend fun loadChallengeWinnerReportDetails(challengeReportId: Int): ResultWrapper<GetChallengeWinnersReportDetailsResponse> {
-        return safeApiCall(Dispatchers.IO){
+        return safeApiCall(Dispatchers.IO) {
             thanksApi.getChallengeWinnerReportDetails(challengeReportId)
         }
     }
@@ -122,5 +123,17 @@ class ChallengeRepositoryImpl @Inject constructor(
                 )
             }
         ).flow
+    }
+
+    override suspend fun pressLike(
+        challengeId: Int
+    ): ResultWrapper<CancelTransactionResponse> {
+        val mapReaction = mapOf<String, Int>(
+            "like_kind" to 1,
+            "challenge_id" to challengeId
+        )
+        return safeApiCall(Dispatchers.IO) {
+            thanksApi.pressLikeNew(mapReaction)
+        }
     }
 }
