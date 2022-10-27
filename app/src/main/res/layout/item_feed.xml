@@ -1,108 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
-    android:elevation="8dp"
-    android:orientation="vertical"
-    app:cardCornerRadius="16dp">
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="24dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/standard_group"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false"
+        android:padding="16dp"
+        android:visibility="visible">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/standard_group"
+        <ImageView
+            android:id="@+id/user_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_anon_avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/dateTime"
+            android:textAppearance="@style/SmallText2.Gray"
+            app:layout_constraintStart_toEndOf="@+id/user_avatar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/senderAndReceiver"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="16dp"
-            android:visibility="visible">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:paddingVertical="5dp"
+            android:text="@string/someoneToSomeone"
+            android:textAppearance="@style/StandardText3Medium.Black"
+            app:layout_constraintStart_toEndOf="@+id/user_avatar"
+            app:layout_constraintTop_toBottomOf="@id/date_time" />
 
-            <ImageView
-                android:id="@+id/user_avatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_anon_avatar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:id="@+id/toggleButtonGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="@id/date_time"
+            app:layout_constraintTop_toBottomOf="@id/senderAndReceiver">
 
-            <TextView
-                android:id="@+id/date_time"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/comment_btn"
+                style="@style/ReactionBtnFeed"
+                android:layout_width="81dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="@string/dateTime"
-                android:textAppearance="@style/SmallText2.Gray"
-                app:layout_constraintStart_toEndOf="@+id/user_avatar"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginEnd="4dp"
+                app:icon="@drawable/ic_comment" />
 
-            <TextView
-                android:id="@+id/senderAndReceiver"
-                android:layout_width="match_parent"
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dislike_btn"
+                style="@style/ReactionBtnFeed"
+                android:layout_width="81dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:paddingVertical="5dp"
-                android:text="@string/someoneToSomeone"
-                android:textAppearance="@style/StandardText3Medium.Black"
-                app:layout_constraintStart_toEndOf="@+id/user_avatar"
-                app:layout_constraintTop_toBottomOf="@id/date_time" />
+                android:layout_marginEnd="4dp"
+                android:textColor="@color/general_contrast"
+                android:visibility="gone"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_dislike" />
 
-            <LinearLayout
-                android:id="@+id/toggleButtonGroup"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/like_btn"
+                style="@style/ReactionBtnFeed"
+                android:layout_width="81dp"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@id/date_time"
-                app:layout_constraintTop_toBottomOf="@id/senderAndReceiver">
+                app:icon="@drawable/ic_like" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/comment_btn"
-                    style="@style/ReactionBtnFeed"
-                    android:layout_width="81dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    app:icon="@drawable/ic_comment" />
+        </LinearLayout>
 
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/dislike_btn"
-                    style="@style/ReactionBtnFeed"
-                    android:layout_width="81dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:textColor="@color/general_contrast"
-                    android:visibility="gone"
-                    app:cornerRadius="8dp"
-                    app:icon="@drawable/ic_dislike" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/user_avatar"
+            app:layout_constraintTop_toBottomOf="@id/toggleButtonGroup"
+            app:singleLine="false">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/like_btn"
-                    style="@style/ReactionBtnFeed"
-                    android:layout_width="81dp"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_like" />
+        </com.google.android.material.chip.ChipGroup>
 
-            </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/user_avatar"
-                app:layout_constraintTop_toBottomOf="@id/toggleButtonGroup"
-                app:singleLine="false">
-
-            </com.google.android.material.chip.ChipGroup>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

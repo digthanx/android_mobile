@@ -82,7 +82,6 @@ android {
 }
 dependencies {
 
-
     // Library for sticky scroll
     implementation 'com.github.amarjain07:StickyScrollView:1.0.3'
 
