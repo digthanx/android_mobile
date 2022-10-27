@@ -42,5 +42,9 @@ class MainActivity : AppCompatActivity(), IMainAction {
         TODO("Not yet implemented")
     }
 
+    companion object {
+        const val TAG = "MainActivity"
+    }
+
 
 }

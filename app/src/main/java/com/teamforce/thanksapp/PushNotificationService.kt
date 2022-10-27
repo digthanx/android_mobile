@@ -1,31 +1,70 @@
 package com.teamforce.thanksapp
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.teamforce.thanksapp.data.SharedPreferences
 import com.teamforce.thanksapp.presentation.activity.MainActivity
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 
 class PushNotificationService : FirebaseMessagingService() {
 
-    override fun onMessageReceived(message: RemoteMessage) {
-        if (message.notification != null) {
-            NotificationsRepository.state.postValue(NotificationStates.NotificationReceived)
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface PushNotificationServiceEntryPoint {
+        fun notificationsRepository(): NotificationsRepository
+        fun sharedPreferences(): SharedPreferences
 
+
+    }
+
+    override fun onMessageReceived(message: RemoteMessage) {
+        Log.d(TAG, "onMessageReceived: ")
+        if (message.notification != null) {
+            val entryPoint = EntryPointAccessors.fromApplication(
+                applicationContext,
+                PushNotificationServiceEntryPoint::class.java
+            )
+            entryPoint.notificationsRepository().state.postValue(NotificationStates.NotificationReceived)
             generateNotification(message.notification!!.title!!, message.notification!!.body!!)
         }
     }
 
+    @SuppressLint("HardwareIds")
     override fun onNewToken(token: String) {
         Log.d(TAG, "onNewToken: $token")
+        val entryPoint = EntryPointAccessors.fromApplication(
+            applicationContext,
+            PushNotificationServiceEntryPoint::class.java
+        )
 
+        //сохраняем токен после обновления или получения
+        entryPoint.sharedPreferences().pushToken = token
+        val deviceId = Settings.Secure.getString(
+            this.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
+        //сообщаем слушателей о том, что токен обновился. Вдруг он обновится во время работы программы.
+        //Это вряд ли, но на всякий случай
+        entryPoint.notificationsRepository().state.postValue(
+            NotificationStates.PushTokenUpdated(
+                token,
+                deviceId
+            )
+        )
     }
 
     private fun generateNotification(title: String, message: String) {

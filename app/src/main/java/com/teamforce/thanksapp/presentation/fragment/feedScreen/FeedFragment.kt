@@ -1,6 +1,9 @@
 package com.teamforce.thanksapp.presentation.fragment.feedScreen
 
+import android.content.ContentResolver
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -67,7 +70,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         //  displaySnack()
 
         binding.notifyLayout.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_notificationsFragment)
+            findNavController().navigate(R.id.action_FeedFragment_to_notificationsFragment)
         }
 
         sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
@@ -217,5 +220,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     }
 
+
+    companion object {
+        const val TAG = "FeedFragment"
+    }
 
 }

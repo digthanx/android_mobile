@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.data.api
 
+import com.teamforce.thanksapp.data.entities.PushTokenEntity
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.request.*
@@ -203,4 +204,7 @@ interface ThanksApi {
     suspend fun getChallengeWinnerReportDetails(
         @Path("challenge_report_id") challengeReportId: Int,
     ): GetChallengeWinnersReportDetailsResponse
+
+    @POST("/set-fcm-token/")
+    suspend fun setPushToken(@Body token: PushTokenEntity): PushTokenEntity
 }

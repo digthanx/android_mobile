@@ -1,9 +1,11 @@
 package com.teamforce.thanksapp.presentation.fragment.challenges
 
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.teamforce.thanksapp.NotificationSharedViewModel
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentChallengesBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
@@ -22,9 +25,7 @@ import com.teamforce.thanksapp.presentation.adapter.challenge.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.adapter.challenge.ChallengePagerAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.ChallengesViewModel
-import com.teamforce.thanksapp.utils.Consts
-import com.teamforce.thanksapp.utils.OptionsTransaction
-import com.teamforce.thanksapp.utils.navigateSafely
+import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,6 +40,8 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
     private val navController: NavController by lazy { findNavController() }
 
     private var listAdapter: ChallengePagerAdapter? = null
+
+    private val sharedViewModel: NotificationSharedViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,6 +64,21 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
                 OptionsTransaction().optionForProfileFromEditProfile
             )
 
+        }
+
+        sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
+            if (notificationsCount == 0) {
+                binding.apply {
+                    activeNotifyLayout.gone()
+                    notify.visible()
+                }
+            } else {
+                binding.apply {
+                    activeNotifyLayout.visible()
+                    notify.gone()
+                    notifyBadge.text = notificationsCount.toString()
+                }
+            }
         }
 
     }

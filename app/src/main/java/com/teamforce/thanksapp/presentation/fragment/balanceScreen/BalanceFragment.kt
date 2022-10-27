@@ -102,7 +102,7 @@ class BalanceFragment : Fragment() {
         }
 
         binding.notifyLayout.setOnClickListener {
-            findNavController().navigate(R.id.action_balanceFragment_to_notificationsFragment)
+            findNavController().navigate(R.id.action_BalanceFragment_to_notificationsFragment)
         }
 
         sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->

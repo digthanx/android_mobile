@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:489908383495:android:e9a41a594f3f05cdd75fa2",
         "android_client_info": {
-          "package_name": "com.teamforce.thanksapp.debug"
+          "package_name": "com.teamforce.thanksapp"
         }
       },
       "oauth_client": [
@@ -21,6 +21,35 @@
             "certificate_hash": "82afb89c897632862d78dbc9a86dd53a13d0d10b"
           }
         },
+        {
+          "client_id": "489908383495-qashmje56ec9lnpnddsb3ka4s34pe8bf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9-QCuL0A_Vhfu73X-1Hs2xI8twP1YqiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489908383495-qashmje56ec9lnpnddsb3ka4s34pe8bf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489908383495:android:0bb2f21dd1ca0638d75fa2",
+        "android_client_info": {
+          "package_name": "com.teamforce.thanksapp.debug"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "489908383495-qashmje56ec9lnpnddsb3ka4s34pe8bf.apps.googleusercontent.com",
           "client_type": 3
