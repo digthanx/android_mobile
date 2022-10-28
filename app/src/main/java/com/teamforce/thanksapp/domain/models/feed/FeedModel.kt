@@ -43,7 +43,8 @@ sealed class FeedModel(
         val userLiked: Boolean,
         val transactionUpdatedAt: String,
         val transactionTags: List<String>,
-        val isForMe: Boolean
+        val isWithMe: Boolean,
+        val isFromMe: Boolean
     ) : FeedModel(id)
 
     data class WinnerFeedEvent(

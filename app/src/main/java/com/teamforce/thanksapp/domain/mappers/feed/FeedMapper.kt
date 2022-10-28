@@ -53,13 +53,15 @@ class FeedMapper @Inject constructor(
                 transactionRecipientPhoto = from.transaction.recipientPhoto,
                 transactionRecipientTgName = from.transaction.recipientTgName,
                 transactionSenderId = from.transaction.senderId,
-                transactionSenderTgName = from.transaction.senderTgName ?: "tg_name_not_set",
+                transactionSenderTgName = from.transaction.senderTgName ?: "anonymous",
                 userLiked = from.transaction.userLiked,
                 transactionUpdatedAt = from.transaction.updatedAt,
                 transactionTags = from.transaction.tags.map {
                     it.name
                 },
-                isForMe = userDataRepository.getProfileId() == from.transaction.recipientId.toString()
+                isWithMe = (userDataRepository.getProfileId() == from.transaction.recipientId.toString() ||
+                        userDataRepository.getProfileId() == from.transaction.senderId.toString()),
+                isFromMe = userDataRepository.getProfileId() == from.transaction.senderId.toString()
             )
         } else {
             FeedModel.WinnerFeedEvent(

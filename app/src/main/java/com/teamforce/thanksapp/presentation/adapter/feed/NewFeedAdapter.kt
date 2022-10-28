@@ -124,21 +124,28 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
 
         private fun bindTransaction(item: FeedModel.TransactionFeedEvent) {
             with(binding) {
-                if (item.isForMe) {
+                if (item.isWithMe) {
+                    if(item.isFromMe){
+                        senderAndReceiver.text = root.context.getString(
+                            R.string.user_received_thanks_from_you,
+                            item.transactionSenderTgName.username(),
+                            item.transactionAmount
+                        )
+                    }else{
+                        senderAndReceiver.text = root.context.getString(
+                            R.string.you_received_thanks,
+                            item.transactionAmount,
+                            item.transactionSenderTgName.username()
+                        )
+                    }
                     toggleButtonGroup.visible()
-
-
-                    senderAndReceiver.text = root.context.getString(
-                        R.string.you_received_thanks,
-                        item.transactionAmount,
-                        item.transactionSenderTgName.username()
-                    )
                     card.setCardBackgroundColor(root.context.getColor(R.color.minor_success_secondary))
                     likeBtn.setBackgroundColor(root.context.getColor(R.color.white))
                     dislikeBtn.setBackgroundColor(root.context.getColor(R.color.white))
                     commentBtn.setBackgroundColor(root.context.getColor(R.color.white))
 
                 } else {
+                    card.setCardBackgroundColor(root.context.getColor(R.color.general_background))
                     toggleButtonGroup.visible()
                     senderAndReceiver.text = root.context.getString(
                         R.string.user_received_thanks,
