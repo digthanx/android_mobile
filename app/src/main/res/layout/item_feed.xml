@@ -44,6 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
             android:paddingVertical="5dp"
+            android:clickable="true"
+            android:focusable="true"
             android:text="@string/someoneToSomeone"
             android:textAppearance="@style/StandardText3Medium.Black"
             app:layout_constraintStart_toEndOf="@+id/user_avatar"

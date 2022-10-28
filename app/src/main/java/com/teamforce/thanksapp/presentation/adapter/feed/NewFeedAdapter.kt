@@ -75,7 +75,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                         item.winnerTgName.username(),
                         R.color.general_brand
                     ) {
-                        Log.d(TAG, "bindWinner: ${item.winnerTgName} clicked")
+                        Log.d("Token", "bindWinner: ${item.winnerTgName} clicked")
                     },
                 ).append(
                     createClickableSpannable(" " +root.context.getString(R.string.challenge_winner) + " ", R.color.black, null)
@@ -153,7 +153,8 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                         item.transactionAmount,
                         item.transactionSenderTgName.username()
                     )
-
+                    senderAndReceiver.text = createSpannableWhenSenderAndReceiverAreSomeone(
+                        senderAndReceiver.text.toString(), item)
                 }
                 likeBtn.text = item.likesAmount.toString()
                 commentBtn.text = item.commentAmount.toString()
@@ -167,6 +168,36 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                     userAvatar.setImageResource(R.drawable.ic_anon_avatar)
                 }
             }
+        }
+
+        private fun createSpannableWhenSenderAndReceiverAreSomeone(
+            string: String,
+            item: FeedModel.TransactionFeedEvent ): Spannable
+        {
+            val spannable = SpannableString(string)
+            with(spannable){
+                // Получатель
+                this.setSpan(
+                    ForegroundColorSpan(binding.root.context.getColor(R.color.general_brand)),
+                    0, item.transactionRecipientTgName.length + 1,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
+                // Отправитель
+                this.setSpan(
+                    ForegroundColorSpan(binding.root.context.getColor(R.color.general_brand)),
+                    spannable.length - item.transactionSenderTgName.length - 1,
+                    spannable.length,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
+                // Спасибки
+                this.setSpan(
+                    ForegroundColorSpan(binding.root.context.getColor(R.color.minor_success)),
+                    item.transactionRecipientTgName.length + 9,
+                    spannable.length - item.transactionSenderTgName.length - 4,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
+            }
+            return spannable
         }
 
         private fun createClickableSpannable(
