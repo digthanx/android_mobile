@@ -95,18 +95,49 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
         private fun bindChallenge(item: FeedModel.ChallengeFeedEvent) {
             with(binding) {
                 toggleButtonGroup.invisible()
-                senderAndReceiver.text = binding.root.context.getString(
-                    R.string.challenge_created,
-                    item.challengeName.doubleQuoted(),
-                    item.challengeCreatorTgName.username(),
-                    item.challengeCreatedAt
-                )
+
                 dateTime.text = item.time
                 if (!item.challengePhoto.isNullOrEmpty()) {
                     Glide.with(root.context)
                         .load("${Consts.BASE_URL}${item.challengePhoto}".toUri())
                         .apply(RequestOptions.bitmapTransform(CircleCrop()))
                         .into(userAvatar)
+                    val spannable = SpannableStringBuilder(
+                    ).append(
+                        createClickableSpannable(
+                            root.context.getString(R.string.challenge_created) + " ",
+                            R.color.black,
+                            null
+                        )
+                    ).append(
+                        createClickableSpannable(
+                            item.challengeName.doubleQuoted() + " ",
+                            R.color.general_brand,
+                        ){
+                            Log.d(TAG, "bindChallengeName: ${item.challengeName} clicked")
+                        }
+                    ).append(
+                        createClickableSpannable(
+                            root.context.getString(R.string.whoCreatedChallenge) + " ",
+                            R.color.black,
+                            null
+                        )
+                    ).append(
+                        createClickableSpannable(
+                            item.challengeCreatorTgName.username() + " ",
+                            R.color.general_brand,
+                        ){
+                            Log.d(TAG, "bindChallengeCreator: ${item.challengeCreatorTgName} clicked")
+                        }
+                    ).append(
+                        createClickableSpannable(
+                            root.context.getString(R.string.toDate, item.challengeCreatedAt),
+                            R.color.black,
+                            null
+                        )
+                    )
+                    senderAndReceiver.text = spannable
+
                 } else {
                     userAvatar.setImageResource(R.drawable.ic_anon_avatar)
                 }

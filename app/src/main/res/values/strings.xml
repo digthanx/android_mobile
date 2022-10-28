@@ -230,12 +230,15 @@
 
     <!--    feed-->
     <string name="challenge_winner">победил в челлендже</string>
-    <string name="challenge_created">Создан челлендж %1$s пользователем %2$s до %3$s</string>
+    <string name="challenge_created">Создан челлендж</string>
     <string name="user_received_thanks">%1$s получил %2$d спасибок от %3$s</string>
     <string name="you_received_thanks">Вы получили %1$d спасибок от %2$s</string>
     <string name="user_received_thanks_from_you">%1$s получил %2$d спасибок от вас</string>
     <string name="got">получил</string>
     <string name="from">от</string>
+    <string name="whoCreatedChallenge">пользователем</string>
+    <string name="toDate">до %1$s</string>
     <string name="transactions">Транзакции</string>
     <string name="challenges">Челленджи</string>
+    <string name="createdChallenge">Создан челлендж</string>
 </resources>
