@@ -118,7 +118,7 @@
     <string name="typeTransfer">Тип благодарности</string>
     <string name="reasonOfRefusing">Причина отказа</string>
     <string name="youSended">Вы отправили</string>
-    <string name="youGot">Вы получили от</string>
+    <string name="youGot">Вы получили</string>
     <string name="youWantedToSend">Вы хотели отправить</string>
     <string name="weRefusedYourOperation">Мы отклонили вашу операцию</string>
     <string name="operationWasRefused">Операция была отменена</string>
@@ -234,6 +234,8 @@
     <string name="user_received_thanks">%1$s получил %2$d спасибок от %3$s</string>
     <string name="you_received_thanks">Вы получили %1$d спасибок от %2$s</string>
     <string name="user_received_thanks_from_you">%1$s получил %2$d спасибок от вас</string>
+    <string name="got">получил</string>
+    <string name="from">от</string>
     <string name="transactions">Транзакции</string>
     <string name="challenges">Челленджи</string>
 </resources>
