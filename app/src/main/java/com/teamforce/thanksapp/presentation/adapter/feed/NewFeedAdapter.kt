@@ -1,17 +1,17 @@
 package com.teamforce.thanksapp.presentation.adapter.feed
 
-import android.graphics.Color
-import android.text.*
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.core.net.toUri
-import androidx.core.view.get
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -21,13 +21,15 @@ import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemFeedBinding
 import com.teamforce.thanksapp.domain.models.feed.FeedModel
+import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.utils.*
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 
 class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(DiffCallback) {
+
+    var onChallengeClicked: ((challengeId: Int) -> Unit)? = null
+    var onSomeonesClicked: ((userId: Int) -> Unit)? = null
+    var onTransactionClicked: ((dataOfTransaction: FeedModel.TransactionFeedEvent) -> Unit)? = null
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (getItem(position) != null) {
@@ -40,7 +42,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
         return ViewHolder(binding)
     }
 
-    class ViewHolder(val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
+   inner class ViewHolder(val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FeedModel) {
             // Без этого клики по spannable не работают
             binding.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance();
@@ -64,6 +66,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                         R.color.general_brand
                     ) {
                         Log.d(TAG, "bindWinner: ${item.winnerTgName} clicked")
+                        onSomeonesClicked?.invoke(item.winnerId)
                     },
                 ).append(
                     createClickableSpannable(
@@ -76,6 +79,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                         R.color.general_brand
                     ) {
                         Log.d(TAG, "bindChallengeName: ${item.challengeName} clicked")
+                        onChallengeClicked?.invoke(item.id)
                     }
                 )
 
@@ -95,52 +99,52 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
         private fun bindChallenge(item: FeedModel.ChallengeFeedEvent) {
             with(binding) {
                 toggleButtonGroup.invisible()
-
                 dateTime.text = item.time
                 if (!item.challengePhoto.isNullOrEmpty()) {
                     Glide.with(root.context)
                         .load("${Consts.BASE_URL}${item.challengePhoto}".toUri())
                         .apply(RequestOptions.bitmapTransform(CircleCrop()))
                         .into(userAvatar)
-                    val spannable = SpannableStringBuilder(
-                    ).append(
-                        createClickableSpannable(
-                            root.context.getString(R.string.challenge_created) + " ",
-                            R.color.black,
-                            null
-                        )
-                    ).append(
-                        createClickableSpannable(
-                            item.challengeName.doubleQuoted() + " ",
-                            R.color.general_brand,
-                        ){
-                            Log.d(TAG, "bindChallengeName: ${item.challengeName} clicked")
-                        }
-                    ).append(
-                        createClickableSpannable(
-                            root.context.getString(R.string.whoCreatedChallenge) + " ",
-                            R.color.black,
-                            null
-                        )
-                    ).append(
-                        createClickableSpannable(
-                            item.challengeCreatorTgName.username() + " ",
-                            R.color.general_brand,
-                        ){
-                            Log.d(TAG, "bindChallengeCreator: ${item.challengeCreatorTgName} clicked")
-                        }
-                    ).append(
-                        createClickableSpannable(
-                            root.context.getString(R.string.toDate, item.challengeCreatedAt),
-                            R.color.black,
-                            null
-                        )
-                    )
-                    senderAndReceiver.text = spannable
-
                 } else {
                     userAvatar.setImageResource(R.drawable.ic_anon_avatar)
                 }
+                val spannable = SpannableStringBuilder(
+                ).append(
+                    createClickableSpannable(
+                        root.context.getString(R.string.challenge_created) + " ",
+                        R.color.black,
+                        null
+                    )
+                ).append(
+                    createClickableSpannable(
+                        item.challengeName.doubleQuoted() + " ",
+                        R.color.general_brand,
+                    ){
+                        Log.d(TAG, "bindChallengeName: ${item.challengeName} clicked")
+                        onChallengeClicked?.invoke(item.challengeId)
+                    }
+                ).append(
+                    createClickableSpannable(
+                        root.context.getString(R.string.whoCreatedChallenge) + " ",
+                        R.color.black,
+                        null
+                    )
+                ).append(
+                    createClickableSpannable(
+                        item.challengeCreatorTgName.username() + " ",
+                        R.color.general_brand,
+                    ){
+                        Log.d(TAG, "bindChallengeCreator: ${item.challengeCreatorTgName} clicked")
+                        onSomeonesClicked?.invoke(item.challengeCreatorId)
+                    }
+                ).append(
+                    createClickableSpannable(
+                        root.context.getString(R.string.toDate, item.challengeCreatedAt),
+                        R.color.black,
+                        null
+                    )
+                )
+                senderAndReceiver.text = spannable
             }
         }
 
@@ -148,6 +152,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
             with(binding) {
                 if (item.isWithMe) {
                     if(item.isFromMe){
+                        // Я отправитель
                         val spannable = SpannableStringBuilder(
                         ).append(
                             createClickableSpannable(
@@ -155,6 +160,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                                 R.color.general_brand
                             ){
                                 Log.d(TAG, "bindRecipientName: ${item.transactionRecipientTgName} clicked")
+                                onSomeonesClicked?.invoke(item.transactionRecipientId)
                             }
                         ).append(
                             createClickableSpannable(
@@ -183,6 +189,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                         )
                         senderAndReceiver.text = spannable
                     }else{
+                        // Я получатель
                         val spannable = SpannableStringBuilder(
                         ).append(
                             createClickableSpannable(
@@ -208,6 +215,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                                 R.color.general_brand
                             ){
                                 Log.d(TAG, "bindSender: ${item.transactionSenderTgName} clicked")
+                                item.transactionSenderId?.let { onSomeonesClicked?.invoke(it) }
                             }
                         )
                         senderAndReceiver.text = spannable
@@ -228,6 +236,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                             R.color.general_brand
                         ){
                             Log.d(TAG, "bindRecipient: ${item.transactionRecipientTgName} clicked")
+                            onSomeonesClicked?.invoke(item.transactionRecipientId)
                         }
                     ).append(
                         createClickableSpannable(
@@ -253,6 +262,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                             R.color.general_brand
                         ){
                             Log.d(TAG, "bindSender: ${item.transactionSenderTgName} clicked")
+                            item.transactionSenderId?.let { onSomeonesClicked?.invoke(it) }
                         }
                     )
                     senderAndReceiver.text = spannable
@@ -260,6 +270,9 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                 likeBtn.text = item.likesAmount.toString()
                 commentBtn.text = item.commentAmount.toString()
                 dateTime.text = item.time
+                card.setOnClickListener {
+                    onTransactionClicked?.invoke(item)
+                }
                 if (!item.transactionRecipientPhoto.isNullOrEmpty()) {
                     Glide.with(root.context)
                         .load("${Consts.BASE_URL}${item.transactionRecipientPhoto}".toUri())
