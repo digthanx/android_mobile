@@ -134,6 +134,9 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                             item.transactionSenderTgName.username(),
                             item.transactionAmount
                         )
+                        senderAndReceiver.text = createSpannableWhenYouSender(
+                            senderAndReceiver.text.toString(),
+                            item)
                     }else{
                         senderAndReceiver.text = root.context.getString(
                             R.string.you_received_thanks,
@@ -241,6 +244,31 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                     ForegroundColorSpan(binding.root.context.getColor(R.color.minor_success)),
                     12,
                     spannable.length - item.transactionSenderTgName.length - 4,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
+            }
+            return spannable
+        }
+
+        private fun createSpannableWhenYouSender(
+            string: String,
+            item: FeedModel.TransactionFeedEvent
+        ): Spannable
+        {
+            val spannable = SpannableString(string)
+            with(spannable){
+                // Отправитель
+                this.setSpan(
+                    ForegroundColorSpan(binding.root.context.getColor(R.color.general_brand)),
+                    0,
+                    spannable.length - item.transactionRecipientTgName.length + 1,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
+                // Спасибки
+                this.setSpan(
+                    ForegroundColorSpan(binding.root.context.getColor(R.color.minor_success)),
+                    spannable.length - item.transactionRecipientTgName.length + 9,
+                    spannable.length - 7,
                     Spannable.SPAN_INCLUSIVE_INCLUSIVE
                 )
             }
