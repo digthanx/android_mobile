@@ -104,9 +104,9 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
         listAdapter.onChallengeClicked = { challengeId: Int ->
             val bundle = Bundle()
             bundle.putInt(ChallengesConsts.CHALLENGER_ID, challengeId)
-            //TODO !ВЫЛЕТ! В детали челленджа добавить новый запрос и установку данных с другой модели
+            //TODO В детали челленджа добавить новый запрос и установку данных с другой модели
             view.findNavController().navigateSafely(
-                R.id.action_global_challenge_graph,
+                R.id.action_global_detailsMainChallengeFragment,
                 bundle,
                 OptionsTransaction().optionForAdditionalInfoFeedFragment
             )

@@ -149,9 +149,7 @@
                 app:destination="@id/profileGraph" />
         </fragment>
     </navigation>
-    <navigation
-        android:id="@+id/challenge_graph"
-        app:startDestination="@id/challengesFragment">
+
         <fragment
             android:id="@+id/challengesFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment"
@@ -198,7 +196,7 @@
             app:destination="@id/challengesWinnersDetailFragment"/>
         <action android:id="@+id/action_global_detailsMainChallengeFragment"
             app:destination="@id/detailsMainChallengeFragment"/>
-    </navigation>
+
     <action android:id="@+id/action_global_someonesProfileFragment"
         app:destination="@id/someonesProfileFragment"/>
     <action android:id="@+id/action_global_challenge_graph"

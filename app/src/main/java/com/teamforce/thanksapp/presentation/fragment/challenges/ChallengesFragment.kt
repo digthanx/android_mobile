@@ -70,7 +70,7 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
                 R.id.feedFragment,
                 R.id.balanceFragment,
                 R.id.historyFragment,
-                R.id.challenge_graph
+                R.id.challengesFragment
             )
         )
         val toolbar = binding.toolbar
