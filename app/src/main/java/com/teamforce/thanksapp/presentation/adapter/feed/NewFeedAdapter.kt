@@ -28,7 +28,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
 
     var onChallengeClicked: ((challengeId: Int) -> Unit)? = null
     var onSomeonesClicked: ((userId: Int) -> Unit)? = null
-    var onTransactionClicked: ((dataOfTransaction: FeedModel.TransactionFeedEvent) -> Unit)? = null
+    var onTransactionClicked: ((transactionId: Int) -> Unit)? = null
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -79,7 +79,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                         R.color.general_brand
                     ) {
                         Log.d(TAG, "bindChallengeName: ${item.challengeName} clicked")
-                        onChallengeClicked?.invoke(item.id)
+                      //  onChallengeClicked?.invoke(item.id)
                     }
                 )
 
@@ -271,7 +271,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                 commentBtn.text = item.commentAmount.toString()
                 dateTime.text = item.time
                 card.setOnClickListener {
-                    onTransactionClicked?.invoke(item)
+                    onTransactionClicked?.invoke(item.transactionId)
                 }
                 if (!item.transactionRecipientPhoto.isNullOrEmpty()) {
                     Glide.with(root.context)

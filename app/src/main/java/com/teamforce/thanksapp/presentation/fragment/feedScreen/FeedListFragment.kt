@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -12,8 +13,12 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentFeedListBinding
 import com.teamforce.thanksapp.presentation.adapter.feed.NewFeedAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
 import com.teamforce.thanksapp.presentation.viewmodel.feed.FeedListViewModel
+import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.ViewLifecycleDelegate
+import com.teamforce.thanksapp.utils.navigateSafely
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -84,7 +89,39 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
                 }
             }
         }
+        listAdapter.onTransactionClicked = { transactionId ->
+            val bundle = Bundle()
+            bundle.putInt(Consts.TRANSACTION_ID, transactionId)
+            //TODO Добавить запрос в бд и установку данных переделать под данные с бека
+            view.findNavController()
+                .navigate(
+                    R.id.action_global_additionalInfoFeedItemFragment,
+                    bundle,
+                    OptionsTransaction().optionForAdditionalInfoFeedFragment
+                )
+        }
 
+        listAdapter.onChallengeClicked = { challengeId: Int ->
+            val bundle = Bundle()
+            bundle.putInt(ChallengesConsts.CHALLENGER_ID, challengeId)
+            //TODO !ВЫЛЕТ! В детали челленджа добавить новый запрос и установку данных с другой модели
+            view.findNavController().navigateSafely(
+                R.id.action_global_challenge_graph,
+                bundle,
+                OptionsTransaction().optionForAdditionalInfoFeedFragment
+            )
+            // Добавить в модель победителя challengeId когда бек добавит
+        }
+
+        listAdapter.onSomeonesClicked = { userId: Int ->
+            val bundle = Bundle()
+            bundle.putInt(Consts.USER_ID, userId)
+            view.findNavController().navigate(
+                R.id.action_global_someonesProfileFragment,
+                bundle,
+                OptionsTransaction().optionForAdditionalInfoFeedFragment
+            )
+        }
 
     }
 

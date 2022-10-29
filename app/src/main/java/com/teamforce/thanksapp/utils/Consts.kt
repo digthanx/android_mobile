@@ -15,6 +15,7 @@ object Consts {
     const val LINK_TO_BOT_Name = "LinkToBot"
     const val SELECT_PICTURE = 200
     const val USER_ID = "userId"
+    val TRANSACTION_ID = "transactionId"
 
     // Аргументы в расширенную инфу о траназкции
     const val DATE_TRANSACTION = "date-transaction"

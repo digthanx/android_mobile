@@ -29,6 +29,7 @@ import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.presentation.adapter.CommentsAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.AdditionalInfoFeedItemViewModel
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.Consts.TRANSACTION_ID
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -352,6 +353,5 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         val DISLIKES_COUNT = "dislikesCount"
         val IS_LIKED = "isLiked"
         val IS_DISLIKED = "isDisliked"
-        val TRANSACTION_ID = "transactionId"
     }
 }

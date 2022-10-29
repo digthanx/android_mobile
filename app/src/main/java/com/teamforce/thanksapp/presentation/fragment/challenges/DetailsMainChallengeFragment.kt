@@ -13,9 +13,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
+import com.teamforce.thanksapp.model.domain.ChallengeModelById
 import com.teamforce.thanksapp.presentation.adapter.FragmentDetailChallengeStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsMainChallengeViewModel
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_DATA
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,11 +32,14 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
 
     private var dataOfChallenge: ChallengeModel? = null
+    private var challengeId: Int? = null
+    private var challengeModelById: ChallengeModelById? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             dataOfChallenge = it.getParcelable(CHALLENGER_DATA)
+            challengeId = it.getInt(CHALLENGER_ID)
         }
     }
 

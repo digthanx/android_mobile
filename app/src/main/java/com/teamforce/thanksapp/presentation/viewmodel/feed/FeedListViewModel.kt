@@ -26,23 +26,23 @@ class FeedListViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = PagingData.empty()
-    )
+    ).cachedIn(viewModelScope)
 
     val transactions = feedRepository.getTransactions().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = PagingData.empty()
-    )
+    ).cachedIn(viewModelScope)
 
     val winners = feedRepository.getWinners().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = PagingData.empty()
-    )
+    ).cachedIn(viewModelScope)
 
     val challenges = feedRepository.getChallenges().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = PagingData.empty()
-    )
+    ).cachedIn(viewModelScope)
 }
