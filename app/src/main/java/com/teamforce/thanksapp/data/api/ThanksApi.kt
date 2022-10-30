@@ -1,5 +1,6 @@
 package com.teamforce.thanksapp.data.api
 
+import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEnity
 import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
@@ -71,7 +72,7 @@ interface ThanksApi {
     @GET("/user/transactions/{id}")
     suspend fun getTransactionById(
         @Path("id") transactionId: Int
-    )
+    ): FeedItemByIdEnity
 
     @GET("/feed/")
     suspend fun getFeed(

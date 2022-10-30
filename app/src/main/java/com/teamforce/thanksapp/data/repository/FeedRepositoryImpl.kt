@@ -8,9 +8,13 @@ import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.data.sources.createPager
 import com.teamforce.thanksapp.data.sources.feed.FeedPagingSource
 import com.teamforce.thanksapp.domain.mappers.feed.FeedMapper
+import com.teamforce.thanksapp.domain.models.feed.FeedItemByIdModel
 import com.teamforce.thanksapp.domain.models.feed.FeedModel
 import com.teamforce.thanksapp.domain.repositories.FeedRepository
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.ResultWrapper
+import com.teamforce.thanksapp.utils.safeApiCall
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -55,4 +59,13 @@ class FeedRepositoryImpl @Inject constructor(
         val result = thanksApi.getEventsTransactions(limit = page, offset = Consts.PAGE_SIZE)
         feedMapper.mapList(result)
     }.flow
+
+    override suspend fun getTransactionById(transactionId: Int): ResultWrapper<FeedItemByIdModel> {
+        val result = safeApiCall(Dispatchers.IO) {
+            feedMapper.mapEntityByIdToModel(
+                thanksApi.getTransactionById(transactionId)
+            )
+        }
+        return result
+    }
 }
