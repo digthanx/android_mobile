@@ -97,7 +97,7 @@ class FeedMapper @Inject constructor(
         return FeedItemByIdModel(
             id = from.id,
             tags = from.tags,
-            amount = from.amount,
+            like_amount = from.like_amount,
             updated_at = convertDate(from.updated_at),
             reason = from.reason,
             photo = from.photo,
@@ -113,7 +113,7 @@ class FeedMapper @Inject constructor(
             recipient_tg_name = from.recipient_tg_name?: "anonymous",
             is_anonymous = from.is_anonymous,
             user_liked = from.user_liked,
-            likes_amount = from.likes_amount
+            amount = from.amount
         )
     }
 

@@ -23,6 +23,6 @@ data class FeedItemByIdModel(
     val reason: String?,
     val photo: String?,
     val user_liked: Boolean,
-    val likes_amount: Int,
+    val like_amount: Int,
     val is_anonymous: Boolean
 )

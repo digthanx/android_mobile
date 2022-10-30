@@ -53,7 +53,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private var userIdSender: Int? = null
     private var likesCount: Int? = null
     private var likesCountReal: Int = 0
-    private var isLiked: Boolean? = null
+    private var isLikedInner: Boolean? = null
     private var transactionId: Int? = null
     private var recipientAvatar: String? = null
 
@@ -81,7 +81,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         initTabLayoutMediator()
         loadDataFromDb()
         setBaseInfo()
-        setLikes()
 //        transactionId?.let {
 //            loadCommentFromDb(it)
 //        }
@@ -246,9 +245,9 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     }
 
     private fun updateOutlookLike() {
-        if (isLiked != null) {
-            isLiked = !isLiked!!
-            if (isLiked == true) {
+        if (isLikedInner != null) {
+            isLikedInner = !isLikedInner!!
+            if (isLikedInner == true) {
                 likesCountReal += 1
                 binding.likeBtn.text = likesCountReal.toString()
                 binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
@@ -283,6 +282,9 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 )
                 reasonTransaction.text = it?.reason
                 setAvatar(it?.recipient_photo)
+                userIdReceiver = it?.recipient_id
+                userIdSender = it?.sender_id
+                setLikes(it?.like_amount, it?.user_liked)
             }
         }
     }
@@ -313,14 +315,13 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     }
 
-    private fun setLikes() {
-        likesCount?.let { likes ->
-
-            likesCountReal = likesCount!!
-
+    private fun setLikes(likes: Int?, isLiked: Boolean?) {
+        likes?.let { likes ->
+            likesCountReal = likes
         }
+        isLiked?.let { isLiked -> isLikedInner = isLiked }
         binding.likeBtn.text = likesCountReal.toString()
-        if (isLiked == true) {
+        if (isLikedInner == true) {
             binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
         } else {
             binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
