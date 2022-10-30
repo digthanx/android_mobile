@@ -236,6 +236,7 @@
     <string name="user_received_thanks_from_you">%1$s получил %2$d спасибок от вас</string>
     <string name="got">получил</string>
     <string name="from">от</string>
+    <string name="gotFrom">получил от</string>
     <string name="whoCreatedChallenge">пользователем</string>
     <string name="toDate">до %1$s</string>
     <string name="transactions">Транзакции</string>

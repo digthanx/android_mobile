@@ -49,7 +49,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private val viewModel: AdditionalInfoFeedItemViewModel by viewModels()
 
 
-    private var descrFeed: String? = null
     private var userIdReceiver: Int? = null
     private var userIdSender: Int? = null
     private var likesCount: Int? = null
@@ -277,7 +276,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                     descriptionTransactionWhoReceived.text =
                         it?.recipient_tg_name?.username()
                 }
-                descriptionTransactionWhatDid.text = descrFeed
+                descriptionTransactionWhatDid.text = requireContext().getString(R.string.gotFrom)
                 amountThanks.text = requireContext().getString(
                     R.string.amountThanks,
                     it?.amount.toString()
