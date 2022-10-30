@@ -202,8 +202,8 @@
                     android:textSize="14dp" />
             </LinearLayout>
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
@@ -211,31 +211,27 @@
                 app:singleSelection="true"
                 app:selectionRequired="true">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipComment"
-                    style="@style/MyChipsFeed"
+                <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="10dp"
-                    app:chipMinTouchTargetSize="40dp"
-                    android:checkable="true"
-                    android:textAppearance="@style/StandardText3Medium.Black"
-                    android:checked="true"
-                    android:text="@string/comments"/>
+                    android:layout_height="wrap_content"
+                    android:text="@string/details"
+                    />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipReactions"
-                    style="@style/MyChipsFeed"
+                <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    app:chipMinTouchTargetSize="40dp"
-                    android:textAppearance="@style/StandardText3Medium.Black"
-                    android:checkable="true"
-                    android:visibility="gone"
-                    android:text="@string/reactions" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/comments"
+                    />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reactions"
+                    />
 
 
-            </com.google.android.material.chip.ChipGroup>
+
+            </com.google.android.material.tabs.TabLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comments_rv"

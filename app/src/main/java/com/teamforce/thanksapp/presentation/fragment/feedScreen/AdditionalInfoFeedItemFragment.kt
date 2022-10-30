@@ -106,18 +106,10 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         setPhoto()
         setLikesAndDislikes()
         createRecycler()
-        transactionId?.let {
-            loadCommentFromDb(it)
-        }
+//        transactionId?.let {
+//            loadCommentFromDb(it)
+//        }
         listeners()
-        binding.chipGroup.setOnCheckedStateChangeListener { group: ChipGroup, checkedIds: MutableList<Int> ->
-            if(checkedIds.size > 0){
-                refreshRecyclerViewWithChip(checkedIds[0])
-            }else{
-                (binding.commentsRv.adapter as CommentsAdapter).submitList(allComments)
-            }
-
-        }
 
     }
 
@@ -125,17 +117,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         viewModel.addComment(transactionId, message)
     }
 
-
-    private fun refreshRecyclerViewWithChip(checkedId: Int) {
-        val comments: List<CommentModel> = when (checkedId) {
-            R.id.chipComment -> allComments
-            else -> {
-                allComments
-            }
-        }
-        (binding.commentsRv.adapter as CommentsAdapter).submitList(comments)
-
-    }
 
     private fun createRecycler() {
         val rv = binding.commentsRv
