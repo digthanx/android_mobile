@@ -68,6 +68,11 @@ interface ThanksApi {
         @Query("received_only") receivedOnly: Int?
     ): List<HistoryItem.UserTransactionsResponse>
 
+    @GET("/user/transactions/{id}")
+    suspend fun getTransactionById(
+        @Path("id") transactionId: Int
+    )
+
     @GET("/feed/")
     suspend fun getFeed(
         @Query("limit") limit: Int,

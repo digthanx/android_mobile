@@ -97,6 +97,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initTopBar()
         initTabLayoutMediator()
+        loadDataFromDb()
         setBaseInfo()
         setLikes()
 //        transactionId?.let {
@@ -133,6 +134,10 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 2 -> tab.text = context?.getString(R.string.reactions)
             }
         }.attach()
+    }
+
+    private fun loadDataFromDb(){
+
     }
 
 //    private fun addComment(transactionId: Int, message: String) {

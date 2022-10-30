@@ -3,7 +3,9 @@ package com.teamforce.thanksapp.domain.mappers.feed
 import android.content.Context
 import android.util.Log
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEnity
 import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
+import com.teamforce.thanksapp.domain.models.feed.FeedItemByIdModel
 import com.teamforce.thanksapp.domain.models.feed.FeedModel
 import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -31,7 +33,7 @@ class FeedMapper @Inject constructor(
                 challengeCreatorFirstName = from.challenge.creatorFirstName ?: "",
                 challengeCreatorSurname = from.challenge.creatorSurname ?: "",
                 challengeId = from.challenge.creatorId,
-                challengeCreatorTgName = from.challenge.creatorTgName ?: "tg_name_not_set",
+                challengeCreatorTgName = from.challenge.creatorTgName ?: "anonymous",
                 challengeName = from.challenge.name ?: "Unknown",
                 challengePhoto = from.challenge.photo,
                 userLiked = from.challenge.userLiked,
@@ -89,6 +91,25 @@ class FeedMapper @Inject constructor(
         return from.map {
             map(it)
         }
+    }
+
+    fun mapEntityByIdToModel(from: FeedItemByIdEnity): FeedItemByIdModel {
+        return FeedItemByIdModel(
+            id = from.id,
+            sender = from.sender,
+            recipient = from.recipient,
+            status = from.status,
+            transactionClass = from.transactionClass,
+            expireToCancel = from.expireToCancel,
+            canUserCancel = from.canUserCancel,
+            tags = from.tags,
+            reasonDef = from.reasonDef,
+            amount = from.amount,
+            created_at = from.created_at,
+            updated_at = from.updated_at,
+            reason = from.reason,
+            photo = from.photo
+        )
     }
 
     private fun convertDate(inputDate: String): String {
