@@ -9,10 +9,9 @@ import androidx.navigation.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentWinnersChallengeBinding
-import com.teamforce.thanksapp.presentation.adapter.WinnersAdapter
+import com.teamforce.thanksapp.presentation.adapter.challenge.WinnersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_REPORT_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_WINNER
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.WinnersChallengeViewModel

@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.adapter
+package com.teamforce.thanksapp.presentation.adapter.challenge
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,7 +24,9 @@ class ContendersAdapter(
     private val applyClickListener: (reportId: Int, state: Char, position: Int) -> Unit,
     private val refuseClickListener: (reportId: Int, state: Char, position: Int) -> Unit,
 
-): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(DiffCallback)
+): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(
+    DiffCallback
+)
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContenderViewHolder {
         val binding = ItemContenderBinding

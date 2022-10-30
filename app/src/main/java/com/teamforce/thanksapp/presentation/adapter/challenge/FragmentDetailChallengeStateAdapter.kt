@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.adapter
+package com.teamforce.thanksapp.presentation.adapter.challenge
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

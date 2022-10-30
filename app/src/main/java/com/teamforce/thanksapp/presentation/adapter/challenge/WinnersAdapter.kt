@@ -1,8 +1,7 @@
-package com.teamforce.thanksapp.presentation.adapter
+package com.teamforce.thanksapp.presentation.adapter.challenge
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
@@ -12,9 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.data.response.GetChallengeContendersResponse
 import com.teamforce.thanksapp.data.response.GetChallengeWinnersResponse
-import com.teamforce.thanksapp.databinding.ItemContenderBinding
 import com.teamforce.thanksapp.databinding.ItemWinnerBinding
 import com.teamforce.thanksapp.utils.Consts
 import java.time.LocalDate

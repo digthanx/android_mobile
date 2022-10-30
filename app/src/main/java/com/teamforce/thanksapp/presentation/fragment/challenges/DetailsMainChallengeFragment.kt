@@ -14,7 +14,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.ChallengeModelById
-import com.teamforce.thanksapp.presentation.adapter.FragmentDetailChallengeStateAdapter
+import com.teamforce.thanksapp.presentation.adapter.challenge.FragmentDetailChallengeStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsMainChallengeViewModel
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_DATA
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
