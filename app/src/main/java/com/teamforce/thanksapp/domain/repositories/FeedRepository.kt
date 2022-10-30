@@ -1,7 +1,6 @@
 package com.teamforce.thanksapp.domain.repositories
 
 import androidx.paging.PagingData
-import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEnity
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.domain.models.feed.FeedItemByIdModel
 import com.teamforce.thanksapp.domain.models.feed.FeedModel

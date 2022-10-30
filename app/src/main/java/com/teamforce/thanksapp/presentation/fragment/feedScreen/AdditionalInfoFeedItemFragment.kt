@@ -20,6 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayoutMediator
@@ -32,8 +33,11 @@ import com.teamforce.thanksapp.presentation.adapter.challenge.FragmentDetailChal
 import com.teamforce.thanksapp.presentation.adapter.feed.DetailFeedStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.AdditionalInfoFeedItemViewModel
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
+import com.teamforce.thanksapp.utils.Consts.RECEIVER_SURNAME
 import com.teamforce.thanksapp.utils.Consts.TRANSACTION_ID
 import com.teamforce.thanksapp.utils.OptionsTransaction
+import com.teamforce.thanksapp.utils.username
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,44 +48,23 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     private val viewModel: AdditionalInfoFeedItemViewModel by viewModels()
 
-    private var dateTransaction: String? = null
-    private var avatarReceiver: String? = null
+
     private var descrFeed: String? = null
-    private var senderTg: String? = null
-    private var receiverTg: String? = null
-    private var amount: String? = null
-    private var photo: String? = null
-    private var reason: String? = null
     private var userIdReceiver: Int? = null
     private var userIdSender: Int? = null
     private var likesCount: Int? = null
-    private var dislikesCount: Int? = null
     private var likesCountReal: Int = 0
-    private var dislikesCountReal: Int = 0
     private var isLiked: Boolean? = null
-    private var isDisliked: Boolean? = null
     private var transactionId: Int? = null
+    private var recipientAvatar: String? = null
 
     private var allComments: List<CommentModel> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            dateTransaction = it.getString(Consts.DATE_TRANSACTION)
-            avatarReceiver = it.getString(Consts.AVATAR_USER)
-            descrFeed = it.getString(Consts.DESCRIPTION_FEED)
-            senderTg = it.getString(Consts.SENDER_TG)
-            receiverTg = it.getString(Consts.RECEIVER_TG)
-            amount = it.getString(Consts.AMOUNT_THANKS)
-            photo = it.getString(Consts.PHOTO_TRANSACTION)
-            reason = it.getString(Consts.REASON_TRANSACTION)
-            userIdReceiver = it.getInt("userIdReceiver")
-            userIdSender = it.getInt("userIdSender")
-            likesCount = it.getInt(LIKES_COUNT)
-            dislikesCount = it.getInt(DISLIKES_COUNT)
-            isLiked = it.getBoolean(IS_LIKED)
-            isDisliked = it.getBoolean(IS_DISLIKED)
             transactionId = it.getInt(TRANSACTION_ID)
+            recipientAvatar = it.getString(AVATAR_USER)
         }
     }
 
@@ -136,8 +119,8 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         }.attach()
     }
 
-    private fun loadDataFromDb(){
-
+    private fun loadDataFromDb() {
+        transactionId?.let { viewModel.loadTransactionDetail(it) }
     }
 
 //    private fun addComment(transactionId: Int, message: String) {
@@ -194,7 +177,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 updateOutlookLike()
             }
         }
-       // inputMessage()
+        // inputMessage()
 
 //        (binding.commentsRv.adapter as CommentsAdapter).onDeleteCommentClickListener =
 //            { commentId ->
@@ -264,7 +247,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     }
 
     private fun updateOutlookLike() {
-        if (isLiked != null && isDisliked != null) {
+        if (isLiked != null) {
             isLiked = !isLiked!!
             if (isLiked == true) {
                 likesCountReal += 1
@@ -281,68 +264,65 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     private fun setBaseInfo() {
         with(binding) {
-            dateTransactionTv.text = dateTransaction
-            if (senderTg?.equals(viewModel.userDataRepository.getUserName()) == true) {
-                descriptionTransactionWhoSent.text = context?.getString(R.string.fromYou)
-            } else {
-                descriptionTransactionWhoSent.text = context?.getString(
-                    R.string.tgName
-                )?.let { String.format(it, senderTg) }
+            viewModel.dataOfTransaction.observe(viewLifecycleOwner) {
+                dateTransactionTv.text = it?.updated_at
+                if (it?.sender_tg_name?.equals(viewModel.userDataRepository.getUserName()) == true) {
+                    descriptionTransactionWhoSent.text = context?.getString(R.string.fromYou)
+                } else {
+                    descriptionTransactionWhoSent.text = it?.sender_tg_name?.username()
+                }
+                if (it?.recipient_tg_name?.equals(viewModel.userDataRepository.getUserName()) == true) {
+                    descriptionTransactionWhoReceived.text = context?.getString(R.string.you)
+                } else {
+                    descriptionTransactionWhoReceived.text =
+                        it?.recipient_tg_name?.username()
+                }
+                descriptionTransactionWhatDid.text = descrFeed
+                amountThanks.text = requireContext().getString(
+                    R.string.amountThanks,
+                    it?.amount.toString()
+                )
+                reasonTransaction.text = it?.reason
+                setAvatar(it?.recipient_photo)
             }
-            if (receiverTg?.equals(viewModel.userDataRepository.getUserName()) == true) {
-                descriptionTransactionWhoReceived.text = context?.getString(R.string.you)
-            } else {
-                descriptionTransactionWhoReceived.text = context?.getString(
-                    R.string.tgName
-                )?.let { String.format(it, receiverTg) }
-            }
-            descriptionTransactionWhatDid.text = descrFeed
-            amountThanks.text = context?.getString(R.string.amountThanks)?.let {
-                String.format(it, amount)
-            }
-            reasonTransaction.text = reason
-            setPhoto()
         }
     }
 
-    private fun setPhoto() {
-        avatarReceiver?.let {
+    private fun setAvatar(avatarRecipient: String?) {
+        avatarRecipient?.let {
             if (!it.contains("null")) {
-                Glide.with(this)
-                    .load(avatarReceiver?.toUri())
-                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                Glide.with(requireContext())
+                    .load("${Consts.BASE_URL}${avatarRecipient}".toUri())
                     .centerCrop()
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.userAvatar)
             }
         }
 
-        if (!photo.isNullOrEmpty()) {
-            Log.d("Token", "${photo}")
-            binding.photoTv.visibility = View.VISIBLE
-            binding.cardViewImg.visibility = View.VISIBLE
-            Glide.with(binding.senderImage.context)
-                .load("${Consts.BASE_URL}${photo}".toUri())
-                .centerCrop()
-                .into(binding.senderImage)
-        } else {
-            binding.photoTv.visibility = View.GONE
-            binding.cardViewImg.visibility = View.GONE
-        }
+//        if (!photo.isNullOrEmpty()) {
+//            Log.d("Token", "${photo}")
+//            binding.photoTv.visibility = View.VISIBLE
+//            binding.cardViewImg.visibility = View.VISIBLE
+//            Glide.with(binding.senderImage.context)
+//                .load("${Consts.BASE_URL}${photo}".toUri())
+//                .centerCrop()
+//                .into(binding.senderImage)
+//        } else {
+//            binding.photoTv.visibility = View.GONE
+//            binding.cardViewImg.visibility = View.GONE
+//        }
 
     }
 
     private fun setLikes() {
         likesCount?.let { likes ->
-            dislikesCount?.let { dislikes ->
-                likesCountReal = likesCount!!
-                dislikesCountReal = dislikesCount!!
-            }
+
+            likesCountReal = likesCount!!
+
         }
         binding.likeBtn.text = likesCountReal.toString()
         if (isLiked == true) {
             binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
-        } else if (isDisliked == true) {
-            binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
         } else {
             binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_info_secondary))
         }

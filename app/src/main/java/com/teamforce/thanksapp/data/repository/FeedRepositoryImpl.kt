@@ -63,7 +63,7 @@ class FeedRepositoryImpl @Inject constructor(
     override suspend fun getTransactionById(transactionId: Int): ResultWrapper<FeedItemByIdModel> {
         val result = safeApiCall(Dispatchers.IO) {
             feedMapper.mapEntityByIdToModel(
-                thanksApi.getTransactionById(transactionId)
+                thanksApi.getTransactionById(transactionId.toString())
             )
         }
         return result

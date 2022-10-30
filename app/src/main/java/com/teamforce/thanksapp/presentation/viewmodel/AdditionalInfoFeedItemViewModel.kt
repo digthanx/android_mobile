@@ -64,7 +64,7 @@ class AdditionalInfoFeedItemViewModel @Inject constructor(
     private val _isLoadingLikes = MutableLiveData<Boolean>()
     val isLoadingLikes: LiveData<Boolean> = _isLoadingLikes
 
-    fun loadChallengeResult(
+    fun loadTransactionDetail(
         transactionId: Int
     ) {
         _isLoading.postValue(true)

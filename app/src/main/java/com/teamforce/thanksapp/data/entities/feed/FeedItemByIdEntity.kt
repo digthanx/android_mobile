@@ -1,10 +1,10 @@
-package com.teamforce.thanksapp.domain.models.feed
+package com.teamforce.thanksapp.data.entities.feed
+
 
 import com.google.gson.annotations.SerializedName
-import com.teamforce.thanksapp.data.entities.feed.Tag
 import com.teamforce.thanksapp.model.domain.TagModel
 
-data class FeedItemByIdModel(
+data class FeedItemByIdEntity(
     val id: Int,
     val sender_id: Int?,
     val sender_tg_name: String?,

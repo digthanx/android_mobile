@@ -3,7 +3,7 @@ package com.teamforce.thanksapp.domain.mappers.feed
 import android.content.Context
 import android.util.Log
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEnity
+import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEntity
 import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
 import com.teamforce.thanksapp.domain.models.feed.FeedItemByIdModel
 import com.teamforce.thanksapp.domain.models.feed.FeedModel
@@ -93,22 +93,27 @@ class FeedMapper @Inject constructor(
         }
     }
 
-    fun mapEntityByIdToModel(from: FeedItemByIdEnity): FeedItemByIdModel {
+    fun mapEntityByIdToModel(from: FeedItemByIdEntity): FeedItemByIdModel {
         return FeedItemByIdModel(
             id = from.id,
-            sender = from.sender,
-            recipient = from.recipient,
-            status = from.status,
-            transactionClass = from.transactionClass,
-            expireToCancel = from.expireToCancel,
-            canUserCancel = from.canUserCancel,
             tags = from.tags,
-            reasonDef = from.reasonDef,
             amount = from.amount,
-            created_at = from.created_at,
-            updated_at = from.updated_at,
+            updated_at = convertDate(from.updated_at),
             reason = from.reason,
-            photo = from.photo
+            photo = from.photo,
+            sender_id = from.sender_id,
+            sender_first_name = from.sender_first_name,
+            sender_surname = from.sender_surname,
+            sender_photo = from.sender_photo,
+            sender_tg_name = from.sender_tg_name?: "anonymous",
+            recipient_id = from.recipient_id,
+            recipient_first_name = from.recipient_first_name,
+            recipient_surname = from.recipient_surname,
+            recipient_photo = from.recipient_photo,
+            recipient_tg_name = from.recipient_tg_name?: "anonymous",
+            is_anonymous = from.is_anonymous,
+            user_liked = from.user_liked,
+            likes_amount = from.likes_amount
         )
     }
 

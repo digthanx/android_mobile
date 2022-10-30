@@ -1,6 +1,6 @@
 package com.teamforce.thanksapp.data.api
 
-import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEnity
+import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEntity
 import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
@@ -69,10 +69,10 @@ interface ThanksApi {
         @Query("received_only") receivedOnly: Int?
     ): List<HistoryItem.UserTransactionsResponse>
 
-    @GET("/user/transactions/{id}")
+    @GET("/events/transactions/{id}")
     suspend fun getTransactionById(
-        @Path("id") transactionId: Int
-    ): FeedItemByIdEnity
+        @Path("id") transactionId: String
+    ): FeedItemByIdEntity
 
     @GET("/feed/")
     suspend fun getFeed(
