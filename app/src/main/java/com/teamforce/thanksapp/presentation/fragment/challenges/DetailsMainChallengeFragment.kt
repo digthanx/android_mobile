@@ -54,7 +54,6 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     }
 
     private fun initTabLayoutMediator(myResultWasReceivedSuccessfully: Boolean) {
-        // Нужно добавить изменения в количестве вкладок в зависимости от статуса чалика
         val detailInnerAdapter = dataOfChallenge?.creator_id?.let { creatorId ->
             FragmentDetailChallengeStateAdapter(
                 requireActivity(),

@@ -22,11 +22,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
 import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.presentation.adapter.CommentsAdapter
+import com.teamforce.thanksapp.presentation.adapter.challenge.FragmentDetailChallengeStateAdapter
+import com.teamforce.thanksapp.presentation.adapter.feed.DetailFeedStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.AdditionalInfoFeedItemViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.TRANSACTION_ID
@@ -92,6 +95,18 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initTopBar()
+        initTabLayoutMediator()
+        setBaseInfo()
+        setLikes()
+//        transactionId?.let {
+//            loadCommentFromDb(it)
+//        }
+        listeners()
+
+    }
+
+    private fun initTopBar() {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -102,43 +117,50 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             )
         )
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
-        setBaseInfo()
-        setPhoto()
-        setLikesAndDislikes()
-        createRecycler()
-//        transactionId?.let {
-//            loadCommentFromDb(it)
-//        }
-        listeners()
-
     }
 
-    private fun addComment(transactionId: Int, message: String) {
-        viewModel.addComment(transactionId, message)
-    }
+    private fun initTabLayoutMediator() {
+        val detailInnerAdapter = DetailFeedStateAdapter(requireActivity())
 
+        detailInnerAdapter.setTransactionId(transactionId)
 
-    private fun createRecycler() {
-        val rv = binding.commentsRv
-        val commentsAdapter = CommentsAdapter(requireContext(), viewModel.getProfileId()!!)
-        rv.adapter = commentsAdapter
-    }
+        binding.pager.adapter = detailInnerAdapter
 
-    private fun deleteComment(commentId: Int) {
-        viewModel.deleteComment(commentId)
-    }
-
-    private fun loadCommentFromDb(transactionId: Int) {
-        viewModel.loadCommentsList(transactionId)
-
-        viewModel.comments.observe(
-            viewLifecycleOwner,
-            Observer {
-                allComments = it?.comments!!
-                (binding.commentsRv.adapter as CommentsAdapter).submitList(it.comments)
+        TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+            when (position) {
+                0 -> tab.text = context?.getString(R.string.details)
+                1 -> tab.text = context?.getString(R.string.comments)
+                2 -> tab.text = context?.getString(R.string.reactions)
             }
-        )
+        }.attach()
     }
+
+//    private fun addComment(transactionId: Int, message: String) {
+//        viewModel.addComment(transactionId, message)
+//    }
+
+
+//    private fun createRecycler() {
+//        val rv = binding.commentsRv
+//        val commentsAdapter = CommentsAdapter(requireContext(), viewModel.getProfileId()!!)
+//        rv.adapter = commentsAdapter
+//    }
+
+//    private fun deleteComment(commentId: Int) {
+//        viewModel.deleteComment(commentId)
+//    }
+
+//    private fun loadCommentFromDb(transactionId: Int) {
+//        viewModel.loadCommentsList(transactionId)
+//
+//        viewModel.comments.observe(
+//            viewLifecycleOwner,
+//            Observer {
+//                allComments = it?.comments!!
+//                (binding.commentsRv.adapter as CommentsAdapter).submitList(it.comments)
+//            }
+//        )
+//    }
 
     private fun listeners() {
         binding.descriptionTransactionWhoReceived.setOnClickListener {
@@ -167,66 +189,66 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 updateOutlookLike()
             }
         }
-        inputMessage()
+       // inputMessage()
 
-        (binding.commentsRv.adapter as CommentsAdapter).onDeleteCommentClickListener =
-            { commentId ->
-                deleteComment(commentId)
-                transactionId?.let { transactionId ->
-                    viewModel.deleteCommentLoading.observe(viewLifecycleOwner) { loading ->
-                        if (!loading) loadCommentFromDb(transactionId)
-                    }
-                }
-
-            }
+//        (binding.commentsRv.adapter as CommentsAdapter).onDeleteCommentClickListener =
+//            { commentId ->
+//                deleteComment(commentId)
+//                transactionId?.let { transactionId ->
+//                    viewModel.deleteCommentLoading.observe(viewLifecycleOwner) { loading ->
+//                        if (!loading) loadCommentFromDb(transactionId)
+//                    }
+//                }
+//
+//            }
 
     }
 
-    private fun inputMessage() {
-        binding.messageValueEt.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.trim().length > 0) {
-                    binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_CUSTOM
-                    binding.textFieldMessage.endIconDrawable =
-                        context?.getDrawable(R.drawable.ic_send_vector)
-                } else {
-                    binding.textFieldMessage.endIconDrawable =
-                        context?.getDrawable(R.drawable.ic_emotion)
-                }
-                binding.textFieldMessage.setEndIconOnClickListener {
-                    sendMessage()
-                }
-            }
+//    private fun inputMessage() {
+//        binding.messageValueEt.addTextChangedListener(object : TextWatcher {
+//            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+//                if (s.trim().length > 0) {
+//                    binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_CUSTOM
+//                    binding.textFieldMessage.endIconDrawable =
+//                        context?.getDrawable(R.drawable.ic_send_vector)
+//                } else {
+//                    binding.textFieldMessage.endIconDrawable =
+//                        context?.getDrawable(R.drawable.ic_emotion)
+//                }
+//                binding.textFieldMessage.setEndIconOnClickListener {
+//                    sendMessage()
+//                }
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+//            }
+//
+//            override fun afterTextChanged(s: Editable) {
+//
+//            }
+//        })
+//
+//        if (binding.messageValueEt.text?.trim().toString().isEmpty()) {
+//            // Запретить отправку
+//            binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
+//            binding.textFieldMessage.isEndIconCheckable = false
+//        }
+//        transactionId?.let { transactionId ->
+//            viewModel.createCommentsLoading.observe(viewLifecycleOwner) { loading ->
+//                if (!loading) loadCommentFromDb(transactionId)
+//            }
+//        }
+//    }
 
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable) {
-
-            }
-        })
-
-        if (binding.messageValueEt.text?.trim().toString().isEmpty()) {
-            // Запретить отправку
-            binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
-            binding.textFieldMessage.isEndIconCheckable = false
-        }
-        transactionId?.let { transactionId ->
-            viewModel.createCommentsLoading.observe(viewLifecycleOwner) { loading ->
-                if (!loading) loadCommentFromDb(transactionId)
-            }
-        }
-    }
-
-    private fun sendMessage(){
-        transactionId?.let { transactionId ->
-            if(binding.messageValueEt.text?.trim()?.length!! > 0){
-                addComment(transactionId, binding.messageValueEt.text.toString())
-            }
-            binding.messageValueEt.text?.clear()
-            closeKeyboard()
-        }
-    }
+//    private fun sendMessage() {
+//        transactionId?.let { transactionId ->
+//            if (binding.messageValueEt.text?.trim()?.length!! > 0) {
+//                addComment(transactionId, binding.messageValueEt.text.toString())
+//            }
+//            binding.messageValueEt.text?.clear()
+//            closeKeyboard()
+//        }
+//    }
 
     private fun closeKeyboard() {
         val view: View? = activity?.currentFocus
@@ -274,6 +296,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 String.format(it, amount)
             }
             reasonTransaction.text = reason
+            setPhoto()
         }
     }
 
@@ -303,7 +326,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     }
 
-    private fun setLikesAndDislikes() {
+    private fun setLikes() {
         likesCount?.let { likes ->
             dislikesCount?.let { dislikes ->
                 likesCountReal = likesCount!!

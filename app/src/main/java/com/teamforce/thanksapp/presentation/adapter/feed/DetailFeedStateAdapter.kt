@@ -15,8 +15,10 @@ class DetailFeedStateAdapter(
 
     private var transactionId: Int = 0
 
-    public fun setTransactionId(data: Int) {
-        transactionId = data
+    public fun setTransactionId(outsideTransactionId: Int?) {
+        if (outsideTransactionId != null) {
+            transactionId = outsideTransactionId
+        }
     }
 
     override fun createFragment(position: Int): Fragment {
