@@ -27,9 +27,9 @@ class FeedMapper @Inject constructor(
                 eventObjectId = from.eventObjectId,
                 eventRecordId = from.eventRecordId,
                 likesAmount = from.likesAmount,
-                time = convertDate(from.time),
+                time = convertDateWithTime(from.time),
                 userId = from.userId,
-                challengeCreatedAt = from.challenge.createdAt,
+                challengeCreatedAt = convertDateWithoutTime(from.challenge.createdAt),
                 challengeCreatorFirstName = from.challenge.creatorFirstName ?: "",
                 challengeCreatorSurname = from.challenge.creatorSurname ?: "",
                 challengeId = from.challenge.id,
@@ -46,7 +46,7 @@ class FeedMapper @Inject constructor(
                 eventObjectId = from.eventObjectId,
                 eventRecordId = from.eventRecordId,
                 likesAmount = from.likesAmount,
-                time = convertDate(from.time),
+                time = convertDateWithTime(from.time),
                 userId = from.userId,
                 transactionAmount = from.transaction.amount,
                 transactionId = from.transaction.id,
@@ -72,7 +72,7 @@ class FeedMapper @Inject constructor(
                 eventObjectId = from.eventObjectId,
                 eventRecordId = from.eventRecordId,
                 likesAmount = from.likesAmount,
-                time = convertDate(from.time),
+                time = convertDateWithTime(from.time),
                 userId = from.userId,
                 challengeName = from.winner!!.challengeName ?: "Unknown",
                 reportId = from.winner.id,
@@ -98,7 +98,7 @@ class FeedMapper @Inject constructor(
             id = from.id,
             tags = from.tags,
             like_amount = from.like_amount,
-            updated_at = convertDate(from.updated_at),
+            updated_at = convertDateWithTime(from.updated_at),
             reason = from.reason,
             photo = from.photo,
             sender_id = from.sender_id,
@@ -116,8 +116,8 @@ class FeedMapper @Inject constructor(
             amount = from.amount
         )
     }
-
-    private fun convertDate(inputDate: String): String {
+    // Переводит в dd.mm.yyyy в hh:mm
+    private fun convertDateWithTime(inputDate: String): String {
         try {
             val zdt: ZonedDateTime =
                 ZonedDateTime.parse(inputDate, DateTimeFormatter.ISO_DATE_TIME)
@@ -158,6 +158,36 @@ class FeedMapper @Inject constructor(
         } catch (e: Exception) {
             Log.e("HistoryAdapter", e.message, e.fillInStackTrace())
             return ""
+        }
+    }
+
+    private fun convertDateWithoutTime(inputDate: String): String {
+        try {
+            val zdt: ZonedDateTime =
+                ZonedDateTime.parse(inputDate, DateTimeFormatter.ISO_DATE_TIME)
+            val dateTime: String? =
+                LocalDateTime.parse(zdt.toString(), DateTimeFormatter.ISO_DATE_TIME)
+                    .format(DateTimeFormatter.ofPattern("dd.MM.y HH:mm"))
+            val date = dateTime?.subSequence(0, 10)
+            val today: LocalDate = LocalDate.now()
+            val yesterday: String = today.minusDays(1).format(DateTimeFormatter.ISO_DATE)
+            val todayString =
+                LocalDate.parse(today.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .format(DateTimeFormatter.ofPattern("dd.MM.y"))
+            val yesterdayString =
+                LocalDate.parse(yesterday, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .format(DateTimeFormatter.ofPattern("dd.MM.y"))
+
+            if (date == todayString) {
+                return "Сегодня"
+            } else if (date == yesterdayString) {
+                return "Вчера"
+            } else {
+                return date.toString()
+            }
+        } catch (e: Exception) {
+            Log.e("ChallengeAdapter", e.message, e.fillInStackTrace())
+            return "Не определено"
         }
     }
 }
