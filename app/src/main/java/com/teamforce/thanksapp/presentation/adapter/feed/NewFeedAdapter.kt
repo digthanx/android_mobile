@@ -82,7 +82,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                         R.color.general_brand
                     ) {
                         Log.d(TAG, "bindChallengeName: ${item.challengeName} clicked")
-                        //  onChallengeClicked?.invoke(item.id)
+                        onChallengeClicked?.invoke(item.challengeId)
                     }
                 )
 
@@ -145,7 +145,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                     }
                 ).append(
                     createClickableSpannable(
-                        root.context.getString(R.string.toDate, item.challengeCreatedAt),
+                        root.context.getString(R.string.toDate, item.challengeEndAt),
                         R.color.black,
                         null
                     )
