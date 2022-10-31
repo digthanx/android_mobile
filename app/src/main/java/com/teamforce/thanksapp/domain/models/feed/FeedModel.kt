@@ -28,7 +28,7 @@ sealed class FeedModel(
         val commentAmount: Int?,
         val eventObjectId: Int?,
         val eventRecordId: Int?,
-        val likesAmount: Int?,
+        var likesAmount: Int?,
         val time: String,
         val userId: Int?,
         val transactionAmount: Int,

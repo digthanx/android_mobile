@@ -1,11 +1,13 @@
 package com.teamforce.thanksapp.presentation.viewmodel.feed
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.teamforce.thanksapp.data.response.LikeResponse
 import com.teamforce.thanksapp.domain.repositories.FeedRepository
 import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.UserDataRepository
@@ -57,8 +59,8 @@ class FeedListViewModel @Inject constructor(
     private val _pressLikesError = MutableLiveData<String>()
     val pressLikesError: LiveData<String> = _pressLikesError
 
-    private val _pressLikes = MutableLiveData<String>()
-    val pressLikes: LiveData<String> = _pressLikes
+    private val _pressLikes = MutableLiveData<LikeResponse?>()
+    val pressLikes: LiveData<LikeResponse?> = _pressLikes
 
 
 
@@ -72,7 +74,8 @@ class FeedListViewModel @Inject constructor(
                 _isLoading.postValue(true)
                 when (val result = feedRepository.pressLike(transactionId)) {
                     is ResultWrapper.Success -> {
-                        _pressLikes.postValue(result.value.data)
+                        _pressLikes.postValue(result.value)
+                        Log.d("Token", " Результат лайка ${result.value}")
                     }
                     else -> {
                         if (result is ResultWrapper.GenericError) {

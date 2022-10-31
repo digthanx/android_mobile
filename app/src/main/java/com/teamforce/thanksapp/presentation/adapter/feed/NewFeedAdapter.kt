@@ -21,10 +21,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemFeedBinding
 import com.teamforce.thanksapp.domain.models.feed.FeedModel
-import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.utils.*
 
-class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(DiffCallback) {
+class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(DiffCallback) {
 
     var onChallengeClicked: ((challengeId: Int) -> Unit)? = null
     var onSomeonesClicked: ((userId: Int) -> Unit)? = null
@@ -321,20 +320,21 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
         }
 
         private fun updateLikeByClick(item: FeedModel.TransactionFeedEvent, position: Int) {
-            /*Network Request code*/
-            // if success
-            /*update the no. of likes or this card*/
-            // if fails, check first the status of 'liked', and revert the
-            // drawable to its previous state
             if(item.userLiked){
                 item.userLiked = false
-                notifyItemChanged(position)
+                binding.likeBtn.text = (item.likesAmount?.minus(1)).toString()
+                item.likesAmount = item.likesAmount?.minus(1)
+                if(item.isWithMe) binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.white))
+                else binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_info_secondary))
             }else{
                 item.userLiked = true
-                notifyItemChanged(position)
+                binding.likeBtn.text = (item.likesAmount?.plus(1)).toString()
+                item.likesAmount = item.likesAmount?.plus(1)
+
+                if(item.isWithMe) binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
+                else binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_success_secondary))
             }
         }
-
 
         private fun createClickableSpannable(
             string: String,

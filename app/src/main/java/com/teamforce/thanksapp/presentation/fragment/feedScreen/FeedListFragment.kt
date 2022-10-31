@@ -136,6 +136,15 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
             viewModel.pressLike(transactionId)
         }
 
+        viewModel.pressLikes.observe(viewLifecycleOwner){
+            // Подтвердить лайк
+        }
+
+        viewModel.pressLikesError.observe(viewLifecycleOwner){
+            // Отвергнуть лайк
+        }
+
+
     }
 
     override fun onDestroyView() {

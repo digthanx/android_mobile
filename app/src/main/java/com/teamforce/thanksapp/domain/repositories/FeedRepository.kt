@@ -3,6 +3,7 @@ package com.teamforce.thanksapp.domain.repositories
 import androidx.paging.PagingData
 import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.FeedResponse
+import com.teamforce.thanksapp.data.response.LikeResponse
 import com.teamforce.thanksapp.domain.models.feed.FeedItemByIdModel
 import com.teamforce.thanksapp.domain.models.feed.FeedModel
 import com.teamforce.thanksapp.model.domain.CommentModel
@@ -38,5 +39,5 @@ interface FeedRepository {
 
     suspend fun getTransactionById(transactionId: Int): ResultWrapper<FeedItemByIdModel>
 
-    suspend fun pressLike(transactionId: Int): ResultWrapper<CancelTransactionResponse>
+    suspend fun pressLike(transactionId: Int): ResultWrapper<LikeResponse>
 }

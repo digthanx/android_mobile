@@ -7,6 +7,7 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CreateCommentRequest
 import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.FeedResponse
+import com.teamforce.thanksapp.data.response.LikeResponse
 import com.teamforce.thanksapp.data.sources.createPager
 import com.teamforce.thanksapp.data.sources.feed.FeedCommentsPagingSource
 import com.teamforce.thanksapp.data.sources.feed.FeedPagingSource
@@ -109,7 +110,7 @@ class FeedRepositoryImpl @Inject constructor(
         return result
     }
 
-    override suspend fun pressLike(transactionId: Int): ResultWrapper<CancelTransactionResponse> {
+    override suspend fun pressLike(transactionId: Int): ResultWrapper<LikeResponse> {
         val data = mapOf("like_kind" to 1, "transaction" to transactionId)
         return safeApiCall(Dispatchers.IO){
             thanksApi.newPressLike(data)

@@ -127,9 +127,9 @@ interface ThanksApi {
     ): Call<CancelTransactionResponse>
 
     @POST("/press-like/")
-    fun newPressLike(
+    suspend fun newPressLike(
         @Body data: Map<String, Int>
-    ): CancelTransactionResponse
+    ): LikeResponse
 
     @POST("/get-comments/")
     suspend fun getComments(
