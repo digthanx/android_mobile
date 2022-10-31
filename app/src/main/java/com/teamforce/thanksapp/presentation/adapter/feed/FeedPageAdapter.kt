@@ -146,19 +146,15 @@ class FeedPageAdapter(
         with(holder.binding) {
             // Default Values
             likeBtn.text = "0"
-            dislikeBtn.text = "0"
             holder.likesCount = 0
             holder.dislikesCount = 0
             standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.general_background))
 
             if (data.transaction.user_liked) {
                 likeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
-                dislikeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
             } else if (data.transaction.user_disliked) {
-                dislikeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_error_secondary))
                 likeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
             } else {
-                dislikeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
                 likeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
             }
 
@@ -169,7 +165,6 @@ class FeedPageAdapter(
                     likeBtn.text = (i.counter).toString()
                     holder.likesCount = i.counter
                 } else if (i.code == "dislike") {
-                    dislikeBtn.text = (i.counter).toString()
                     holder.dislikesCount = i.counter
 
                 }
@@ -180,9 +175,6 @@ class FeedPageAdapter(
                 onLikeClicked(data, holder.layoutPosition)
             }
 
-            dislikeBtn.setOnClickListener {
-                onDislikeClicked(data, holder.layoutPosition)
-            }
         }
 
     }

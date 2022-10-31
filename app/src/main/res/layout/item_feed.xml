@@ -69,17 +69,6 @@
 
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/dislike_btn"
-                style="@style/ReactionBtnFeed"
-                android:layout_width="81dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:textColor="@color/general_contrast"
-                android:visibility="gone"
-                app:cornerRadius="8dp"
-                app:icon="@drawable/ic_dislike" />
-
-            <com.google.android.material.button.MaterialButton
                 android:id="@+id/like_btn"
                 style="@style/ReactionBtnFeed"
                 android:layout_width="81dp"

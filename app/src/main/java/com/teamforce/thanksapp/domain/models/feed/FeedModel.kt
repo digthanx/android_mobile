@@ -40,7 +40,7 @@ sealed class FeedModel(
         val transactionRecipientTgName: String,
         val transactionSenderId: Int?,
         val transactionSenderTgName: String,
-        val userLiked: Boolean,
+        var userLiked: Boolean,
         val transactionUpdatedAt: String,
         val transactionTags: List<String>,
         val isWithMe: Boolean,

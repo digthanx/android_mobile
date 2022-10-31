@@ -30,11 +30,12 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
     var onSomeonesClicked: ((userId: Int) -> Unit)? = null
     var onTransactionClicked: ((transactionId: Int) -> Unit)? = null
     var onWinnerClicked: ((challengeReportId: Int) -> Unit)? = null
+    var onLikeClicked: ((challengeReportId: Int) -> Unit)? = null
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (getItem(position) != null) {
-            holder.bind(getItem(position)!!)
+            holder.bind(getItem(position)!!, position)
         }
     }
 
@@ -43,12 +44,12 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
         return ViewHolder(binding)
     }
 
-   inner class ViewHolder(val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: FeedModel) {
+    inner class ViewHolder(val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: FeedModel, position: Int) {
             // Без этого клики по spannable не работают
             binding.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance();
             when (item) {
-                is FeedModel.TransactionFeedEvent -> bindTransaction(item)
+                is FeedModel.TransactionFeedEvent -> bindTransaction(item, position)
                 is FeedModel.ChallengeFeedEvent -> bindChallenge(item)
                 is FeedModel.WinnerFeedEvent -> bindWinner(item)
             }
@@ -56,7 +57,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
 
         private fun bindWinner(item: FeedModel.WinnerFeedEvent) {
             with(binding) {
-                toggleButtonGroup.visible()
+                toggleButtonGroup.invisible()
                 likeBtn.text = item.likesAmount.toString()
                 commentBtn.text = item.commentAmount.toString()
 
@@ -71,16 +72,17 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                     },
                 ).append(
                     createClickableSpannable(
-                        " " +root.context.getString(R.string.challenge_winner) + " ",
+                        " " + root.context.getString(R.string.challenge_winner) + " ",
                         R.color.black,
-                        null)
+                        null
+                    )
                 ).append(
                     createClickableSpannable(
                         item.challengeName.doubleQuoted(),
                         R.color.general_brand
                     ) {
                         Log.d(TAG, "bindChallengeName: ${item.challengeName} clicked")
-                      //  onChallengeClicked?.invoke(item.id)
+                        //  onChallengeClicked?.invoke(item.id)
                     }
                 )
 
@@ -123,7 +125,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                     createClickableSpannable(
                         item.challengeName.doubleQuoted() + " ",
                         R.color.general_brand,
-                    ){
+                    ) {
                         Log.d(TAG, "bindChallengeName: ${item.challengeName} clicked")
                         onChallengeClicked?.invoke(item.challengeId)
                     }
@@ -137,7 +139,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                     createClickableSpannable(
                         item.challengeCreatorTgName.username() + " ",
                         R.color.general_brand,
-                    ){
+                    ) {
                         Log.d(TAG, "bindChallengeCreator: ${item.challengeCreatorTgName} clicked")
                         onSomeonesClicked?.invoke(item.challengeCreatorId)
                     }
@@ -155,18 +157,21 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
             }
         }
 
-        private fun bindTransaction(item: FeedModel.TransactionFeedEvent) {
+        private fun bindTransaction(item: FeedModel.TransactionFeedEvent, position: Int) {
             with(binding) {
                 if (item.isWithMe) {
-                    if(item.isFromMe){
+                    if (item.isFromMe) {
                         // Я отправитель
                         val spannable = SpannableStringBuilder(
                         ).append(
                             createClickableSpannable(
                                 item.transactionRecipientTgName,
                                 R.color.general_brand
-                            ){
-                                Log.d(TAG, "bindRecipientName: ${item.transactionRecipientTgName} clicked")
+                            ) {
+                                Log.d(
+                                    TAG,
+                                    "bindRecipientName: ${item.transactionRecipientTgName} clicked"
+                                )
                                 onSomeonesClicked?.invoke(item.transactionRecipientId)
                             }
                         ).append(
@@ -177,7 +182,10 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                             )
                         ).append(
                             createClickableSpannable(
-                                root.context.getString(R.string.amountThanks, item.likesAmount.toString()),
+                                root.context.getString(
+                                    R.string.amountThanks,
+                                    item.likesAmount.toString()
+                                ),
                                 R.color.minor_success,
                                 null
                             )
@@ -195,7 +203,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                             )
                         )
                         senderAndReceiver.text = spannable
-                    }else{
+                    } else {
                         // Я получатель
                         val spannable = SpannableStringBuilder(
                         ).append(
@@ -206,7 +214,10 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                             )
                         ).append(
                             createClickableSpannable(
-                                root.context.getString(R.string.amountThanks, item.likesAmount.toString()),
+                                root.context.getString(
+                                    R.string.amountThanks,
+                                    item.likesAmount.toString()
+                                ),
                                 R.color.minor_success,
                                 null
                             )
@@ -220,7 +231,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                             createClickableSpannable(
                                 item.transactionSenderTgName + " ",
                                 R.color.general_brand
-                            ){
+                            ) {
                                 Log.d(TAG, "bindSender: ${item.transactionSenderTgName} clicked")
                                 item.transactionSenderId?.let { onSomeonesClicked?.invoke(it) }
                             }
@@ -230,7 +241,6 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                     toggleButtonGroup.visible()
                     card.setCardBackgroundColor(root.context.getColor(R.color.minor_success_secondary))
                     likeBtn.setBackgroundColor(root.context.getColor(R.color.white))
-                    dislikeBtn.setBackgroundColor(root.context.getColor(R.color.white))
                     commentBtn.setBackgroundColor(root.context.getColor(R.color.white))
 
                 } else {
@@ -241,7 +251,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                         createClickableSpannable(
                             item.transactionRecipientTgName.username(),
                             R.color.general_brand
-                        ){
+                        ) {
                             Log.d(TAG, "bindRecipient: ${item.transactionRecipientTgName} clicked")
                             onSomeonesClicked?.invoke(item.transactionRecipientId)
                         }
@@ -253,7 +263,10 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                         )
                     ).append(
                         createClickableSpannable(
-                            root.context.getString(R.string.amountThanks, item.likesAmount.toString()),
+                            root.context.getString(
+                                R.string.amountThanks,
+                                item.likesAmount.toString()
+                            ),
                             R.color.minor_success,
                             null
                         )
@@ -267,18 +280,21 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                         createClickableSpannable(
                             item.transactionSenderTgName.username() + " ",
                             R.color.general_brand
-                        ){
+                        ) {
                             Log.d(TAG, "bindSender: ${item.transactionSenderTgName} clicked")
                             item.transactionSenderId?.let { onSomeonesClicked?.invoke(it) }
                         }
                     )
                     senderAndReceiver.text = spannable
                 }
-                likeBtn.text = item.likesAmount.toString()
+                setLikes(item)
                 commentBtn.text = item.commentAmount.toString()
                 dateTime.text = item.time
                 card.setOnClickListener {
                     onTransactionClicked?.invoke(item.transactionId)
+                }
+                likeBtn.setOnClickListener {
+                    updateLikeByClick(item, position)
                 }
                 if (!item.transactionRecipientPhoto.isNullOrEmpty()) {
                     Glide.with(root.context)
@@ -288,6 +304,30 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                 } else {
                     userAvatar.setImageResource(R.drawable.ic_anon_avatar)
                 }
+            }
+        }
+
+        private fun setLikes(item: FeedModel.TransactionFeedEvent) {
+            binding.likeBtn.text = item.likesAmount.toString()
+            if (item.userLiked) {
+                binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
+            } else {
+                binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_info_secondary))
+            }
+        }
+
+        private fun updateLikeByClick(item: FeedModel.TransactionFeedEvent, position: Int) {
+            /*Network Request code*/
+            // if success
+            /*update the no. of likes or this card*/
+            // if fails, check first the status of 'liked', and revert the
+            // drawable to its previous state
+            if(item.userLiked){
+                item.userLiked = false
+                notifyItemChanged(position)
+            }else{
+                item.userLiked = true
+                notifyItemChanged(position)
             }
         }
 
