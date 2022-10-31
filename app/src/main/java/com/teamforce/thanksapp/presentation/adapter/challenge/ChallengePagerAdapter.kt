@@ -22,7 +22,7 @@ class ChallengePagerAdapter(
 
 ) : PagingDataAdapter<ChallengeModel, ChallengePagerAdapter.ChallengeViewHolder>(DiffCallback) {
 
-     var onChallengeClicked: ((dataOChallenge: ChallengeModel) -> Unit)? = null
+     var onChallengeClicked: ((challengeId: Int) -> Unit)? = null
 
 
     companion object {
@@ -55,7 +55,7 @@ class ChallengePagerAdapter(
         if(item != null){
             holder.bind(item)
            holder.binding.mainCard.setOnClickListener {
-                onChallengeClicked?.invoke(item)
+                onChallengeClicked?.invoke(item.id)
             }
         }
     }

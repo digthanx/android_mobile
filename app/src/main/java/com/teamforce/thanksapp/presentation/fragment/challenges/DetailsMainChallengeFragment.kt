@@ -31,14 +31,12 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     private val viewModel: DetailsMainChallengeViewModel by viewModels()
 
 
-    private var dataOfChallenge: ChallengeModel? = null
+    private var dataOfChallenge: ChallengeModelById? = null
     private var challengeId: Int? = null
-    private var challengeModelById: ChallengeModelById? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            dataOfChallenge = it.getParcelable(CHALLENGER_DATA)
             challengeId = it.getInt(CHALLENGER_ID)
         }
     }
@@ -107,8 +105,9 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     }
 
     private fun loadDataFromDb() {
-        dataOfChallenge?.id?.let {
-            viewModel.loadChallengeResult(it)
+        challengeId?.let { challengeId ->
+            viewModel.loadChallenge(challengeId)
+            viewModel.loadChallengeResult(challengeId)
         }
     }
 
@@ -123,11 +122,14 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
     private fun listenersForRequestedData() {
         viewModel.isSuccessOperationMyResult.observe(viewLifecycleOwner) {
-            if (it) {
+            if (it && dataOfChallenge != null) {
                 initTabLayoutMediator(it)
-            } else if (it == false) {
+            } else if (it == false && dataOfChallenge != null) {
                 initTabLayoutMediator(it)
             }
+        }
+        viewModel.challenge.observe(viewLifecycleOwner){
+            dataOfChallenge = it
         }
     }
 
