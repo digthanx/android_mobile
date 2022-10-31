@@ -94,10 +94,10 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     private fun setDataAboutChallenge() {
 
         viewModel.challenge.observe(viewLifecycleOwner) {
-            binding.nameChallenge.text = it.name
-            binding.descriptionChallenge.text = it.description
-            binding.stateAboutReports.text = it.status
-            if (it.active) {
+            binding.nameChallenge.text = it?.name
+            binding.descriptionChallenge.text = it?.description
+            binding.stateAboutReports.text = it?.status
+            if (it?.active == true) {
                 binding.stateAboutAddParticipants.text =
                     requireContext().getString(R.string.gettingReportsActive)
             } else {
@@ -108,33 +108,35 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
             // пробегаться по массиву статусов и ставить чипы
             // Установить организатора
             binding.prizeFundValue.text =
-                String.format(requireContext().getString(R.string.fund), it.fund.toString())
-            binding.dateEndValue.text = convertDateToNecessaryFormat(it.end_at)
+                String.format(requireContext().getString(R.string.fund), it?.fund.toString())
+            binding.dateEndValue.text = it?.end_at?.let { endAt ->
+                convertDateToNecessaryFormat(endAt)
+            }
             binding.prizePoolValue.text =
                 String.format(
                     requireContext()
-                        .getString(R.string.occupiedPrizePool), it.winners_count, it.awardees
+                        .getString(R.string.occupiedPrizePool), it?.winners_count, it?.awardees
                 )
             binding.userTgName.setText(
-                String.format(requireContext().getString(R.string.tgName), it.creator_tg_name)
+                String.format(requireContext().getString(R.string.tgName), it?.creator_tg_name)
             )
-            if (!it.creator_photo.isNullOrEmpty()) {
+            if (!it?.creator_photo.isNullOrEmpty()) {
                 Glide.with(requireContext())
-                    .load("${Consts.BASE_URL}${it.creator_photo}".toUri())
+                    .load("${Consts.BASE_URL}${it?.creator_photo}".toUri())
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(binding.userAvatar)
             }
 
-            if(it.status.isNullOrEmpty()){
+            if(it?.status.isNullOrEmpty()){
                 binding.stateAboutReports.visibility = View.GONE
             }else{
                 binding.stateAboutReports.visibility = View.VISIBLE
-                enableOrDisableSentReportButton(it.status)
-                binding.stateAboutReports.text = it.status
+                it?.status?.let { it1 -> enableOrDisableSentReportButton(it1) }
+                binding.stateAboutReports.text = it?.status
             }
 
             binding.userItem.setOnClickListener { view ->
-                it.creator_id?.let { id ->
+                it?.creator_id?.let { id ->
                     transactionToProfileOfCreator(id, view)
                 }
             }

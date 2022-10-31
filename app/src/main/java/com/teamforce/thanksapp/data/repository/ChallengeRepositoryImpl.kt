@@ -11,6 +11,7 @@ import com.teamforce.thanksapp.data.sources.challenge.ChallengeCommentsPagingSou
 import com.teamforce.thanksapp.data.sources.challenge.ChallengePagingSource
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
 import com.teamforce.thanksapp.model.domain.ChallengeModel
+import com.teamforce.thanksapp.model.domain.ChallengeModelById
 import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.ResultWrapper
@@ -122,5 +123,11 @@ class ChallengeRepositoryImpl @Inject constructor(
                 )
             }
         ).flow
+    }
+
+    override suspend fun getChallengeById(challengeId: Int): ResultWrapper<ChallengeModelById> {
+        return safeApiCall(Dispatchers.IO){
+            thanksApi.getChallenge(challengeId)
+        }
     }
 }

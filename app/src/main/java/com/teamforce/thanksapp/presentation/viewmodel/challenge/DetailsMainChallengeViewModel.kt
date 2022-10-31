@@ -32,6 +32,7 @@ class DetailsMainChallengeViewModel @Inject constructor(
 
 
 
+
     fun loadChallengeResult(
         challengeId: Int
     ) {

@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailInnerFeedViewModel @Inject constructor(
-    val feedRepository: FeedRepository
+    private val feedRepository: FeedRepository
 ): ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()

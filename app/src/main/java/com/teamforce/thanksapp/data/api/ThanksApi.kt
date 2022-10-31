@@ -161,9 +161,9 @@ interface ThanksApi {
     ): List<ChallengeModel>
 
     @GET("/challenges/{challenge_id}/")
-    fun getChallenge(
-        @Path("challenge_id") commentId: Int
-    ): Call<ChallengeModelById>
+    suspend fun getChallenge(
+        @Path("challenge_id") challengeId: Int
+    ): ChallengeModelById
 
     @Multipart
     @POST("/create-challenge-report/")
