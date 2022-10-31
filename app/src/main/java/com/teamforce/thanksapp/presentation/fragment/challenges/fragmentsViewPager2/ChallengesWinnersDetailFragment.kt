@@ -17,7 +17,7 @@ import com.teamforce.thanksapp.data.response.GetChallengeWinnersResponse
 import com.teamforce.thanksapp.databinding.FragmentChallengesWinnersDetailBinding
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_WINNER
-import com.teamforce.thanksapp.presentation.viewmodel.WinnersDetailChallengeViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.WinnersDetailChallengeViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
