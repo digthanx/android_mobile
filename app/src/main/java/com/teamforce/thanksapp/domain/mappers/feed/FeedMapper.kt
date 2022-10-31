@@ -32,7 +32,7 @@ class FeedMapper @Inject constructor(
                 challengeCreatedAt = from.challenge.createdAt,
                 challengeCreatorFirstName = from.challenge.creatorFirstName ?: "",
                 challengeCreatorSurname = from.challenge.creatorSurname ?: "",
-                challengeId = from.challenge.creatorId,
+                challengeId = from.challenge.id,
                 challengeCreatorTgName = from.challenge.creatorTgName ?: "anonymous",
                 challengeName = from.challenge.name ?: "Unknown",
                 challengePhoto = from.challenge.photo,
