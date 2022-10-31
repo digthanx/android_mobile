@@ -32,6 +32,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
 
     private var dataOfChallenge: ChallengeModelById? = null
+    private var doIHaveResult: Boolean? = null
     private var challengeId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +45,6 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadDataFromDb()
-        setData()
         listenersForRequestedData()
         listenersBtn()
 
@@ -122,14 +122,21 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
     private fun listenersForRequestedData() {
         viewModel.isSuccessOperationMyResult.observe(viewLifecycleOwner) {
-            if (it && dataOfChallenge != null) {
+            doIHaveResult = it
+            if (doIHaveResult == true && dataOfChallenge != null) {
                 initTabLayoutMediator(it)
-            } else if (it == false && dataOfChallenge != null) {
+            } else if (doIHaveResult == false && dataOfChallenge != null) {
                 initTabLayoutMediator(it)
             }
         }
         viewModel.challenge.observe(viewLifecycleOwner){
             dataOfChallenge = it
+            if (doIHaveResult == true && dataOfChallenge != null) {
+                initTabLayoutMediator(doIHaveResult!!)
+            } else if (doIHaveResult == false && dataOfChallenge != null) {
+                initTabLayoutMediator(doIHaveResult!!)
+            }
+            setData()
         }
     }
 

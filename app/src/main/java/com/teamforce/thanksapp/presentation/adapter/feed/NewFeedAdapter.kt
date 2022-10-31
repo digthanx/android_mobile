@@ -149,6 +149,9 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                     )
                 )
                 senderAndReceiver.text = spannable
+                card.setOnClickListener {
+                    onChallengeClicked?.invoke(item.challengeId)
+                }
             }
         }
 

@@ -120,4 +120,9 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.challengeRv.adapter = null
+    }
+
 }
