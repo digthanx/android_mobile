@@ -29,6 +29,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
     var onChallengeClicked: ((challengeId: Int) -> Unit)? = null
     var onSomeonesClicked: ((userId: Int) -> Unit)? = null
     var onTransactionClicked: ((transactionId: Int) -> Unit)? = null
+    var onWinnerClicked: ((challengeReportId: Int) -> Unit)? = null
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -85,6 +86,9 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
 
                 senderAndReceiver.text = spannable
                 dateTime.text = item.time
+                card.setOnClickListener {
+                    onWinnerClicked?.invoke(item.reportId)
+                }
                 if (!item.winnerPhoto.isNullOrEmpty()) {
                     Glide.with(root.context)
                         .load("${Consts.BASE_URL}${item.winnerPhoto}".toUri())

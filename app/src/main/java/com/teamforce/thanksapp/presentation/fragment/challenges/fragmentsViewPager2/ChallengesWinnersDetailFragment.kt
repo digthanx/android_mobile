@@ -19,6 +19,7 @@ import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_WINNER
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.WinnersDetailChallengeViewModel
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.username
 import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,37 +57,51 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
                 it?.challengePhoto?.let { photo ->
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
+                Glide.with(requireContext())
+                    .load("${Consts.BASE_URL}${it?.user?.avatar}".toUri())
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .placeholder(R.drawable.ic_anon_avatar)
+                    .error(R.drawable.ic_anon_avatar)
+                    .into(binding.userAvatar)
             }
-        }
-        dataOfWinner?.let {
             binding.userNameLabelTv.text =
                 String.format(
-                    requireContext().getString(R.string.userSurnameAndName), it.participant_surname,
-                it.participant_name)
-            // Возможно лучше другое подставить, тк тут никнейм, а не телеграмм именно
-            binding.userTgName.text = String.format(
-                requireContext().getString(R.string.tgName), it.nickname)
-            // Поставить плейсхолдер и фото если ничего нет стандартную
-            Glide.with(requireContext())
-                .load("${Consts.BASE_URL}${it.participant_photo}".toUri())
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .placeholder(R.drawable.ic_anon_avatar)
-                .error(R.drawable.ic_anon_avatar)
-                .into(binding.userAvatar)
-        }
+                    requireContext().getString(R.string.userSurnameAndName), it?.user?.surname,
+                    it?.user?.name)
+            binding.userTgName.text = it?.user?.tg_name?.username()
 
-        binding.closeBtn.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
-
-        binding.userItem.setOnClickListener {
-            val bundle: Bundle = Bundle()
-            dataOfWinner?.participant_id?.let { id ->
-                bundle.putInt(Consts.USER_ID, id)
+            binding.closeBtn.setOnClickListener {
+                requireActivity().onBackPressed()
             }
-            it.findNavController().navigate(R.id.action_global_someonesProfileFragment, bundle)
+
+            binding.userItem.setOnClickListener { view ->
+                val bundle: Bundle = Bundle()
+                it?.user?.id?.let { id ->
+                    bundle.putInt(Consts.USER_ID, id)
+                }
+                view.findNavController().navigate(R.id.action_global_someonesProfileFragment, bundle)
+            }
         }
+//        dataOfWinner?.let {
+//            binding.userNameLabelTv.text =
+//                String.format(
+//                    requireContext().getString(R.string.userSurnameAndName), it.participant_surname,
+//                it.participant_name)
+//            // Возможно лучше другое подставить, тк тут никнейм, а не телеграмм именно
+//            binding.userTgName.text = String.format(
+//                requireContext().getString(R.string.tgName), it.nickname)
+//            // Поставить плейсхолдер и фото если ничего нет стандартную
+//            Glide.with(requireContext())
+//                .load("${Consts.BASE_URL}${it.participant_photo}".toUri())
+//                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+//                .transition(DrawableTransitionOptions.withCrossFade())
+//                .placeholder(R.drawable.ic_anon_avatar)
+//                .error(R.drawable.ic_anon_avatar)
+//                .into(binding.userAvatar)
+//        }
+
+
     }
 
 
