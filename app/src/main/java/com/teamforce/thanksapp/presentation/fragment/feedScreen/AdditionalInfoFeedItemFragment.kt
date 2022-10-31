@@ -23,6 +23,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
@@ -38,6 +39,7 @@ import com.teamforce.thanksapp.utils.Consts.RECEIVER_SURNAME
 import com.teamforce.thanksapp.utils.Consts.TRANSACTION_ID
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.username
+import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -187,6 +189,20 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 userIdReceiver = it?.recipient_id
                 userIdSender = it?.sender_id
                 setLikes(it?.like_amount, it?.user_liked)
+
+                // Переход к просмотру фото
+                binding.userAvatar.setOnClickListener { view ->
+                    it?.recipient_photo?.let { photo ->
+                        (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                    }
+                    Glide.with(requireContext())
+                        .load("${Consts.BASE_URL}${it?.recipient_photo}".toUri())
+                        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .placeholder(R.drawable.ic_anon_avatar)
+                        .error(R.drawable.ic_anon_avatar)
+                        .into(binding.userAvatar)
+                }
             }
         }
     }

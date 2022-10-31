@@ -93,7 +93,6 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
         listAdapter.onTransactionClicked = { transactionId ->
             val bundle = Bundle()
             bundle.putInt(Consts.TRANSACTION_ID, transactionId)
-            //TODO Добавить запрос в бд и установку данных переделать под данные с бека
             view.findNavController()
                 .navigate(
                     R.id.action_global_additionalInfoFeedItemFragment,
