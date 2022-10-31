@@ -37,7 +37,8 @@ class FeedMapper @Inject constructor(
                 challengeName = from.challenge.name ?: "Unknown",
                 challengePhoto = from.challenge.photo,
                 userLiked = from.challenge.userLiked,
-                challengeCreatorId = from.challenge.creatorId
+                challengeCreatorId = from.challenge.creatorId,
+                challengeEndAt = convertDateWithoutTime(from.challenge.endAt)
             )
         } else if (from.transaction != null) {
             FeedModel.TransactionFeedEvent(
@@ -82,7 +83,8 @@ class FeedMapper @Inject constructor(
                 winnerId = from.winner.winnerId,
                 winnerPhoto = from.winner.winnerPhoto,
                 winnerSurname = from.winner.winnerSurname,
-                winnerTgName = from.winner.winnerTgName ?: "tg_name_not_set"
+                winnerTgName = from.winner.winnerTgName ?: "tg_name_not_set",
+                challengeId = from.winner.challengeId
             )
         }
     }

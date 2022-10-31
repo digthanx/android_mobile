@@ -63,7 +63,6 @@ class FeedAdapter(
         var dateTime: TextView = binding.dateTime
         val senderAndReceiver: TextView = binding.senderAndReceiver
         val likeBtn: MaterialButton = binding.likeBtn
-        val dislikeBtn: MaterialButton = binding.dislikeBtn
         val commentBtn: MaterialButton = binding.commentBtn
         val chipGroup: ChipGroup = binding.chipGroup
         val standardGroup = binding.standardGroup
@@ -289,19 +288,15 @@ class FeedAdapter(
     private fun bindLikesAndComments(holder: FeedViewHolder, position: Int) {
         // Default Values
         holder.likeBtn.text = "0"
-        holder.dislikeBtn.text = "0"
         holder.likesCount = 0
         holder.dislikesCount = 0
         holder.standardGroup.setBackgroundColor(holder.view.context.getColor(R.color.general_background))
 
         if (currentList[position].transaction.user_liked) {
             holder.likeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_success_secondary))
-            holder.dislikeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
         } else if (currentList[position].transaction.user_disliked) {
-            holder.dislikeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_error_secondary))
             holder.likeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
         } else {
-            holder.dislikeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
             holder.likeBtn.setBackgroundColor(holder.view.context.getColor(R.color.minor_info_secondary))
         }
 
@@ -312,7 +307,6 @@ class FeedAdapter(
                 holder.likeBtn.text = (i.counter).toString()
                 holder.likesCount = i.counter
             } else if (i.code == "dislike") {
-                holder.dislikeBtn.text = (i.counter).toString()
                 holder.dislikesCount = i.counter
 
             }
@@ -326,14 +320,7 @@ class FeedAdapter(
             )
             likeClickListener?.invoke(mapReaction, position)
         }
-
-        holder.dislikeBtn.setOnClickListener {
-            val mapReaction: Map<String, Int> = mapOf(
-                "like_kind" to 2,
-                "transaction" to currentList[position].transaction.id
-            )
-            dislikeClickListener?.invoke(mapReaction, position)
-        }
+        
     }
 
 

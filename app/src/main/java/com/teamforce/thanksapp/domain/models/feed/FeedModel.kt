@@ -1,7 +1,5 @@
 package com.teamforce.thanksapp.domain.models.feed
 
-import com.google.android.datatransport.cct.StringMerger
-
 sealed class FeedModel(
     open val id: Int,
 ) {
@@ -14,6 +12,7 @@ sealed class FeedModel(
         val time: String,
         val userId: Int?,
         val challengeCreatedAt: String,
+        val challengeEndAt: String,
         val challengeCreatorFirstName: String,
         val challengeCreatorSurname: String,
         val challengeCreatorId: Int,
@@ -55,6 +54,7 @@ sealed class FeedModel(
         val likesAmount: Int?,
         val time: String,
         val userId: Int?,
+        val challengeId: Int,
         val challengeName: String,
         val reportId: Int,
         val updatedAt: String,

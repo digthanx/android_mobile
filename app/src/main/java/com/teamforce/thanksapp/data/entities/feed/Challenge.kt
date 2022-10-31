@@ -10,6 +10,8 @@ data class Challenge(
     val photo: String?,
     @SerializedName("created_at")
     val createdAt: String,
+    @SerializedName("end_at")
+    val endAt: String,
     @SerializedName("name")
     val name: String?,
     @SerializedName("creator_id")

@@ -4,6 +4,8 @@ package com.teamforce.thanksapp.data.entities.feed
 import com.google.gson.annotations.SerializedName
 
 data class Winner(
+    @SerializedName("challenge_id")
+    val challengeId: Int,
     @SerializedName("challenge_name")
     val challengeName: String?,
     @SerializedName("id")
