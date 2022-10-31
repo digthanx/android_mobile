@@ -127,17 +127,17 @@ interface ThanksApi {
     ): Call<CancelTransactionResponse>
 
     @POST("/get-comments/")
-    fun getComments(
+    suspend fun getComments(
         @Body transaction_id: GetCommentsRequest
     ): GetCommentsResponse
 
     @POST("/create-comment/")
-    fun createComment(
+    suspend fun createComment(
         @Body data: CreateCommentRequest
     ): CancelTransactionResponse
 
     @DELETE("/delete-comment/{comment_id}/")
-    fun deleteComment(
+    suspend fun deleteComment(
         @Path("comment_id") commentId: Int
     ): CancelTransactionResponse
 

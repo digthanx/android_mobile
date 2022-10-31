@@ -57,8 +57,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
     private var transactionId: Int? = null
     private var recipientAvatar: String? = null
 
-    private var allComments: List<CommentModel> = listOf()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -81,9 +79,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         initTabLayoutMediator()
         loadDataFromDb()
         setBaseInfo()
-//        transactionId?.let {
-//            loadCommentFromDb(it)
-//        }
         listeners()
 
     }
@@ -121,33 +116,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         transactionId?.let { viewModel.loadTransactionDetail(it) }
     }
 
-//    private fun addComment(transactionId: Int, message: String) {
-//        viewModel.addComment(transactionId, message)
-//    }
-
-
-//    private fun createRecycler() {
-//        val rv = binding.commentsRv
-//        val commentsAdapter = CommentsAdapter(requireContext(), viewModel.getProfileId()!!)
-//        rv.adapter = commentsAdapter
-//    }
-
-//    private fun deleteComment(commentId: Int) {
-//        viewModel.deleteComment(commentId)
-//    }
-
-//    private fun loadCommentFromDb(transactionId: Int) {
-//        viewModel.loadCommentsList(transactionId)
-//
-//        viewModel.comments.observe(
-//            viewLifecycleOwner,
-//            Observer {
-//                allComments = it?.comments!!
-//                (binding.commentsRv.adapter as CommentsAdapter).submitList(it.comments)
-//            }
-//        )
-//    }
-
     private fun listeners() {
         binding.descriptionTransactionWhoReceived.setOnClickListener {
             if (userIdReceiver != 0) {
@@ -175,74 +143,9 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 updateOutlookLike()
             }
         }
-        // inputMessage()
-
-//        (binding.commentsRv.adapter as CommentsAdapter).onDeleteCommentClickListener =
-//            { commentId ->
-//                deleteComment(commentId)
-//                transactionId?.let { transactionId ->
-//                    viewModel.deleteCommentLoading.observe(viewLifecycleOwner) { loading ->
-//                        if (!loading) loadCommentFromDb(transactionId)
-//                    }
-//                }
-//
-//            }
 
     }
 
-//    private fun inputMessage() {
-//        binding.messageValueEt.addTextChangedListener(object : TextWatcher {
-//            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-//                if (s.trim().length > 0) {
-//                    binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_CUSTOM
-//                    binding.textFieldMessage.endIconDrawable =
-//                        context?.getDrawable(R.drawable.ic_send_vector)
-//                } else {
-//                    binding.textFieldMessage.endIconDrawable =
-//                        context?.getDrawable(R.drawable.ic_emotion)
-//                }
-//                binding.textFieldMessage.setEndIconOnClickListener {
-//                    sendMessage()
-//                }
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-//            }
-//
-//            override fun afterTextChanged(s: Editable) {
-//
-//            }
-//        })
-//
-//        if (binding.messageValueEt.text?.trim().toString().isEmpty()) {
-//            // Запретить отправку
-//            binding.textFieldMessage.endIconMode = TextInputLayout.END_ICON_NONE
-//            binding.textFieldMessage.isEndIconCheckable = false
-//        }
-//        transactionId?.let { transactionId ->
-//            viewModel.createCommentsLoading.observe(viewLifecycleOwner) { loading ->
-//                if (!loading) loadCommentFromDb(transactionId)
-//            }
-//        }
-//    }
-
-//    private fun sendMessage() {
-//        transactionId?.let { transactionId ->
-//            if (binding.messageValueEt.text?.trim()?.length!! > 0) {
-//                addComment(transactionId, binding.messageValueEt.text.toString())
-//            }
-//            binding.messageValueEt.text?.clear()
-//            closeKeyboard()
-//        }
-//    }
-
-    private fun closeKeyboard() {
-        val view: View? = activity?.currentFocus
-        if (view != null) {
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
 
     private fun updateOutlookLike() {
         if (isLikedInner != null) {
@@ -264,12 +167,12 @@ class AdditionalInfoFeedItemFragment : Fragment() {
         with(binding) {
             viewModel.dataOfTransaction.observe(viewLifecycleOwner) {
                 dateTransactionTv.text = it?.updated_at
-                if (it?.sender_tg_name?.equals(viewModel.userDataRepository.getUserName()) == true) {
+                if (it?.sender_tg_name?.equals(viewModel.getProfileUserName()) == true) {
                     descriptionTransactionWhoSent.text = context?.getString(R.string.fromYou)
                 } else {
                     descriptionTransactionWhoSent.text = it?.sender_tg_name?.username()
                 }
-                if (it?.recipient_tg_name?.equals(viewModel.userDataRepository.getUserName()) == true) {
+                if (it?.recipient_tg_name?.equals(viewModel.getProfileUserName()) == true) {
                     descriptionTransactionWhoReceived.text = context?.getString(R.string.you)
                 } else {
                     descriptionTransactionWhoReceived.text =
@@ -298,19 +201,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                     .into(binding.userAvatar)
             }
         }
-
-//        if (!photo.isNullOrEmpty()) {
-//            Log.d("Token", "${photo}")
-//            binding.photoTv.visibility = View.VISIBLE
-//            binding.cardViewImg.visibility = View.VISIBLE
-//            Glide.with(binding.senderImage.context)
-//                .load("${Consts.BASE_URL}${photo}".toUri())
-//                .centerCrop()
-//                .into(binding.senderImage)
-//        } else {
-//            binding.photoTv.visibility = View.GONE
-//            binding.cardViewImg.visibility = View.GONE
-//        }
 
     }
 

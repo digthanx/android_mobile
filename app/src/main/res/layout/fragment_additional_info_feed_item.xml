@@ -1,176 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Theme.ThanksApp.PopupOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/general_brand"
+        android:elevation="0dp"
+        app:navigationIconTint="@color/general_background"
+        app:titleTextAppearance="@style/Headline6.White"
+        app:titleTextColor="@color/white">
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="32dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/user_avatar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/ic_anon_avatar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="5dp"
+            app:cardBackgroundColor="@color/minor_success_secondary"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/user_avatar"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/amount_thanks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@color/minor_success" />
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/date_transaction_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="4dp"
+        android:text="Сегодня в 12:30" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/Theme.ThanksApp.PopupOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/general_brand"
-            android:elevation="0dp"
-            app:navigationIconTint="@color/general_background"
-            app:titleTextAppearance="@style/Headline6.White"
-            app:titleTextColor="@color/white">
+        <TextView
+            android:id="@+id/description_transaction_who_received"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="\@AnnaKim_TF"
+            android:textAppearance="@style/StandardText3Medium.Black"
+            android:textColor="@color/general_brand" />
 
-        </com.google.android.material.appbar.MaterialToolbar>
-
-        <LinearLayout
-            android:id="@+id/main_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="32dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/user_avatar"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="27dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_marginStart="30dp"
-                    android:src="@drawable/ic_anon_avatar"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="5dp"
-                    app:cardBackgroundColor="@color/minor_success_secondary"
-                    app:layout_constraintStart_toEndOf="@id/user_avatar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:cardCornerRadius="8dp">
-
-                    <TextView
-                        android:id="@+id/amount_thanks"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:textColor="@color/minor_success" />
-                </com.google.android.material.card.MaterialCardView>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/description_transaction_what_did"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:text=" получила от "
+            android:textAppearance="@style/StandardText3Medium.Black" />
 
 
-            <TextView
-                android:id="@+id/date_transaction_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="Сегодня в 12:30" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/description_transaction_who_received"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="\@AnnaKim_TF"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:textAppearance="@style/StandardText3Medium.Black"
-                    android:textColor="@color/general_brand" />
-
-                <TextView
-                    android:id="@+id/description_transaction_what_did"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:text=" получила от "
-                    android:textAppearance="@style/StandardText3Medium.Black"/>
-
-
-                <TextView
-                    android:id="@+id/description_transaction_who_sent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" \@NyamaMDE"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:textAppearance="@style/StandardText3Medium.Black"
-                    android:textColor="@color/general_brand" />
-            </LinearLayout>
-
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/like_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_like"
-                    app:iconGravity="textStart"
-                    android:layout_marginHorizontal="16dp"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toStartOf="@id/date_time"
-                    app:layout_constraintTop_toBottomOf="@id/senderAndReceiver"
-                    style="@style/ReactionBtnFeed" />
-
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                style="@style/MyTabChallenge">
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/details"
-                    />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/comments"
-                    />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reactions"
-                    />
-
-
-
-            </com.google.android.material.tabs.TabLayout>
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/pager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:elevation="50dp"
-                android:layout_weight="1"/>
-
-        </LinearLayout>
-
+        <TextView
+            android:id="@+id/description_transaction_who_sent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:text=" \@NyamaMDE"
+            android:textAppearance="@style/StandardText3Medium.Black"
+            android:textColor="@color/general_brand" />
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/like_btn"
+        style="@style/ReactionBtnFeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textSize="12sp"
+        app:icon="@drawable/ic_like"
+        app:iconGravity="textStart"
+        app:layout_constraintStart_toStartOf="@id/date_time"
+        app:layout_constraintTop_toBottomOf="@id/senderAndReceiver" />
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        style="@style/MyTabChallenge"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/details" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comments" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reactions" />
+
+
+    </com.google.android.material.tabs.TabLayout>
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:elevation="50dp" />
+
+</LinearLayout>
+

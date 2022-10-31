@@ -7,12 +7,11 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CreateCommentRequest
 import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.FeedResponse
-import com.teamforce.thanksapp.data.sources.challenge.ChallengeCommentsPagingSource
 import com.teamforce.thanksapp.data.sources.createPager
+import com.teamforce.thanksapp.data.sources.feed.FeedCommentsPagingSource
 import com.teamforce.thanksapp.data.sources.feed.FeedPagingSource
 import com.teamforce.thanksapp.domain.mappers.feed.FeedMapper
 import com.teamforce.thanksapp.domain.models.feed.FeedItemByIdModel
-import com.teamforce.thanksapp.domain.models.feed.FeedModel
 import com.teamforce.thanksapp.domain.repositories.FeedRepository
 import com.teamforce.thanksapp.model.domain.CommentModel
 import com.teamforce.thanksapp.utils.Consts
@@ -45,7 +44,7 @@ class FeedRepositoryImpl @Inject constructor(
     }
 
     override fun getComments(
-        challengeId: Int
+        transactionId: Int
     ): Flow<PagingData<CommentModel>> {
         return Pager(
             config = PagingConfig(
@@ -55,9 +54,9 @@ class FeedRepositoryImpl @Inject constructor(
                 enablePlaceholders = false,
             ),
             pagingSourceFactory = {
-                ChallengeCommentsPagingSource(
+                FeedCommentsPagingSource(
                     api = thanksApi,
-                    challengeId
+                    transactionId = transactionId
                 )
             }
         ).flow
