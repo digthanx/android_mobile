@@ -129,17 +129,18 @@ interface ThanksApi {
     @POST("/get-comments/")
     fun getComments(
         @Body transaction_id: GetCommentsRequest
-    ): Call<GetCommentsResponse>
+    ): GetCommentsResponse
 
     @POST("/create-comment/")
     fun createComment(
         @Body data: CreateCommentRequest
-    ): Call<CancelTransactionResponse>
+    ): CancelTransactionResponse
 
     @DELETE("/delete-comment/{comment_id}/")
     fun deleteComment(
         @Path("comment_id") commentId: Int
-    ): Call<CancelTransactionResponse>
+    ): CancelTransactionResponse
+
 
     @Multipart
     @POST("/create-challenge/")

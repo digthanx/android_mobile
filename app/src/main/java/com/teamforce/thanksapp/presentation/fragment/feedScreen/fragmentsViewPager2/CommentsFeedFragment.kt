@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class CommentsFeedFragment : Fragment() {
+class CommentsFeedFragment : Fragment(R.layout.fragment_comments_feed) {
 
     private var transactionId: Int? = null
 
@@ -24,12 +24,9 @@ class CommentsFeedFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_comments_feed, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
     companion object {

@@ -59,7 +59,7 @@ class DetailsInnerFeedFragment : Fragment(R.layout.fragment_details_inner_feed) 
                     photoTv.visibility = View.VISIBLE
                     cardViewImg.visibility = View.VISIBLE
                     Glide.with(requireContext())
-                        .load("${Consts.BASE_URL}${it?.photo}".toUri())
+                        .load("${Consts.BASE_URL}${it.photo}".toUri())
                         .centerCrop()
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(binding.senderImage)
