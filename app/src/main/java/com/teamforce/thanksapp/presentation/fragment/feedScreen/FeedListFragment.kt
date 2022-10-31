@@ -104,13 +104,11 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
         listAdapter.onChallengeClicked = { challengeId: Int ->
             val bundle = Bundle()
             bundle.putInt(ChallengesConsts.CHALLENGER_ID, challengeId)
-            //TODO В детали челленджа добавить новый запрос и установку данных с другой модели
             view.findNavController().navigateSafely(
                 R.id.action_global_detailsMainChallengeFragment,
                 bundle,
                 OptionsTransaction().optionForAdditionalInfoFeedFragment
             )
-            // Добавить в модель победителя challengeId когда бек добавит
         }
 
         listAdapter.onSomeonesClicked = { userId: Int ->
@@ -131,6 +129,10 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
                 bundle,
                 OptionsTransaction().optionForAdditionalInfoFeedFragment
             )
+        }
+
+        listAdapter.onLikeClicked = { transactionId: Int ->
+            // Отправка лайка на сервер
         }
 
     }

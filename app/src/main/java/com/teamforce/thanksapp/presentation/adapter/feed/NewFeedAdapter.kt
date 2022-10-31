@@ -30,7 +30,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
     var onSomeonesClicked: ((userId: Int) -> Unit)? = null
     var onTransactionClicked: ((transactionId: Int) -> Unit)? = null
     var onWinnerClicked: ((challengeReportId: Int) -> Unit)? = null
-    var onLikeClicked: ((challengeReportId: Int) -> Unit)? = null
+    var onLikeClicked: ((transactionId: Int) -> Unit)? = null
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -295,6 +295,7 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
                 }
                 likeBtn.setOnClickListener {
                     updateLikeByClick(item, position)
+                    onLikeClicked?.invoke(item.transactionId)
                 }
                 if (!item.transactionRecipientPhoto.isNullOrEmpty()) {
                     Glide.with(root.context)
@@ -310,9 +311,12 @@ class NewFeedAdapter : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>(D
         private fun setLikes(item: FeedModel.TransactionFeedEvent) {
             binding.likeBtn.text = item.likesAmount.toString()
             if (item.userLiked) {
-                binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
+                if(item.isWithMe) binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
+                else binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_success_secondary))
             } else {
-                binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_info_secondary))
+                if(item.isWithMe) binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.white))
+                else binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_info_secondary))
+
             }
         }
 
