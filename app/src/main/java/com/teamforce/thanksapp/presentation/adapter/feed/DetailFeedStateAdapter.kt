@@ -15,7 +15,8 @@ class DetailFeedStateAdapter(
 
     private var transactionId: Int = 0
 
-    public fun setTransactionId(outsideTransactionId: Int?) {
+
+   fun setTransactionId(outsideTransactionId: Int?) {
         if (outsideTransactionId != null) {
             transactionId = outsideTransactionId
         }

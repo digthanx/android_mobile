@@ -1,14 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.fragment.feedScreen.fragmentsViewPager2.DetailsInnerFeedFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/linear_info"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:visibility="visible"
+        tools:context=".presentation.fragment.feedScreen.fragmentsViewPager2.DetailsInnerFeedFragment">
 
-</FrameLayout>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/message_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/minor_info_secondary"
+            android:layout_marginBottom="18dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginBottom="8dp"
+                    android:letterSpacing="0.25"
+                    android:text="@string/forWhat"
+                    android:textAllCaps="true"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/reason_transaction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:textAppearance="@style/StandardText4.Black"
+                    android:text="Некая причина перевода"
+                    />
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/tagsChipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:chipSpacingVertical="0dp"
+            android:layout_marginVertical="20dp">
+
+        </com.google.android.material.chip.ChipGroup>
+
+
+        <TextView
+            android:id="@+id/photo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="16dp"
+            android:letterSpacing="0.25"
+            android:text="@string/photoInFeedDetail"
+            android:textAllCaps="true"
+            android:textAppearance="@style/VerySmallText1.Gray"
+            android:visibility="visible" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view_img"
+            app:cardCornerRadius="12dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/sender_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_launcher_background" />
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </LinearLayout>
+</ScrollView>

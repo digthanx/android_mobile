@@ -280,7 +280,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                     R.string.amountThanks,
                     it?.amount.toString()
                 )
-                reasonTransaction.text = it?.reason
                 setAvatar(it?.recipient_photo)
                 userIdReceiver = it?.recipient_id
                 userIdSender = it?.sender_id

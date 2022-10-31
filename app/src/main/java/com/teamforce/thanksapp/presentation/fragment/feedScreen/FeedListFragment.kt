@@ -97,7 +97,7 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
                 .navigate(
                     R.id.action_global_additionalInfoFeedItemFragment,
                     bundle,
-                    OptionsTransaction().optionForAdditionalInfoFeedFragment
+                    OptionsTransaction().optionForEditProfile
                 )
         }
 
