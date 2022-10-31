@@ -14,6 +14,7 @@ import com.teamforce.thanksapp.databinding.FragmentFeedListBinding
 import com.teamforce.thanksapp.presentation.adapter.feed.NewFeedAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_REPORT_ID
 import com.teamforce.thanksapp.presentation.viewmodel.feed.FeedListViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
@@ -118,6 +119,16 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
             bundle.putInt(Consts.USER_ID, userId)
             view.findNavController().navigate(
                 R.id.action_global_someonesProfileFragment,
+                bundle,
+                OptionsTransaction().optionForAdditionalInfoFeedFragment
+            )
+        }
+
+        listAdapter.onWinnerClicked = { challengeReportId: Int ->
+            val bundle = Bundle()
+            bundle.putInt(CHALLENGER_REPORT_ID, challengeReportId)
+            view.findNavController().navigate(
+                R.id.action_global_challengesWinnersDetailFragment,
                 bundle,
                 OptionsTransaction().optionForAdditionalInfoFeedFragment
             )

@@ -11,6 +11,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentWinnersChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.challenge.WinnersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_WINNER
 import com.teamforce.thanksapp.utils.OptionsTransaction
@@ -41,10 +42,10 @@ class WinnersChallengeFragment : Fragment(R.layout.fragment_winners_challenge) {
             VerticalDividerItemDecorator(16, adapter.itemCount)
         )
         if (idChallenge != null){
-            adapter.onWinnerClicked = { dataOfWinner ->
+            adapter.onWinnerClicked = { reportId ->
                 val bundle = Bundle()
                 with(bundle){
-                    putParcelable(CHALLENGER_WINNER, dataOfWinner)
+                    putInt(ChallengesConsts.CHALLENGER_REPORT_ID, reportId)
                 }
                 view.findNavController().navigate(
                     R.id.action_global_challengesWinnersDetailFragment,

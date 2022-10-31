@@ -16,6 +16,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.GetChallengeWinnersResponse
 import com.teamforce.thanksapp.databinding.FragmentChallengesWinnersDetailBinding
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_REPORT_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_WINNER
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.WinnersDetailChallengeViewModel
 import com.teamforce.thanksapp.utils.Consts
@@ -29,20 +30,18 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
     private val binding: FragmentChallengesWinnersDetailBinding by viewBinding()
     private val viewModel: WinnersDetailChallengeViewModel by viewModels()
 
-    private var challengeId: Int? = null
-    private var dataOfWinner: GetChallengeWinnersResponse.Winner? = null
+    private var reportId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            dataOfWinner = it.getParcelable(CHALLENGER_WINNER)
-            challengeId = it.getInt(CHALLENGER_ID)
+            reportId = it.getInt(CHALLENGER_REPORT_ID)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dataOfWinner?.reportId?.let { viewModel.loadChallengeWinnerReportDetail(it) }
+        reportId?.let { viewModel.loadChallengeWinnerReportDetail(it) }
         viewModel.winnerReport.observe(viewLifecycleOwner){
             binding.nameChallenge.text = it?.challenge?.name
             binding.descriptionChallenge.text = it?.challengeText

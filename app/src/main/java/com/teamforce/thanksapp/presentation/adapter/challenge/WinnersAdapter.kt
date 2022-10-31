@@ -23,7 +23,7 @@ class WinnersAdapter(
 )
     : ListAdapter<GetChallengeWinnersResponse.Winner, WinnersAdapter.WinnerViewHolder>(DiffCallback)
 {
-     var onWinnerClicked: ((dataOfWinner: GetChallengeWinnersResponse.Winner) -> Unit)? = null
+     var onWinnerClicked: ((reportId: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WinnerViewHolder {
         val binding = ItemWinnerBinding
@@ -74,7 +74,7 @@ class WinnersAdapter(
                     .into(binding.userAvatar)
             }
             binding.userItem.setOnClickListener {
-                onWinnerClicked?.invoke(currentList[position])
+                onWinnerClicked?.invoke(currentList[position].reportId)
             }
         }
 
