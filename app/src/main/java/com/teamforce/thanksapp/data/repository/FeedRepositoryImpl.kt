@@ -73,7 +73,7 @@ class FeedRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteChallengeComment(
+    override suspend fun deleteComment(
         commentId: Int
     ): ResultWrapper<CancelTransactionResponse> {
         return safeApiCall(Dispatchers.IO){

@@ -16,7 +16,7 @@ interface FeedRepository {
     ): Flow<PagingData<FeedResponse>>
 
     fun getComments(
-        challengeId: Int
+        transactionId: Int
     ): Flow<PagingData<CommentModel>>
 
     suspend fun createComment(
@@ -24,7 +24,7 @@ interface FeedRepository {
         text: String
     ): ResultWrapper<CancelTransactionResponse>
 
-    suspend fun deleteChallengeComment(
+    suspend fun deleteComment(
         commentId: Int
     ): ResultWrapper<CancelTransactionResponse>
 
