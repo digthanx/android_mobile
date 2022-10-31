@@ -133,6 +133,7 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
 
         listAdapter.onLikeClicked = { transactionId: Int ->
             // Отправка лайка на сервер
+            viewModel.pressLike(transactionId)
         }
 
     }

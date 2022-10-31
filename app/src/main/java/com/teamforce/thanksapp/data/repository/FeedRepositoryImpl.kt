@@ -108,4 +108,11 @@ class FeedRepositoryImpl @Inject constructor(
         }
         return result
     }
+
+    override suspend fun pressLike(transactionId: Int): ResultWrapper<CancelTransactionResponse> {
+        val data = mapOf("like_kind" to 1, "transaction" to transactionId)
+        return safeApiCall(Dispatchers.IO){
+            thanksApi.newPressLike(data)
+        }
+    }
 }

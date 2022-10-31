@@ -37,4 +37,6 @@ interface FeedRepository {
     fun getTransactions(): Flow<PagingData<FeedModel>>
 
     suspend fun getTransactionById(transactionId: Int): ResultWrapper<FeedItemByIdModel>
+
+    suspend fun pressLike(transactionId: Int): ResultWrapper<CancelTransactionResponse>
 }
