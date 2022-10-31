@@ -1,6 +1,8 @@
 package com.teamforce.thanksapp.data.api
 
+import com.teamforce.thanksapp.data.entities.NotificationEntity
 import com.teamforce.thanksapp.data.entities.PushTokenEntity
+import com.teamforce.thanksapp.data.entities.RemovePushTokenEntity
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.request.*
@@ -207,4 +209,12 @@ interface ThanksApi {
 
     @POST("/set-fcm-token/")
     suspend fun setPushToken(@Body token: PushTokenEntity): PushTokenEntity
+
+    @POST("/remove-fcm-token/")
+    suspend fun removePushToken(@Body remove: RemovePushTokenEntity)
+
+    @GET("/notifications/")
+    suspend fun getNotifications(): List<NotificationEntity>
+
+
 }

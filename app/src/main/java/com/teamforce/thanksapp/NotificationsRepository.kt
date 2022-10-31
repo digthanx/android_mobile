@@ -2,11 +2,18 @@ package com.teamforce.thanksapp
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.data.entities.NotificationEntity
 import com.teamforce.thanksapp.data.entities.PushTokenEntity
+import com.teamforce.thanksapp.data.sources.notifications.NotificationsPagingSource
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.safeApiCall
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,6 +29,22 @@ class NotificationsRepository @Inject constructor(
         return safeApiCall(Dispatchers.IO) {
             thanksApi.setPushToken(token)
         }
+    }
+
+    fun getNotifications(): Flow<PagingData<NotificationEntity>> {
+        return Pager(
+            config = PagingConfig(
+                initialLoadSize = Consts.PAGE_SIZE,
+                prefetchDistance = 1,
+                pageSize = Consts.PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                NotificationsPagingSource(
+                    api = thanksApi
+                )
+            }
+        ).flow
     }
 }
 
