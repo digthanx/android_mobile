@@ -52,4 +52,6 @@ interface ChallengeRepository {
 
     fun loadChallenge(): Flow<PagingData<ChallengeModel>>
 
+    suspend fun pressLike(challengeId: Int): ResultWrapper<CancelTransactionResponse>
+
 }

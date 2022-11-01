@@ -19,6 +19,8 @@ data class ChallengeModelById(
     val awardees: Int,
     val creator_organization_id: Int,
     val fund: Int,
+    val user_liked: Boolean,
+    val likes_amount: Int,
     val creator_name: String?,
     val creator_surname: String?,
     val creator_photo: String?,

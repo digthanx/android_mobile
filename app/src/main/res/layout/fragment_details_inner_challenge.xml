@@ -285,9 +285,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="4dp"
                 android:layout_marginBottom="16dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:backgroundTint="@color/background_active_and_disabled_btn"
                 android:letterSpacing="-0.031"
                 android:text="@string/sendReport"
@@ -299,23 +299,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
+                android:text=""
                 app:icon="@drawable/ic_like" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/dislike_btn"
-                style="@style/ReactionBtnFeed"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:textColor="@color/general_contrast"
-                app:cornerRadius="8dp"
-                app:icon="@drawable/ic_dislike" />
         </LinearLayout>
 
 
