@@ -14,6 +14,9 @@ import com.teamforce.thanksapp.utils.Consts
 
 class FeedReactionsPageAdapter:
     PagingDataAdapter<GetReactionsForTransactionsResponse.InnerInfoLike, FeedReactionsPageAdapter.ReactionViewHolder>(DiffCallback) {
+
+    var onReactionClicked: ((userId: Int) -> Unit)? = null
+
     companion object {
 
         object DiffCallback : DiffUtil.ItemCallback<GetReactionsForTransactionsResponse.InnerInfoLike>() {
@@ -44,6 +47,9 @@ class FeedReactionsPageAdapter:
         val item = getItem(position)
         if(item != null){
             holder.bind(item)
+            holder.binding.mainCardView.setOnClickListener {
+                onReactionClicked?.invoke(item.user.id)
+            }
         }
     }
 
