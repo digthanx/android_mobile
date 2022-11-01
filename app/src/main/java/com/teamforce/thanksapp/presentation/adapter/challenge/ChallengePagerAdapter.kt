@@ -105,6 +105,7 @@ class ChallengePagerAdapter(
                     prizeFundText.setTextColor(binding.root.context.getColor(R.color.general_contrast))
                     prizePoolText.setTextColor(binding.root.context.getColor(R.color.general_contrast))
                     challengeTitle.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    challengeCreator.setTextColor(binding.root.context.getColor(R.color.general_contrast))
                     winnersValue.setTextColor(binding.root.context.getColor(R.color.general_contrast))
                     winnersText.setTextColor(binding.root.context.getColor(R.color.general_contrast))
                     lastUpdateChallengeValue.setTextColor(binding.root.context.getColor(R.color.general_contrast))
