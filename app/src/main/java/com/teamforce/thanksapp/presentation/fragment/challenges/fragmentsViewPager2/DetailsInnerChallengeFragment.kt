@@ -161,8 +161,9 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
             // Некст две строки нужны для динамического обновления кол ва лайков
             // Если кто то кликнул в то время, пока ты не обновлял данные
             // TODO Мне не очень нравится реализация, можно как то лучше
-            loadChallengeData(idChallenge)
-            setDataAboutChallengeInListener()
+            // TODO Пока убал динамическое обновление, не понравилось как дергается кол во лайков
+//            loadChallengeData(idChallenge)
+//            setDataAboutChallengeInListener()
             isLikedInner?.let { setLikes(likesCountInner, it) }
         }
     }
