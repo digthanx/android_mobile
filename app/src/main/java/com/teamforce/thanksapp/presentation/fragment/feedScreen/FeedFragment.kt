@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
 import com.teamforce.thanksapp.presentation.adapter.feed.PagerAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.feed.FeedViewModel
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.ViewLifecycleDelegate
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,6 +38,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 }
             }
             mediator?.attach()
+        }
+
+        binding.profile.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_feedFragment_to_profileGraph, null,
+                OptionsTransaction().optionForProfileFragment
+            )
         }
     }
 
