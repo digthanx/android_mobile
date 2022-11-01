@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/minor_info_secondary"
+    app:cardCornerRadius="12dp"
+    android:layout_marginBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="8dp"
+        android:layout_marginStart="14dp"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/user_avatar"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_anon_avatar"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:background="@color/minor_success"
+                android:src="@drawable/ic_like_8x8_for_reactions_list"
+                android:tint="@color/general_background"
+                android:layout_alignEnd="@id/user_avatar"
+                android:layout_alignBottom="@id/user_avatar"
+                android:scaleType="centerInside"
+                app:backgroundPadding="5dp"
+                android:adjustViewBounds="true"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/user_fi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:textAppearance="@style/StandardText3Medium.Black"/>
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
