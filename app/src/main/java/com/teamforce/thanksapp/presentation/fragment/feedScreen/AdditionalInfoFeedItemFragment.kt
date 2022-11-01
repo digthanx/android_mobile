@@ -41,17 +41,16 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     private var userIdReceiver: Int? = null
     private var userIdSender: Int? = null
-    private var likesCount: Int? = null
     private var likesCountReal: Int = 0
     private var isLikedInner: Boolean? = null
     private var transactionId: Int? = null
-    private var recipientAvatar: String? = null
+    private var neddedPagePosition: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             transactionId = it.getInt(TRANSACTION_ID)
-            recipientAvatar = it.getString(AVATAR_USER)
+            neddedPagePosition = it.getInt(Consts.NEEDED_PAGE_POSITION)
         }
     }
 
@@ -88,7 +87,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
 
     private fun initTabLayoutMediator() {
         val detailInnerAdapter = DetailFeedStateAdapter(requireActivity())
-
         detailInnerAdapter.setTransactionId(transactionId)
 
         binding.pager.adapter = detailInnerAdapter
@@ -100,6 +98,9 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 2 -> tab.text = context?.getString(R.string.reactions)
             }
         }.attach()
+
+        if(neddedPagePosition != null)
+            binding.pager.setCurrentItem(neddedPagePosition!!, false)
     }
 
     private fun loadDataFromDb() {

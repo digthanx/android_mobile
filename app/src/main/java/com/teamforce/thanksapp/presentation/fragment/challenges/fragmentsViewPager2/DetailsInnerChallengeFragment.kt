@@ -36,7 +36,6 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     private var isLikedInner: Boolean? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -67,13 +66,14 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
         }
     }
 
-    private fun transactionToProfileOfCreator(creatorId: Int, view: View){
+    private fun transactionToProfileOfCreator(creatorId: Int, view: View) {
         val bundle = Bundle()
         bundle.putInt(Consts.USER_ID, creatorId)
         view.findNavController().navigate(
             R.id.action_global_someonesProfileFragment,
             bundle,
-            OptionsTransaction().optionForTransactionWithSaveBackStack)
+            OptionsTransaction().optionForTransactionWithSaveBackStack
+        )
     }
 
 
@@ -98,66 +98,72 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     private fun setDataAboutChallengeInListener() {
 
         viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
-            if(challenge != null){
+            if (challenge != null) {
                 setLikes(challenge.likes_amount, challenge.user_liked)
                 binding.likeBtn.text = challenge.likes_amount.toString()
-                if (challenge.active) {
-                    binding.nameChallenge.text = challenge.name
-                    binding.descriptionChallenge.text = challenge.description
-                    binding.stateAboutReports.text = challenge.status
-                    if (challenge?.active == true) {
-                        binding.stateAboutAddParticipants.text =
-                            requireContext().getString(R.string.gettingReportsActive)
-                    } else {
-                        binding.stateAboutAddParticipants.text =
-                            requireContext().getString(R.string.gettingReportsFinished)
-                    }
-                    binding.prizeFundValue.text =
-                        String.format(requireContext().getString(R.string.fund), challenge.fund.toString())
-                    binding.dateEndValue.text = challenge.end_at?.let { endAt ->
-                        convertDateToNecessaryFormat(endAt)
-                    }
-                    binding.prizePoolValue.text =
-                        String.format(
-                            requireContext()
-                                .getString(R.string.occupiedPrizePool), challenge.winners_count, challenge.awardees
-                        )
-                    binding.userTgName.setText(
-                        String.format(requireContext().getString(R.string.tgName), challenge.creator_tg_name)
+
+                binding.nameChallenge.text = challenge.name
+                binding.descriptionChallenge.text = challenge.description
+                binding.stateAboutReports.text = challenge.status
+                if (challenge?.active == true) {
+                    binding.stateAboutAddParticipants.text =
+                        requireContext().getString(R.string.gettingReportsActive)
+                } else {
+                    binding.stateAboutAddParticipants.text =
+                        requireContext().getString(R.string.gettingReportsFinished)
+                }
+                binding.prizeFundValue.text =
+                    String.format(
+                        requireContext().getString(R.string.fund),
+                        challenge.fund.toString()
                     )
-                    if (!challenge.creator_photo.isNullOrEmpty()) {
-                        Glide.with(requireContext())
-                            .load("${Consts.BASE_URL}${challenge.creator_photo}".toUri())
-                            .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                            .into(binding.userAvatar)
-                    }
+                binding.dateEndValue.text = challenge.end_at?.let { endAt ->
+                    convertDateToNecessaryFormat(endAt)
+                }
+                binding.prizePoolValue.text =
+                    String.format(
+                        requireContext()
+                            .getString(R.string.occupiedPrizePool),
+                        challenge.winners_count,
+                        challenge.awardees
+                    )
+                binding.userTgName.setText(
+                    String.format(
+                        requireContext().getString(R.string.tgName),
+                        challenge.creator_tg_name
+                    )
+                )
+                if (!challenge.creator_photo.isNullOrEmpty()) {
+                    Glide.with(requireContext())
+                        .load("${Consts.BASE_URL}${challenge.creator_photo}".toUri())
+                        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .into(binding.userAvatar)
+                }
 
-                    if (challenge.status.isNullOrEmpty()) {
-                        binding.stateAboutReports.visibility = View.GONE
-                    } else {
-                        binding.stateAboutReports.visibility = View.VISIBLE
-                        challenge.status.let { it1 -> enableOrDisableSentReportButton(it1) }
-                        binding.stateAboutReports.text = challenge.status
-                    }
+                if (challenge.status.isNullOrEmpty()) {
+                    binding.stateAboutReports.visibility = View.GONE
+                } else {
+                    binding.stateAboutReports.visibility = View.VISIBLE
+                    challenge.status.let { it1 -> enableOrDisableSentReportButton(it1) }
+                    binding.stateAboutReports.text = challenge.status
+                }
 
-                    binding.userItem.setOnClickListener { view ->
-                        challenge.creator_id?.let { id ->
-                            transactionToProfileOfCreator(id, view)
-                        }
+                binding.userItem.setOnClickListener { view ->
+                    challenge.creator_id?.let { id ->
+                        transactionToProfileOfCreator(id, view)
                     }
-
                 }
             }
 
         }
     }
 
-    private fun handleLike(){
+    private fun handleLike() {
         binding.likeBtn.setOnClickListener { view ->
             isLikedInner?.let { likeBtnClicked(it) }
             idChallenge?.let { challengeId -> viewModel.pressLike(challengeId) }
         }
-        viewModel.likeResult.observe(viewLifecycleOwner){ view ->
+        viewModel.likeResult.observe(viewLifecycleOwner) { view ->
             // Некст две строки нужны для динамического обновления кол ва лайков
             // Если кто то кликнул в то время, пока ты не обновлял данные
             // TODO Мне не очень нравится реализация, можно как то лучше
@@ -169,7 +175,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     }
 
 
-    private fun likeBtnClicked(isLiked: Boolean){
+    private fun likeBtnClicked(isLiked: Boolean) {
         if (isLikedInner != null) {
             isLikedInner = !isLiked
             if (isLikedInner == true) {
@@ -188,7 +194,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     private fun setLikes(likesAmount: Int, isLiked: Boolean) {
         likesCountInner = likesAmount
         isLikedInner = isLiked
-        binding.likeBtn.text =  likesCountInner.toString()
+        binding.likeBtn.text = likesCountInner.toString()
         if (isLiked) {
             binding.likeBtn.setBackgroundColor(requireContext().getColor(R.color.minor_success_secondary))
         } else {
@@ -198,9 +204,11 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
 
     private fun enableOrDisableSentReportButton(statusChallenge: String) {
         // Для прода
-        binding.sendReportBtn.isEnabled = (statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
-                statusChallenge.trim().contains(ChallengesStatus.REPORT_REFUSED.value, true)) &&
-                !statusChallenge.trim().contains(ChallengesStatus.YOU_ARE_CREATER.value, ignoreCase = true)
+        binding.sendReportBtn.isEnabled =
+            (statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||
+                    statusChallenge.trim().contains(ChallengesStatus.REPORT_REFUSED.value, true)) &&
+                    !statusChallenge.trim()
+                        .contains(ChallengesStatus.YOU_ARE_CREATER.value, ignoreCase = true)
         // Для разработки
 //        binding.sendReportBtn.isEnabled =
 //            statusChallenge.trim().contains(ChallengesStatus.YOU_CAN_SENT_REPORT.value, true) ||

@@ -28,9 +28,8 @@ object Consts {
     const val WE_REFUSED_YOUR_OPERATION = "we-refused_your_operation"
     const val AVATAR_USER = "user-avatar"
     const val SHOULD_ME_GOTO_HISTORY = "ShouldMeGoToHistory"
-    const val SENDER_TG = "senderTg"
-    const val DESCRIPTION_FEED = "descriptionFeed"
-    const val PHOTO_TRANSACTION = "photoFeed"
+    const val NEEDED_PAGE_POSITION = "needed-page-position"
+
 
     val MAIN = MainActivity()
     var BASE_URL: String = BuildConfig.URL_PORT

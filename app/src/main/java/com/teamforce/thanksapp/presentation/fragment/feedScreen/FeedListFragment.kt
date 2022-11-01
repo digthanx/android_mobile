@@ -136,13 +136,38 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
             viewModel.pressLike(transactionId)
         }
 
-        viewModel.pressLikes.observe(viewLifecycleOwner){
-            // Подтвердить лайк
+        listAdapter.onCommentClicked = { transactionId: Int, pagePosition: Int ->
+            val bundle = Bundle()
+            bundle.putInt(Consts.TRANSACTION_ID, transactionId)
+            bundle.putInt(Consts.NEEDED_PAGE_POSITION, pagePosition)
+            view.findNavController()
+                .navigate(
+                    R.id.action_global_additionalInfoFeedItemFragment,
+                    bundle,
+                    OptionsTransaction().optionForEditProfile
+                )
         }
 
-        viewModel.pressLikesError.observe(viewLifecycleOwner){
-            // Отвергнуть лайк
+        listAdapter.onLikeLongClicked = { transactionId: Int, pagePosition: Int ->
+            val bundle = Bundle()
+            bundle.putInt(Consts.TRANSACTION_ID, transactionId)
+            bundle.putInt(Consts.NEEDED_PAGE_POSITION, pagePosition)
+            view.findNavController()
+                .navigate(
+                    R.id.action_global_additionalInfoFeedItemFragment,
+                    bundle,
+                    OptionsTransaction().optionForEditProfile
+                )
         }
+
+//      Для динамического обновления лайков
+//        viewModel.pressLikes.observe(viewLifecycleOwner){
+//            // Подтвердить лайк
+//        }
+//
+//        viewModel.pressLikesError.observe(viewLifecycleOwner){
+//            // Отвергнуть лайк
+//        }
 
 
     }

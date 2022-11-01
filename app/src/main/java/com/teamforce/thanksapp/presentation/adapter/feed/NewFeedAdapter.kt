@@ -30,6 +30,8 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
     var onTransactionClicked: ((transactionId: Int) -> Unit)? = null
     var onWinnerClicked: ((challengeReportId: Int) -> Unit)? = null
     var onLikeClicked: ((transactionId: Int) -> Unit)? = null
+    var onLikeLongClicked: ((transactionId: Int, pagePosition: Int) -> Unit)? = null
+    var onCommentClicked: ((transactionId: Int, pagePosition: Int) -> Unit)? = null
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -290,16 +292,11 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                     )
                     senderAndReceiver.text = spannable
                 }
+                // Установка базовых полей(независимых от условия)
                 setLikes(item)
                 commentBtn.text = item.commentAmount.toString()
                 dateTime.text = item.time
-                card.setOnClickListener {
-                    onTransactionClicked?.invoke(item.transactionId)
-                }
-                likeBtn.setOnClickListener {
-                    updateLikeByClick(item, position)
-                    onLikeClicked?.invoke(item.transactionId)
-                }
+
                 if (!item.transactionRecipientPhoto.isNullOrEmpty()) {
                     Glide.with(root.context)
                         .load("${Consts.BASE_URL}${item.transactionRecipientPhoto}".toUri())
@@ -307,6 +304,21 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                         .into(userAvatar)
                 } else {
                     userAvatar.setImageResource(R.drawable.ic_anon_avatar)
+                }
+                // Слушатели
+                card.setOnClickListener {
+                    onTransactionClicked?.invoke(item.transactionId)
+                }
+                likeBtn.setOnClickListener {
+                    updateLikeByClick(item, position)
+                    onLikeClicked?.invoke(item.transactionId)
+                }
+                commentBtn.setOnClickListener {
+                    onCommentClicked?.invoke(item.transactionId, 1)
+                }
+                likeBtn.setOnLongClickListener {
+                    onLikeLongClicked?.invoke(item.transactionId, 2)
+                    return@setOnLongClickListener true
                 }
             }
         }
