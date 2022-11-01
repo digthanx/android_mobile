@@ -242,4 +242,12 @@ interface ThanksApi {
         @Query("limit") limit: Int,
         @Query("offset") offset: Int,
     ): List<FeedItemEntity>
+
+    @GET("/get-likes/")
+    suspend fun getReactionsForTransaction(
+        @Query("transaction_id") transactionId: Int,
+        @Query("include_name") includeName: Boolean = true,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): GetReactionsForTransactionsResponse
 }
