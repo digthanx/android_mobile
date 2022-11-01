@@ -5,7 +5,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/minor_info_secondary"
     app:cardCornerRadius="12dp"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="8dp"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -16,11 +18,11 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/user_avatar"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_anon_avatar"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
             <com.google.android.material.imageview.ShapeableImageView
