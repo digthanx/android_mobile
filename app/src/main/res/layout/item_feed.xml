@@ -40,16 +40,20 @@
 
         <TextView
             android:id="@+id/senderAndReceiver"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:paddingVertical="5dp"
             android:clickable="true"
             android:focusable="true"
+            android:maxLines="2"
+            android:maxWidth="200dp"
             android:text="@string/someoneToSomeone"
             android:textAppearance="@style/StandardText3Medium.Black"
             app:layout_constraintStart_toEndOf="@+id/user_avatar"
-            app:layout_constraintTop_toBottomOf="@id/date_time" />
+            app:layout_constraintTop_toBottomOf="@id/date_time"
+            />
 
         <LinearLayout
             android:id="@+id/toggleButtonGroup"

@@ -187,13 +187,6 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                     it?.recipient_photo?.let { photo ->
                         (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                     }
-                    Glide.with(requireContext())
-                        .load("${Consts.BASE_URL}${it?.recipient_photo}".toUri())
-                        .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .placeholder(R.drawable.ic_anon_avatar)
-                        .error(R.drawable.ic_anon_avatar)
-                        .into(binding.userAvatar)
                 }
             }
         }

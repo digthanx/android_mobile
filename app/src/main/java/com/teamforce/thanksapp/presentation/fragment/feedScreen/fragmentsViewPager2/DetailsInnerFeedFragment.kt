@@ -3,6 +3,7 @@ package com.teamforce.thanksapp.presentation.fragment.feedScreen.fragmentsViewPa
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +17,7 @@ import com.teamforce.thanksapp.databinding.FragmentDetailsInnerFeedBinding
 import com.teamforce.thanksapp.presentation.viewmodel.feed.DetailInnerFeedViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.TRANSACTION_ID
+import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -45,19 +47,7 @@ class DetailsInnerFeedFragment : Fragment(R.layout.fragment_details_inner_feed) 
         super.onViewCreated(view, savedInstanceState)
         transactionId?.let { viewModel.loadTransactionDetail(it) }
         setDetail()
-//        viewModel.isLoading.observe(viewLifecycleOwner){ isLoading ->
-//            if(isLoading){
-//                binding.messageCard.visibility = View.GONE
-//                binding.cardViewImg.visibility = View.GONE
-//                binding.tagsChipGroup.visibility = View.GONE
-//                binding.progressBar.visibility = View.VISIBLE
-//            }else{
-//                binding.messageCard.visibility = View.VISIBLE
-//                binding.cardViewImg.visibility = View.VISIBLE
-//                binding.tagsChipGroup.visibility = View.VISIBLE
-//                binding.progressBar.visibility = View.GONE
-//            }
-//        }
+
     }
 
     private fun setDetail(){
@@ -81,6 +71,11 @@ class DetailsInnerFeedFragment : Fragment(R.layout.fragment_details_inner_feed) 
                     cardViewImg.visibility = View.GONE
                 }
 
+                binding.senderImage.setOnClickListener { view ->
+                    it?.photo?.let { photo ->
+                        (view as ImageView).viewSinglePhoto(photo, requireContext())
+                    }
+                }
             }
         }
     }
