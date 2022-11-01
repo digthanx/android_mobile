@@ -7,10 +7,12 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.CreateCommentRequest
 import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.FeedResponse
+import com.teamforce.thanksapp.data.response.GetReactionsForTransactionsResponse
 import com.teamforce.thanksapp.data.response.LikeResponse
 import com.teamforce.thanksapp.data.sources.createPager
 import com.teamforce.thanksapp.data.sources.feed.FeedCommentsPagingSource
 import com.teamforce.thanksapp.data.sources.feed.FeedPagingSource
+import com.teamforce.thanksapp.data.sources.feed.FeedReactionsPagingSource
 import com.teamforce.thanksapp.domain.mappers.feed.FeedMapper
 import com.teamforce.thanksapp.domain.models.feed.FeedItemByIdModel
 import com.teamforce.thanksapp.domain.repositories.FeedRepository
@@ -116,4 +118,25 @@ class FeedRepositoryImpl @Inject constructor(
             thanksApi.newPressLike(data)
         }
     }
+
+    override fun getReactions(
+        transactionId: Int
+    ): Flow<PagingData<GetReactionsForTransactionsResponse.InnerInfoLike>> {
+        return Pager(
+            config = PagingConfig(
+                initialLoadSize = Consts.PAGE_SIZE,
+                prefetchDistance = 1,
+                pageSize = Consts.PAGE_SIZE,
+                enablePlaceholders = false,
+            ),
+            pagingSourceFactory = {
+                FeedReactionsPagingSource(
+                    api = thanksApi,
+                    transactionId = transactionId
+                )
+            }
+        ).flow
+
+    }
+
 }
