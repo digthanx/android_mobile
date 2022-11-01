@@ -45,6 +45,19 @@ class DetailsInnerFeedFragment : Fragment(R.layout.fragment_details_inner_feed) 
         super.onViewCreated(view, savedInstanceState)
         transactionId?.let { viewModel.loadTransactionDetail(it) }
         setDetail()
+//        viewModel.isLoading.observe(viewLifecycleOwner){ isLoading ->
+//            if(isLoading){
+//                binding.messageCard.visibility = View.GONE
+//                binding.cardViewImg.visibility = View.GONE
+//                binding.tagsChipGroup.visibility = View.GONE
+//                binding.progressBar.visibility = View.VISIBLE
+//            }else{
+//                binding.messageCard.visibility = View.VISIBLE
+//                binding.cardViewImg.visibility = View.VISIBLE
+//                binding.tagsChipGroup.visibility = View.VISIBLE
+//                binding.progressBar.visibility = View.GONE
+//            }
+//        }
     }
 
     private fun setDetail(){

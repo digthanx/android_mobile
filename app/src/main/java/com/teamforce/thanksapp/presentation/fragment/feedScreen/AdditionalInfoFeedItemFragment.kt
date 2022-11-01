@@ -1,20 +1,14 @@
 package com.teamforce.thanksapp.presentation.fragment.feedScreen
 
-import android.content.Context
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.core.net.toUri
-import androidx.core.view.updatePadding
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -22,20 +16,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.chip.ChipGroup
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.android.material.textfield.TextInputLayout
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
-import com.teamforce.thanksapp.model.domain.CommentModel
-import com.teamforce.thanksapp.presentation.adapter.CommentsAdapter
-import com.teamforce.thanksapp.presentation.adapter.challenge.FragmentDetailChallengeStateAdapter
 import com.teamforce.thanksapp.presentation.adapter.feed.DetailFeedStateAdapter
-import com.teamforce.thanksapp.presentation.viewmodel.AdditionalInfoFeedItemViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.feed.AdditionalInfoFeedItemViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
-import com.teamforce.thanksapp.utils.Consts.RECEIVER_SURNAME
 import com.teamforce.thanksapp.utils.Consts.TRANSACTION_ID
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.username
@@ -146,6 +134,10 @@ class AdditionalInfoFeedItemFragment : Fragment() {
             }
         }
 
+        viewModel.isLoading.observe(viewLifecycleOwner){ isLodaing ->
+            if (isLodaing) crossfade()
+        }
+
     }
 
 
@@ -205,7 +197,35 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 }
             }
         }
+
     }
+    private fun crossfade() {
+        binding.linearAllContent.apply {
+            // Set the content view to 0% opacity but visible, so that it is visible
+            // (but fully transparent) during the animation.
+            alpha = 0f
+            visibility = View.VISIBLE
+
+            // Animate the content view to 100% opacity, and clear any animation
+            // listener set on the view.
+            animate()
+                .alpha(1f)
+                .setDuration(350)
+                .setListener(null)
+        }
+        // Animate the loading view to 0% opacity. After the animation ends,
+        // set its visibility to GONE as an optimization step (it won't
+        // participate in layout passes, etc.)
+        binding.progressBar.animate()
+            .alpha(0f)
+            .setDuration(350)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    binding.progressBar.visibility = View.GONE
+                }
+            })
+    }
+
 
     private fun setAvatar(avatarRecipient: String?) {
         avatarRecipient?.let {

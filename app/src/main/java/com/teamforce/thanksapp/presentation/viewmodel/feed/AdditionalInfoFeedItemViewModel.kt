@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.viewmodel
+package com.teamforce.thanksapp.presentation.viewmodel.feed
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,10 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.api.ThanksApi
-import com.teamforce.thanksapp.data.request.CreateCommentRequest
-import com.teamforce.thanksapp.data.request.GetCommentsRequest
 import com.teamforce.thanksapp.data.response.CancelTransactionResponse
-import com.teamforce.thanksapp.data.response.GetCommentsResponse
 import com.teamforce.thanksapp.domain.models.feed.FeedItemByIdModel
 import com.teamforce.thanksapp.domain.repositories.FeedRepository
 import com.teamforce.thanksapp.utils.ResultWrapper
