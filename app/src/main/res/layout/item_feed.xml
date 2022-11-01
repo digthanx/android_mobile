@@ -47,7 +47,7 @@
             android:paddingVertical="5dp"
             android:clickable="true"
             android:focusable="true"
-            android:maxLines="2"
+            android:maxLines="4"
             android:maxWidth="200dp"
             android:text="@string/someoneToSomeone"
             android:textAppearance="@style/StandardText3Medium.Black"

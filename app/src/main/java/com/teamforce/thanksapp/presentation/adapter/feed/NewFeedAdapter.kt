@@ -142,13 +142,17 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                         Log.d(TAG, "bindChallengeCreator: ${item.challengeCreatorTgName} clicked")
                         onSomeonesClicked?.invoke(item.challengeCreatorId)
                     }
-                ).append(
-                    createClickableSpannable(
-                        root.context.getString(R.string.toDate, item.challengeEndAt),
-                        R.color.black,
-                        null
-                    )
                 )
+                // Проверка даты на пустоту
+                if (item.challengeEndAt != "" && item.challengeEndAt != "null" && item.challengeEndAt != "Не определено") {
+                    spannable.append(
+                        createClickableSpannable(
+                            root.context.getString(R.string.toDate, item.challengeEndAt),
+                            R.color.black,
+                            null
+                        )
+                    )
+                }
                 senderAndReceiver.text = spannable
                 card.setOnClickListener {
                     onChallengeClicked?.invoke(item.challengeId)
@@ -310,28 +314,44 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
         private fun setLikes(item: FeedModel.TransactionFeedEvent) {
             binding.likeBtn.text = item.likesAmount.toString()
             if (item.userLiked) {
-                if(item.isWithMe) binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
+                if (item.isWithMe) binding.likeBtn.setBackgroundColor(
+                    binding.root.context.getColor(
+                        R.color.minor_success
+                    )
+                )
                 else binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_success_secondary))
             } else {
-                if(item.isWithMe) binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.white))
+                if (item.isWithMe) binding.likeBtn.setBackgroundColor(
+                    binding.root.context.getColor(
+                        R.color.white
+                    )
+                )
                 else binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_info_secondary))
 
             }
         }
 
         private fun updateLikeByClick(item: FeedModel.TransactionFeedEvent, position: Int) {
-            if(item.userLiked){
+            if (item.userLiked) {
                 item.userLiked = false
                 binding.likeBtn.text = (item.likesAmount?.minus(1)).toString()
                 item.likesAmount = item.likesAmount?.minus(1)
-                if(item.isWithMe) binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.white))
+                if (item.isWithMe) binding.likeBtn.setBackgroundColor(
+                    binding.root.context.getColor(
+                        R.color.white
+                    )
+                )
                 else binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_info_secondary))
-            }else{
+            } else {
                 item.userLiked = true
                 binding.likeBtn.text = (item.likesAmount?.plus(1)).toString()
                 item.likesAmount = item.likesAmount?.plus(1)
 
-                if(item.isWithMe) binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
+                if (item.isWithMe) binding.likeBtn.setBackgroundColor(
+                    binding.root.context.getColor(
+                        R.color.minor_success
+                    )
+                )
                 else binding.likeBtn.setBackgroundColor(binding.root.context.getColor(R.color.minor_success_secondary))
             }
         }
