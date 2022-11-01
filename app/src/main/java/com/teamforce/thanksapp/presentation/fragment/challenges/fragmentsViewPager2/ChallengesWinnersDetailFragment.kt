@@ -57,18 +57,13 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
             }
-            binding.imageBackground.setOnClickListener { view ->
-                it?.challengePhoto?.let { photo ->
-                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
-                }
                 Glide.with(requireContext())
                     .load("${Consts.BASE_URL}${it?.user?.avatar}".toUri())
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .transition(DrawableTransitionOptions.withCrossFade())
-                    .placeholder(R.drawable.ic_anon_avatar)
                     .error(R.drawable.ic_anon_avatar)
                     .into(binding.userAvatar)
-            }
+
             binding.userNameLabelTv.text =
                 String.format(
                     requireContext().getString(R.string.userSurnameAndName), it?.user?.surname,
