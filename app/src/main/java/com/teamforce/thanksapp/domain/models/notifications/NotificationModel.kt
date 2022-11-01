@@ -1,20 +1,30 @@
 package com.teamforce.thanksapp.domain.models.notifications
 
-data class NotificationModel(
-    val type: NotificationType,
-    val objectId: Int,
-    val theme: String,
-    val text: String,
-    val isRead: Boolean,
-    val createdAt: String,
-    val updatedAt: String,
-    val id: Int
-)
+import java.util.*
+
+sealed class NotificationItem {
+    data class NotificationModel(
+        val type: NotificationType,
+        val objectId: Int,
+        val theme: String,
+        val text: String,
+        val isRead: Boolean,
+        val createdAt: String,
+        val updatedAt: String,
+        val id: Int
+    ) : NotificationItem()
+
+    data class DateTimeSeparator(
+        val date: String,
+        val uuid: UUID = UUID.randomUUID()
+    ) : NotificationItem()
+}
+
 
 enum class NotificationType {
-    transaction,
-    challenge,
-    comment,
-    like,
-    unknown
+    Transaction,
+    Challenge,
+    Comment,
+    Like,
+    Unknown
 }

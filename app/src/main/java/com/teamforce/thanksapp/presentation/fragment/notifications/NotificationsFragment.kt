@@ -26,10 +26,10 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
         super.onViewCreated(view, savedInstanceState)
         sharedViewModel.dropNotificationCounter()
 
-        binding.apply {
-            closeButton.setOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
+//        binding.apply {
+//            closeButton.setOnClickListener {
+//                findNavController().navigateUp()
+//            }
+//        }
     }
 }

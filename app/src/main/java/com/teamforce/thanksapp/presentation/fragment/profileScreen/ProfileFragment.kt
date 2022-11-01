@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -189,6 +190,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun showAlertDialogForExit() {
+        val id = Settings.Secure.getString(
+            requireContext().applicationContext.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.wouldYouLikeToExit))
 
@@ -197,7 +202,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
             .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
                 dialog.cancel()
-                viewModel.logout()
+                viewModel.logout(id)
                 activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
             }
             .show()

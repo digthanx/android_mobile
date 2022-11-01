@@ -8,9 +8,11 @@ import androidx.paging.PagingData
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.entities.NotificationEntity
 import com.teamforce.thanksapp.data.entities.PushTokenEntity
+import com.teamforce.thanksapp.data.entities.RemovePushTokenEntity
 import com.teamforce.thanksapp.data.sources.notifications.NotificationsPagingSource
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.ResultWrapper
+import com.teamforce.thanksapp.utils.UserDataRepository
 import com.teamforce.thanksapp.utils.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +21,8 @@ import javax.inject.Singleton
 
 @Singleton
 class NotificationsRepository @Inject constructor(
-    private val thanksApi: ThanksApi
+    private val thanksApi: ThanksApi,
+    private val userDataRepository: UserDataRepository
 ) {
 
     val state = MutableLiveData<NotificationStates>()
@@ -45,6 +48,15 @@ class NotificationsRepository @Inject constructor(
                 )
             }
         ).flow
+    }
+
+    suspend fun deletePushToken(deviceId: String): ResultWrapper<Unit> {
+        return safeApiCall(Dispatchers.IO) {
+            val userId = userDataRepository.getProfileId()
+            thanksApi.removePushToken(RemovePushTokenEntity(
+                deviceId, userId!!
+            ))
+        }
     }
 }
 
