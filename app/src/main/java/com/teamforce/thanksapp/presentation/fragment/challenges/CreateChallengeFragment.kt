@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,6 +20,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.DialogDatePickerBinding
 import com.teamforce.thanksapp.databinding.FragmentCreateChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
+import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.CreateChallengeViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.getPath
@@ -29,7 +29,6 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.time.*
 import java.util.*
 
 @AndroidEntryPoint
@@ -194,6 +193,7 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                Log.d(ProfileFragment.TAG, "${result.data?.data}:")
                 val path = getPath(requireContext(), result.data?.data!!)
                 val imageUri = result.data!!.data
                 if (imageUri != null && path != null) {
@@ -212,6 +212,18 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.type = "image/*"
         resultLauncher.launch(pickIntent)
+//        resultLauncher.launch(
+//            CropImageContractOptions(
+//                pickIntent.data, CropImageOptions(
+//                    imageSourceIncludeGallery = true,
+//                    imageSourceIncludeCamera = false,
+//                    guidelines = CropImageView.Guidelines.ON,
+//                    backgroundColor = requireContext().getColor(R.color.general_contrast),
+//                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast),
+//                    maxCropResultHeight = 200
+//                )
+//            )
+//        )
     }
 
 

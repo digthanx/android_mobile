@@ -144,6 +144,7 @@
     <string name="allFieldsAreRequired">Не все поля заполнены</string>
     <string name="challengeWasCreated">Челлендж успешно создан</string>
     <string name="requiredField">Поле обязательно</string>
+    <string name="creatorOfChallenge">от %s %s</string>
 
     <!-- Челлендж фрагмент детали -->
     <string name="details">Детали</string>

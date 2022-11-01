@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.GetChallengeContendersResponse
 import com.teamforce.thanksapp.databinding.ItemContenderBinding
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.viewSinglePhoto
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -84,6 +87,16 @@ class ContendersAdapter(
                 Log.d("Token", "Размер списка в адаптере " + currentList.size.toString())
                 Log.d("Token", "Кликнутая позиция в адаптере " + position)
                 refuseClickListener?.invoke(currentList[position].report_id, 'D', position)
+            }
+            binding.image.setOnClickListener { view ->
+                currentList[position].report_photo?.let { photo ->
+                    (view as ImageView).viewSinglePhoto(photo, binding.root.context)
+                }
+            }
+            binding.userAvatar.setOnClickListener { view ->
+                currentList[position].participant_photo?.let { photo ->
+                    (view as ShapeableImageView).viewSinglePhoto(photo, binding.root.context)
+                }
             }
         }
 

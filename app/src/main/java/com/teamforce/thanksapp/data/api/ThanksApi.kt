@@ -90,7 +90,8 @@ interface ThanksApi {
     @POST("/update-profile-image/{id}/")
     suspend fun putUserAvatar(
         @Path("id") userId: String,
-        @Part photo: MultipartBody.Part
+        @Part photo: MultipartBody.Part,
+        @Part cropped_photo: MultipartBody.Part
     ): PutUserAvatarResponse
 
 
@@ -130,6 +131,11 @@ interface ThanksApi {
     suspend fun newPressLike(
         @Body data: Map<String, Int>
     ): LikeResponse
+
+    @POST("/press-like/")
+    suspend fun pressLikeNew(
+        @Body mapReaction: Map<String, Int>
+    ): CancelTransactionResponse
 
     @POST("/get-comments/")
     suspend fun getComments(

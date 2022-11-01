@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -21,6 +22,7 @@ import com.teamforce.thanksapp.presentation.adapter.challenge.ChallengeAdapter
 import com.teamforce.thanksapp.presentation.adapter.challenge.ChallengePagerAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.ChallengesViewModel
+import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.navigateSafely
 import dagger.hilt.android.AndroidEntryPoint
@@ -106,6 +108,16 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
                 R.id.action_challengesFragment_to_detailsMainChallengeFragment,
                 bundle,
                 OptionsTransaction().optionForEditProfile
+            )
+        }
+
+        listAdapter?.onCreatorOfChallengeClicked = {creatorId ->
+            val bundle = Bundle()
+            bundle.putInt(Consts.USER_ID, creatorId)
+            view?.findNavController()?.navigate(
+                R.id.action_global_someonesProfileFragment,
+                bundle,
+                OptionsTransaction().optionForTransactionWithSaveBackStack
             )
         }
 

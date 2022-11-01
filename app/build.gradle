@@ -17,7 +17,7 @@ android {
             keyPassword 'hiiamNyamailikecode'
         }
     }
-    compileSdk 32
+    compileSdk 33
 
 //    signingConfigs {
 //        release {
@@ -32,7 +32,7 @@ android {
     defaultConfig {
         applicationId "com.teamforce.thanksapp"
         minSdk 23
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -82,6 +82,9 @@ android {
 }
 dependencies {
 
+    // Library for Cropping Image
+    implementation("com.vanniktech:android-image-cropper:4.4.0")
+
     // Library for sticky scroll
     implementation 'com.github.amarjain07:StickyScrollView:1.0.3'
 
@@ -99,7 +102,7 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Glide
@@ -137,9 +140,9 @@ dependencies {
     implementation libs.recyclerview
     implementation libs.retrofit
     implementation libs.retrofit.converter.gson
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     testImplementation 'junit:junit:4.13.2'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

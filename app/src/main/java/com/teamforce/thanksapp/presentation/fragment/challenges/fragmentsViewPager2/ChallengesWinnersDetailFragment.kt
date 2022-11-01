@@ -56,6 +56,11 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
                 it?.challengePhoto?.let { photo ->
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
+            }
+            binding.imageBackground.setOnClickListener { view ->
+                it?.challengePhoto?.let { photo ->
+                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                }
                 Glide.with(requireContext())
                     .load("${Consts.BASE_URL}${it?.user?.avatar}".toUri())
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
@@ -82,25 +87,6 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
                 view.findNavController().navigate(R.id.action_global_someonesProfileFragment, bundle)
             }
         }
-//        dataOfWinner?.let {
-//            binding.userNameLabelTv.text =
-//                String.format(
-//                    requireContext().getString(R.string.userSurnameAndName), it.participant_surname,
-//                it.participant_name)
-//            // Возможно лучше другое подставить, тк тут никнейм, а не телеграмм именно
-//            binding.userTgName.text = String.format(
-//                requireContext().getString(R.string.tgName), it.nickname)
-//            // Поставить плейсхолдер и фото если ничего нет стандартную
-//            Glide.with(requireContext())
-//                .load("${Consts.BASE_URL}${it.participant_photo}".toUri())
-//                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-//                .transition(DrawableTransitionOptions.withCrossFade())
-//                .placeholder(R.drawable.ic_anon_avatar)
-//                .error(R.drawable.ic_anon_avatar)
-//                .into(binding.userAvatar)
-//        }
-
-
     }
 
 

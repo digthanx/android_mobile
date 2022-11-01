@@ -22,7 +22,8 @@ class ChallengePagerAdapter(
 
 ) : PagingDataAdapter<ChallengeModel, ChallengePagerAdapter.ChallengeViewHolder>(DiffCallback) {
 
-     var onChallengeClicked: ((challengeId: Int) -> Unit)? = null
+    var onChallengeClicked: ((challengeId: Int) -> Unit)? = null
+    var onCreatorOfChallengeClicked: ((creatorId: Int) -> Unit)? = null
 
 
     companion object {
@@ -52,10 +53,13 @@ class ChallengePagerAdapter(
 
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
         val item = getItem(position)
-        if(item != null){
+        if (item != null) {
             holder.bind(item)
-           holder.binding.mainCard.setOnClickListener {
+            holder.binding.mainCard.setOnClickListener {
                 onChallengeClicked?.invoke(item.id)
+            }
+            holder.binding.challengeCreator.setOnClickListener {
+                onCreatorOfChallengeClicked?.invoke(item.creator_id)
             }
         }
     }
@@ -78,6 +82,7 @@ class ChallengePagerAdapter(
                     prizeFundText.setTextColor(binding.root.context.getColor(R.color.general_background))
                     prizePoolText.setTextColor(binding.root.context.getColor(R.color.general_background))
                     challengeTitle.setTextColor(binding.root.context.getColor(R.color.general_background))
+                    challengeCreator.setTextColor(binding.root.context.getColor(R.color.general_background))
                     winnersValue.setTextColor(binding.root.context.getColor(R.color.general_background))
                     winnersText.setTextColor(binding.root.context.getColor(R.color.general_background))
                     lastUpdateChallengeValue.setTextColor(binding.root.context.getColor(R.color.general_background))
@@ -88,14 +93,44 @@ class ChallengePagerAdapter(
                             R.color.transparent
                         )
                     )
-                    mainCard.background = null
+                    mainCard.setCardBackgroundColor(null)
                     imageRelative.visibility = View.VISIBLE
                     alphaView.visibility = View.VISIBLE
+                }
+            }else {
+                binding.apply {
+                    successfulPersonImage.visibility = View.VISIBLE
+                    prizeFundValue.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    prizePoolValue.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    prizeFundText.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    prizePoolText.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    challengeTitle.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    challengeCreator.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    winnersValue.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    winnersText.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    lastUpdateChallengeValue.setTextColor(binding.root.context.getColor(R.color.general_contrast))
+                    lastUpdateChallengeCard.strokeColor =
+                        binding.root.context.getColor(R.color.general_contrast)
+                    lastUpdateChallengeCard.setCardBackgroundColor(
+                        binding.root.context.getColor(
+                            R.color.general_brand_secondary
+                        )
+                    )
+                    mainCard.setCardBackgroundColor(binding.root.context.getColor(R.color.general_brand_secondary))
+                    imageRelative.visibility = View.GONE
+                    alphaView.visibility = View.GONE
                 }
             }
             // insert data
             binding.apply {
                 challengeTitle.setText(data.name)
+                challengeCreator.setText(
+                    String.format(
+                        binding.root.context.getString(R.string.creatorOfChallenge),
+                        data.creator_surname,
+                        data.creator_name
+                    )
+                )
                 winnersValue.text = data.winners_count.toString()
                 if (data.parameters?.get(0)?.id == 1) {
                     data.parameters?.get(1)?.let { prizePoolValue.setText(it.value.toString()) }

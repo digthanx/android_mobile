@@ -9,6 +9,7 @@ interface ProfileRepository {
     suspend fun loadUserProfile(): ResultWrapper<ProfileEntity>
     suspend fun updateUserAvatar(
         userId: String,
-        filePath: String
+        filePath: String,
+        filePathCropped: String
     ): ResultWrapper<PutUserAvatarResponse>
 }

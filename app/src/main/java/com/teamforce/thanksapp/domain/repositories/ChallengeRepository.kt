@@ -55,4 +55,6 @@ interface ChallengeRepository {
 
     suspend fun getChallengeById(challengeId: Int): ResultWrapper<ChallengeModelById>
 
+    suspend fun pressLike(challengeId: Int): ResultWrapper<CancelTransactionResponse>
+
 }
