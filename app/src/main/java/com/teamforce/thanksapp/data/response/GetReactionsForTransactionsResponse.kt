@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class GetReactionsForTransactionsResponse(
     @SerializedName("transaction_id")
     val transactionId: Int,
-    @SerializedName("transaction_id")
+    @SerializedName("likes")
     val likes: List<Like>,
 ){
     data class Like(
@@ -26,7 +26,7 @@ data class GetReactionsForTransactionsResponse(
     )
     data class UserInLike(
         val id: Int,
-        val name: String,
+        val name: String?,
         val avatar: String?
     )
 }

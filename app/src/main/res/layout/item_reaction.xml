@@ -34,8 +34,6 @@
                 android:layout_alignEnd="@id/user_avatar"
                 android:layout_alignBottom="@id/user_avatar"
                 android:scaleType="centerInside"
-                app:backgroundPadding="5dp"
-                android:adjustViewBounds="true"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
         </RelativeLayout>
         <TextView
