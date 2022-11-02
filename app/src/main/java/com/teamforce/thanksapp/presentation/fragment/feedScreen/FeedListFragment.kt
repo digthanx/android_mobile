@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentFeedListBinding
+import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerDecoratorForListWithBottomBar
 import com.teamforce.thanksapp.presentation.adapter.feed.NewFeedAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
@@ -45,6 +46,8 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
                 header = HistoryLoadStateAdapter(),
                 footer = HistoryLoadStateAdapter()
             )
+            this.addItemDecoration(VerticalDividerDecoratorForListWithBottomBar(8, listAdapter!!.itemCount))
+
         }
 
         listAdapter.addLoadStateListener { state ->
