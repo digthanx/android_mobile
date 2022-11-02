@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentFeedListBinding
+import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerDecoratorForListWithBottomBar
 import com.teamforce.thanksapp.presentation.adapter.feed.NewFeedAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_REPORT_ID
 import com.teamforce.thanksapp.presentation.viewmodel.feed.FeedListViewModel
 import com.teamforce.thanksapp.utils.Consts
@@ -45,6 +47,8 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
                 header = HistoryLoadStateAdapter(),
                 footer = HistoryLoadStateAdapter()
             )
+            this.addItemDecoration(VerticalDividerDecoratorForListWithBottomBar(8, listAdapter!!.itemCount))
+
         }
 
         listAdapter.addLoadStateListener { state ->
@@ -121,9 +125,10 @@ class FeedListFragment : Fragment(R.layout.fragment_feed_list) {
             )
         }
 
-        listAdapter.onWinnerClicked = { challengeReportId: Int ->
+        listAdapter.onWinnerClicked = { challengeReportId: Int, challengeId: Int ->
             val bundle = Bundle()
             bundle.putInt(CHALLENGER_REPORT_ID, challengeReportId)
+            bundle.putInt(CHALLENGER_ID, challengeId)
             view.findNavController().navigate(
                 R.id.action_global_challengesWinnersDetailFragment,
                 bundle,

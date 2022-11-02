@@ -28,7 +28,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
     var onChallengeClicked: ((challengeId: Int) -> Unit)? = null
     var onSomeonesClicked: ((userId: Int) -> Unit)? = null
     var onTransactionClicked: ((transactionId: Int) -> Unit)? = null
-    var onWinnerClicked: ((challengeReportId: Int) -> Unit)? = null
+    var onWinnerClicked: ((challengeReportId: Int, challengeId: Int) -> Unit)? = null
     var onLikeClicked: ((transactionId: Int) -> Unit)? = null
     var onLikeLongClicked: ((transactionId: Int, pagePosition: Int) -> Unit)? = null
     var onCommentClicked: ((transactionId: Int, pagePosition: Int) -> Unit)? = null
@@ -90,7 +90,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                 senderAndReceiver.text = spannable
                 dateTime.text = item.time
                 card.setOnClickListener {
-                    onWinnerClicked?.invoke(item.reportId)
+                    onWinnerClicked?.invoke(item.reportId, item.challengeId)
                 }
                 if (!item.winnerPhoto.isNullOrEmpty()) {
                     Glide.with(root.context)
