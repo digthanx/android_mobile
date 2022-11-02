@@ -12,10 +12,6 @@ import com.teamforce.thanksapp.utils.ResultWrapper
 import kotlinx.coroutines.flow.Flow
 
 interface FeedRepository {
-    fun getFeed(
-        mineOnly: Int?,
-        publicOnly: Int?
-    ): Flow<PagingData<FeedResponse>>
 
     fun getComments(
         transactionId: Int

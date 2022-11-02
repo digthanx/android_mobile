@@ -28,23 +28,7 @@ class FeedRepositoryImpl @Inject constructor(
     private val thanksApi: ThanksApi,
     private val feedMapper: FeedMapper
 ) : FeedRepository {
-    override fun getFeed(mineOnly: Int?, publicOnly: Int?): Flow<PagingData<FeedResponse>> {
-        return Pager(
-            config = PagingConfig(
-                initialLoadSize = Consts.PAGE_SIZE,
-                prefetchDistance = 1,
-                pageSize = Consts.PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                FeedPagingSource(
-                    api = thanksApi,
-                    mineOnly = mineOnly,
-                    publicOnly = publicOnly
-                )
-            }
-        ).flow
-    }
+
 
     override fun getComments(
         transactionId: Int
