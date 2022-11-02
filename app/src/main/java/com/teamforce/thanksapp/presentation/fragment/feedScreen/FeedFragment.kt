@@ -32,7 +32,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             mediator = TabLayoutMediator(tabGroup, viewPager) { tab, pos ->
                 when (pos) {
                     0 -> tab.text = getString(R.string.allEvent)
-                    1 -> tab.text = getString(R.string.transactions)
+                    1 -> tab.text = getString(R.string.thanks)
                     2 -> tab.text = getString(R.string.winners)
                     3 -> tab.text = getString(R.string.challenges)
                 }

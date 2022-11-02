@@ -61,7 +61,7 @@
     <string name="enter_button_label">Вход</string>
     <string name="user_name_label">Имя пользователя</string>
     <string name="balance_label">Баланс</string>
-    <string name="feed_label">Благодарности</string>
+    <string name="feed_label">События</string>
     <string name="new_transaction_label">Новая благодарность</string>
     <string name="transaction_result_label">Отправлено</string>
     <string name="period">Выберите период</string>
@@ -242,7 +242,8 @@
     <string name="gotFrom">получил от</string>
     <string name="whoCreatedChallenge">пользователем</string>
     <string name="toDate">до %1$s</string>
-    <string name="transactions">Транзакции</string>
+    <string name="thanks">Спасибки</string>
+    <string name="events">События</string>
     <string name="challenges">Челленджи</string>
     <string name="createdChallenge">Создан челлендж</string>
 </resources>
