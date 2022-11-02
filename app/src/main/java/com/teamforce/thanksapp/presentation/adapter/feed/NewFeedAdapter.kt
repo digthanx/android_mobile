@@ -35,8 +35,9 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (getItem(position) != null) {
-            holder.bind(getItem(position)!!, position)
+        val item = getItem(position)
+        if (item != null) {
+            holder.bind(item)
         }
     }
 
@@ -46,11 +47,11 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
     }
 
     inner class ViewHolder(val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: FeedModel, position: Int) {
+        fun bind(item: FeedModel) {
             // Без этого клики по spannable не работают
             binding.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance();
             when (item) {
-                is FeedModel.TransactionFeedEvent -> bindTransaction(item, position)
+                is FeedModel.TransactionFeedEvent -> bindTransaction(item)
                 is FeedModel.ChallengeFeedEvent -> bindChallenge(item)
                 is FeedModel.WinnerFeedEvent -> bindWinner(item)
             }
@@ -162,7 +163,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
             }
         }
 
-        private fun bindTransaction(item: FeedModel.TransactionFeedEvent, position: Int) {
+        private fun bindTransaction(item: FeedModel.TransactionFeedEvent) {
             with(binding) {
                 if (item.isWithMe) {
                     if (item.isFromMe) {
@@ -309,7 +310,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                     onTransactionClicked?.invoke(item.transactionId)
                 }
                 likeBtn.setOnClickListener {
-                    updateLikeByClick(item, position)
+                    updateLikeByClick(item,)
                     onLikeClicked?.invoke(item.transactionId)
                 }
                 commentBtn.setOnClickListener {
@@ -342,7 +343,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
             }
         }
 
-        private fun updateLikeByClick(item: FeedModel.TransactionFeedEvent, position: Int) {
+        private fun updateLikeByClick(item: FeedModel.TransactionFeedEvent) {
             if (item.userLiked) {
                 item.userLiked = false
                 binding.likeBtn.text = (item.likesAmount?.minus(1)).toString()

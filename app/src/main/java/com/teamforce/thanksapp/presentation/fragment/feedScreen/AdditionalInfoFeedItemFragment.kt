@@ -228,6 +228,7 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                     .load("${Consts.BASE_URL}${avatarRecipient}".toUri())
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade())
+                    .error(R.drawable.ic_anon_avatar)
                     .into(binding.userAvatar)
             }
         }
