@@ -51,7 +51,7 @@ interface ChallengeRepository {
         challengeReportId: Int,
     ): ResultWrapper<GetChallengeWinnersReportDetailsResponse>
 
-    fun loadChallenge(): Flow<PagingData<ChallengeModel>>
+    fun loadChallenge(activeOnly: Int): Flow<PagingData<ChallengeModel>>
 
     suspend fun getChallengeById(challengeId: Int): ResultWrapper<ChallengeModelById>
 

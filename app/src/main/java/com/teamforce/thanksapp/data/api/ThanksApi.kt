@@ -168,7 +168,8 @@ interface ThanksApi {
     @GET("/challenges/")
     suspend fun getChallenges(
         @Query("limit") limit: Int,
-        @Query("offset") offset: Int
+        @Query("offset") offset: Int,
+        @Query("active_only") activeOnly: Int
     ): List<ChallengeModel>
 
     @GET("/challenges/{challenge_id}/")

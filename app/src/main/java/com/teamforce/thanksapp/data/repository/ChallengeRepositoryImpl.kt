@@ -110,7 +110,9 @@ class ChallengeRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun loadChallenge(): Flow<PagingData<ChallengeModel>> {
+    override fun loadChallenge(
+        activeOnly: Int
+    ): Flow<PagingData<ChallengeModel>> {
         return Pager(
             config = PagingConfig(
                 initialLoadSize = Consts.PAGE_SIZE,
@@ -120,7 +122,8 @@ class ChallengeRepositoryImpl @Inject constructor(
             ),
             pagingSourceFactory = {
                 ChallengePagingSource(
-                    api = thanksApi
+                    api = thanksApi,
+                    activeOnly = activeOnly
                 )
             }
         ).flow
