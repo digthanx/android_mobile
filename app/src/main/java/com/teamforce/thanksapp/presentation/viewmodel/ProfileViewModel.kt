@@ -85,12 +85,17 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun logout(deviceId: String) {
+        removePushToken(deviceId)
+        userDataRepository.logout()
+    }
+
+
+    fun removePushToken(deviceId: String) {
         viewModelScope.launch {
             notificationsRepository.deletePushToken(
                 deviceId
             )
         }
-        userDataRepository.logout()
     }
 
     fun isUserAuthorized() = userDataRepository.getAuthToken() != null

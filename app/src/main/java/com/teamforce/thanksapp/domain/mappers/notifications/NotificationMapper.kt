@@ -17,14 +17,15 @@ class NotificationMapper @Inject constructor() {
             updatedAt = from.updatedAt,
             id = from.id
         )
+
     }
 
     private fun mapType(stringType: String): NotificationType {
-        return when (stringType) {
-            "T", "t" -> NotificationType.Transaction
-            "H", "h" -> NotificationType.Challenge
-            "C", "c" -> NotificationType.Comment
-            "L", "l" -> NotificationType.Like
+        return when (stringType.lowercase()) {
+            "t" -> NotificationType.Transaction
+            "h" -> NotificationType.Challenge
+            "c" -> NotificationType.Comment
+            "l" -> NotificationType.Like
             else -> NotificationType.Unknown
         }
     }

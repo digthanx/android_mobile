@@ -26,7 +26,10 @@ class NotificationsPagingSource(
         }
 
         return try {
-            val response = api.getNotifications()
+            val response = api.getNotifications(
+                limit = Consts.PAGE_SIZE,
+                offset = pageIndex
+            )
             val nextKey =
                 if (response.isEmpty()) {
                     null

@@ -219,7 +219,10 @@ interface ThanksApi {
     suspend fun removePushToken(@Body remove: RemovePushTokenEntity)
 
     @GET("/notifications/")
-    suspend fun getNotifications(): List<NotificationEntity>
+    suspend fun getNotifications(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<NotificationEntity>
 
 
 }
