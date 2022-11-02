@@ -189,8 +189,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                             createClickableSpannable(
                                 root.context.getString(
                                     R.string.amountThanks,
-                                    item.likesAmount.toString()
-                                ),
+                                    item.transactionAmount.toString()                                ),
                                 R.color.minor_success,
                                 null
                             )
@@ -221,7 +220,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                             createClickableSpannable(
                                 root.context.getString(
                                     R.string.amountThanks,
-                                    item.likesAmount.toString()
+                                    item.transactionAmount.toString()
                                 ),
                                 R.color.minor_success,
                                 null
@@ -270,7 +269,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                         createClickableSpannable(
                             root.context.getString(
                                 R.string.amountThanks,
-                                item.likesAmount.toString()
+                                item.transactionAmount.toString()
                             ),
                             R.color.minor_success,
                             null
