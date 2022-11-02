@@ -17,6 +17,7 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentChallengeListBinding
 import com.teamforce.thanksapp.databinding.FragmentChallengesBinding
 import com.teamforce.thanksapp.presentation.adapter.challenge.ChallengePagerAdapter
+import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerDecoratorForListWithBottomBar
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.ChallengesViewModel
 import com.teamforce.thanksapp.utils.Consts
@@ -64,6 +65,7 @@ class ChallengeListFragment : Fragment(R.layout.fragment_challenge_list) {
                 header = HistoryLoadStateAdapter(),
                 footer = HistoryLoadStateAdapter()
             )
+            this.addItemDecoration(VerticalDividerDecoratorForListWithBottomBar(8, listAdapter!!.itemCount))
         }
 
         listAdapter?.addLoadStateListener { state ->
