@@ -14,7 +14,6 @@
             android:id="@+id/challenge_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="60dp"
             android:layout_marginHorizontal="16dp"
             tools:listitem="@layout/item_challenge"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
