@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.domain.repositories
 
 import androidx.paging.PagingData
+import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
 import com.teamforce.thanksapp.data.response.CancelTransactionResponse
 import com.teamforce.thanksapp.data.response.FeedResponse
 import com.teamforce.thanksapp.data.response.GetReactionsForTransactionsResponse

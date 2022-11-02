@@ -5,23 +5,24 @@ import androidx.paging.PagingState
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
 import com.teamforce.thanksapp.data.response.FeedResponse
+import com.teamforce.thanksapp.domain.mappers.feed.FeedMapper
+import com.teamforce.thanksapp.domain.models.feed.FeedModel
 import com.teamforce.thanksapp.utils.Consts
 import retrofit2.HttpException
 import java.io.IOException
 
 class FeedPagingSource(
     private val api: ThanksApi,
-    private val mineOnly: Int?,
-    private val publicOnly: Int?
-) : PagingSource<Int, FeedItemEntity>() {
-    override fun getRefreshKey(state: PagingState<Int, FeedItemEntity>): Int? {
+    private val feedMapper: FeedMapper
+) : PagingSource<Int, FeedModel>() {
+    override fun getRefreshKey(state: PagingState<Int, FeedModel>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FeedItemEntity> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FeedModel> {
         var pageIndex = params.key ?: 1
 
         if (params is LoadParams.Refresh) {
@@ -40,7 +41,7 @@ class FeedPagingSource(
                     pageIndex + (params.loadSize / Consts.PAGE_SIZE)
                 }
             LoadResult.Page(
-                data = response,
+                data = feedMapper.mapList(response),
                 prevKey = if (pageIndex == 1) null else pageIndex,
                 nextKey = nextKey
             )
