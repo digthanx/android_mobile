@@ -72,7 +72,7 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
                 R.id.feedFragment,
                 R.id.balanceFragment,
                 R.id.historyFragment,
-                R.id.challenge_graph
+                R.id.challengesFragment
             )
         )
         val toolbar = binding.toolbar
@@ -99,10 +99,10 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
             binding.swipeRefreshLayout.isRefreshing = true
         }
 
-        listAdapter?.onChallengeClicked = { dataOfChallenge ->
+        listAdapter?.onChallengeClicked = { challengeId: Int ->
             val bundle = Bundle()
             bundle.apply {
-                putParcelable(ChallengesConsts.CHALLENGER_DATA, dataOfChallenge)
+                putInt(ChallengesConsts.CHALLENGER_ID, challengeId)
             }
             findNavController().navigate(
                 R.id.action_challengesFragment_to_detailsMainChallengeFragment,
@@ -130,6 +130,11 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
                 listAdapter?.submitData(challenges)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.challengeRv.adapter = null
     }
 
 }

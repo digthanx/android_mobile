@@ -1,5 +1,7 @@
 package com.teamforce.thanksapp.data.api
 
+import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEntity
+import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.request.*
@@ -67,8 +69,16 @@ interface ThanksApi {
         @Query("received_only") receivedOnly: Int?
     ): List<HistoryItem.UserTransactionsResponse>
 
+    @GET("/events/transactions/{id}")
+    suspend fun getTransactionById(
+        @Path("id") transactionId: String
+    ): FeedItemByIdEntity
+
     @GET("/feed/")
-    fun getFeed(): Call<List<FeedResponse>>
+    suspend fun getFeed(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<FeedResponse>
 
     @POST("/users-list/")
     fun getUsersWithoutInput(
@@ -118,24 +128,30 @@ interface ThanksApi {
     ): Call<CancelTransactionResponse>
 
     @POST("/press-like/")
+    suspend fun newPressLike(
+        @Body data: Map<String, Int>
+    ): LikeResponse
+
+    @POST("/press-like/")
     suspend fun pressLikeNew(
         @Body mapReaction: Map<String, Int>
     ): CancelTransactionResponse
 
     @POST("/get-comments/")
-    fun getComments(
+    suspend fun getComments(
         @Body transaction_id: GetCommentsRequest
-    ): Call<GetCommentsResponse>
+    ): GetCommentsResponse
 
     @POST("/create-comment/")
-    fun createComment(
+    suspend fun createComment(
         @Body data: CreateCommentRequest
-    ): Call<CancelTransactionResponse>
+    ): CancelTransactionResponse
 
     @DELETE("/delete-comment/{comment_id}/")
-    fun deleteComment(
+    suspend fun deleteComment(
         @Path("comment_id") commentId: Int
-    ): Call<CancelTransactionResponse>
+    ): CancelTransactionResponse
+
 
     @Multipart
     @POST("/create-challenge/")
@@ -156,9 +172,9 @@ interface ThanksApi {
     ): List<ChallengeModel>
 
     @GET("/challenges/{challenge_id}/")
-    fun getChallenge(
-        @Path("challenge_id") commentId: Int
-    ): Call<ChallengeModelById>
+    suspend fun getChallenge(
+        @Path("challenge_id") challengeId: Int
+    ): ChallengeModelById
 
     @Multipart
     @POST("/create-challenge-report/")
@@ -208,4 +224,33 @@ interface ThanksApi {
     suspend fun getChallengeWinnerReportDetails(
         @Path("challenge_report_id") challengeReportId: Int,
     ): GetChallengeWinnersReportDetailsResponse
+
+    @GET("/events/")
+    suspend fun getEvents(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<FeedItemEntity>
+
+    @GET("/events/transactions/")
+    suspend fun getEventsTransactions(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<FeedItemEntity>
+
+    @GET("/events/winners/")
+    suspend fun getEventsWinners(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<FeedItemEntity>
+
+    @GET("/events/challenges/")
+    suspend fun getEventsChallenges(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<FeedItemEntity>
+
+    @POST("/get-likes/")
+    suspend fun getReactionsForTransaction(
+        @Body data: GetReactionsForTransactionRequest
+    ): GetReactionsForTransactionsResponse
 }

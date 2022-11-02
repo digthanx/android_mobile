@@ -46,4 +46,6 @@ data class FeedResponse(
         val code: String,
         var counter: Int
     )
+
+
 }

@@ -1,9 +1,11 @@
 package com.teamforce.thanksapp.di
 
 import com.teamforce.thanksapp.data.repository.ChallengeRepositoryImpl
+import com.teamforce.thanksapp.data.repository.FeedRepositoryImpl
 import com.teamforce.thanksapp.data.repository.HistoryRepositoryImpl
 import com.teamforce.thanksapp.data.repository.ProfileRepositoryImpl
 import com.teamforce.thanksapp.domain.repositories.ChallengeRepository
+import com.teamforce.thanksapp.domain.repositories.FeedRepository
 import com.teamforce.thanksapp.domain.repositories.HistoryRepository
 import com.teamforce.thanksapp.domain.repositories.ProfileRepository
 import dagger.Binds
@@ -23,5 +25,8 @@ interface BindModule {
 
     @Binds
     fun bindHistoryRepository(bindHistoryRepositoryImpl: HistoryRepositoryImpl): HistoryRepository
+
+    @Binds
+    fun bindFeedRepository(feedRepositoryImpl: FeedRepositoryImpl): FeedRepository
 
 }

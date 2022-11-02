@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/users_list_rv" />
+    <LinearLayout
+        android:id="@+id/linear_all_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -25,273 +34,141 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <LinearLayout
-            android:id="@+id/main_content"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="32dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/user_avatar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="32dp">
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="5dp"
+                app:cardBackgroundColor="@color/minor_success_secondary"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/user_avatar"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/user_avatar"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="27dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_marginStart="30dp"
-                    android:src="@drawable/ic_anon_avatar"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-
-                <com.google.android.material.card.MaterialCardView
+                <TextView
+                    android:id="@+id/amount_thanks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="5dp"
-                    app:cardBackgroundColor="@color/minor_success_secondary"
-                    app:layout_constraintStart_toEndOf="@id/user_avatar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:cardCornerRadius="8dp">
+                    android:layout_margin="8dp"
+                    android:textColor="@color/minor_success" />
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <TextView
-                        android:id="@+id/amount_thanks"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:textColor="@color/minor_success" />
-                </com.google.android.material.card.MaterialCardView>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/date_transaction_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
+            android:text="Сегодня в 12:30" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/description_transaction_who_received"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="\@AnnaKim_TF"
+                android:textAppearance="@style/StandardText3Medium.Black"
+                android:textColor="@color/general_brand" />
+
+            <TextView
+                android:id="@+id/description_transaction_what_did"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:text=" получила от "
+                android:textAppearance="@style/StandardText3Medium.Black" />
 
 
             <TextView
-                android:id="@+id/date_transaction_tv"
+                android:id="@+id/description_transaction_who_sent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="Сегодня в 12:30" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/description_transaction_who_received"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="\@AnnaKim_TF"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:textAppearance="@style/StandardText3Medium.Black"
-                    android:textColor="@color/general_brand" />
-
-                <TextView
-                    android:id="@+id/description_transaction_what_did"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:text=" получила от "
-                    android:textAppearance="@style/StandardText3Medium.Black"/>
-
-
-                <TextView
-                    android:id="@+id/description_transaction_who_sent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" \@NyamaMDE"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:textAppearance="@style/StandardText3Medium.Black"
-                    android:textColor="@color/general_brand" />
-            </LinearLayout>
-
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/like_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_like"
-                    app:iconGravity="textStart"
-                    android:layout_marginHorizontal="16dp"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toStartOf="@id/date_time"
-                    app:layout_constraintTop_toBottomOf="@id/senderAndReceiver"
-                    style="@style/ReactionBtnFeed" />
-
-
-
-            <LinearLayout
-                android:id="@+id/linear_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginTop="16dp"
-                android:paddingHorizontal="16dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginBottom="15dp"
-                    android:letterSpacing="0.25"
-                    android:text="@string/information"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:id="@+id/photo_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginBottom="7dp"
-                    android:letterSpacing="0.05"
-                    android:text="@string/photo"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_view_img"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_gravity="start"
-                    android:layout_marginBottom="21dp"
-                    android:visibility="gone"
-                    app:cardCornerRadius="12dp">
-
-                    <ImageView
-                        android:id="@+id/sender_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_launcher_background" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginBottom="7dp"
-                    android:letterSpacing="0.05"
-                    android:text="@string/message"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/reason_transaction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginBottom="26dp"
-                    android:text="Некая причина перевода"
-                    android:textColor="@color/general_contrast"
-                    android:textSize="14dp" />
-            </LinearLayout>
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                app:singleSelection="true"
-                app:selectionRequired="true">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipComment"
-                    style="@style/MyChipsFeed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="10dp"
-                    app:chipMinTouchTargetSize="40dp"
-                    android:checkable="true"
-                    android:textAppearance="@style/StandardText3Medium.Black"
-                    android:checked="true"
-                    android:text="@string/comments"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipReactions"
-                    style="@style/MyChipsFeed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    app:chipMinTouchTargetSize="40dp"
-                    android:textAppearance="@style/StandardText3Medium.Black"
-                    android:checkable="true"
-                    android:visibility="gone"
-                    android:text="@string/reactions" />
-
-
-            </com.google.android.material.chip.ChipGroup>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/comments_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="110dp"
-                tools:listitem="@layout/item_comment"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
+                android:clickable="true"
+                android:focusable="true"
+                android:text=" \@NyamaMDE"
+                android:textAppearance="@style/StandardText3Medium.Black"
+                android:textColor="@color/general_brand" />
         </LinearLayout>
 
-    </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_input_comment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        style="@style/MyCardView"
-        app:cardElevation="30dp">
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textFieldMessage"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/like_btn"
+            style="@style/ReactionBtnFeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minLines="1"
-            android:maxLines="10"
-            android:scrollbars="vertical"
-            android:layout_marginTop="@dimen/margin_x"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="18dp"
-            android:hint="@string/comment"
-            app:endIconTint="@color/general_brand"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/ic_emotion"
-            android:textColorHint="@color/general_secondary"
-            app:boxStrokeColor="@color/general_color_grey"
-            app:boxBackgroundColor="@color/color5"
-            app:boxCornerRadiusBottomEnd="15dp"
-            app:boxCornerRadiusBottomStart="15dp"
-            app:boxCornerRadiusTopEnd="15dp"
-            app:boxCornerRadiusTopStart="15dp"
-            app:boxStrokeWidth="1dp">
+            android:layout_marginHorizontal="16dp"
+            android:textSize="12sp"
+            app:icon="@drawable/ic_like"
+            app:iconGravity="textStart"
+            app:layout_constraintStart_toStartOf="@id/date_time"
+            app:layout_constraintTop_toBottomOf="@id/senderAndReceiver" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/message_value_et"
-                android:layout_width="match_parent"
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            style="@style/MyTabChallenge"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minLines="1"
-                android:maxLines="10"
-                android:gravity="top|start"
-                android:scrollbars="vertical"
-                android:inputType="textCapSentences|textMultiLine"
-                android:drawableEnd="@drawable/ic_emotion"/>
+                android:text="@string/details" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comments" />
 
-    </com.google.android.material.card.MaterialCardView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reactions" />
+
+
+        </com.google.android.material.tabs.TabLayout>
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:elevation="50dp" />
+
+    </LinearLayout>
+</FrameLayout>
+
+

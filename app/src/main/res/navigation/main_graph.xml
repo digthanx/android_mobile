@@ -71,7 +71,11 @@
             <action
                 android:id="@+id/action_additionalInfoFeedItemFragment_to_someonesProfileFragment2"
                 app:destination="@id/someonesProfileFragment" />
-        </fragment>
+        </fragment><action android:id="@+id/action_global_additionalInfoFeedItemFragment" app:destination="@id/additionalInfoFeedItemFragment"/>
+        <fragment
+            android:id="@+id/feedListFragment"
+            android:name="com.teamforce.thanksapp.presentation.fragment.feedScreen.FeedListFragment"
+            android:label="FeedListFragment" />
     </navigation>
     <navigation android:id="@+id/transaction_graph"
         app:startDestination="@id/transactionFragment">
@@ -145,9 +149,7 @@
                 app:destination="@id/profileGraph" />
         </fragment>
     </navigation>
-    <navigation
-        android:id="@+id/challenge_graph"
-        app:startDestination="@id/challengesFragment">
+
         <fragment
             android:id="@+id/challengesFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment"
@@ -189,6 +191,14 @@
             android:id="@+id/challengesWinnersDetailFragment"
             android:name="com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2.ChallengesWinnersDetailFragment"
             android:label="fragment_challenges_winners_detail"
-            tools:layout="@layout/fragment_challenges_winners_detail" /><action android:id="@+id/action_global_challengesWinnersDetailFragment" app:destination="@id/challengesWinnersDetailFragment"/>
-    </navigation><action android:id="@+id/action_global_someonesProfileFragment" app:destination="@id/someonesProfileFragment"/>
+            tools:layout="@layout/fragment_challenges_winners_detail" />
+        <action android:id="@+id/action_global_challengesWinnersDetailFragment"
+            app:destination="@id/challengesWinnersDetailFragment"/>
+        <action android:id="@+id/action_global_detailsMainChallengeFragment"
+            app:destination="@id/detailsMainChallengeFragment"/>
+
+    <action android:id="@+id/action_global_someonesProfileFragment"
+        app:destination="@id/someonesProfileFragment"/>
+    <action android:id="@+id/action_global_challenge_graph"
+        app:destination="@id/challenge_graph"/>
 </navigation>
