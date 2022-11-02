@@ -50,7 +50,7 @@ android {
         }
         getByName("debug"){
             applicationIdSuffix = ".debug"
-            buildConfigField "String", "URL_PORT", "\"http://176.99.6.251:8889\""
+            buildConfigField "String", "URL_PORT", "\"http://176.99.6.251:8888\""
             manifestPlaceholders = [appName: "Debug"]
         }
     }
