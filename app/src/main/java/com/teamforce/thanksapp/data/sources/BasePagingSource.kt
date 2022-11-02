@@ -25,10 +25,19 @@ class BasePagingSource<V : Any>(
         }
         return try {
             val response = block(page)
+
+            val nextKey =
+                if (response.isEmpty()) {
+                    null
+                } else {
+                    page + (params.loadSize / Consts.PAGE_SIZE)
+                }
+
+
             LoadResult.Page(
                 data = response,
-                prevKey = if (page == 1) null else page - 1,
-                nextKey = if (totalPages != null && page == totalPages) null else page + 1
+                prevKey = if (page == 1) null else page,
+                nextKey = nextKey
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
@@ -42,6 +51,11 @@ fun <V : Any> createPager(
     enablePlaceholders: Boolean = false,
     block: suspend (Int) -> List<V>
 ): Pager<Int, V> = Pager(
-    config = PagingConfig(enablePlaceholders = enablePlaceholders, pageSize = pageSize),
+    config = PagingConfig(
+        initialLoadSize = Consts.PAGE_SIZE,
+        enablePlaceholders = enablePlaceholders,
+        pageSize = pageSize,
+        prefetchDistance = 1,
+    ),
     pagingSourceFactory = { BasePagingSource(totalPages, block) }
 )
