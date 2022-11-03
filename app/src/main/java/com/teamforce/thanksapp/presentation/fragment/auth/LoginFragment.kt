@@ -132,7 +132,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     private fun finishLogin(authToken: String?, telegramOrEmail: String?) {
         viewModel.userDataRepository.saveCredentials(authToken, telegramOrEmail, username)
-        Log.d("Token", "цукпукп")
+        viewModel.loadUserProfile()
         findNavController().navigate(R.id.action_loginFragment_to_mainFlowFragment)
     }
 
