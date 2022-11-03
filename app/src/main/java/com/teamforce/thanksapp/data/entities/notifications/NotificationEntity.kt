@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.data.entities
+package com.teamforce.thanksapp.data.entities.notifications
 
 import com.google.gson.annotations.SerializedName
 

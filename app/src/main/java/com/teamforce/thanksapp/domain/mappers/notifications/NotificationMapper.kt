@@ -1,6 +1,6 @@
 package com.teamforce.thanksapp.domain.mappers.notifications
 
-import com.teamforce.thanksapp.data.entities.NotificationEntity
+import com.teamforce.thanksapp.data.entities.notifications.NotificationEntity
 import com.teamforce.thanksapp.domain.models.notifications.NotificationItem
 import com.teamforce.thanksapp.domain.models.notifications.NotificationType
 import javax.inject.Inject

@@ -3,7 +3,7 @@ package com.teamforce.thanksapp.data.sources.notifications
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.teamforce.thanksapp.data.api.ThanksApi
-import com.teamforce.thanksapp.data.entities.NotificationEntity
+import com.teamforce.thanksapp.data.entities.notifications.NotificationEntity
 import com.teamforce.thanksapp.utils.Consts
 import retrofit2.HttpException
 import java.io.IOException

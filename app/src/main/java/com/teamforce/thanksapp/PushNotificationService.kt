@@ -32,7 +32,7 @@ class PushNotificationService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        Log.d(TAG, "onMessageReceived: ")
+        Log.d(TAG, "onMessageReceived: $message")
         if (message.notification != null) {
             val entryPoint = EntryPointAccessors.fromApplication(
                 applicationContext,

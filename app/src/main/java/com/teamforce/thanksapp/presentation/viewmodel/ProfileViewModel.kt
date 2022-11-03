@@ -1,10 +1,12 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.NotificationsRepository
+import com.teamforce.thanksapp.PushNotificationService
 import com.teamforce.thanksapp.domain.models.profile.ProfileModel
 import com.teamforce.thanksapp.domain.repositories.ProfileRepository
 import com.teamforce.thanksapp.domain.usecases.LoadProfileUseCase
@@ -85,18 +87,20 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun logout(deviceId: String) {
-        removePushToken(deviceId)
-        userDataRepository.logout()
-    }
-
-
-    fun removePushToken(deviceId: String) {
+        //при выходе из аккаунта удаляем пуш токен, чтобы не приходили уведомления
         viewModelScope.launch {
-            notificationsRepository.deletePushToken(
-                deviceId
-            )
+            try {
+                notificationsRepository.deletePushToken(
+                    deviceId
+                )
+            } catch (e:Exception) {
+                Log.d(PushNotificationService.TAG, "logout: error $e")
+            }
+            userDataRepository.logout()
         }
     }
+
+
 
     fun isUserAuthorized() = userDataRepository.getAuthToken() != null
 

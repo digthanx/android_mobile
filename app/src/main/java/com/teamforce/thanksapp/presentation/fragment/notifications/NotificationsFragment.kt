@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -48,6 +49,10 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
         binding.swipeRefreshLayout.setOnRefreshListener {
             listAdapter?.refresh()
             binding.swipeRefreshLayout.isRefreshing = true
+        }
+
+        binding.closeButton.setOnClickListener {
+            findNavController().navigateUp()
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
