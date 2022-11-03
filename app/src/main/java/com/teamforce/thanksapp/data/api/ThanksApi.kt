@@ -74,12 +74,6 @@ interface ThanksApi {
         @Path("id") transactionId: String
     ): FeedItemByIdEntity
 
-    @GET("/feed/")
-    suspend fun getFeed(
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int,
-    ): List<FeedResponse>
-
     @POST("/users-list/")
     fun getUsersWithoutInput(
         @Body get_users: UserListWithoutInputRequest
