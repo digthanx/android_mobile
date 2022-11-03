@@ -7,7 +7,7 @@ import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentMyResultChallengeBinding
-import com.teamforce.thanksapp.presentation.adapter.ResultChallengeAdapter
+import com.teamforce.thanksapp.presentation.adapter.challenge.ResultChallengeAdapter
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.MyResultChallengeViewModel
 import dagger.hilt.android.AndroidEntryPoint

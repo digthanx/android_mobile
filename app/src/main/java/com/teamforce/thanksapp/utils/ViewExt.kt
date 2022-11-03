@@ -2,10 +2,10 @@ package com.teamforce.thanksapp.utils
 
 import android.view.View
 
-fun View.visible() {
-    this.visibility = View.VISIBLE
+fun View.visible() = this.apply {
+    visibility = View.VISIBLE
 }
 
-fun View.gone() {
-    this.visibility = View.GONE
+fun View.invisible() = this.apply {
+    visibility = View.GONE
 }

@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.viewmodel
+package com.teamforce.thanksapp.presentation.viewmodel.history
 
 import androidx.lifecycle.ViewModel
 import com.teamforce.thanksapp.domain.repositories.HistoryRepository

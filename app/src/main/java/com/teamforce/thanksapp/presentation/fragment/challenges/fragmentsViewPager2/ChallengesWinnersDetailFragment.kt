@@ -15,11 +15,12 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.GetChallengeWinnersResponse
 import com.teamforce.thanksapp.databinding.FragmentChallengesWinnersDetailBinding
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_REPORT_ID
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_WINNER
-import com.teamforce.thanksapp.presentation.viewmodel.WinnersDetailChallengeViewModel
-import com.teamforce.thanksapp.utils.Consts
-import com.teamforce.thanksapp.utils.viewSinglePhoto
+import com.teamforce.thanksapp.presentation.viewmodel.challenge.WinnersDetailChallengeViewModel
+import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,20 +29,20 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
     private val binding: FragmentChallengesWinnersDetailBinding by viewBinding()
     private val viewModel: WinnersDetailChallengeViewModel by viewModels()
 
+    private var reportId: Int? = null
     private var challengeId: Int? = null
-    private var dataOfWinner: GetChallengeWinnersResponse.Winner? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            dataOfWinner = it.getParcelable(CHALLENGER_WINNER)
+            reportId = it.getInt(CHALLENGER_REPORT_ID)
             challengeId = it.getInt(CHALLENGER_ID)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dataOfWinner?.reportId?.let { viewModel.loadChallengeWinnerReportDetail(it) }
+        reportId?.let { viewModel.loadChallengeWinnerReportDetail(it) }
         viewModel.winnerReport.observe(viewLifecycleOwner){
             binding.nameChallenge.text = it?.challenge?.name
             binding.descriptionChallenge.text = it?.challengeText
@@ -57,40 +58,43 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
             }
-            binding.imageBackground.setOnClickListener { view ->
-                it?.challengePhoto?.let { photo ->
-                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
-                }
-            }
-        }
-        dataOfWinner?.let {
+                Glide.with(requireContext())
+                    .load("${Consts.BASE_URL}${it?.user?.avatar}".toUri())
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .error(R.drawable.ic_anon_avatar)
+                    .into(binding.userAvatar)
+
             binding.userNameLabelTv.text =
                 String.format(
-                    requireContext().getString(R.string.userSurnameAndName), it.participant_surname,
-                it.participant_name)
-            // Возможно лучше другое подставить, тк тут никнейм, а не телеграмм именно
-            binding.userTgName.text = String.format(
-                requireContext().getString(R.string.tgName), it.nickname)
-            // Поставить плейсхолдер и фото если ничего нет стандартную
-            Glide.with(requireContext())
-                .load("${Consts.BASE_URL}${it.participant_photo}".toUri())
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .placeholder(R.drawable.ic_anon_avatar)
-                .error(R.drawable.ic_anon_avatar)
-                .into(binding.userAvatar)
-        }
+                    requireContext().getString(R.string.userSurnameAndName), it?.user?.surname,
+                    it?.user?.name)
+            binding.userTgName.text = it?.user?.tg_name?.username()
 
-        binding.closeBtn.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
-
-        binding.userItem.setOnClickListener {
-            val bundle: Bundle = Bundle()
-            dataOfWinner?.participant_id?.let { id ->
-                bundle.putInt(Consts.USER_ID, id)
+            binding.closeBtn.setOnClickListener {
+                requireActivity().onBackPressed()
             }
-            it.findNavController().navigate(R.id.action_global_someonesProfileFragment, bundle)
+
+            binding.userItem.setOnClickListener { view ->
+                val bundle = Bundle()
+                it?.user?.id?.let { id ->
+                    bundle.putInt(Consts.USER_ID, id)
+                }
+                view.findNavController().navigate(
+                    R.id.action_global_someonesProfileFragment,
+                    bundle,
+                    OptionsTransaction().optionForAdditionalInfoFeedFragment)
+            }
+
+            binding.challengeCard.setOnClickListener {
+                val bundle = Bundle()
+                challengeId?.let { it1 -> bundle.putInt(CHALLENGER_ID, it1) }
+                view.findNavController().navigateSafely(
+                    R.id.action_global_detailsMainChallengeFragment,
+                    bundle,
+                    OptionsTransaction().optionForAdditionalInfoFeedFragment
+                )
+            }
         }
     }
 

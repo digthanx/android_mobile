@@ -45,6 +45,7 @@ class ProfileViewModel @Inject constructor(
                 when (val result = loadProfileUseCase()) {
                     is ResultWrapper.Success -> {
                         _profile.postValue(result.value!!)
+                        Log.d("Token", "Сохраняем id профиля ${result.value.profile.id}")
                         userDataRepository.saveProfileId(result.value.profile.id)
                         userDataRepository.saveUsername(result.value.profile.tgName)
                     }

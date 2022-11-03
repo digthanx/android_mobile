@@ -13,9 +13,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
-import com.teamforce.thanksapp.presentation.adapter.FragmentDetailChallengeStateAdapter
+import com.teamforce.thanksapp.model.domain.ChallengeModelById
+import com.teamforce.thanksapp.presentation.adapter.challenge.FragmentDetailChallengeStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsMainChallengeViewModel
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_DATA
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,19 +31,20 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     private val viewModel: DetailsMainChallengeViewModel by viewModels()
 
 
-    private var dataOfChallenge: ChallengeModel? = null
+    private var dataOfChallenge: ChallengeModelById? = null
+    private var doIHaveResult: Boolean? = null
+    private var challengeId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            dataOfChallenge = it.getParcelable(CHALLENGER_DATA)
+            challengeId = it.getInt(CHALLENGER_ID)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadDataFromDb()
-        setData()
         listenersForRequestedData()
         listenersBtn()
 
@@ -49,7 +52,6 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     }
 
     private fun initTabLayoutMediator(myResultWasReceivedSuccessfully: Boolean) {
-        // Нужно добавить изменения в количестве вкладок в зависимости от статуса чалика
         val detailInnerAdapter = dataOfChallenge?.creator_id?.let { creatorId ->
             FragmentDetailChallengeStateAdapter(
                 requireActivity(),
@@ -103,8 +105,9 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     }
 
     private fun loadDataFromDb() {
-        dataOfChallenge?.id?.let {
-            viewModel.loadChallengeResult(it)
+        challengeId?.let { challengeId ->
+            viewModel.loadChallenge(challengeId)
+            viewModel.loadChallengeResult(challengeId)
         }
     }
 
@@ -119,11 +122,21 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
     private fun listenersForRequestedData() {
         viewModel.isSuccessOperationMyResult.observe(viewLifecycleOwner) {
-            if (it) {
+            doIHaveResult = it
+            if (doIHaveResult == true && dataOfChallenge != null) {
                 initTabLayoutMediator(it)
-            } else if (it == false) {
+            } else if (doIHaveResult == false && dataOfChallenge != null) {
                 initTabLayoutMediator(it)
             }
+        }
+        viewModel.challenge.observe(viewLifecycleOwner){
+            dataOfChallenge = it
+            if (doIHaveResult == true && dataOfChallenge != null) {
+                initTabLayoutMediator(doIHaveResult!!)
+            } else if (doIHaveResult == false && dataOfChallenge != null) {
+                initTabLayoutMediator(doIHaveResult!!)
+            }
+            setData()
         }
     }
 

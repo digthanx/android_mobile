@@ -12,6 +12,7 @@ import java.io.IOException
 
 class ChallengePagingSource(
     private val api: ThanksApi,
+    private val activeOnly: Int
 ) : PagingSource<Int, ChallengeModel>() {
 
     override fun getRefreshKey(state: PagingState<Int, ChallengeModel>): Int? {
@@ -31,7 +32,8 @@ class ChallengePagingSource(
         return try {
             val response = api.getChallenges(
                 limit = Consts.PAGE_SIZE,
-                offset = pageIndex
+                offset = pageIndex,
+                activeOnly = activeOnly
             )
             val nextKey =
                 if (response.isEmpty()) {

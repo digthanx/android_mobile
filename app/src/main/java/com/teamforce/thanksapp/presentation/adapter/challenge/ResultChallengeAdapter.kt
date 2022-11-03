@@ -1,8 +1,7 @@
-package com.teamforce.thanksapp.presentation.adapter
+package com.teamforce.thanksapp.presentation.adapter.challenge
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
@@ -20,7 +19,7 @@ import java.time.format.DateTimeFormatter
 
 class ResultChallengeAdapter(
 ) : ListAdapter<GetChallengeResultResponse,
-        ResultChallengeAdapter.ResultChallengeViewHolder>(ResultChallengeAdapter.Companion.DiffCallback) {
+        ResultChallengeAdapter.ResultChallengeViewHolder>(DiffCallback) {
 
     companion object {
         object DiffCallback : DiffUtil.ItemCallback<GetChallengeResultResponse>() {

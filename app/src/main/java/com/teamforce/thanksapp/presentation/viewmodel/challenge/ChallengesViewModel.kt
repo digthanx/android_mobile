@@ -24,13 +24,22 @@ class ChallengesViewModel @Inject constructor(
     val isLoading: LiveData<Boolean> = _isLoading
 
 
-    val allChallenge = challengeRepository.loadChallenge().stateIn(
+    val allChallenge = challengeRepository.loadChallenge(activeOnly = 0).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = PagingData.empty()
         ).cachedIn(viewModelScope).map {
             it.map { it }
         }
+
+    val acitveChallenge = challengeRepository.loadChallenge(activeOnly = 1).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = PagingData.empty()
+    ).cachedIn(viewModelScope).map {
+        it.map { it }
+    }
+
 
 
 

@@ -11,9 +11,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentHistoryListBinding
+import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerDecoratorForListWithBottomBar
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryPageAdapter
-import com.teamforce.thanksapp.presentation.viewmodel.HistoryListViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.history.HistoryListViewModel
 import com.teamforce.thanksapp.utils.Result
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -40,6 +41,8 @@ class HistoryListFragment : Fragment(R.layout.fragment_history_list) {
                 footer = HistoryLoadStateAdapter()
             )
             layoutManager = LinearLayoutManager(requireContext())
+            this.addItemDecoration(VerticalDividerDecoratorForListWithBottomBar(8, listAdapter!!.itemCount))
+
         }
 
         listAdapter?.addLoadStateListener { state ->

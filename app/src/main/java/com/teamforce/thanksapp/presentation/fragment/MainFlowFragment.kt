@@ -67,7 +67,7 @@ val color =        ColorDrawable(0x000000)
                     return@OnItemSelectedListener true
                 }
                 R.id.challenge_graph -> {
-                    navController.navigate(R.id.challenge_graph, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(R.id.challengesFragment, null, OptionsTransaction().optionForTransaction)
                     return@OnItemSelectedListener true
                 }
             }
