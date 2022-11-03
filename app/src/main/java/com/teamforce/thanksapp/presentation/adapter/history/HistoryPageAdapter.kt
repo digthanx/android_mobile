@@ -256,6 +256,8 @@ class HistoryPageAdapter(
                             binding.root.context.getString(R.string.operationWasRefused)
 
                         // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
+                    }else if(status.equals("W")){
+
                     }
                 }
 
@@ -298,6 +300,7 @@ class HistoryPageAdapter(
                         }
 
                     }
+                    Log.d("History", "${data}")
                     v.findNavController().navigate(
                         R.id.action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2,
                         bundle
