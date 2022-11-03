@@ -55,7 +55,7 @@ fun <V : Any> createPager(
         initialLoadSize = Consts.PAGE_SIZE,
         enablePlaceholders = enablePlaceholders,
         pageSize = pageSize,
-        prefetchDistance = 1,
+        prefetchDistance = 2,
     ),
     pagingSourceFactory = { BasePagingSource(totalPages, block) }
 )
