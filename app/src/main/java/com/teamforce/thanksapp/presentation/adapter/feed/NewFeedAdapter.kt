@@ -214,7 +214,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                         ).append(
                             createClickableSpannable(
                                 root.context.getString(R.string.youGot) + " ",
-                                R.color.general_brand,
+                                R.color.black,
                                 null
                             )
                         ).append(

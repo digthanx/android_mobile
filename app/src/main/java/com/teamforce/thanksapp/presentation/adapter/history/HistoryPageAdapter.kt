@@ -1,10 +1,16 @@
 package com.teamforce.thanksapp.presentation.adapter.history
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorRes
 import androidx.core.net.toUri
 import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
@@ -20,6 +26,7 @@ import com.teamforce.thanksapp.data.response.HistoryItem
 import com.teamforce.thanksapp.databinding.ItemTransferBinding
 import com.teamforce.thanksapp.databinding.SeparatorDateTimeBinding
 import com.teamforce.thanksapp.model.domain.TagModel
+import com.teamforce.thanksapp.presentation.adapter.feed.NewFeedAdapter
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import java.lang.UnsupportedOperationException
@@ -32,6 +39,9 @@ class HistoryPageAdapter(
     private val username: String,
     private val onCancelClicked: (id: Int) -> Unit
 ) : PagingDataAdapter<HistoryItem, RecyclerView.ViewHolder>(DiffCallback) {
+
+    var onSomeonesClicked: ((userId: Int) -> Unit)? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -77,7 +87,7 @@ class HistoryPageAdapter(
         }
     }
 
-    class HistoryItemViewHolder(
+    inner class HistoryItemViewHolder(
         private val binding: ItemTransferBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -111,12 +121,33 @@ class HistoryPageAdapter(
                 }
                 if (data.sender?.sender_tg_name != "anonymous" && data.sender?.sender_tg_name == username
                 ) {
-                    // Ты отправитель
-                    valueTransfer.text = " " + data.amount
-                    tgNameUser.text = String.format(
-                        binding.root.context.getString(R.string.tgName),
-                        data.recipient?.recipient_tg_name
+                    // Я отправитель
+                    val spannable = SpannableStringBuilder(
+                    ).append(
+                        createClickableSpannable(
+                            root.context.getString(R.string.youSended) + " ",
+                            R.color.black,
+                            null
+                        )
+                    ).append(
+                        createClickableSpannable(
+                            root.context.getString(
+                                R.string.amountThanks,
+                                data.amount
+                            ),
+                            R.color.minor_success,
+                            null
+                        )
+                    ).append(
+                        createClickableSpannable(
+                            data.recipient?.recipient_surname + " " +
+                                    data.recipient?.recipient_first_name + " ",
+                            R.color.general_brand
+                        ) {
+                            data.recipient_id?.let { onSomeonesClicked?.invoke(it) }
+                        }
                     )
+                    message.text = spannable
                     descr_transaction_1 = binding.root.context.getString(R.string.youSended)
                     labelStatusTransaction = binding.root.context.getString(R.string.statusTransfer)
                     if (!data.recipient?.recipient_photo.isNullOrEmpty()) {
@@ -205,13 +236,35 @@ class HistoryPageAdapter(
                         }
                         descr_transaction_1 = binding.root.context.getString(R.string.youGot)
 
-                        tgNameUser.text = String.format(
-                            binding.root.context.getString(R.string.tgName),
-                            data.sender?.sender_tg_name
+                        // Я получатель
+                        val spannable = SpannableStringBuilder(
+                        ).append(
+                            createClickableSpannable(
+                               "+" +  root.context.getString(
+                                    R.string.amountThanks,
+                                    data.amount
+                                ),
+                                R.color.minor_success,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                " " + root.context.getString(R.string.from) + " ",
+                                R.color.black,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                data.sender?.sender_surname + " " +
+                                data.sender?.sender_first_name,
+                                R.color.general_brand
+                            ) {
+                                data.sender_id?.let { onSomeonesClicked?.invoke(it) }
+                            }
                         )
+                        message.text = spannable
                         labelStatusTransaction =
                             binding.root.context.getString(R.string.typeTransfer)
-                        valueTransfer.text = "+ " + data.amount
                         comingStatusTransaction =
                             binding.root.context.getString(R.string.comingTransfer)
                     }
@@ -257,7 +310,35 @@ class HistoryPageAdapter(
 
                         // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
                     }else if(status.equals("W")){
-
+                        // В случае победе в челлендже
+                        // Я получатель
+                        val spannable = SpannableStringBuilder(
+                        ).append(
+                            createClickableSpannable(
+                                "+" +  root.context.getString(
+                                    R.string.amountThanks,
+                                    data.amount
+                                ),
+                                R.color.minor_success,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                " " + root.context.getString(R.string.forWinningInChallenge) + " ",
+                                R.color.black,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                // Занести сюда название челленджа
+                                data.sender?.sender_surname + " " +
+                                        data.sender?.sender_first_name,
+                                R.color.general_brand
+                            ) {
+                                data.sender_id?.let { onSomeonesClicked?.invoke(it) }
+                            }
+                        )
+                        message.text = spannable
                     }
                 }
 
@@ -307,6 +388,36 @@ class HistoryPageAdapter(
                     )
                 }
             }
+        }
+
+        private fun createClickableSpannable(
+            string: String,
+            @ColorRes color: Int,
+            onClick: (() -> Unit)?
+        ): SpannableString {
+            val spannableString = SpannableString(string)
+
+            val clickableSpan = object : ClickableSpan() {
+                override fun onClick(p0: View) {
+                    Log.d(NewFeedAdapter.TAG, "onClick: ")
+                    onClick?.invoke()
+                }
+
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    ds.isUnderlineText = false
+                    ds.color = binding.root.context.getColor(color)
+                }
+            }
+
+            spannableString.setSpan(
+                clickableSpan,
+                0,
+                string.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return spannableString
+
         }
 
         private fun setTags(tagsChipGroup: ChipGroup, tagList: List<TagModel>) {
