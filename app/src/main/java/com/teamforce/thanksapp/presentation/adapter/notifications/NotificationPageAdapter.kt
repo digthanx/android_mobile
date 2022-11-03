@@ -11,7 +11,6 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemNotificationBinding
 import com.teamforce.thanksapp.databinding.SeparatorDateTimeBinding
 import com.teamforce.thanksapp.domain.models.notifications.NotificationItem
-import com.teamforce.thanksapp.utils.gone
 import java.lang.UnsupportedOperationException
 
 class NotificationPageAdapter:

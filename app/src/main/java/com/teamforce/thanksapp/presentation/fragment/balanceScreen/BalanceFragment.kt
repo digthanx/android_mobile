@@ -102,19 +102,19 @@ class BalanceFragment : Fragment() {
         }
 
         binding.notifyLayout.setOnClickListener {
-            findNavController().navigate(R.id.action_BalanceFragment_to_notificationsFragment)
+            findNavController().navigate(R.id.action_balanceFragment_to_notificationFragment)
         }
 
         sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
             if (notificationsCount == 0) {
                 binding.apply {
-                    activeNotifyLayout.gone()
+                    activeNotifyLayout.invisible()
                     notify.visible()
                 }
             } else {
                 binding.apply {
                     activeNotifyLayout.visible()
-                    notify.gone()
+                    notify.invisible()
                     notifyBadge.text = notificationsCount.toString()
                 }
             }
