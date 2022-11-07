@@ -35,7 +35,6 @@
             android:layout_marginTop="5dp"
             android:clickable="true"
             android:focusable="true"
-            android:text="\@Somebody"
             android:visibility="gone"
             android:textAppearance="@style/Body2"
             app:layout_constraintStart_toEndOf="@id/transfer_icon_iv"
@@ -50,7 +49,6 @@
             android:focusable="true"
             android:maxWidth="271dp"
             android:scrollHorizontally="false"
-            android:text="Вы отправили 12 спасибок Иванченко Андрею, а потом произошло не что "
             android:textAppearance="@style/SmallText2Medium.Black"
             app:layout_constraintStart_toEndOf="@id/transfer_icon_iv"
             app:layout_constraintTop_toTopOf="@id/transfer_icon_iv"
@@ -74,8 +72,7 @@
                 android:paddingVertical="2dp"
                 android:textAppearance="@style/VerySmallText1.White"
                 android:paddingHorizontal="12dp"
-                android:background="@color/minor_success"
-                android:text="Выполнен" />
+                android:background="@color/minor_success" />
         </com.google.android.material.card.MaterialCardView>
 
         <ScrollView
@@ -104,8 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="- 100"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:visibility="gone"
             android:textStyle="bold"
             android:textColor="@color/black"
