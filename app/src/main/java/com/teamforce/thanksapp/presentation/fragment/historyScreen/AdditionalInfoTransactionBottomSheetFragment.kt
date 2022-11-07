@@ -109,6 +109,10 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
                 .load(avatar?.toUri())
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(binding.userAvatar)
+            binding.userAvatar.setOnLongClickListener {
+                (it as ImageView).viewSinglePhoto(avatar!!, requireContext())
+                return@setOnLongClickListener true
+            }
         }
         if (!photo_from_sender.isNullOrEmpty()){
             Log.d("Token", "${Consts.BASE_URL}${photo_from_sender}")
@@ -118,6 +122,12 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
                 .load("${Consts.BASE_URL}${photo_from_sender}")
                 .centerCrop()
                 .into(binding.senderImage)
+            binding.senderImage.setOnClickListener {
+                Log.d("AdditionalInfoTransactionBottomSheetFragment", "Клик по аватарке")
+                (it as ImageView).viewSinglePhoto(
+                    "${Consts.BASE_URL}${photo_from_sender}",
+                    requireContext())
+            }
         }else{
             binding.photoTv.visibility = View.GONE
             binding.cardViewImg.visibility = View.GONE
@@ -150,5 +160,9 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
                         bundle, OptionsTransaction().optionForProfileFragment)
             }
         }
+    }
+
+    companion object {
+        const val TAG = "AdditionalInfoTransactionBottomSheetFragment"
     }
 }
