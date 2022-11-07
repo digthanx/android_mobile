@@ -42,6 +42,7 @@ class HistoryPageAdapter(
 ) : PagingDataAdapter<HistoryItem, RecyclerView.ViewHolder>(DiffCallback) {
 
     var onSomeonesClicked: ((userId: Int) -> Unit)? = null
+    var onChallengeClicked: ((challengeId: Int) -> Unit)? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -300,8 +301,7 @@ class HistoryPageAdapter(
                                     data.sender?.challenge_name?.doubleQuoted() ?: "",
                                     R.color.general_brand
                                 ) {
-                                    // TODO Переход на чалик
-                                    data.sender?.challenge_id?.let { onSomeonesClicked?.invoke(it) }
+                                    data.sender?.challenge_id?.let { onChallengeClicked?.invoke(it) }
                                 }
                             )
                             message.text = spannable
@@ -394,42 +394,49 @@ class HistoryPageAdapter(
                 transactionToAnotherProfile(username, data)
 
                 photoFromSender = data.photo
-                standardGroup.setOnClickListener { v ->
-                    val bundle = Bundle()
-                    bundle.apply {
-                        // аву пока не передаю
-                        putString("photo_from_sender", photoFromSender)
-                        putString(Consts.AVATAR_USER, avatar)
-                        putString(Consts.DATE_TRANSACTION, dateGetInfo)
-                        putString(Consts.DESCRIPTION_TRANSACTION_1, descr_transaction_1)
-                        putString(
-                            Consts.DESCRIPTION_TRANSACTION_2_WHO,
-                            if (data.sender?.sender_tg_name == username) data.recipient?.recipient_tg_name
-                            else data.sender?.sender_tg_name
-                        )
-                        putString(
-                            Consts.DESCRIPTION_TRANSACTION_3_AMOUNT,
-                            binding.root.context.getString(R.string.amountThanks, data.amount)
-                        )
-                        putString(Consts.REASON_TRANSACTION, data.reason)
-                        putString(Consts.STATUS_TRANSACTION, comingStatusTransaction)
-                        putString(Consts.LABEL_STATUS_TRANSACTION, labelStatusTransaction)
-                        putString(Consts.AMOUNT_THANKS, data.amount)
-                        putString(Consts.WE_REFUSED_YOUR_OPERATION, weRefusedYourOperation)
-                        data.recipient_id?.let {
-                            putInt("userIdReceiver", it)
-                        }
-                        data.sender_id?.let {
-                            putInt("userIdSender", it)
-                        }
+                if(data.transactionClass.id != "W"){
+                    mainCard.setOnClickListener { v ->
+                        val bundle = Bundle()
+                        bundle.apply {
+                            // аву пока не передаю
+                            putString("photo_from_sender", photoFromSender)
+                            putString(Consts.AVATAR_USER, avatar)
+                            putString(Consts.DATE_TRANSACTION, dateGetInfo)
+                            putString(Consts.DESCRIPTION_TRANSACTION_1, descr_transaction_1)
+                            putString(
+                                Consts.DESCRIPTION_TRANSACTION_2_WHO,
+                                if (data.sender?.sender_tg_name == username) data.recipient?.recipient_tg_name
+                                else data.sender?.sender_tg_name
+                            )
+                            putString(
+                                Consts.DESCRIPTION_TRANSACTION_3_AMOUNT,
+                                binding.root.context.getString(R.string.amountThanks, data.amount)
+                            )
+                            putString(Consts.REASON_TRANSACTION, data.reason)
+                            putString(Consts.STATUS_TRANSACTION, comingStatusTransaction)
+                            putString(Consts.LABEL_STATUS_TRANSACTION, labelStatusTransaction)
+                            putString(Consts.AMOUNT_THANKS, data.amount)
+                            putString(Consts.WE_REFUSED_YOUR_OPERATION, weRefusedYourOperation)
+                            data.recipient_id?.let {
+                                putInt("userIdReceiver", it)
+                            }
+                            data.sender_id?.let {
+                                putInt("userIdSender", it)
+                            }
 
+                        }
+                        Log.d("History", "${data}")
+                        v.findNavController().navigate(
+                            R.id.action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2,
+                            bundle
+                        )
                     }
-                    Log.d("History", "${data}")
-                    v.findNavController().navigate(
-                        R.id.action_historyFragment_to_additionalInfoTransactionBottomSheetFragment2,
-                        bundle
-                    )
+                }else{
+                    mainCard.setOnClickListener{
+                        data.sender?.challenge_id?.let { it1 -> onChallengeClicked?.invoke(it1) }
+                    }
                 }
+
             }
         }
 
@@ -460,6 +467,10 @@ class HistoryPageAdapter(
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             return spannableString
+
+        }
+
+        private fun navigateToDetailTransaction(){
 
         }
 
