@@ -36,7 +36,6 @@ class ContendersChallengeViewModel @Inject constructor(
     fun loadContenders(
         challengeId: Int
     ) {
-        _isLoading.postValue(true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _isLoading.postValue(true)
@@ -61,10 +60,10 @@ class ContendersChallengeViewModel @Inject constructor(
     fun checkReport(
         reportId: Int,
         state: Char,
-        reasonOfReject: String?
+        reasonOfReject: String?,
+        challengeId: Int
     ) {
         val stateMap = mapOf<String, Char>("state" to state)
-        _isLoading.postValue(true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _isLoading.postValue(true)
@@ -72,6 +71,7 @@ class ContendersChallengeViewModel @Inject constructor(
                 when (val result = challengeRepository.checkChallengeReport(reportId, stateMap, reasonOfReject)) {
                     is ResultWrapper.Success -> {
                         _isSuccessOperation.postValue(SuccessResultCheckReport(state, true))
+                        loadContenders(challengeId)
                     }
                     else -> {
                         if (result is ResultWrapper.GenericError) {
