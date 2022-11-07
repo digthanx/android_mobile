@@ -217,6 +217,7 @@ class HistoryPageAdapter(
                     }
                 } else {
                     if (data.sender?.sender_tg_name == "anonymous") {
+                        // Я получатель от анонима
                         descr_transaction_1 = binding.root.context.getString(R.string.youGot)
                         tgNameUser.text = " Аноним"
                         labelStatusTransaction =
@@ -224,6 +225,43 @@ class HistoryPageAdapter(
                         valueTransfer.text = "+ " + data.amount
                         comingStatusTransaction =
                             binding.root.context.getString(R.string.comingTransfer)
+                        val spannable = SpannableStringBuilder(
+                        ).append(
+                            createClickableSpannable(
+                                "+" + root.context.getString(
+                                    R.string.amountThanks,
+                                    data.amount
+                                ),
+                                R.color.minor_success,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                " " + root.context.getString(R.string.from) + " ",
+                                R.color.black,
+                                null
+                            )
+                        ).append(
+                            if (data.sender.sender_tg_name == "anonymous") {
+                                createClickableSpannable(
+                                    data.sender.sender_tg_name + " ",
+                                    R.color.general_brand
+                                )
+                                {
+                                    data.sender_id?.let { onSomeonesClicked?.invoke(it) }
+                                }
+                            } else {
+                                createClickableSpannable(
+                                    data.sender?.sender_surname + " " +
+                                            data.sender?.sender_first_name,
+                                    R.color.general_brand
+                                )
+                                {
+                                    data.sender_id?.let { onSomeonesClicked?.invoke(it) }
+                                }
+                            }
+                        )
+                        message.text = spannable
                     } else {
                         // Я получатель
                         if (!data.sender?.sender_photo.isNullOrEmpty()) {
@@ -239,7 +277,7 @@ class HistoryPageAdapter(
                         val spannable = SpannableStringBuilder(
                         ).append(
                             createClickableSpannable(
-                               "+" +  root.context.getString(
+                                "+" + root.context.getString(
                                     R.string.amountThanks,
                                     data.amount
                                 ),
@@ -255,11 +293,13 @@ class HistoryPageAdapter(
                         ).append(
                             createClickableSpannable(
                                 data.sender?.sender_surname + " " +
-                                data.sender?.sender_first_name,
+                                        data.sender?.sender_first_name,
                                 R.color.general_brand
-                            ) {
+                            )
+                            {
                                 data.sender_id?.let { onSomeonesClicked?.invoke(it) }
                             }
+
                         )
                         message.text = spannable
                         labelStatusTransaction =
@@ -308,13 +348,13 @@ class HistoryPageAdapter(
                             binding.root.context.getString(R.string.operationWasRefused)
 
                         // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
-                    }else if(status.equals("W")){
+                    } else if (status.equals("W")) {
                         // В случае победе в челлендже
                         // Я получатель
                         val spannable = SpannableStringBuilder(
                         ).append(
                             createClickableSpannable(
-                                "+" +  root.context.getString(
+                                "+" + root.context.getString(
                                     R.string.amountThanks,
                                     data.amount
                                 ),
@@ -330,11 +370,11 @@ class HistoryPageAdapter(
                         ).append(
                             createClickableSpannable(
                                 // Занести сюда название челленджа
-                                data.sender?.sender_surname + " " +
-                                        data.sender?.sender_first_name,
+                                data.sender?.challenge_name ?: "",
                                 R.color.general_brand
                             ) {
-                                data.sender_id?.let { onSomeonesClicked?.invoke(it) }
+                                // TODO Переход на чалик
+                                data.sender?.challenge_id?.let { onSomeonesClicked?.invoke(it) }
                             }
                         )
                         message.text = spannable
@@ -361,7 +401,8 @@ class HistoryPageAdapter(
                         putString(Consts.DESCRIPTION_TRANSACTION_1, descr_transaction_1)
                         putString(
                             Consts.DESCRIPTION_TRANSACTION_2_WHO,
-                            tgNameUser.text.toString()
+                            if (data.sender?.sender_tg_name == username) data.recipient?.recipient_tg_name
+                            else data.sender?.sender_tg_name
                         )
                         putString(
                             Consts.DESCRIPTION_TRANSACTION_3_AMOUNT,
@@ -370,7 +411,7 @@ class HistoryPageAdapter(
                         putString(Consts.REASON_TRANSACTION, data.reason)
                         putString(Consts.STATUS_TRANSACTION, comingStatusTransaction)
                         putString(Consts.LABEL_STATUS_TRANSACTION, labelStatusTransaction)
-                        putString(Consts.AMOUNT_THANKS, valueTransfer.text.toString())
+                        putString(Consts.AMOUNT_THANKS, data.amount)
                         putString(Consts.WE_REFUSED_YOUR_OPERATION, weRefusedYourOperation)
                         data.recipient_id?.let {
                             putInt("userIdReceiver", it)
