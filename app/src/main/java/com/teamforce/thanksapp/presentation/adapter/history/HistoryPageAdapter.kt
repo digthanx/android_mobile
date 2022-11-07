@@ -5,6 +5,7 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
+import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.LayoutInflater
@@ -38,12 +39,10 @@ import java.util.*
 
 class HistoryPageAdapter(
     private val username: String,
-    private val onCancelClicked: (id: Int) -> Unit
+    private val onCancelClicked: (id: Int) -> Unit,
+    private val onSomeonesClicked: (userId: Int) -> Unit,
+    private val onChallengeClicked: (challengeId: Int) -> Unit
 ) : PagingDataAdapter<HistoryItem, RecyclerView.ViewHolder>(DiffCallback) {
-
-    var onSomeonesClicked: ((userId: Int) -> Unit)? = null
-    var onChallengeClicked: ((challengeId: Int) -> Unit)? = null
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -72,7 +71,8 @@ class HistoryPageAdapter(
                 }
                 is HistoryItem.UserTransactionsResponse -> {
                     val viewHolder = holder as HistoryItemViewHolder
-                    viewHolder.bind(item, username, onCancelClicked)
+                    viewHolder.bind(item, username, onCancelClicked,
+                        onChallengeClicked, onSomeonesClicked)
                 }
 
             }
@@ -106,8 +106,12 @@ class HistoryPageAdapter(
 
         fun bind(
             data: HistoryItem.UserTransactionsResponse, username: String,
-            onCancelClicked: (id: Int) -> Unit
+            onCancelClicked: (id: Int) -> Unit,
+            onChallengeClicked: (challengeId: Int) -> Unit,
+            onSomeonesClicked: (userId: Int) -> Unit
         ) {
+            // Без этого клики по spannable не работают
+            binding.message.movementMethod = LinkMovementMethod.getInstance()
             binding.apply {
                 root.id = data.id
                 val status = data.transaction_status.id
@@ -146,7 +150,10 @@ class HistoryPageAdapter(
                                     data.recipient?.recipient_first_name + " ",
                             R.color.general_brand
                         ) {
-                            data.recipient_id?.let { onSomeonesClicked?.invoke(it) }
+                            data.recipient_id?.let {
+                                onSomeonesClicked(it)
+                                Log.d(TAG, "bindUser: ${it} clicked")
+                            }
                         }
                     )
                     message.text = spannable
@@ -259,7 +266,7 @@ class HistoryPageAdapter(
                                     R.color.general_brand
                                 )
                                 {
-                                    data.sender_id?.let { onSomeonesClicked?.invoke(it) }
+                                    data.sender_id?.let { onSomeonesClicked(it) }
                                 }
                             }
                         )
@@ -301,7 +308,7 @@ class HistoryPageAdapter(
                                     data.sender?.challenge_name?.doubleQuoted() ?: "",
                                     R.color.general_brand
                                 ) {
-                                    data.sender?.challenge_id?.let { onChallengeClicked?.invoke(it) }
+                                    data.sender?.challenge_id?.let { onChallengeClicked(it) }
                                 }
                             )
                             message.text = spannable
@@ -329,7 +336,7 @@ class HistoryPageAdapter(
                                     R.color.general_brand
                                 )
                                 {
-                                    data.sender_id?.let { onSomeonesClicked?.invoke(it) }
+                                    data.sender_id?.let { onSomeonesClicked(it) }
                                 }
 
                             )
@@ -432,8 +439,8 @@ class HistoryPageAdapter(
                         )
                     }
                 }else{
-                    mainCard.setOnClickListener{
-                        data.sender?.challenge_id?.let { it1 -> onChallengeClicked?.invoke(it1) }
+                    mainCard.setOnClickListener{ view ->
+                        data.sender?.challenge_id?.let { it -> onChallengeClicked(it) }
                     }
                 }
 
@@ -467,10 +474,6 @@ class HistoryPageAdapter(
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             return spannableString
-
-        }
-
-        private fun navigateToDetailTransaction(){
 
         }
 
@@ -557,6 +560,8 @@ class HistoryPageAdapter(
     }
 
     companion object {
+        const val TAG = "HistoryPageAdapter"
+
         private val DiffCallback = object : DiffUtil.ItemCallback<HistoryItem>() {
             override fun areItemsTheSame(
                 oldItem: HistoryItem,

@@ -1,10 +1,13 @@
 package com.teamforce.thanksapp.presentation.fragment.historyScreen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -14,8 +17,12 @@ import com.teamforce.thanksapp.databinding.FragmentHistoryListBinding
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerDecoratorForListWithBottomBar
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryPageAdapter
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
 import com.teamforce.thanksapp.presentation.viewmodel.history.HistoryListViewModel
+import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.Result
+import com.teamforce.thanksapp.utils.navigateSafely
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,7 +40,9 @@ class HistoryListFragment : Fragment(R.layout.fragment_history_list) {
         val sentOnly = arguments?.getInt(SENT_ONLY_KEY)!!
         val receivedOnly = arguments?.getInt(RECEIVED_ONLY)!!
 
-        listAdapter = HistoryPageAdapter(viewModel.getUsername()!!, ::onCancelClicked)
+        listAdapter = HistoryPageAdapter(
+            viewModel.getUsername()!!,
+            ::onCancelClicked, ::onSomeonesClicked, ::onChallengeClicked)
 
         binding.list.apply {
             this.adapter = listAdapter?.withLoadStateHeaderAndFooter(
@@ -108,6 +117,26 @@ class HistoryListFragment : Fragment(R.layout.fragment_history_list) {
 
     private fun onCancelClicked(id: Int) {
         showAlertDialogForCancelTransaction(id)
+    }
+
+    private fun onChallengeClicked(challengeId: Int){
+        val bundle = Bundle()
+        bundle.putInt(ChallengesConsts.CHALLENGER_ID, challengeId)
+        findNavController().navigateSafely(
+            R.id.action_global_detailsMainChallengeFragment,
+            bundle,
+            OptionsTransaction().optionForAdditionalInfoFeedFragment
+        )
+    }
+    private fun onSomeonesClicked(userId: Int){
+        Log.d(HistoryPageAdapter.TAG, "Im inner method click upon user")
+        val bundle = Bundle()
+        bundle.putInt(Consts.USER_ID, userId)
+        findNavController().navigate(
+            R.id.action_global_someonesProfileFragment,
+            bundle,
+            OptionsTransaction().optionForAdditionalInfoFeedFragment
+        )
     }
 
     private fun showAlertDialogForCancelTransaction(idTransaction: Int) {
