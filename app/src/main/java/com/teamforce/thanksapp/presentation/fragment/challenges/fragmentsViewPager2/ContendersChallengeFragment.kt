@@ -28,12 +28,11 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
     private val viewModel: ContendersChallengeViewModel by viewModels()
 
     private var idChallenge: Int? = null
-    private var listOfContenders: MutableList<GetChallengeContendersResponse.Contender> =
-        mutableListOf()
+   // private var listOfContenders: MutableList<GetChallengeContendersResponse.Contender> = mutableListOf()
 
     private var contendersAdapter: ContendersAdapter? = null
 
-    private var currentPositionItem = -1
+    //private var currentPositionItem = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +60,11 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
         )
         loadParticipants()
         setData()
+        listeners()
+
+    }
+
+    private fun listeners() {
 
         viewModel.contendersError.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
@@ -69,47 +73,47 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
 
-        viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
-            if (it.successResult)
-                if (it.state == 'W') {
-                    listOfContenders.removeAt(currentPositionItem)
-                    contendersAdapter?.submitList(null)
-                    contendersAdapter?.submitList(listOfContenders)
-                    Toast.makeText(
-                        requireContext(), requireContext().getString(R.string.applyCheckReport),
-                        Toast.LENGTH_LONG
-                    ).show()
-                } else {
-                    listOfContenders.removeAt(currentPositionItem)
-                    Log.d(TAG, "Размер списка в фрагменте " + listOfContenders.size.toString())
-                    contendersAdapter?.submitList(null)
-                    contendersAdapter?.submitList(listOfContenders)
-                    Log.d(
-                        TAG,
-                        "listeningResponse: размер списка adapter.currentList " + contendersAdapter?.currentList?.size
-                    )
-                    contendersAdapter?.notifyDataSetChanged()
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().getString(R.string.deniedCheckReport),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-
-        }
+//        viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
+//            if (it.successResult)
+//                if (it.state == 'W') {
+//                    listOfContenders.removeAt(currentPositionItem)
+//                    contendersAdapter?.submitList(null)
+//                    contendersAdapter?.submitList(listOfContenders)
+//                    Toast.makeText(
+//                        requireContext(), requireContext().getString(R.string.applyCheckReport),
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                } else {
+//                    listOfContenders.removeAt(currentPositionItem)
+//                    Log.d(TAG, "Размер списка в фрагменте " + listOfContenders.size.toString())
+//                    contendersAdapter?.submitList(null)
+//                    contendersAdapter?.submitList(listOfContenders)
+//                    Log.d(
+//                        TAG,
+//                        "listeningResponse: размер списка adapter.currentList " + contendersAdapter?.currentList?.size
+//                    )
+//                    contendersAdapter?.notifyDataSetChanged()
+//                    Toast.makeText(
+//                        requireContext(),
+//                        requireContext().getString(R.string.deniedCheckReport),
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
+//        }
     }
 
     private fun loadParticipants() {
         idChallenge?.let { viewModel.loadContenders(it) }
+        setData()
     }
 
     private fun setData() {
         viewModel.contenders.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
                 binding.noData.visibility = View.GONE
-                listOfContenders = it.toMutableList()
-                Log.d(TAG, "setData: setdata listOfContenders.size = " + listOfContenders.size)
-                contendersAdapter?.submitList(it.toMutableList())
+             //   listOfContenders = it.toMutableList()
+               // Log.d(TAG, "setData: setdata listOfContenders.size = " + listOfContenders.size)
+                contendersAdapter?.submitList(it)
             } else {
                 binding.noData.visibility = View.VISIBLE
             }
@@ -138,10 +142,15 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
             if (dialog.findViewById<TextInputEditText>(R.id.description_et)
                     .text?.trim()?.isNotEmpty() == true
             ) {
-                viewModel.checkReport(
-                    reportId, state,
-                    dialog.findViewById<TextInputEditText>(R.id.description_et).text.toString()
-                )
+                if (idChallenge != null){
+                    viewModel.checkReport(
+                        reportId, state,
+                        dialog.findViewById<TextInputEditText>(R.id.description_et).text.toString(),
+                        idChallenge!!
+                    )
+
+                }
+
                 dialog.cancel()
             } else {
                 Toast.makeText(
@@ -169,14 +178,14 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
             }
     }
 
-    private fun apply(reportId: Int, state: Char, position: Int) {
-        currentPositionItem = position
-        viewModel.checkReport(reportId, state, " ")
+    private fun apply(reportId: Int, state: Char) {
+       // currentPositionItem = position
+        idChallenge?.let { viewModel.checkReport(reportId, state, " ", it) }
     }
 
-    private fun refuse(reportId: Int, state: Char, position: Int) {
-        Log.d(TAG, "onViewCreated: refused item index $position")
-        currentPositionItem = position
+    private fun refuse(reportId: Int, state: Char) {
+       // Log.d(TAG, "onViewCreated: refused item index $position")
+       // currentPositionItem = position
         createDialog(reportId, state)
     }
 

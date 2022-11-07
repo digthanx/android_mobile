@@ -24,8 +24,8 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class ContendersAdapter(
-    private val applyClickListener: (reportId: Int, state: Char, position: Int) -> Unit,
-    private val refuseClickListener: (reportId: Int, state: Char, position: Int) -> Unit,
+    private val applyClickListener: (reportId: Int, state: Char) -> Unit,
+    private val refuseClickListener: (reportId: Int, state: Char) -> Unit,
 
 ): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(
     DiffCallback
@@ -81,12 +81,12 @@ class ContendersAdapter(
             binding.userSurnameLabelTv.text = currentList[position].participant_surname
             convertDateToNecessaryFormat(holder, position)
             binding.applyBtn.setOnClickListener {
-                applyClickListener?.invoke(currentList[position].report_id, 'W', position)
+                applyClickListener.invoke(currentList[position].report_id, 'W')
             }
             binding.refuseBtn.setOnClickListener {
                 Log.d("Token", "Размер списка в адаптере " + currentList.size.toString())
                 Log.d("Token", "Кликнутая позиция в адаптере " + position)
-                refuseClickListener?.invoke(currentList[position].report_id, 'D', position)
+                refuseClickListener.invoke(currentList[position].report_id, 'D')
             }
             binding.image.setOnClickListener { view ->
                 currentList[position].report_photo?.let { photo ->
