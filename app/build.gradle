@@ -11,7 +11,7 @@ plugins {
 android {
     signingConfigs {
         release {
-            storeFile file('C:\\Users\\dimam\\Desktop\\MobileDeveloper\\android_mobile\\key\\NyamaKey.jks')
+            storeFile file('/Users/nyama/Desktop/android/key/NyamaKey.jks')
             storePassword 'hiiamNyamailikecode'
             keyAlias 'thanksapp-release'
             keyPassword 'hiiamNyamailikecode'
