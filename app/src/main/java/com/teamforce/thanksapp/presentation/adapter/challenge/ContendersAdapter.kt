@@ -43,6 +43,7 @@ class ContendersAdapter(
     }
 
     companion object{
+        const val TAG = "ContendersAdapter"
 
         object DiffCallback : DiffUtil.ItemCallback<GetChallengeContendersResponse.Contender>() {
             override fun areItemsTheSame(oldItem: GetChallengeContendersResponse.Contender, newItem: GetChallengeContendersResponse.Contender): Boolean {
@@ -84,8 +85,9 @@ class ContendersAdapter(
                 applyClickListener.invoke(currentList[position].report_id, 'W')
             }
             binding.refuseBtn.setOnClickListener {
-                Log.d("Token", "Размер списка в адаптере " + currentList.size.toString())
-                Log.d("Token", "Кликнутая позиция в адаптере " + position)
+
+                Log.d("ContendersAdapter", "Размер списка в адаптере " + currentList.size.toString())
+                Log.d("ContendersAdapter", "Кликнутая позиция в адаптере " + position)
                 refuseClickListener.invoke(currentList[position].report_id, 'D')
             }
             binding.image.setOnClickListener { view ->

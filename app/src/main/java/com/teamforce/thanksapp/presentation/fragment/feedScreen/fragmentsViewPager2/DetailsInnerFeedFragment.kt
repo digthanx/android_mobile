@@ -53,8 +53,11 @@ class DetailsInnerFeedFragment : Fragment(R.layout.fragment_details_inner_feed) 
     private fun setDetail(){
         viewModel.dataOfTransaction.observe(viewLifecycleOwner){
             with(binding){
-                if(it?.reason != "") reasonTransaction.text = it?.reason
-                else messageCard.visibility = View.GONE
+                if(it?.reason != "") {
+                    messageCard.visibility = View.VISIBLE
+                    reasonTransaction.text = it?.reason
+                }else messageCard.visibility = View.GONE
+
                 if (it != null) {
                     setTags(it.tags)
                 }
