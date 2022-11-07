@@ -46,7 +46,7 @@
             android:layout_marginTop="5dp"
             android:clickable="true"
             android:focusable="true"
-            android:maxWidth="300dp"
+            android:maxWidth="271dp"
             android:scrollHorizontally="false"
             android:text="Вы отправили 12 спасибок Иванченко Андрею, а потом произошло не что "
             android:textAppearance="@style/SmallText2Medium.Black"

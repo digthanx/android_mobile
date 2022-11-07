@@ -29,6 +29,7 @@ import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.presentation.adapter.feed.NewFeedAdapter
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
+import com.teamforce.thanksapp.utils.doubleQuoted
 import java.lang.UnsupportedOperationException
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -252,8 +253,8 @@ class HistoryPageAdapter(
                                 }
                             } else {
                                 createClickableSpannable(
-                                    data.sender?.sender_surname + " " +
-                                            data.sender?.sender_first_name,
+                                    data.sender.sender_surname + " " +
+                                            data.sender.sender_first_name,
                                     R.color.general_brand
                                 )
                                 {
@@ -274,34 +275,66 @@ class HistoryPageAdapter(
                         }
                         descr_transaction_1 = binding.root.context.getString(R.string.youGot)
 
-                        val spannable = SpannableStringBuilder(
-                        ).append(
-                            createClickableSpannable(
-                                "+" + root.context.getString(
-                                    R.string.amountThanks,
-                                    data.amount
-                                ),
-                                R.color.minor_success,
-                                null
+                        if (data.transactionClass.id == "W") {
+                            // В случае победы в челлендже
+                            // Я получатель
+                            val spannable = SpannableStringBuilder(
+                            ).append(
+                                createClickableSpannable(
+                                    "+" + root.context.getString(
+                                        R.string.amountThanks,
+                                        data.amount
+                                    ),
+                                    R.color.minor_success,
+                                    null
+                                )
+                            ).append(
+                                createClickableSpannable(
+                                    " " + root.context.getString(R.string.forWinningInChallenge) + " ",
+                                    R.color.black,
+                                    null
+                                )
+                            ).append(
+                                createClickableSpannable(
+                                    // Занести сюда название челленджа
+                                    data.sender?.challenge_name?.doubleQuoted() ?: "",
+                                    R.color.general_brand
+                                ) {
+                                    // TODO Переход на чалик
+                                    data.sender?.challenge_id?.let { onSomeonesClicked?.invoke(it) }
+                                }
                             )
-                        ).append(
-                            createClickableSpannable(
-                                " " + root.context.getString(R.string.from) + " ",
-                                R.color.black,
-                                null
-                            )
-                        ).append(
-                            createClickableSpannable(
-                                data.sender?.sender_surname + " " +
-                                        data.sender?.sender_first_name,
-                                R.color.general_brand
-                            )
-                            {
-                                data.sender_id?.let { onSomeonesClicked?.invoke(it) }
-                            }
+                            message.text = spannable
+                        }else{
+                            val spannable = SpannableStringBuilder(
+                            ).append(
+                                createClickableSpannable(
+                                    "+" + root.context.getString(
+                                        R.string.amountThanks,
+                                        data.amount
+                                    ),
+                                    R.color.minor_success,
+                                    null
+                                )
+                            ).append(
+                                createClickableSpannable(
+                                    " " + root.context.getString(R.string.from) + " ",
+                                    R.color.black,
+                                    null
+                                )
+                            ).append(
+                                createClickableSpannable(
+                                    data.sender?.sender_surname + " " +
+                                            data.sender?.sender_first_name,
+                                    R.color.general_brand
+                                )
+                                {
+                                    data.sender_id?.let { onSomeonesClicked?.invoke(it) }
+                                }
 
-                        )
-                        message.text = spannable
+                            )
+                            message.text = spannable
+                        }
                         labelStatusTransaction =
                             binding.root.context.getString(R.string.typeTransfer)
                         comingStatusTransaction =
@@ -348,36 +381,6 @@ class HistoryPageAdapter(
                             binding.root.context.getString(R.string.operationWasRefused)
 
                         // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
-                    } else if (status.equals("W")) {
-                        // В случае победе в челлендже
-                        // Я получатель
-                        val spannable = SpannableStringBuilder(
-                        ).append(
-                            createClickableSpannable(
-                                "+" + root.context.getString(
-                                    R.string.amountThanks,
-                                    data.amount
-                                ),
-                                R.color.minor_success,
-                                null
-                            )
-                        ).append(
-                            createClickableSpannable(
-                                " " + root.context.getString(R.string.forWinningInChallenge) + " ",
-                                R.color.black,
-                                null
-                            )
-                        ).append(
-                            createClickableSpannable(
-                                // Занести сюда название челленджа
-                                data.sender?.challenge_name ?: "",
-                                R.color.general_brand
-                            ) {
-                                // TODO Переход на чалик
-                                data.sender?.challenge_id?.let { onSomeonesClicked?.invoke(it) }
-                            }
-                        )
-                        message.text = spannable
                     }
                 }
 
