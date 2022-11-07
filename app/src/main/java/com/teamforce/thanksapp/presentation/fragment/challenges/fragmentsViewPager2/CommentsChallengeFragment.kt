@@ -31,7 +31,6 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
     private var listAdapter: ChallengeCommentAdapter? = null
 
     private var idChallenge: Int? = null
-    private var allComments: List<CommentModel> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
