@@ -85,6 +85,7 @@ class ContendersAdapter(
                 applyClickListener.invoke(currentList[position].report_id, 'W')
             }
             binding.refuseBtn.setOnClickListener {
+
                 Log.d("ContendersAdapter", "Размер списка в адаптере " + currentList.size.toString())
                 Log.d("ContendersAdapter", "Кликнутая позиция в адаптере " + position)
                 refuseClickListener.invoke(currentList[position].report_id, 'D')
@@ -95,11 +96,9 @@ class ContendersAdapter(
                 }
             }
             binding.userAvatar.setOnClickListener { view ->
-                Log.d("ContendersAdapter", "Размер списка в адаптере " + currentList.size.toString())
-                Log.d("ContendersAdapter", "Кликнутая позиция в адаптере " + position)
-//                currentList[position].participant_photo?.let { photo ->
-//                    (view as ShapeableImageView).viewSinglePhoto(photo, binding.root.context)
-//                }
+                currentList[position].participant_photo?.let { photo ->
+                    (view as ShapeableImageView).viewSinglePhoto(photo, binding.root.context)
+                }
             }
         }
 

@@ -123,6 +123,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
                         dialog.findViewById<TextInputEditText>(R.id.description_et).text.toString(),
                         idChallenge!!
                     )
+
                 }
 
                 dialog.cancel()

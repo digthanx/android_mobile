@@ -27,8 +27,9 @@ sealed class HistoryItem {
             val sender_tg_name: String?,
             val sender_first_name: String?,
             val sender_surname: String?,
-            val sender_photo: String?
-
+            val sender_photo: String?,
+            val challenge_name: String?,
+            val challenge_id: Int
         )
 
         data class Recipient(
