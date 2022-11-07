@@ -68,3 +68,4 @@ sealed class NotificationStates {
     object NotificationReceived : NotificationStates()
     data class PushTokenUpdated(val token: String, val deviceId: String) : NotificationStates()
 }
+

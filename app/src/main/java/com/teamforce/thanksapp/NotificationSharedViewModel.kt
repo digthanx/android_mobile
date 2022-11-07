@@ -22,7 +22,6 @@ class NotificationSharedViewModel @Inject constructor(
     app: Application
 ) : AndroidViewModel(app) {
     init {
-        Log.d(PushNotificationService.TAG, "init notificationsViewModel")
         if (sharedPreferences.pushToken != null) {
             val id = Settings.Secure.getString(
                 app.contentResolver,
@@ -60,9 +59,9 @@ class NotificationSharedViewModel @Inject constructor(
         }
     }
 
-    private fun checkNotifications() {
+    fun checkNotifications() {
         viewModelScope.launch {
-            delay(300)
+            delay(3000)
             state.value = 0
         }
     }

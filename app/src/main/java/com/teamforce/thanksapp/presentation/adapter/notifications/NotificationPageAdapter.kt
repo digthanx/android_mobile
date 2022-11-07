@@ -10,17 +10,45 @@ import com.teamforce.thanksapp.PushNotificationService
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemNotificationBinding
 import com.teamforce.thanksapp.databinding.SeparatorDateTimeBinding
+import com.teamforce.thanksapp.domain.models.notifications.NotificationAdditionalData
 import com.teamforce.thanksapp.domain.models.notifications.NotificationItem
 import java.lang.UnsupportedOperationException
 
-class NotificationPageAdapter:
+class NotificationPageAdapter :
     PagingDataAdapter<NotificationItem, RecyclerView.ViewHolder>(DIffCallback) {
+
+    override fun getItemViewType(position: Int): Int {
+        return when (val item = getItem(position)) {
+            is NotificationItem.NotificationModel -> {
+                return when (item.data) {
+                    is NotificationAdditionalData.NotificationChallengeDataModel -> {
+                        CHALLENGE_VIEW_TYPE
+                    }
+                    is NotificationAdditionalData.NotificationTransactionDataModel -> {
+                        TRANSACTION_VIEW_TYPE
+                    }
+                    else -> UNKNOWN_VIEW_TYPE
+                }
+            }
+            is NotificationItem.DateTimeSeparator -> {
+                DATE_TIME_SEPARATOR_VIEW_TYPE
+            }
+            null -> {
+                throw UnsupportedOperationException("Unknown view")
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         Log.d(PushNotificationService.TAG, "onCreateViewHolder: $viewType")
         return when (viewType) {
-
-            R.layout.item_notification -> {
+            TRANSACTION_VIEW_TYPE, CHALLENGE_VIEW_TYPE -> {
+                val binding = ItemNotificationBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+                NotificationViewHolder(binding)
+            }
+            UNKNOWN_VIEW_TYPE -> {
                 val binding = ItemNotificationBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
@@ -40,7 +68,7 @@ class NotificationPageAdapter:
         if (item != null) {
             when (item) {
                 is NotificationItem.NotificationModel -> {
-                    val viewHolder =holder as NotificationViewHolder
+                    val viewHolder = holder as NotificationViewHolder
                     viewHolder.bind(item)
                 }
                 is NotificationItem.DateTimeSeparator -> {
@@ -67,26 +95,18 @@ class NotificationPageAdapter:
         fun bind(data: NotificationItem.NotificationModel) {
             binding.apply {
                 dateTime.text = data.createdAt
-                description.text = data.text
-            }
-        }
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is NotificationItem.NotificationModel -> {
-                R.layout.item_notification
-            }
-            is NotificationItem.DateTimeSeparator -> {
-                R.layout.separator_date_time
-            }
-            null -> {
-                throw UnsupportedOperationException("Unknown view")
+                description.text = data.theme
             }
         }
     }
 
     companion object {
+        const val TRANSACTION_VIEW_TYPE = 1
+        const val CHALLENGE_VIEW_TYPE = 2
+        const val UNKNOWN_VIEW_TYPE = 3
+        const val DATE_TIME_SEPARATOR_VIEW_TYPE = 4
+
+
         private val DIffCallback = object : DiffUtil.ItemCallback<NotificationItem>() {
             override fun areItemsTheSame(
                 oldItem: NotificationItem,

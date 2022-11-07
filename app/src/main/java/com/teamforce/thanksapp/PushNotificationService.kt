@@ -27,8 +27,6 @@ class PushNotificationService : FirebaseMessagingService() {
     interface PushNotificationServiceEntryPoint {
         fun notificationsRepository(): NotificationsRepository
         fun sharedPreferences(): SharedPreferences
-
-
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -39,7 +37,7 @@ class PushNotificationService : FirebaseMessagingService() {
                 PushNotificationServiceEntryPoint::class.java
             )
             entryPoint.notificationsRepository().state.postValue(NotificationStates.NotificationReceived)
-            generateNotification(message.notification!!.title!!, message.notification!!.body!!)
+//            generateNotification(message.notification!!.title!!, message.notification!!.body!!)
         }
     }
 
