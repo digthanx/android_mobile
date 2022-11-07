@@ -11,7 +11,7 @@ import com.teamforce.thanksapp.R
 
 fun ImageView.viewSinglePhoto(image: String, context: Context) {
     val images = mutableListOf<String>()
-    val fullSizeImage = image.replace("_thumb", "")
+    val fullSizeImage = image.replace("_thumb", "").replace(Consts.BASE_URL, "")
     images.add(fullSizeImage)
     StfalconImageViewer.Builder<String>(context, images){ imageView, image ->
         Glide.with(this)

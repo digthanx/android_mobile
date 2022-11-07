@@ -13,7 +13,8 @@ import java.io.IOException
 
 class FeedPagingSource(
     private val api: ThanksApi,
-    private val feedMapper: FeedMapper
+    private val feedMapper: FeedMapper,
+    private val whatWouldYouLikeToGet: WhatExactlyWouldYouNeed
 ) : PagingSource<Int, FeedModel>() {
     override fun getRefreshKey(state: PagingState<Int, FeedModel>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -30,21 +31,73 @@ class FeedPagingSource(
         }
 
         return try {
-            val response = api.getEvents(
-                limit = Consts.PAGE_SIZE,
-                offset = pageIndex,
-            )
-
-            val nextKey =
-                if (response.isEmpty()) null
-                else {
-                    pageIndex + (params.loadSize / Consts.PAGE_SIZE)
+            when(whatWouldYouLikeToGet){
+                WhatExactlyWouldYouNeed.EVENTS -> {
+                    val response = api.getEvents(
+                        limit = Consts.PAGE_SIZE,
+                        offset = pageIndex,
+                    )
+                    val nextKey =
+                        if (response.isEmpty()) null
+                        else {
+                            pageIndex + (params.loadSize / Consts.PAGE_SIZE)
+                        }
+                    LoadResult.Page(
+                        data = feedMapper.mapList(response),
+                        prevKey = if (pageIndex == 1) null else pageIndex,
+                        nextKey = nextKey
+                    )
                 }
-            LoadResult.Page(
-                data = feedMapper.mapList(response),
-                prevKey = if (pageIndex == 1) null else pageIndex,
-                nextKey = nextKey
-            )
+                WhatExactlyWouldYouNeed.TRANSACTIONS -> {
+                    val response = api.getEventsTransactions(
+                        limit = Consts.PAGE_SIZE,
+                        offset = pageIndex,
+                    )
+                    val nextKey =
+                        if (response.isEmpty()) null
+                        else {
+                            pageIndex + (params.loadSize / Consts.PAGE_SIZE)
+                        }
+                    LoadResult.Page(
+                        data = feedMapper.mapList(response),
+                        prevKey = if (pageIndex == 1) null else pageIndex,
+                        nextKey = nextKey
+                    )
+                }
+                WhatExactlyWouldYouNeed.WINNERS -> {
+                    val response = api.getEventsWinners(
+                        limit = Consts.PAGE_SIZE,
+                        offset = pageIndex,
+                    )
+                    val nextKey =
+                        if (response.isEmpty()) null
+                        else {
+                            pageIndex + (params.loadSize / Consts.PAGE_SIZE)
+                        }
+                    LoadResult.Page(
+                        data = feedMapper.mapList(response),
+                        prevKey = if (pageIndex == 1) null else pageIndex,
+                        nextKey = nextKey
+                    )
+                }
+                else -> {
+                    val response = api.getEventsChallenges(
+                        limit = Consts.PAGE_SIZE,
+                        offset = pageIndex,
+                    )
+                    val nextKey =
+                        if (response.isEmpty()) null
+                        else {
+                            pageIndex + (params.loadSize / Consts.PAGE_SIZE)
+                        }
+                    LoadResult.Page(
+                        data = feedMapper.mapList(response),
+                        prevKey = if (pageIndex == 1) null else pageIndex,
+                        nextKey = nextKey
+                    )
+                }
+            }
+
 
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
@@ -52,4 +105,8 @@ class FeedPagingSource(
             return LoadResult.Error(exception)
         }
     }
+}
+
+enum class WhatExactlyWouldYouNeed(){
+    EVENTS, TRANSACTIONS, WINNERS, CHALLENGES
 }
