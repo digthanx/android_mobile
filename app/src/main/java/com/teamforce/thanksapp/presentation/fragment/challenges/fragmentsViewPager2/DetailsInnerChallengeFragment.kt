@@ -50,7 +50,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.scrollView.setFooterView(R.id.user_item)
+        binding.scrollView.setFooterView(R.id.challenge_organizer)
         loadChallengeData(idChallenge)
         setDataAboutChallengeInListener()
         checkReportSharedPref()
@@ -148,7 +148,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                     binding.stateAboutReports.text = challenge.status
                 }
 
-                binding.userItem.setOnClickListener { view ->
+                binding.challengeOrganizer.setOnClickListener { view ->
                     challenge.creator_id?.let { id ->
                         transactionToProfileOfCreator(id, view)
                     }

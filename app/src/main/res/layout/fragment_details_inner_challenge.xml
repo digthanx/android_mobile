@@ -209,7 +209,7 @@
             android:minHeight="104dp" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/user_item"
+            android:id="@+id/challenge_organizer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
