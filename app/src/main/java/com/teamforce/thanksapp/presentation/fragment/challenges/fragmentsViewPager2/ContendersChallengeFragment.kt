@@ -18,6 +18,8 @@ import com.teamforce.thanksapp.presentation.adapter.challenge.ContendersAdapter
 import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerItemDecorator
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.ContendersChallengeViewModel
+import com.teamforce.thanksapp.utils.invisible
+import com.teamforce.thanksapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -73,33 +75,6 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
 
-//        viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
-//            if (it.successResult)
-//                if (it.state == 'W') {
-//                    listOfContenders.removeAt(currentPositionItem)
-//                    contendersAdapter?.submitList(null)
-//                    contendersAdapter?.submitList(listOfContenders)
-//                    Toast.makeText(
-//                        requireContext(), requireContext().getString(R.string.applyCheckReport),
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                } else {
-//                    listOfContenders.removeAt(currentPositionItem)
-//                    Log.d(TAG, "Размер списка в фрагменте " + listOfContenders.size.toString())
-//                    contendersAdapter?.submitList(null)
-//                    contendersAdapter?.submitList(listOfContenders)
-//                    Log.d(
-//                        TAG,
-//                        "listeningResponse: размер списка adapter.currentList " + contendersAdapter?.currentList?.size
-//                    )
-//                    contendersAdapter?.notifyDataSetChanged()
-//                    Toast.makeText(
-//                        requireContext(),
-//                        requireContext().getString(R.string.deniedCheckReport),
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//        }
     }
 
     private fun loadParticipants() {
@@ -110,19 +85,19 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
     private fun setData() {
         viewModel.contenders.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
-                binding.noData.visibility = View.GONE
-             //   listOfContenders = it.toMutableList()
-               // Log.d(TAG, "setData: setdata listOfContenders.size = " + listOfContenders.size)
+                binding.noData.invisible()
+                contendersAdapter?.submitList(null)
                 contendersAdapter?.submitList(it)
             } else {
-                binding.noData.visibility = View.VISIBLE
+                binding.noData.visible()
+                binding.contendersRv.invisible()
             }
         }
     }
 
     private fun createDialog(
         reportId: Int,
-        state: Char,
+        state: Char
     ) {
         val builderDialog = AlertDialog.Builder(context, R.style.FullscreenDialogTheme)
         val inflater = requireActivity().layoutInflater
@@ -148,7 +123,6 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
                         dialog.findViewById<TextInputEditText>(R.id.description_et).text.toString(),
                         idChallenge!!
                     )
-
                 }
 
                 dialog.cancel()
@@ -167,7 +141,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
     }
 
     companion object {
-        public const val TAG = "ContendersChallengeFragment"
+        const val TAG = "ContendersChallengeFragment"
 
         @JvmStatic
         fun newInstance(challengeId: Int) =
