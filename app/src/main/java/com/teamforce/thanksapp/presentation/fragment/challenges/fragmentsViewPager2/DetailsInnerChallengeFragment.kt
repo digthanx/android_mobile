@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -21,6 +22,7 @@ import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesStatus
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsInnerChallengerViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
+import com.teamforce.thanksapp.utils.isViewVisible
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -54,6 +56,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //binding.scrollView.setFooterView(R.id.challenge_organizer)
+        setupStickyFooter()
         loadChallengeData(idChallenge)
         setDataAboutChallengeInListener()
         checkReportSharedPref()
@@ -66,6 +69,13 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                 bundle,
                 OptionsTransaction().optionForEditProfile
             )
+        }
+    }
+
+    private fun setupStickyFooter() {
+        binding.challengeOrganizerSticky.isVisible = binding.scrollView.isViewVisible(binding.challengeOrganizer) == false
+        binding.scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            binding.challengeOrganizerSticky.isVisible = binding.scrollView.isViewVisible(binding.challengeOrganizer) == false
         }
     }
 
@@ -135,11 +145,25 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                         challenge.creator_tg_name
                     )
                 )
+
+                // Дублирование для стики вью
+                binding.userTgNameSticky.setText(
+                    String.format(
+                        requireContext().getString(R.string.tgName),
+                        challenge.creator_tg_name
+                    )
+                )
                 if (!challenge.creator_photo.isNullOrEmpty()) {
                     Glide.with(requireContext())
                         .load("${Consts.BASE_URL}${challenge.creator_photo}".toUri())
                         .apply(RequestOptions.bitmapTransform(CircleCrop()))
                         .into(binding.userAvatar)
+
+                    // Дублирование для стики вью
+                    Glide.with(requireContext())
+                        .load("${Consts.BASE_URL}${challenge.creator_photo}".toUri())
+                        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .into(binding.userAvatarSticky)
                 }
 
                 if (challenge.status.isNullOrEmpty()) {
@@ -151,6 +175,13 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                 }
 
                 binding.challengeOrganizer.setOnClickListener { view ->
+                    challenge.creator_id?.let { id ->
+                        transactionToProfileOfCreator(id, view)
+                    }
+                }
+
+                // Дублирование для стики вью
+                binding.challengeOrganizerSticky.setOnClickListener { view ->
                     challenge.creator_id?.let { id ->
                         transactionToProfileOfCreator(id, view)
                     }
