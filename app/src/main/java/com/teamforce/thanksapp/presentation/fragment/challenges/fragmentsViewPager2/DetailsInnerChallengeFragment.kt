@@ -1,8 +1,11 @@
 package com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPager2
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -50,7 +53,7 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.scrollView.setFooterView(R.id.challenge_organizer)
+        //binding.scrollView.setFooterView(R.id.challenge_organizer)
         loadChallengeData(idChallenge)
         setDataAboutChallengeInListener()
         checkReportSharedPref()
@@ -82,7 +85,6 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
             viewModel.loadChallenge(it)
         }
     }
-
 
     private fun checkReportSharedPref() {
         val sharedPref = requireContext().getSharedPreferences("report", 0)
@@ -246,6 +248,8 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
     }
 
     companion object {
+
+        const val TAG = "DetailsInnerChallengeFragment"
 
         @JvmStatic
         fun newInstance(challengeId: Int) =

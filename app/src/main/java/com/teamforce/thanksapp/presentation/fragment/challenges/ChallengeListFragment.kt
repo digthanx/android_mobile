@@ -121,6 +121,7 @@ class ChallengeListFragment : Fragment(R.layout.fragment_challenge_list) {
     override fun onDestroyView() {
         super.onDestroyView()
         binding.challengeRv.adapter = null
+        listAdapter = null
     }
 
     companion object {
