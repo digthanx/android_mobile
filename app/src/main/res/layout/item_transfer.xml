@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/transfer_icon_iv"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:src="@drawable/ic_anon_avatar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,14 +42,16 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="5dp"
             android:clickable="true"
             android:focusable="true"
-            android:text=""
-            android:textAppearance="@style/Body2"
+            android:maxWidth="300dp"
+            android:scrollHorizontally="false"
+            android:text="Вы отправили 12 спасибок Иванченко Андрею, а потом произошло не что "
+            android:textAppearance="@style/SmallText2Medium.Black"
             app:layout_constraintStart_toEndOf="@id/transfer_icon_iv"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/transfer_icon_iv" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/status_card"
@@ -77,7 +79,8 @@
             android:id="@+id/scrollForChipGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/status_card"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/transfer_icon_iv"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/transfer_icon_iv">
             <HorizontalScrollView
@@ -93,10 +96,6 @@
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
         </ScrollView>
-
-
-
-
 
         <TextView
             android:id="@+id/valueTransfer"
@@ -115,21 +114,12 @@
             android:id="@+id/refuse_transaction_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginBottom="-3dp"
             android:background="@color/transparent"
             android:src="@drawable/ic__cross_red"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/status_card"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@color/superLightGray"/>
+            app:layout_constraintBottom_toTopOf="@id/scrollForChipGroup"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

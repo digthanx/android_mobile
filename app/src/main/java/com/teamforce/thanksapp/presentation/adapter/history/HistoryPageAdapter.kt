@@ -134,7 +134,7 @@ class HistoryPageAdapter(
                             root.context.getString(
                                 R.string.amountThanks,
                                 data.amount
-                            ),
+                            ) + " ",
                             R.color.minor_success,
                             null
                         )
@@ -225,7 +225,7 @@ class HistoryPageAdapter(
                         comingStatusTransaction =
                             binding.root.context.getString(R.string.comingTransfer)
                     } else {
-                        // Ты получатель
+                        // Я получатель
                         if (!data.sender?.sender_photo.isNullOrEmpty()) {
                             Glide.with(binding.root.context)
                                 .load("${Consts.BASE_URL}${data.sender?.sender_photo}".toUri())
@@ -236,7 +236,6 @@ class HistoryPageAdapter(
                         }
                         descr_transaction_1 = binding.root.context.getString(R.string.youGot)
 
-                        // Я получатель
                         val spannable = SpannableStringBuilder(
                         ).append(
                             createClickableSpannable(
