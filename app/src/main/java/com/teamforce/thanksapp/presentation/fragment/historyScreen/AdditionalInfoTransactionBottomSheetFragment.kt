@@ -81,13 +81,20 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
         super.onViewCreated(view, savedInstanceState)
         with(binding){
             dateTransactionTv.text = dateTransaction
-            descriptionTransactionYouDo.text = descr_transaction_1
+            descriptionTransactionYouDo.text = descr_transaction_1 + " "
             descriptionTransactionWho.text = descr_transaction_2_who
             descriptionTransactionAmountText.text = descr_transaction_3_amount
             valueTransfer.text = amount_thanks
-            reasonTransaction.text = reason_transaction
             labelStatusTransaction.text = label_status_transaction
             statusTransaction.text = status_transaction
+        }
+        if(reason_transaction.isNullOrEmpty()){
+            binding.reasonTransaction.visibility = View.GONE
+            binding.reasonTransactionLabel.visibility = View.GONE
+        }else{
+            binding.reasonTransaction.visibility = View.VISIBLE
+            binding.reasonTransactionLabel.visibility = View.VISIBLE
+            binding.reasonTransaction.text = reason_transaction
         }
         if(we_refused_your != null){
             binding.currencyTransaction.visibility = View.GONE

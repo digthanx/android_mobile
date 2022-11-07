@@ -129,7 +129,6 @@ class HistoryListFragment : Fragment(R.layout.fragment_history_list) {
         )
     }
     private fun onSomeonesClicked(userId: Int){
-        Log.d(HistoryPageAdapter.TAG, "Im inner method click upon user")
         val bundle = Bundle()
         bundle.putInt(Consts.USER_ID, userId)
         findNavController().navigate(

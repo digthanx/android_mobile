@@ -152,7 +152,6 @@ class HistoryPageAdapter(
                         ) {
                             data.recipient_id?.let {
                                 onSomeonesClicked(it)
-                                Log.d(TAG, "bindUser: ${it} clicked")
                             }
                         }
                     )
@@ -394,7 +393,10 @@ class HistoryPageAdapter(
                 chipGroup.removeAllViews()
 
                 if (!data.tags.isNullOrEmpty()) {
+                    binding.scrollForChipGroup.visibility = View.VISIBLE
                     setTags(chipGroup, data.tags)
+                }else{
+                    binding.scrollForChipGroup.visibility = View.GONE
                 }
 
                 convertDataToNecessaryFormat(data)
