@@ -70,7 +70,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 Log.d("Token", "CroppedPhoto - ${pathCroppedPhoto}")
                 val imageUri = result.uriContent
                 if (imageUri != null && pathCroppedPhoto != null && pathOrigPhoto != null) {
-                    uriToMultipart(imageUri, pathOrigPhoto.toString(), pathCroppedPhoto)
+                    uriToMultipart(imageUri, pathOrigPhoto, pathCroppedPhoto)
                 }
 
             }
