@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -264,20 +265,28 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         requestMultiplePermissionsLauncher.launch(array)
     }
 
-    private fun showDialogAboutPermissions(){
+    private fun showDialogAboutPermissions() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.explainingAboutPermissions))
 
             .setNegativeButton(resources.getString(R.string.close)) { dialog, _ ->
                 dialog.cancel()
             }
-            .setPositiveButton(resources.getString(R.string.good)) { dialog, which ->
+            .setPositiveButton(resources.getString(R.string.settings)) { dialog, which ->
                 dialog.cancel()
+                val reqIntent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    .apply {
+                        val uri = Uri.fromParts("package", "com.teamforce.thanksapp", null)
+                        data = uri
+                    }
+                startActivity(reqIntent)
                 // Почему то повторно не запрашивается разрешение
-               // requestPermissions()
+                // requestPermissions()
             }
             .show()
     }
+
+
 
 
     private fun initViews() {

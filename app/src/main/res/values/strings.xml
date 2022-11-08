@@ -47,7 +47,7 @@
         Данные разрешения нам нужны для обновления аватара.
         Вы можете разрешить их в настройках телефона.</string>
     <string name="avatar">Аватар</string>
-    <string name="good">Хорошо</string>
+    <string name="settings">Настройки</string>
     <string name="stringData">Личную информацию</string>
     <string name="exit">Выйти</string>
     <string name="close">Закрыть</string>
