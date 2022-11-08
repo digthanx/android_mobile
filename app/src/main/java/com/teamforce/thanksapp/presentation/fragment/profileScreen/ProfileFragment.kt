@@ -44,7 +44,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { result ->
-            if(result[Manifest.permission.READ_EXTERNAL_STORAGE] == true ||
+            if(result[Manifest.permission.READ_EXTERNAL_STORAGE] == true &&
                     result[Manifest.permission.CAMERA] == true){
                 Toast.makeText(
                     requireContext(),
