@@ -43,7 +43,11 @@
     <string name="accept">Да</string>
     <string name="decline">Нет</string>
     <string name="whatEditInProfile">Что именно вы хотите отредактировать?</string>
+    <string name="explainingAboutPermissions">Вы не дали нам достаточно разрешений.
+        Данные разрешения нам нужны для обновления аватара.
+        Вы можете разрешить их в настройках телефона.</string>
     <string name="avatar">Аватар</string>
+    <string name="good">Хорошо</string>
     <string name="stringData">Личную информацию</string>
     <string name="exit">Выйти</string>
     <string name="close">Закрыть</string>
