@@ -9,6 +9,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.data.SharedPreferences
 import com.teamforce.thanksapp.data.entities.notifications.PushTokenEntity
+import com.teamforce.thanksapp.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -61,8 +62,11 @@ class NotificationSharedViewModel @Inject constructor(
 
     fun checkNotifications() {
         viewModelScope.launch {
-            delay(3000)
-            state.value = 0
+            when (val result = notificationsRepository.getUnreadNotificationsAmount()) {
+                is ResultWrapper.Success -> state.value = result.value.unreadNotificationsAmount
+                else -> state.value = 0
+            }
+
         }
     }
 

@@ -1,11 +1,8 @@
 package com.teamforce.thanksapp.data.api
 
-import com.teamforce.thanksapp.data.entities.notifications.NotificationEntity
-import com.teamforce.thanksapp.data.entities.notifications.PushTokenEntity
-import com.teamforce.thanksapp.data.entities.notifications.RemovePushTokenEntity
-import com.teamforce.thanksapp.data.entities.notifications.RemovePushTokenResultEntity
 import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEntity
 import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
+import com.teamforce.thanksapp.data.entities.notifications.*
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.request.*
@@ -272,4 +269,6 @@ interface ThanksApi {
     ): List<NotificationEntity>
 
 
+    @GET("/notifications/unread/amount/")
+    suspend fun getUnreadNotificationAmount(): UnreadNotificationsAmountEntity
 }

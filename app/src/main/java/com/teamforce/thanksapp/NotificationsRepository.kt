@@ -6,10 +6,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.teamforce.thanksapp.data.api.ThanksApi
-import com.teamforce.thanksapp.data.entities.notifications.NotificationEntity
-import com.teamforce.thanksapp.data.entities.notifications.PushTokenEntity
-import com.teamforce.thanksapp.data.entities.notifications.RemovePushTokenEntity
-import com.teamforce.thanksapp.data.entities.notifications.RemovePushTokenResultEntity
+import com.teamforce.thanksapp.data.entities.notifications.*
 import com.teamforce.thanksapp.data.sources.notifications.NotificationsPagingSource
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.ResultWrapper
@@ -59,6 +56,12 @@ class NotificationsRepository @Inject constructor(
                     deviceId, userId!!
                 )
             )
+        }
+    }
+
+    suspend fun getUnreadNotificationsAmount(): ResultWrapper<UnreadNotificationsAmountEntity> {
+        return safeApiCall(Dispatchers.IO) {
+            thanksApi.getUnreadNotificationAmount()
         }
     }
 }

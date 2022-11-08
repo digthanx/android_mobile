@@ -1,9 +1,8 @@
 package com.teamforce.thanksapp.domain.models.notifications
 
-import java.util.*
+import com.teamforce.thanksapp.data.entities.notifications.NotificationCommentData
 
-sealed class NotificationItem(
-) {
+sealed class NotificationItem {
     data class NotificationModel(
         val id: Int,
         val theme: String,
@@ -15,13 +14,10 @@ sealed class NotificationItem(
 
     data class DateTimeSeparator(
         val date: String,
-        val uuid: UUID = UUID.randomUUID()
     ) : NotificationItem()
 }
 
-
 sealed class NotificationAdditionalData {
-
     data class NotificationTransactionDataModel(
         val amount: Int,
         val status: String,
@@ -44,8 +40,45 @@ sealed class NotificationAdditionalData {
         val creatorPhoto: String?
     ) : NotificationAdditionalData()
 
-    object Unknown : NotificationAdditionalData()
 
+    data class NotificationChallengeReportDataModel(
+        val reportId: Int,
+        val challengeId: Int,
+        val challengeName: String,
+        val reportSenderPhoto: String?,
+        val reportSenderSurname: String,
+        val reportSenderTgName: String,
+        val reportSenderFirstName: String
+    ) : NotificationAdditionalData()
+
+
+    data class NotificationChallengeWinnerDataModel(
+        val prize: Int,
+        val challengeId: Int,
+        val challengeName: String,
+        val challengeReportId: Int
+    ) : NotificationAdditionalData()
+
+    data class NotificationReactionDataModel(
+        val transactionId: Int?,
+        val commentId: Int?,
+        val challengeId: Int?,
+        val reactionFromPhoto: String?,
+        val reactionFromTgName: String,
+        val reactionFromSurname: String,
+        val reactionFromFirstName: String
+    ) : NotificationAdditionalData()
+
+    data class NotificationCommentDataModel(
+        val transactionId: Int?,
+        val challengeId: Int?,
+        val commentFromPhoto: String?,
+        val commentFromTgName: String,
+        val commentFromSurname: String,
+        val commentFromFirstName: String
+    ) : NotificationAdditionalData()
+
+    object Unknown : NotificationAdditionalData()
 }
 
 enum class NotificationType {
@@ -53,5 +86,9 @@ enum class NotificationType {
     Challenge,
     Comment,
     Like,
+    ChallengeWinner,
+    Report,
     Unknown
 }
+
+

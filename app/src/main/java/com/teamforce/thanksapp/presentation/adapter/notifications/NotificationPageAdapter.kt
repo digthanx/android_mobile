@@ -7,12 +7,10 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.teamforce.thanksapp.PushNotificationService
-import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemNotificationBinding
 import com.teamforce.thanksapp.databinding.SeparatorDateTimeBinding
 import com.teamforce.thanksapp.domain.models.notifications.NotificationAdditionalData
 import com.teamforce.thanksapp.domain.models.notifications.NotificationItem
-import java.lang.UnsupportedOperationException
 
 class NotificationPageAdapter :
     PagingDataAdapter<NotificationItem, RecyclerView.ViewHolder>(DIffCallback) {
@@ -21,12 +19,12 @@ class NotificationPageAdapter :
         return when (val item = getItem(position)) {
             is NotificationItem.NotificationModel -> {
                 return when (item.data) {
-                    is NotificationAdditionalData.NotificationChallengeDataModel -> {
-                        CHALLENGE_VIEW_TYPE
-                    }
-                    is NotificationAdditionalData.NotificationTransactionDataModel -> {
-                        TRANSACTION_VIEW_TYPE
-                    }
+                    is NotificationAdditionalData.NotificationChallengeDataModel -> CHALLENGE_VIEW_TYPE
+                    is NotificationAdditionalData.NotificationTransactionDataModel -> TRANSACTION_VIEW_TYPE
+                    is NotificationAdditionalData.NotificationCommentDataModel -> COMMENT_VIEW_TYPE
+                    is NotificationAdditionalData.NotificationReactionDataModel -> LIKE_VIEW_TYPE
+                    is NotificationAdditionalData.NotificationChallengeWinnerDataModel -> WINNER_VIEW_TYPE
+                    is NotificationAdditionalData.NotificationChallengeReportDataModel -> CHALLENGE_REPORT_VIEW_TYPE
                     else -> UNKNOWN_VIEW_TYPE
                 }
             }
@@ -42,13 +40,8 @@ class NotificationPageAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         Log.d(PushNotificationService.TAG, "onCreateViewHolder: $viewType")
         return when (viewType) {
-            TRANSACTION_VIEW_TYPE, CHALLENGE_VIEW_TYPE -> {
-                val binding = ItemNotificationBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-                )
-                NotificationViewHolder(binding)
-            }
-            UNKNOWN_VIEW_TYPE -> {
+            TRANSACTION_VIEW_TYPE, CHALLENGE_VIEW_TYPE, COMMENT_VIEW_TYPE, LIKE_VIEW_TYPE,
+            WINNER_VIEW_TYPE, CHALLENGE_REPORT_VIEW_TYPE -> {
                 val binding = ItemNotificationBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
@@ -105,6 +98,10 @@ class NotificationPageAdapter :
         const val CHALLENGE_VIEW_TYPE = 2
         const val UNKNOWN_VIEW_TYPE = 3
         const val DATE_TIME_SEPARATOR_VIEW_TYPE = 4
+        const val CHALLENGE_REPORT_VIEW_TYPE = 5
+        const val COMMENT_VIEW_TYPE = 6
+        const val LIKE_VIEW_TYPE = 7
+        const val WINNER_VIEW_TYPE = 8
 
 
         private val DIffCallback = object : DiffUtil.ItemCallback<NotificationItem>() {
@@ -117,7 +114,7 @@ class NotificationPageAdapter :
                         oldItem.id == newItem.id) ||
                         (oldItem is NotificationItem.DateTimeSeparator &&
                                 newItem is NotificationItem.DateTimeSeparator &&
-                                oldItem.uuid == newItem.uuid)
+                                oldItem.date == newItem.date)
             }
 
             override fun areContentsTheSame(

@@ -42,7 +42,9 @@ class MainActivity : AppCompatActivity(), IMainAction {
 
     override fun onResume() {
         super.onResume()
-        notificationsSharedViewModel.checkNotifications()
+        if(viewModel.isUserAuthorized()) {
+            notificationsSharedViewModel.checkNotifications()
+        }
     }
 
 

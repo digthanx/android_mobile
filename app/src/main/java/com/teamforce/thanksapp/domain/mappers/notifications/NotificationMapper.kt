@@ -1,8 +1,6 @@
 package com.teamforce.thanksapp.domain.mappers.notifications
 
-import com.teamforce.thanksapp.data.entities.notifications.NotificationChallengeDataEntity
-import com.teamforce.thanksapp.data.entities.notifications.NotificationEntity
-import com.teamforce.thanksapp.data.entities.notifications.NotificationTransactionDataEntity
+import com.teamforce.thanksapp.data.entities.notifications.*
 import com.teamforce.thanksapp.domain.models.notifications.NotificationAdditionalData
 import com.teamforce.thanksapp.domain.models.notifications.NotificationItem
 import com.teamforce.thanksapp.domain.models.notifications.NotificationType
@@ -19,6 +17,10 @@ class NotificationMapper @Inject constructor() {
             data = when (mapType(from.type)) {
                 NotificationType.Transaction -> mapNotificationTransactionData(from.transactionData!!)
                 NotificationType.Challenge -> mapNotificationChallengeData(from.challengeData!!)
+                NotificationType.Comment -> mapNotificationCommentData(from.commentData!!)
+                NotificationType.Report -> mapNotificationChallengeReportData(from.reportData!!)
+                NotificationType.ChallengeWinner -> mapNotificationChallengeWinnerData(from.winnerData!!)
+                NotificationType.Like -> mapNotificationReactionData(from.likeData!!)
                 else -> NotificationAdditionalData.Unknown
             }
         )
@@ -31,6 +33,8 @@ class NotificationMapper @Inject constructor() {
             "h" -> NotificationType.Challenge
             "c" -> NotificationType.Comment
             "l" -> NotificationType.Like
+            "w" -> NotificationType.ChallengeWinner
+            "r" -> NotificationType.Report
             else -> NotificationType.Unknown
         }
     }
@@ -58,6 +62,50 @@ class NotificationMapper @Inject constructor() {
             creatorFirstName = from.creatorFirstName ?: "",
             creatorSurname = from.creatorSurname ?: "",
             creatorPhoto = from.creatorPhoto
+        )
+    }
+
+    private fun mapNotificationChallengeReportData(from: NotificationChallengeReportData): NotificationAdditionalData.NotificationChallengeReportDataModel {
+        return NotificationAdditionalData.NotificationChallengeReportDataModel(
+            reportId = from.reportId,
+            challengeId = from.challengeId,
+            challengeName = from.challengeName ?: "Unknown",
+            reportSenderPhoto = from.reportSenderPhoto,
+            reportSenderSurname = from.reportSenderSurname ?: "",
+            reportSenderTgName = from.reportSenderTgName ?: "Unknown",
+            reportSenderFirstName = from.reportSenderFirstName ?: " "
+        )
+    }
+
+    private fun mapNotificationChallengeWinnerData(from: NotificationChallengeWinnerData): NotificationAdditionalData.NotificationChallengeWinnerDataModel {
+        return NotificationAdditionalData.NotificationChallengeWinnerDataModel(
+            prize = from.prize,
+            challengeId = from.challengeId,
+            challengeName = from.challengeName ?: "Unknown",
+            challengeReportId = from.challengeReportId
+        )
+    }
+
+    private fun mapNotificationReactionData(from: NotificationReactionData): NotificationAdditionalData.NotificationReactionDataModel {
+        return NotificationAdditionalData.NotificationReactionDataModel(
+            transactionId = from.transactionId,
+            commentId = from.commentId,
+            challengeId = from.challengeId,
+            reactionFromPhoto = from.reactionFromPhoto,
+            reactionFromTgName = from.reactionFromTgName ?: "Unknown",
+            reactionFromSurname = from.reactionFromSurname ?: "",
+            reactionFromFirstName = from.reactionFromFirstName ?: ""
+        )
+    }
+
+    private fun mapNotificationCommentData(from: NotificationCommentData): NotificationAdditionalData.NotificationCommentDataModel {
+        return NotificationAdditionalData.NotificationCommentDataModel(
+            transactionId = from.transactionId,
+            challengeId = from.challengeId,
+            commentFromPhoto = from.commentFromPhoto,
+            commentFromFirstName = from.commentFromFirstName ?: "",
+            commentFromSurname = from.commentFromSurname ?: "",
+            commentFromTgName = from.commentFromTgName ?: "Unknown"
         )
     }
 }
