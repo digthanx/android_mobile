@@ -187,7 +187,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     private val resultLauncher =
         registerForActivityResult(CropImageContract()) { result ->
             if (result.isSuccessful && result.uriContent != null) {
-                val pathCroppedPhoto = result.getUriFilePath(requireContext(), false)
+                val pathCroppedPhoto = result.getUriFilePath(requireContext(), true)
                 if (pathCroppedPhoto != null) {
                     uriToMultipart(pathCroppedPhoto)
                 }

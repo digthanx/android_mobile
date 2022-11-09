@@ -57,7 +57,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         registerForActivityResult(CropImageContract()) { result ->
             if (result.isSuccessful && result.uriContent != null) {
                 val pathCroppedPhoto = result.getUriFilePath(requireContext())
-//                val pathOrigPhoto = result.originalUri?.let { getPath(requireContext(), it) }
                 val pathOrigPhoto =
                     result.originalUri?.let { getFilePathFromUri(requireContext(), it, false) }
                 Log.d("Token", "OrigPhoto - ${pathOrigPhoto}")
