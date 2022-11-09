@@ -61,7 +61,7 @@ tools:context=".presentation.fragment.challenges.ChallengesFragment">
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:scaleType="matrix"
-                    android:src="@drawable/smile"
+                    android:src="@drawable/ic_auth_icon"
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
             </LinearLayout>
             <FrameLayout

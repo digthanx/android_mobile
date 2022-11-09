@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:scaleType="matrix"
-                        android:src="@drawable/smile" />
+                        android:src="@drawable/ic_auth_icon" />
                 </LinearLayout>
 
                 <FrameLayout
