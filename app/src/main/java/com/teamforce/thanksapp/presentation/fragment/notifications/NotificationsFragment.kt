@@ -2,10 +2,12 @@ package com.teamforce.thanksapp.presentation.fragment.notifications
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +17,11 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentNotificationsBinding
 import com.teamforce.thanksapp.presentation.adapter.history.HistoryLoadStateAdapter
 import com.teamforce.thanksapp.presentation.adapter.notifications.NotificationPageAdapter
+import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
 import com.teamforce.thanksapp.presentation.viewmodel.NotificationsViewModel
+import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.OptionsTransaction
+import com.teamforce.thanksapp.utils.navigateSafely
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -75,14 +81,29 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
     }
 
     private fun onUserClicked(userId: Int) {
-
+        findNavController().navigate(
+            R.id.action_global_someonesProfileFragment,
+            bundleOf(Consts.USER_ID to userId),
+            OptionsTransaction().optionForAdditionalInfoFeedFragment
+        )
     }
 
-    private fun onTransactionClicked() {
+    private fun onTransactionClicked(transactionId: Int) {
+        findNavController().navigate(
+            R.id.action_notificationsFragment_to_additionalInfoFeedItemFragment2,
+            bundleOf(
+                Consts.TRANSACTION_ID to transactionId,
+            ),
+            OptionsTransaction().optionForEditProfile
 
+        )
     }
 
     private fun onChallengeClicked(challengeId: Int) {
-
+        findNavController().navigateSafely(
+            R.id.action_global_detailsMainChallengeFragment,
+            bundleOf(ChallengesConsts.CHALLENGER_ID to challengeId),
+            OptionsTransaction().optionForAdditionalInfoFeedFragment
+        )
     }
 }

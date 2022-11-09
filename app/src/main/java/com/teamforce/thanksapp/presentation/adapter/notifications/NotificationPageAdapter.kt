@@ -25,10 +25,11 @@ import com.teamforce.thanksapp.presentation.activity.MainActivity
 import com.teamforce.thanksapp.presentation.adapter.feed.NewFeedAdapter
 import com.teamforce.thanksapp.utils.doubleQuoted
 import com.teamforce.thanksapp.utils.username
+import java.lang.NumberFormatException
 
 class NotificationPageAdapter(
     private val onUserClicked: (userId: Int) -> Unit,
-    private val onTransactionClicked: () -> Unit,
+    private val onTransactionClicked: (transactionId: Int) -> Unit,
     private val onChallengeClicked: (challengeId: Int) -> Unit,
 
     ) : PagingDataAdapter<NotificationItem, RecyclerView.ViewHolder>(DIffCallback) {
@@ -129,6 +130,7 @@ class NotificationPageAdapter(
         }
 
         private fun bindTransaction(data: NotificationItem.NotificationModel) {
+            val data = data.data as NotificationAdditionalData.NotificationTransactionDataModel
             binding.apply {
                 val spannable = SpannableStringBuilder()
                     .append(
@@ -142,7 +144,7 @@ class NotificationPageAdapter(
                         createClickableSpannable(
                             binding.root.context.getString(
                                 R.string.amountThanks,
-                                (data.data as NotificationAdditionalData.NotificationTransactionDataModel).amount.toString()
+                                data.amount.toString()
                             ) + " ",
                             R.color.minor_success,
                             null
@@ -151,23 +153,40 @@ class NotificationPageAdapter(
                         root.context.getString(R.string.from) + " "
                     ).append(
                         createClickableSpannable(
-                            data.data.senderTgName.username(),
+                            data.senderTgName.username(),
                             R.color.general_brand,
                         ) {
-                            // TODO: handle click on username
+                            if (data.senderId != null) {
+                                try {
+                                    onUserClicked(data.senderId.toInt())
+                                } catch (e: NumberFormatException) {
+
+                                }
+                            }
                         }
                     )
                 binding.description.text = spannable
             }
+
+            binding.root.setOnClickListener {
+                onTransactionClicked(data.transactionId)
+            }
         }
 
         private fun bindComment(data: NotificationItem.NotificationModel) {
-
+            val targetType: Targets
             val data = data.data as NotificationAdditionalData.NotificationCommentDataModel
             val target =
-                if (data.transactionId != null) binding.root.context.getString(R.string.to_transaction)
-                else if (data.challengeId != null) binding.root.context.getString(R.string.to_challenge)
-                else binding.root.context.getString(R.string.to_your_report)
+                if (data.transactionId != null) {
+                    targetType = Targets.Transaction
+                    binding.root.context.getString(R.string.to_transaction)
+                } else if (data.challengeId != null) {
+                    targetType = Targets.Challenge
+                    binding.root.context.getString(R.string.to_challenge)
+                } else {
+                    targetType = Targets.Report
+                    binding.root.context.getString(R.string.to_your_report)
+                }
 
             binding.apply {
                 val spannable = SpannableStringBuilder()
@@ -175,7 +194,21 @@ class NotificationPageAdapter(
                         root.context.getString(R.string.new_comment_to) + " "
                     )
                     .append(createClickableSpannable(target, R.color.general_brand) {
-                        // TODO: handle clicking on comment
+                        when (targetType) {
+                            Targets.Challenge -> {
+                                if (data.challengeId != null) {
+                                    onChallengeClicked(data.challengeId)
+                                }
+                            }
+                            Targets.Transaction -> {
+                                if (data.transactionId != null) {
+                                    onTransactionClicked(data.transactionId)
+                                }
+                            }
+                            else -> {
+                                //nothing to do
+                            }
+                        }
                     })
                 description.text = spannable
             }
@@ -183,10 +216,19 @@ class NotificationPageAdapter(
 
         private fun bindReaction(data: NotificationItem.NotificationModel) {
             val data = data.data as NotificationAdditionalData.NotificationReactionDataModel
+            val targetType: Targets
+
             val target =
-                if (data.challengeId != null) binding.root.context.getString(R.string.challenge)
-                else if (data.transactionId != null) binding.root.context.getString(R.string.transaction)
-                else binding.root.context.getString(R.string.your_report)
+                if (data.challengeId != null) {
+                    targetType = Targets.Challenge
+                    binding.root.context.getString(R.string.challenge)
+                } else if (data.transactionId != null) {
+                    targetType = Targets.Transaction
+                    binding.root.context.getString(R.string.transaction)
+                } else {
+                    targetType = Targets.Report
+                    binding.root.context.getString(R.string.your_report)
+                }
 
             binding.apply {
                 val spannable = SpannableStringBuilder()
@@ -197,7 +239,21 @@ class NotificationPageAdapter(
                         target,
                         R.color.general_brand
                     ) {
-                        // TODO: handle click on reaction
+                        when (targetType) {
+                            Targets.Transaction -> {
+                                if (data.transactionId != null) {
+                                    onTransactionClicked(data.transactionId)
+                                }
+                            }
+                            Targets.Challenge -> {
+                                if (data.challengeId != null) {
+                                    onChallengeClicked(data.challengeId)
+                                }
+                            }
+                            else -> {
+                                //nothing to do
+                            }
+                        }
                     })
                 description.text = spannable
             }
@@ -212,7 +268,7 @@ class NotificationPageAdapter(
                         data.challengeName.doubleQuoted(),
                         R.color.general_brand,
                     ) {
-                        // TODO: handle on challenge click
+                        onChallengeClicked(data.challengeId)
                     })
                 description.text = spannable
             }
@@ -228,7 +284,7 @@ class NotificationPageAdapter(
                         data.challengeName.doubleQuoted(),
                         R.color.general_brand
                     ) {
-                        // TODO: handle click challenge
+                        onChallengeClicked(data.challengeId)
                     })
                 description.text = spannable
             }
@@ -243,7 +299,7 @@ class NotificationPageAdapter(
                         data.challengeName.doubleQuoted(),
                         R.color.general_brand
                     ) {
-                        // TODO: handle click challenge
+                        onChallengeClicked(data.challengeId)
                     })
                 description.text = spannable
             }

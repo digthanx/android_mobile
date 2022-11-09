@@ -22,7 +22,7 @@ sealed class NotificationAdditionalData {
     data class NotificationTransactionDataModel(
         val amount: Int,
         val status: String,
-        val senderId: String,
+        val senderId: String?,
         val recipientId: Int,
         val senderTgName: String,
         val recipientTgName: String,

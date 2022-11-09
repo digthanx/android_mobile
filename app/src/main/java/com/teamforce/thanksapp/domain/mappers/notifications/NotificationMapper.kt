@@ -54,7 +54,7 @@ class NotificationMapper @Inject constructor(
         return NotificationAdditionalData.NotificationTransactionDataModel(
             amount = from.amount,
             status = from.status,
-            senderId = from.senderId ?: "Unknown",
+            senderId = from.senderId,
             recipientId = from.recipientId,
             senderTgName = from.senderTgName ?: "Unknown",
             recipientTgName = from.recipientTgName ?: "Unknown",

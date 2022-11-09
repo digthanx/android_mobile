@@ -220,5 +220,13 @@
     <fragment
         android:id="@+id/notificationsFragment"
         android:name="com.teamforce.thanksapp.presentation.fragment.notifications.NotificationsFragment"
-        android:label="NotificationsFragment" />
+        android:label="NotificationsFragment" >
+        <action
+            android:id="@+id/action_notificationsFragment_to_additionalInfoFeedItemFragment2"
+            app:destination="@id/additionalInfoFeedItemFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/additionalInfoFeedItemFragment2"
+        android:name="com.teamforce.thanksapp.presentation.fragment.feedScreen.AdditionalInfoFeedItemFragment"
+        android:label="AdditionalInfoFeedItemFragment" />
 </navigation>
