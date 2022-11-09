@@ -4,6 +4,7 @@ import com.teamforce.thanksapp.BuildConfig
 import com.teamforce.thanksapp.presentation.activity.MainActivity
 
 object Consts {
+    const val PACKAGE_NAME = "com.teamforce.thanksapp"
     const val AMOUNT_THANKS = "amount_thanks"
     const val DESCRIPTION_OF_TRANSACTION = "descriptionOfTransaction"
     const val RECEIVER_TG = "receiverTG"

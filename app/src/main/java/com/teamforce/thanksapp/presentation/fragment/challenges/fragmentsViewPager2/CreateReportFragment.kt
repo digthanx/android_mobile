@@ -3,15 +3,24 @@ package com.teamforce.thanksapp.presentation.fragment.challenges.fragmentsViewPa
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentCreateReportBinding
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
@@ -35,14 +44,11 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (!isGranted) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.grant_permission),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+        ) { isGranted ->
+            if (isGranted) {
+                addPhotoFromIntent(useGallery = true, useCamera = true)
+            } else {
+                showDialogAboutPermissions()
             }
         }
 
@@ -168,8 +174,7 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
 
     private fun attachDetachImageInPreview() {
         binding.attachImageBtn.setOnClickListener {
-            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            addPhotoFromIntent()
+            showPhoneStatePermission()
         }
 
         binding.detachImgBtn.setOnClickListener {
@@ -181,37 +186,92 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
 
 
     private val resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-                Log.d(ProfileFragment.TAG, "${result.data?.data}:")
-                val path = getPath(requireContext(), result.data?.data!!)
-                val imageUri = result.data!!.data
-                if (imageUri != null && path != null) {
-                    binding.showAttachedImgCard.visibility = View.VISIBLE
-                    Glide.with(this)
-                        .load(imageUri)
-                        .centerCrop()
-                        .into(binding.image)
-                    uriToMultipart(path)
-                }
+        registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful && result.uriContent != null) {
+            val pathCroppedPhoto = result.getUriFilePath(requireContext(), false)
+            if (pathCroppedPhoto != null) {
+                binding.showAttachedImgCard.visibility = View.VISIBLE
+                Glide.with(this)
+                    .load(pathCroppedPhoto)
+                    .centerCrop()
+                    .into(binding.image)
+                uriToMultipart(pathCroppedPhoto)
+            }
 
+        }
+    }
+
+    private fun showPhoneStatePermission() {
+
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                addPhotoFromIntent(useGallery = true, useCamera = true)
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                showRequestPermissionRational()
+            }
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
+    }
 
-    private fun addPhotoFromIntent() {
+    private fun showDialogAboutPermissions() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.explainingAboutPermissions))
+
+            .setNegativeButton(resources.getString(R.string.close)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton(resources.getString(R.string.settings)) { dialog, which ->
+                dialog.cancel()
+                val reqIntent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    .apply {
+                        val uri = Uri.fromParts("package", "com.teamforce.thanksapp", null)
+                        data = uri
+                    }
+                startActivity(reqIntent)
+                // Почему то повторно не запрашивается разрешение
+                // requestPermissions()
+            }
+            .show()
+    }
+
+    private fun showRequestPermissionRational() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.explainingAboutPermissionsRational))
+
+            .setNegativeButton(resources.getString(R.string.close)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton("Хорошо") { dialog, _ ->
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+                dialog.cancel()
+            }
+            .show()
+    }
+
+    private fun addPhotoFromIntent(useGallery: Boolean, useCamera: Boolean) {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.type = "image/*"
-        resultLauncher.launch(pickIntent)
+        resultLauncher.launch(
+            CropImageContractOptions(
+                pickIntent.data, CropImageOptions(
+                    imageSourceIncludeGallery = useGallery,
+                    imageSourceIncludeCamera = useCamera,
+                    guidelines = CropImageView.Guidelines.ON,
+                    backgroundColor = requireContext().getColor(R.color.general_contrast),
+                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast)
+                )
+            )
+        )
     }
 
 
     private fun uriToMultipart(filePathInner: String) {
-        // Хардовая вставка картинки с самого начала
-        // Убрать как только сделаю обновление по свайпам
-        Glide.with(this)
-            .load(filePathInner)
-            .centerCrop()
-            .into(binding.image)
         filePath = filePathInner
         val file = File(filePathInner)
         val requestFile: RequestBody =
