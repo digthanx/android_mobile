@@ -46,6 +46,10 @@
     <string name="explainingAboutPermissions">Вы не дали нам достаточно разрешений.
         Данные разрешения нам нужны для обновления аватара.
         Вы можете разрешить их в настройках телефона.</string>
+    <string name="explainingAboutPermissionsRational">
+        Вы не дали нам достаточно разрешений для работы.
+        Данные разрешения нам нужны для обновления аватара.
+        Запросить разрешения повторно?</string>
     <string name="avatar">Аватар</string>
     <string name="settings">Настройки</string>
     <string name="stringData">Личную информацию</string>

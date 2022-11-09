@@ -1,8 +1,6 @@
 package com.teamforce.thanksapp.presentation.fragment.profileScreen
 
 import android.Manifest
-import android.content.ContentResolver
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -13,9 +11,10 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
-import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,8 +30,8 @@ import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.*
-import java.text.SimpleDateFormat
 import java.util.*
+
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
@@ -42,16 +41,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private val requestMultiplePermissionsLauncher =
         registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { result ->
-            if(result[Manifest.permission.READ_EXTERNAL_STORAGE] == true &&
-                    result[Manifest.permission.CAMERA] == true){
-                Toast.makeText(
-                    requireContext(),
-                    "Permission Granted",
-                    Toast.LENGTH_SHORT).show()
-            }else if(result[Manifest.permission.READ_EXTERNAL_STORAGE] == false &&
-                result[Manifest.permission.CAMERA] == false){
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                addPhotoFromIntent(useGallery = true, useCamera = true)
+            } else {
                 showDialogAboutPermissions()
             }
         }
@@ -91,10 +85,28 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         swipeToRefresh()
         // TODO Странно работает обновление, оно идет, и все ок, но идет 1 запрос почему то
         // Как и должно быть, но по идее должно быть много лишних запросов, но их нет, разобраться
-        viewModel.isSuccessfulOperation.observe(viewLifecycleOwner){
-            if(it){
+        viewModel.isSuccessfulOperation.observe(viewLifecycleOwner) {
+            if (it) {
                 requestData()
                 setData()
+            }
+        }
+    }
+
+    private fun showPhoneStatePermission() {
+
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                addPhotoFromIntent(useGallery = true, useCamera = true)
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                showRequestPermissionRational()
+            }
+            else -> {
+                requestMultiplePermissionsLauncher.launch(Manifest.permission.CAMERA)
             }
         }
     }
@@ -111,7 +123,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     guidelines = CropImageView.Guidelines.ON,
                     backgroundColor = requireContext().getColor(R.color.general_contrast),
                     activityBackgroundColor = requireContext().getColor(R.color.general_contrast)
-                // TODO: Затестить овал, поправить вылет при обрезке с камеры
+                    // TODO: Затестить овал, поправить вылет при обрезке с камеры
                 )
             )
         )
@@ -227,8 +239,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
             .setNegativeButton(resources.getString(R.string.avatar)) { dialog, _ ->
                 dialog.cancel()
-                checkPermissions()
-
+                showPhoneStatePermission()
             }
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
                 dialog.cancel()
@@ -243,26 +254,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 )
             }
             .show()
-    }
-
-    private fun checkPermissions(){
-        if(requireContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-            requireContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
-            addPhotoFromIntent(useGallery = true, useCamera = true)
-        }else if(requireContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            addPhotoFromIntent(useGallery = true, useCamera = false)
-        }else if(requireContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
-            addPhotoFromIntent(useGallery = false, useCamera = true)
-        }else{
-            requestPermissions()
-        }
-
-
-    }
-
-    private fun requestPermissions(){
-        val array = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
-        requestMultiplePermissionsLauncher.launch(array)
     }
 
     private fun showDialogAboutPermissions() {
@@ -282,6 +273,20 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 startActivity(reqIntent)
                 // Почему то повторно не запрашивается разрешение
                 // requestPermissions()
+            }
+            .show()
+    }
+
+    private fun showRequestPermissionRational() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.explainingAboutPermissionsRational))
+
+            .setNegativeButton(resources.getString(R.string.close)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton("Хорошо") { dialog, _ ->
+                requestMultiplePermissionsLauncher.launch(Manifest.permission.CAMERA)
+                dialog.cancel()
             }
             .show()
     }
