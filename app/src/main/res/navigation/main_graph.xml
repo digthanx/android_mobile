@@ -228,5 +228,5 @@
     <fragment
         android:id="@+id/additionalInfoFeedItemFragment2"
         android:name="com.teamforce.thanksapp.presentation.fragment.feedScreen.AdditionalInfoFeedItemFragment"
-        android:label="AdditionalInfoFeedItemFragment" />
+        android:label="@string/detailOfTransaction" />
 </navigation>
