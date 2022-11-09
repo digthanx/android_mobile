@@ -115,7 +115,7 @@ class NotificationPageAdapter(
                 is NotificationAdditionalData.NotificationCommentDataModel -> bindComment(data)
                 is NotificationAdditionalData.NotificationReactionDataModel -> bindReaction(data)
                 is NotificationAdditionalData.NotificationChallengeDataModel -> bindChallenge(data)
-                is NotificationAdditionalData.NotificationChallengeReportDataModel -> bindChallenge(
+                is NotificationAdditionalData.NotificationChallengeReportDataModel -> bindReport(
                     data
                 )
                 is NotificationAdditionalData.NotificationChallengeWinnerDataModel -> bindWinner(
