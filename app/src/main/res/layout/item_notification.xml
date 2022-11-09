@@ -44,15 +44,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dateTime"
+            android:textAppearance="@style/SmallText2.Gray"
             android:textSize="12sp"
             tools:text="сегодня в 20:30" />
 
         <TextView
             android:id="@+id/description"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:textAppearance="@style/StandardText3Medium.Black"
+            android:maxLines="4"
             android:textColor="@color/black"
             android:textSize="12sp"
             tools:text="Изменён статус вашей транзакции" />

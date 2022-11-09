@@ -1,19 +1,37 @@
 package com.teamforce.thanksapp.presentation.adapter.notifications
 
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.ColorRes
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.teamforce.thanksapp.PushNotificationService
+import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemNotificationBinding
 import com.teamforce.thanksapp.databinding.SeparatorDateTimeBinding
 import com.teamforce.thanksapp.domain.models.notifications.NotificationAdditionalData
 import com.teamforce.thanksapp.domain.models.notifications.NotificationItem
+import com.teamforce.thanksapp.presentation.activity.MainActivity
+import com.teamforce.thanksapp.presentation.adapter.feed.NewFeedAdapter
+import com.teamforce.thanksapp.utils.doubleQuoted
+import com.teamforce.thanksapp.utils.username
 
-class NotificationPageAdapter :
-    PagingDataAdapter<NotificationItem, RecyclerView.ViewHolder>(DIffCallback) {
+class NotificationPageAdapter(
+    private val onUserClicked: (userId: Int) -> Unit,
+    private val onTransactionClicked: () -> Unit,
+    private val onChallengeClicked: (challengeId: Int) -> Unit,
+
+    ) : PagingDataAdapter<NotificationItem, RecyclerView.ViewHolder>(DIffCallback) {
 
     override fun getItemViewType(position: Int): Int {
         return when (val item = getItem(position)) {
@@ -82,14 +100,182 @@ class NotificationPageAdapter :
         }
     }
 
-    class NotificationViewHolder(
+    inner class NotificationViewHolder(
         private val binding: ItemNotificationBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: NotificationItem.NotificationModel) {
-            binding.apply {
-                dateTime.text = data.createdAt
-                description.text = data.theme
+            binding.dateTime.text = data.createdAtHumanView
+            binding.description.movementMethod = LinkMovementMethod.getInstance();
+
+            when (data.data) {
+                is NotificationAdditionalData.NotificationTransactionDataModel -> bindTransaction(
+                    data
+                )
+                is NotificationAdditionalData.NotificationCommentDataModel -> bindComment(data)
+                is NotificationAdditionalData.NotificationReactionDataModel -> bindReaction(data)
+                is NotificationAdditionalData.NotificationChallengeDataModel -> bindChallenge(data)
+                is NotificationAdditionalData.NotificationChallengeReportDataModel -> bindChallenge(
+                    data
+                )
+                is NotificationAdditionalData.NotificationChallengeWinnerDataModel -> bindWinner(
+                    data
+                )
+                else -> {
+                    binding.apply {
+                        description.text = data.theme
+                    }
+                }
             }
+        }
+
+        private fun bindTransaction(data: NotificationItem.NotificationModel) {
+            binding.apply {
+                val spannable = SpannableStringBuilder()
+                    .append(
+                        createClickableSpannable(
+                            root.context.getString(R.string.received_part) + " ",
+                            R.color.black,
+                            null
+                        )
+                    )
+                    .append(
+                        createClickableSpannable(
+                            binding.root.context.getString(
+                                R.string.amountThanks,
+                                (data.data as NotificationAdditionalData.NotificationTransactionDataModel).amount.toString()
+                            ) + " ",
+                            R.color.minor_success,
+                            null
+                        )
+                    ).append(
+                        root.context.getString(R.string.from) + " "
+                    ).append(
+                        createClickableSpannable(
+                            data.data.senderTgName.username(),
+                            R.color.general_brand,
+                        ) {
+                            // TODO: handle click on username
+                        }
+                    )
+                binding.description.text = spannable
+            }
+        }
+
+        private fun bindComment(data: NotificationItem.NotificationModel) {
+
+            val data = data.data as NotificationAdditionalData.NotificationCommentDataModel
+            val target =
+                if (data.transactionId != null) binding.root.context.getString(R.string.to_transaction)
+                else if (data.challengeId != null) binding.root.context.getString(R.string.to_challenge)
+                else binding.root.context.getString(R.string.to_your_report)
+
+            binding.apply {
+                val spannable = SpannableStringBuilder()
+                    .append(
+                        root.context.getString(R.string.new_comment_to) + " "
+                    )
+                    .append(createClickableSpannable(target, R.color.general_brand) {
+                        // TODO: handle clicking on comment
+                    })
+                description.text = spannable
+            }
+        }
+
+        private fun bindReaction(data: NotificationItem.NotificationModel) {
+            val data = data.data as NotificationAdditionalData.NotificationReactionDataModel
+            val target =
+                if (data.challengeId != null) binding.root.context.getString(R.string.challenge)
+                else if (data.transactionId != null) binding.root.context.getString(R.string.transaction)
+                else binding.root.context.getString(R.string.your_report)
+
+            binding.apply {
+                val spannable = SpannableStringBuilder()
+                    .append(
+                        root.context.getString(R.string.new_reaction_to) + " "
+                    )
+                    .append(createClickableSpannable(
+                        target,
+                        R.color.general_brand
+                    ) {
+                        // TODO: handle click on reaction
+                    })
+                description.text = spannable
+            }
+        }
+
+        private fun bindChallenge(data: NotificationItem.NotificationModel) {
+            val data = data.data as NotificationAdditionalData.NotificationChallengeDataModel
+            binding.apply {
+                val spannable = SpannableStringBuilder()
+                    .append(root.context.getString(R.string.new_challenge) + " ")
+                    .append(createClickableSpannable(
+                        data.challengeName.doubleQuoted(),
+                        R.color.general_brand,
+                    ) {
+                        // TODO: handle on challenge click
+                    })
+                description.text = spannable
+            }
+
+        }
+
+        private fun bindReport(data: NotificationItem.NotificationModel) {
+            val data = data.data as NotificationAdditionalData.NotificationChallengeReportDataModel
+            binding.apply {
+                val spannable = SpannableStringBuilder()
+                    .append(root.context.getString(R.string.new_report_to_challenge) + " ")
+                    .append(createClickableSpannable(
+                        data.challengeName.doubleQuoted(),
+                        R.color.general_brand
+                    ) {
+                        // TODO: handle click challenge
+                    })
+                description.text = spannable
+            }
+        }
+
+        private fun bindWinner(data: NotificationItem.NotificationModel) {
+            val data = data.data as NotificationAdditionalData.NotificationChallengeWinnerDataModel
+            binding.apply {
+                val spannable = SpannableStringBuilder()
+                    .append(root.context.getString(R.string.you_win_challenge) + " ")
+                    .append(createClickableSpannable(
+                        data.challengeName.doubleQuoted(),
+                        R.color.general_brand
+                    ) {
+                        // TODO: handle click challenge
+                    })
+                description.text = spannable
+            }
+        }
+
+        private fun createClickableSpannable(
+            string: String,
+            @ColorRes color: Int,
+            onClick: (() -> Unit)?
+        ): SpannableString {
+            val spannableString = SpannableString(string)
+
+            val clickableSpan = object : ClickableSpan() {
+                override fun onClick(p0: View) {
+                    Log.d(NewFeedAdapter.TAG, "onClick: ")
+                    onClick?.invoke()
+                }
+
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    ds.isUnderlineText = false
+                    ds.color = binding.root.context.getColor(color)
+                }
+            }
+
+            spannableString.setSpan(
+                clickableSpan,
+                0,
+                string.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return spannableString
         }
     }
 
@@ -125,4 +311,10 @@ class NotificationPageAdapter :
             }
         }
     }
+}
+
+enum class Targets {
+    Challenge,
+    Transaction,
+    Report
 }

@@ -8,6 +8,7 @@ sealed class NotificationItem {
         val theme: String,
         val isRead: Boolean,
         val createdAt: String,
+        val createdAtHumanView: String,
         val updatedAt: String,
         val data: NotificationAdditionalData
     ) : NotificationItem()

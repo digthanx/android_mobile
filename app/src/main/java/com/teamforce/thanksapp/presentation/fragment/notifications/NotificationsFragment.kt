@@ -31,7 +31,11 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedViewModel.dropNotificationCounter()
-        listAdapter = NotificationPageAdapter()
+        listAdapter = NotificationPageAdapter(
+            onChallengeClicked = ::onChallengeClicked,
+            onUserClicked = ::onUserClicked,
+            onTransactionClicked = ::onTransactionClicked
+        )
 
         binding.notificationsList.apply {
             adapter = listAdapter?.withLoadStateHeaderAndFooter(
@@ -67,6 +71,18 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
         binding.notificationsList.adapter = null
         listAdapter = null
         super.onDestroyView()
+
+    }
+
+    private fun onUserClicked(userId: Int) {
+
+    }
+
+    private fun onTransactionClicked() {
+
+    }
+
+    private fun onChallengeClicked(challengeId: Int) {
 
     }
 }
