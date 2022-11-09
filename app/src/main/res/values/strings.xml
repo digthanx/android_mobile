@@ -111,6 +111,7 @@
     <string name="cancelTransaction">Отменить благодарность?</string>
     <string name="successfulCancel">Спасибки вернутся на ваш счет :)</string>
     <string name="setTag">#%s</string>
+    <string name="forWinningInChallenge">за победу в челлендже</string>
     <!-- Additional Info Bottom Sheet Dialog Fragment -->
     <string name="message">Сообщение</string>
     <string name="photo">Фотография</string>
@@ -245,6 +246,9 @@
     <string name="new_report_to_challenge">Новый отчет к челленджу</string>
     <string name="you_win_challenge">Вы победили в челлендже</string>
     <!--    feed-->
+
+
+    <!--feed-->
     <string name="challenge_winner">победил в челлендже</string>
     <string name="challenge_created">Создан челлендж</string>
     <string name="user_received_thanks">%1$s получил %2$d спасибок от %3$s</string>

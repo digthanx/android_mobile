@@ -9,8 +9,11 @@ import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.request.AuthorizationRequest
 import com.teamforce.thanksapp.data.request.VerificationRequest
 import com.teamforce.thanksapp.data.response.VerificationResponse
+import com.teamforce.thanksapp.domain.models.profile.ProfileModel
+import com.teamforce.thanksapp.domain.usecases.LoadProfileUseCase
 import com.teamforce.thanksapp.model.domain.UserData
 import com.teamforce.thanksapp.utils.Result
+import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -25,8 +28,9 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val thanksApi: ThanksApi,
-    val userDataRepository: UserDataRepository
-) : ViewModel() {
+    val userDataRepository: UserDataRepository,
+    private val loadProfileUseCase: LoadProfileUseCase,
+    ) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -51,6 +55,34 @@ class LoginViewModel @Inject constructor(
         xCode = null
         token = null
         telegramOrEmail = null
+    }
+
+    private val _profile = MutableLiveData<ProfileModel>()
+    val profile: LiveData<ProfileModel> = _profile
+    private val _profileError = MutableLiveData<String>()
+
+    fun loadUserProfile() {
+        _isLoading.postValue(true)
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _isLoading.postValue(true)
+
+                when (val result = loadProfileUseCase()) {
+                    is ResultWrapper.Success -> {
+                        _profile.postValue(result.value!!)
+                        Log.d("Token", "Сохраняем id профиля ${result.value.profile.id}")
+                        userDataRepository.saveProfileId(result.value.profile.id)
+                        userDataRepository.saveUsername(result.value.profile.tgName)
+                    }
+                    is ResultWrapper.GenericError ->
+                        _profileError.postValue(result.error + " " + result.code)
+
+                    is ResultWrapper.NetworkError ->
+                        _profileError.postValue("Ошибка сети")
+                }
+                _isLoading.postValue(false)
+            }
+        }
     }
 
 

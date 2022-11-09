@@ -11,7 +11,7 @@ plugins {
 android {
     signingConfigs {
         release {
-            storeFile file('C:\\Users\\dimam\\Desktop\\MobileDeveloper\\android_mobile\\key\\NyamaKey.jks')
+            storeFile file('/Users/nyama/Desktop/android/key/NyamaKey.jks')
             storePassword 'hiiamNyamailikecode'
             keyAlias 'thanksapp-release'
             keyPassword 'hiiamNyamailikecode'
@@ -85,8 +85,6 @@ dependencies {
     // Library for Cropping Image
     implementation("com.vanniktech:android-image-cropper:4.4.0")
 
-    // Library for sticky scroll
-    implementation 'com.github.amarjain07:StickyScrollView:1.0.3'
 
     // Stfa Icon Image Viewer
     implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'

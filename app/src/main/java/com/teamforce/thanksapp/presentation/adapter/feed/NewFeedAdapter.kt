@@ -49,7 +49,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
     inner class ViewHolder(val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FeedModel) {
             // Без этого клики по spannable не работают
-            binding.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance();
+            binding.senderAndReceiver.movementMethod = LinkMovementMethod.getInstance()
             when (item) {
                 is FeedModel.TransactionFeedEvent -> bindTransaction(item)
                 is FeedModel.ChallengeFeedEvent -> bindChallenge(item)
@@ -214,7 +214,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                         ).append(
                             createClickableSpannable(
                                 root.context.getString(R.string.youGot) + " ",
-                                R.color.general_brand,
+                                R.color.black,
                                 null
                             )
                         ).append(

@@ -14,6 +14,7 @@ import com.teamforce.thanksapp.data.sources.createPager
 import com.teamforce.thanksapp.data.sources.feed.FeedCommentsPagingSource
 import com.teamforce.thanksapp.data.sources.feed.FeedPagingSource
 import com.teamforce.thanksapp.data.sources.feed.FeedReactionsPagingSource
+import com.teamforce.thanksapp.data.sources.feed.WhatExactlyWouldYouNeed
 import com.teamforce.thanksapp.domain.mappers.feed.FeedMapper
 import com.teamforce.thanksapp.domain.models.feed.FeedItemByIdModel
 import com.teamforce.thanksapp.domain.models.feed.FeedModel
@@ -73,33 +74,73 @@ class FeedRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 initialLoadSize = Consts.PAGE_SIZE,
-                prefetchDistance = 2,
+                prefetchDistance = 5,
                 pageSize = Consts.PAGE_SIZE,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
                 FeedPagingSource(
                     api = thanksApi,
-                    feedMapper = feedMapper
+                    feedMapper = feedMapper,
+                    whatWouldYouLikeToGet = WhatExactlyWouldYouNeed.EVENTS
                 )
             }
         ).flow
     }
 
-    override fun getWinners() = createPager { page ->
-        val result = thanksApi.getEventsWinners(limit = Consts.PAGE_SIZE, offset =page)
-        feedMapper.mapList(result)
-    }.flow
+    override fun getWinners(): Flow<PagingData<FeedModel>> {
+        return Pager(
+            config = PagingConfig(
+                initialLoadSize = Consts.PAGE_SIZE,
+                prefetchDistance = 5,
+                pageSize = Consts.PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                FeedPagingSource(
+                    api = thanksApi,
+                    feedMapper = feedMapper,
+                    whatWouldYouLikeToGet = WhatExactlyWouldYouNeed.WINNERS
+                )
+            }
+        ).flow
+    }
 
-    override fun getChallenges() = createPager { page ->
-        val result = thanksApi.getEventsChallenges(limit = Consts.PAGE_SIZE, offset =page)
-        feedMapper.mapList(result)
-    }.flow
+    override fun getChallenges(): Flow<PagingData<FeedModel>> {
+        return Pager(
+            config = PagingConfig(
+                initialLoadSize = Consts.PAGE_SIZE,
+                prefetchDistance = 5,
+                pageSize = Consts.PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                FeedPagingSource(
+                    api = thanksApi,
+                    feedMapper = feedMapper,
+                    whatWouldYouLikeToGet = WhatExactlyWouldYouNeed.CHALLENGES
+                )
+            }
+        ).flow
+    }
 
-    override fun getTransactions() = createPager { page ->
-        val result = thanksApi.getEventsTransactions(limit = Consts.PAGE_SIZE, offset =page)
-        feedMapper.mapList(result)
-    }.flow
+    override fun getTransactions(): Flow<PagingData<FeedModel>> {
+        return Pager(
+            config = PagingConfig(
+                initialLoadSize = Consts.PAGE_SIZE,
+                prefetchDistance = 5,
+                pageSize = Consts.PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                FeedPagingSource(
+                    api = thanksApi,
+                    feedMapper = feedMapper,
+                    whatWouldYouLikeToGet = WhatExactlyWouldYouNeed.TRANSACTIONS
+                )
+            }
+        ).flow
+    }
 
     override suspend fun getTransactionById(transactionId: Int): ResultWrapper<FeedItemByIdModel> {
         val result = safeApiCall(Dispatchers.IO) {

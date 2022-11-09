@@ -6,7 +6,7 @@
     android:textSize="10sp"
     app:chipBackgroundColor="@color/minor_info_secondary"
     android:textColor="@color/minor_info"
-    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize30Percent"
-    android:layout_marginVertical="5dp">
+    app:chipMinTouchTargetSize="0dp"
+    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize30Percent">
 
 </com.google.android.material.chip.Chip>

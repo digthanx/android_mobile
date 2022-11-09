@@ -25,7 +25,7 @@ class FragmentDetailChallengeStateAdapter(
 
     private var challengeId: Int = 0
 
-    public fun setChallengeId(data: Int) {
+    fun setChallengeId(data: Int) {
         challengeId = data
     }
 
@@ -38,7 +38,7 @@ class FragmentDetailChallengeStateAdapter(
                 3 -> ContendersChallengeFragment.newInstance(challengeId)
                 4 -> MyResultChallengeFragment.newInstance(challengeId)
                 else -> {
-                    DetailsInnerChallengeFragment.newInstance(challengeId)
+                    MyResultChallengeFragment.newInstance(challengeId)
                 }
             }
         } else if (creatorId == profileId) {
@@ -51,7 +51,7 @@ class FragmentDetailChallengeStateAdapter(
                 3 -> ContendersChallengeFragment.newInstance(challengeId)
                 4 -> MyResultChallengeFragment.newInstance(challengeId)
                 else -> {
-                    DetailsInnerChallengeFragment.newInstance(challengeId)
+                    MyResultChallengeFragment.newInstance(challengeId)
                 }
             }
         } else if (myResultWasReceivedSuccessfully) {
@@ -61,7 +61,7 @@ class FragmentDetailChallengeStateAdapter(
                 2 -> WinnersChallengeFragment.newInstance(challengeId)
                 3 -> MyResultChallengeFragment.newInstance(challengeId)
                 else -> {
-                    DetailsInnerChallengeFragment.newInstance(challengeId)
+                    MyResultChallengeFragment.newInstance(challengeId)
                 }
             }
         } else {
@@ -70,7 +70,7 @@ class FragmentDetailChallengeStateAdapter(
                 1 -> CommentsChallengeFragment.newInstance(challengeId)
                 2 -> WinnersChallengeFragment.newInstance(challengeId)
                 else -> {
-                    DetailsInnerChallengeFragment.newInstance(challengeId)
+                    MyResultChallengeFragment.newInstance(challengeId)
                 }
             }
         }
