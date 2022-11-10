@@ -29,6 +29,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -205,7 +206,11 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             if(isSuccess){
                 latestTmpUri?.let {
                     binding.showAttachedImgCard.visible()
-                    binding.image.setImageURI(it)
+                    Glide.with(requireContext())
+                        .load(it)
+                        .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(binding.image)
                     val path = getFilePathFromUri(requireContext(), it, true)
                     uriToMultipart(path = path)
                 }
@@ -263,7 +268,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 dialog.cancel()
             }
             .setPositiveButton(resources.getString(R.string.camera)) { dialog, _ ->
-                captureImage()
+                takeImage()
                 dialog.cancel()
             }
             .show()
@@ -288,14 +293,6 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.type = "image/*"
         resultLauncher.launch(pickIntent)
-    }
-
-    private fun captureImage() {
-//        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//        intent.putExtra("camera", true)
-//        resultLauncher.launch(intent)
-
-        takeImage()
     }
 
 
