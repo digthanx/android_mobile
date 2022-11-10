@@ -220,6 +220,9 @@
     <string name="yesterday">Вчера</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="nothing"> </string>
+    <string name="gallery">Галерея</string>
+    <string name="camera">Камера</string>
+    <string name="whatApproachToGetImage">Получить изображение из камеры или галереи?</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

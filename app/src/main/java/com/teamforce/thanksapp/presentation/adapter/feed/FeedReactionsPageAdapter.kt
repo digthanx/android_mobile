@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.GetReactionsForTransactionsResponse
 import com.teamforce.thanksapp.databinding.ItemReactionBinding
 import com.teamforce.thanksapp.utils.Consts
@@ -62,6 +63,12 @@ class FeedReactionsPageAdapter:
                 if(!data.user.avatar.isNullOrEmpty()){
                     Glide.with(root.context)
                         .load("${Consts.BASE_URL}${data.user.avatar}".toUri())
+                        .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(userAvatar)
+                }else{
+                    Glide.with(root.context)
+                        .load(R.drawable.ic_anon_avatar)
                         .centerCrop()
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(userAvatar)

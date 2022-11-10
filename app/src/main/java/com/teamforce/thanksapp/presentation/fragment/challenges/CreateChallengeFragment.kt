@@ -5,25 +5,35 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.teamforce.thanksapp.BuildConfig
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.DialogDatePickerBinding
 import com.teamforce.thanksapp.databinding.FragmentCreateChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.CreateChallengeViewModel
-import com.teamforce.thanksapp.utils.OptionsTransaction
-import com.teamforce.thanksapp.utils.getPath
+import com.teamforce.thanksapp.utils.*
+import com.teamforce.thanksapp.utils.getFilePathFromUri
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -46,13 +56,10 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
-            if (!isGranted) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.grant_permission),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+            if (isGranted) {
+                showDialogCameraOrGallery()
+            }else{
+                showDialogAboutPermissions()
             }
         }
 
@@ -181,49 +188,12 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
 
     private fun uploadImageFromGallery() {
         binding.attachImageBtn.setOnClickListener {
-            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            addPhotoFromIntent()
+            showPhoneStatePermission()
         }
         binding.detachImgBtn.setOnClickListener {
             binding.showAttachedImgCard.visibility = View.GONE
             imageFilePart = null
         }
-    }
-
-    private val resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-                Log.d(ProfileFragment.TAG, "${result.data?.data}:")
-                val path = getPath(requireContext(), result.data?.data!!)
-                val imageUri = result.data!!.data
-                if (imageUri != null && path != null) {
-                    binding.showAttachedImgCard.visibility = View.VISIBLE
-                    Glide.with(this)
-                        .load(imageUri)
-                        .centerCrop()
-                        .into(binding.image)
-                    uriToMultipart(path)
-                }
-
-            }
-        }
-
-    private fun addPhotoFromIntent() {
-        val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
-        pickIntent.type = "image/*"
-        resultLauncher.launch(pickIntent)
-//        resultLauncher.launch(
-//            CropImageContractOptions(
-//                pickIntent.data, CropImageOptions(
-//                    imageSourceIncludeGallery = true,
-//                    imageSourceIncludeCamera = false,
-//                    guidelines = CropImageView.Guidelines.ON,
-//                    backgroundColor = requireContext().getColor(R.color.general_contrast),
-//                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast),
-//                    maxCropResultHeight = 200
-//                )
-//            )
-//        )
     }
 
 
@@ -234,5 +204,139 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
         val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
         imageFilePart = body
     }
+
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val path = result.data?.data?.let { getPath(requireContext(), it) }
+                if (path != null) {
+                    binding.showAttachedImgCard.visibility = View.VISIBLE
+                    Glide.with(this)
+                        .load(path)
+                        .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(binding.image)
+                    uriToMultipart(path)
+                }
+            }
+        }
+
+    private var latestTmpUri: Uri? = null
+    private val takeImageResult =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+            if(isSuccess){
+                latestTmpUri?.let {
+                    binding.showAttachedImgCard.visible()
+                    Glide.with(requireContext())
+                        .load(it)
+                        .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(binding.image)
+                    val path = getFilePathFromUri(requireContext(), it, true)
+                    uriToMultipart(path)
+                }
+            }
+        }
+
+    private fun takeImage() {
+        lifecycleScope.launchWhenStarted {
+            getTmpFileUri().let { uri ->
+                latestTmpUri = uri
+                takeImageResult.launch(uri)
+            }
+        }
+    }
+    private fun getTmpFileUri(): Uri? {
+        val cacheDir: File? = activity?.cacheDir
+        val tmpFile = File.createTempFile("tmp_image_file", ".png", cacheDir).apply {
+            createNewFile()
+            deleteOnExit()
+        }
+
+        return activity?.applicationContext?.let {
+            FileProvider.getUriForFile(
+                it,
+                "${BuildConfig.APPLICATION_ID}.provider", tmpFile
+            )
+        }
+    }
+
+
+
+    private fun showPhoneStatePermission() {
+
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                showDialogCameraOrGallery()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                showRequestPermissionRational()
+            }
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }
+    }
+
+    private fun showDialogCameraOrGallery(){
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.whatApproachToGetImage))
+            .setNegativeButton(resources.getString(R.string.gallery)) { dialog, _ ->
+                getImageFromGallery()
+                dialog.cancel()
+            }
+            .setPositiveButton(resources.getString(R.string.camera)) { dialog, _ ->
+                takeImage()
+                dialog.cancel()
+            }
+            .show()
+    }
+
+    private fun showRequestPermissionRational() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.explainingAboutPermissionsRational))
+
+            .setNegativeButton(resources.getString(R.string.close)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton("Хорошо") { dialog, _ ->
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+                dialog.cancel()
+            }
+            .show()
+    }
+
+
+    private fun getImageFromGallery() {
+        val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
+        pickIntent.type = "image/*"
+        resultLauncher.launch(pickIntent)
+    }
+
+
+    private fun showDialogAboutPermissions() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.explainingAboutPermissions))
+
+            .setNegativeButton(resources.getString(R.string.close)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton(resources.getString(R.string.settings)) { dialog, which ->
+                dialog.cancel()
+                val reqIntent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    .apply {
+                        val uri = Uri.fromParts("package", "com.teamforce.thanksapp", null)
+                        data = uri
+                    }
+                startActivity(reqIntent)
+                // Почему то повторно не запрашивается разрешение
+                // requestPermissions()
+            }
+            .show()
+    }
+
 
 }

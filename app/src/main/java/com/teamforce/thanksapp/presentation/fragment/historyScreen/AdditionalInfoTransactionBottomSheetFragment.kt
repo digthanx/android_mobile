@@ -10,6 +10,7 @@ import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamforce.thanksapp.R
@@ -108,6 +109,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
             Glide.with(this)
                 .load(avatar?.toUri())
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.userAvatar)
             binding.userAvatar.setOnLongClickListener {
                 (it as ImageView).viewSinglePhoto(avatar!!, requireContext())
@@ -121,6 +123,7 @@ class AdditionalInfoTransactionBottomSheetFragment : BottomSheetDialogFragment()
             Glide.with(this)
                 .load("${Consts.BASE_URL}${photo_from_sender}")
                 .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.senderImage)
             binding.senderImage.setOnClickListener {
                 Log.d("AdditionalInfoTransactionBottomSheetFragment", "Клик по аватарке")

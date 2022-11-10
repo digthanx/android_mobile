@@ -21,6 +21,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.canhub.cropper.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
@@ -133,6 +134,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         Glide.with(this)
             .load(imageURI)
             .centerCrop()
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.userAvatar)
         viewModel.loadUpdateAvatarUserProfile(filePath, filePathCropped)
     }
@@ -185,6 +187,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 Glide.with(this)
                     .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
                     .centerCrop()
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.userAvatar)
             } else {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)

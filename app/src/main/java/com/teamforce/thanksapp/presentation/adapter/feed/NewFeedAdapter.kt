@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemFeedBinding
@@ -97,6 +98,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                     Glide.with(root.context)
                         .load("${Consts.BASE_URL}${item.winnerPhoto}".toUri())
                         .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .transition(DrawableTransitionOptions.withCrossFade())
                         .into(userAvatar)
                 } else {
                     userAvatar.setImageResource(R.drawable.ic_anon_avatar)
@@ -112,6 +114,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                     Glide.with(root.context)
                         .load("${Consts.BASE_URL}${item.challengePhoto}".toUri())
                         .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .transition(DrawableTransitionOptions.withCrossFade())
                         .into(userAvatar)
                 } else {
                     userAvatar.setImageResource(R.drawable.ic_anon_avatar)
@@ -301,6 +304,7 @@ class NewFeedAdapter() : PagingDataAdapter<FeedModel, NewFeedAdapter.ViewHolder>
                     Glide.with(root.context)
                         .load("${Consts.BASE_URL}${item.transactionRecipientPhoto}".toUri())
                         .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .transition(DrawableTransitionOptions.withCrossFade())
                         .into(userAvatar)
                 } else {
                     userAvatar.setImageResource(R.drawable.ic_anon_avatar)

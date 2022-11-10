@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.teamforce.thanksapp.R
@@ -91,6 +92,7 @@ class EditProfileBottomSheetFragment : Fragment(R.layout.fragment_edit_profile_b
                 Glide.with(this)
                     .load("${Consts.BASE_URL}${it.profile.photo}".toUri())
                     .centerCrop()
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.userAvatar)
             }
             if (it.profile.contacts.size == 1) {

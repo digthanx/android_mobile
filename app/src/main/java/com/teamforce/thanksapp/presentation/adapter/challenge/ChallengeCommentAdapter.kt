@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.card.MaterialCardView
 import com.teamforce.thanksapp.R
@@ -98,6 +99,7 @@ class ChallengeCommentAdapter(
                 Glide.with(binding.root.context)
                     .load("${Consts.BASE_URL}${data.user.avatar}".toUri())
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.userAvatar)
             } else {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)

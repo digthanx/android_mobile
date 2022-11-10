@@ -13,14 +13,18 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.teamforce.thanksapp.BuildConfig
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentCreateReportBinding
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesFragment
@@ -28,6 +32,8 @@ import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragme
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.CreateReportViewModel
 import com.teamforce.thanksapp.utils.getPath
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
+import com.teamforce.thanksapp.utils.getFilePathFromUri
+import com.teamforce.thanksapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -46,7 +52,7 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                addPhotoFromIntent(useGallery = true, useCamera = true)
+                showDialogCameraOrGallery()
             } else {
                 showDialogAboutPermissions()
             }
@@ -83,15 +89,15 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
 
     }
 
-    private fun deleteReportStateWhenFieldsAreNull(){
+    private fun deleteReportStateWhenFieldsAreNull() {
         if (binding.commentValueEt.text.trim().isEmpty() ||
             filePath.isNullOrEmpty()
-        ){
+        ) {
             deleteReportState()
         }
     }
 
-    private fun saveWithoutSending(){
+    private fun saveWithoutSending() {
         binding.saveWithoutSendingBtn.setOnClickListener {
             if (binding.commentValueEt.text.trim().isNotEmpty() ||
                 !filePath.isNullOrEmpty()
@@ -102,19 +108,21 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
         }
     }
 
-    private fun sendReport(challengeId: Int){
+    private fun sendReport(challengeId: Int) {
         val comment = binding.commentValueEt.text.toString()
         val image = imageFilePart
         val challengeID = challengeId
         viewModel.createReport(challengeID, comment, image)
     }
 
-    private fun listenersSuccessResponseOfCreateReport(){
+    private fun listenersSuccessResponseOfCreateReport() {
         viewModel.isSuccessOperation.observe(viewLifecycleOwner) {
-            if(it){
-                Toast.makeText(requireContext(),
+            if (it) {
+                Toast.makeText(
+                    requireContext(),
                     requireContext().getString(R.string.successCreateReport),
-                    Toast.LENGTH_LONG).show()
+                    Toast.LENGTH_LONG
+                ).show()
                 clearFields()
                 deleteReportState()
                 activity?.onBackPressed()
@@ -122,14 +130,14 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
         }
     }
 
-    private fun clearFields(){
+    private fun clearFields() {
         binding.commentValueEt.setText("")
         binding.showAttachedImgCard.visibility = View.GONE
         imageFilePart = null
         filePath = null
     }
 
-    private fun listenersErrorCreateChallenge(){
+    private fun listenersErrorCreateChallenge() {
         viewModel.createReportError.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
@@ -137,9 +145,10 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
 
     private fun restoreSavedDateFromSP() {
         val sharedPref = requireContext().getSharedPreferences("report", 0)
-        if (!sharedPref.getString("commentReport", "").isNullOrEmpty()){
+        if (!sharedPref.getString("commentReport", "").isNullOrEmpty()) {
             binding.commentValueEt.setText(
-                sharedPref.getString("commentReport", ""))
+                sharedPref.getString("commentReport", "")
+            )
         }
         if (!sharedPref.getString("imageReport", "").isNullOrEmpty()) {
             filePath = sharedPref.getString("imageReport", "")
@@ -147,27 +156,28 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
             Glide.with(this)
                 .load(filePath)
                 .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.image)
             uriToMultipart(filePath!!)
         }
     }
 
     private fun saveReportState() {
-        if(!binding.commentValueEt.text.trim().isEmpty() || !filePath.isNullOrEmpty()){
+        if (!binding.commentValueEt.text.trim().isEmpty() || !filePath.isNullOrEmpty()) {
             val sharedPref =
                 requireContext().getSharedPreferences("report", 0)
             val editor = sharedPref.edit()
             editor.putString("commentReport", binding.commentValueEt.text.toString())
             editor.putString("imageReport", filePath)
             editor.apply()
-        }else{
+        } else {
             deleteReportState()
         }
 
         // При восстановление нужно прогнать filePath через uriToMultipart
     }
 
-    private fun deleteReportState(){
+    private fun deleteReportState() {
         requireContext().getSharedPreferences("report", 0).edit().clear().apply()
     }
 
@@ -186,19 +196,74 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
 
 
     private val resultLauncher =
-        registerForActivityResult(CropImageContract()) { result ->
-        if (result.isSuccessful && result.uriContent != null) {
-            val pathCroppedPhoto = result.getUriFilePath(requireContext(), true)
-            if (pathCroppedPhoto != null) {
-                binding.showAttachedImgCard.visibility = View.VISIBLE
-                Glide.with(this)
-                    .load(pathCroppedPhoto)
-                    .centerCrop()
-                    .into(binding.image)
-                uriToMultipart(pathCroppedPhoto)
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val path = result.data?.data?.let { getPath(requireContext(), it) }
+                if (path != null) {
+                    binding.showAttachedImgCard.visibility = View.VISIBLE
+                    Glide.with(this)
+                        .load(path)
+                        .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(binding.image)
+                    uriToMultipart(path)
+                }
             }
-
         }
+
+    private var latestTmpUri: Uri? = null
+    private val takeImageResult =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+            if (isSuccess) {
+                latestTmpUri?.let {
+                    binding.showAttachedImgCard.visible()
+                    Glide.with(requireContext())
+                        .load(it)
+                        .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(binding.image)
+                    val path = getFilePathFromUri(requireContext(), it, true)
+                    uriToMultipart(path)
+                }
+            }
+        }
+
+    private fun takeImage() {
+        lifecycleScope.launchWhenStarted {
+            getTmpFileUri().let { uri ->
+                latestTmpUri = uri
+                takeImageResult.launch(uri)
+            }
+        }
+    }
+
+    private fun getTmpFileUri(): Uri? {
+        val cacheDir: File? = activity?.cacheDir
+        val tmpFile = File.createTempFile("tmp_image_file", ".png", cacheDir).apply {
+            createNewFile()
+            deleteOnExit()
+        }
+
+        return activity?.applicationContext?.let {
+            FileProvider.getUriForFile(
+                it,
+                "${BuildConfig.APPLICATION_ID}.provider", tmpFile
+            )
+        }
+    }
+
+    private fun showDialogCameraOrGallery() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.whatApproachToGetImage))
+            .setNegativeButton(resources.getString(R.string.gallery)) { dialog, _ ->
+                getImageFromGallery()
+                dialog.cancel()
+            }
+            .setPositiveButton(resources.getString(R.string.camera)) { dialog, _ ->
+                takeImage()
+                dialog.cancel()
+            }
+            .show()
     }
 
     private fun showPhoneStatePermission() {
@@ -208,7 +273,7 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
                 requireContext(),
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
-                addPhotoFromIntent(useGallery = true, useCamera = true)
+                showDialogCameraOrGallery()
             }
             shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
                 showRequestPermissionRational()
@@ -254,20 +319,10 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
             .show()
     }
 
-    private fun addPhotoFromIntent(useGallery: Boolean, useCamera: Boolean) {
+    private fun getImageFromGallery() {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.type = "image/*"
-        resultLauncher.launch(
-            CropImageContractOptions(
-                pickIntent.data, CropImageOptions(
-                    imageSourceIncludeGallery = useGallery,
-                    imageSourceIncludeCamera = useCamera,
-                    guidelines = CropImageView.Guidelines.ON,
-                    backgroundColor = requireContext().getColor(R.color.general_contrast),
-                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast)
-                )
-            )
-        )
+        resultLauncher.launch(pickIntent)
     }
 
 

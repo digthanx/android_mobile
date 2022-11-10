@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -162,6 +163,7 @@ class HistoryPageAdapter(
                         Glide.with(binding.root.context)
                             .load("${Consts.BASE_URL}${data.recipient?.recipient_photo}".toUri())
                             .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                            .transition(DrawableTransitionOptions.withCrossFade())
                             .into(transferIconIv)
                         avatar =
                             "${Consts.BASE_URL}${data.recipient?.recipient_photo}"
@@ -276,6 +278,7 @@ class HistoryPageAdapter(
                             Glide.with(binding.root.context)
                                 .load("${Consts.BASE_URL}${data.sender?.sender_photo}".toUri())
                                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                                .transition(DrawableTransitionOptions.withCrossFade())
                                 .into(transferIconIv)
                             avatar =
                                 "${Consts.BASE_URL}${data.sender?.sender_photo}"

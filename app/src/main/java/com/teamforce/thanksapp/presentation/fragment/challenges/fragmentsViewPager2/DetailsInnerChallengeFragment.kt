@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsInnerChallengeBinding
@@ -157,12 +158,14 @@ class DetailsInnerChallengeFragment : Fragment(R.layout.fragment_details_inner_c
                     Glide.with(requireContext())
                         .load("${Consts.BASE_URL}${challenge.creator_photo}".toUri())
                         .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .transition(DrawableTransitionOptions.withCrossFade())
                         .into(binding.userAvatar)
 
                     // Дублирование для стики вью
                     Glide.with(requireContext())
                         .load("${Consts.BASE_URL}${challenge.creator_photo}".toUri())
                         .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .transition(DrawableTransitionOptions.withCrossFade())
                         .into(binding.userAvatarSticky)
                 }
 
