@@ -58,7 +58,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         registerForActivityResult(CropImageContract()) { result ->
             if (result.isSuccessful && result.uriContent != null) {
                 val pathCroppedPhoto = result.getUriFilePath(requireContext())
-//                val pathOrigPhoto = result.originalUri?.let { getPath(requireContext(), it) }
                 val pathOrigPhoto =
                     result.originalUri?.let { getFilePathFromUri(requireContext(), it, false) }
                 Log.d("Token", "OrigPhoto - ${pathOrigPhoto}")
@@ -222,6 +221,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun showAlertDialogForExit() {
+        val id = Settings.Secure.getString(
+            requireContext().applicationContext.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.wouldYouLikeToExit))
 
@@ -230,7 +233,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
             .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
                 dialog.cancel()
-                viewModel.logout()
+                viewModel.logout(id)
                 activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
             }
             .show()

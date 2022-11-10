@@ -1,13 +1,13 @@
 package com.teamforce.thanksapp.presentation.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.teamforce.thanksapp.NotificationSharedViewModel
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.data.SharedPreferences
 import com.teamforce.thanksapp.databinding.ActivityMainBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity(), IMainAction {
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
     val viewModel: ProfileViewModel by viewModels()
+    val notificationsSharedViewModel: NotificationSharedViewModel by viewModels()
 
     private val navController by lazy {
         val navFragment =
@@ -39,9 +40,20 @@ class MainActivity : AppCompatActivity(), IMainAction {
         navController.graph = navGraph
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(viewModel.isUserAuthorized()) {
+            notificationsSharedViewModel.checkNotifications()
+        }
+    }
+
 
     override fun showSuccessSendingCoins(count: Int, message: String, name: String) {
         TODO("Not yet implemented")
+    }
+
+    companion object {
+        const val TAG = "MainActivity"
     }
 
 
