@@ -60,20 +60,60 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:scaleType="matrix"
-                        android:src="@drawable/smile"
+                        android:src="@drawable/ic_auth_icon"
                         />
                 </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/notify"
+                <FrameLayout
+                    android:clickable="true"
+                    android:id="@+id/notify_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginEnd="15dp"
-                    android:backgroundTint="@color/general_brand"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/ic_bell" />
+                    android:layout_marginEnd="10dp"
+                    android:focusable="true">
+
+                    <FrameLayout
+                        android:visibility="gone"
+                        android:id="@+id/active_notify_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+
+                            android:clickable="false"
+                            android:id="@+id/notify_active"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/general_brand"
+                            android:src="@drawable/ic_notification_45" />
+
+                        <TextView
+                            android:id="@+id/notify_badge"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:layout_gravity="right|end|top"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="6dp"
+                            android:background="@drawable/notification_badge_background"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textColor="@color/general_brand"
+                            android:textSize="7sp"
+                            tools:text="0" />
+                    </FrameLayout>
+
+                    <ImageButton
+                        android:clickable="false"
+                        android:id="@+id/notify"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:backgroundTint="@color/general_brand"
+                        android:src="@drawable/ic_bell"
+                     />
+                </FrameLayout>
+
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>

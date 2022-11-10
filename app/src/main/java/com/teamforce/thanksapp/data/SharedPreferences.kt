@@ -59,6 +59,14 @@ class SharedPreferences @Inject constructor(
             putString(SP_ARG_USER_ID, value)
         }
 
+    var pushToken: String?
+        get() = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).getString(
+            SP_ARG_PUSH_TOKEN, null
+        )
+        set(value) = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).edit {
+            putString(SP_ARG_PUSH_TOKEN, value)
+        }
+
     companion object {
         private const val SP_NAME = "com.teamforce.thanksapp"
         private const val SP_ARG_TELEGRAM = "Telegram"
@@ -66,5 +74,6 @@ class SharedPreferences @Inject constructor(
         private const val SP_ARG_USERNAME = "Username"
         private const val SP_ARG_EMAIL = "Email"
         private const val SP_ARG_USER_ID = "UserId"
+        private const val SP_ARG_PUSH_TOKEN = "pushToken"
     }
 }

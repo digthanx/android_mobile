@@ -188,7 +188,7 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
     private val resultLauncher =
         registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful && result.uriContent != null) {
-            val pathCroppedPhoto = result.getUriFilePath(requireContext(), false)
+            val pathCroppedPhoto = result.getUriFilePath(requireContext(), true)
             if (pathCroppedPhoto != null) {
                 binding.showAttachedImgCard.visibility = View.VISIBLE
                 Glide.with(this)

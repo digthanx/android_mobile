@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -20,13 +21,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.teamforce.thanksapp.NotificationSharedViewModel
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentBalanceBinding
 import com.teamforce.thanksapp.presentation.viewmodel.BalanceViewModel
-import com.teamforce.thanksapp.utils.OptionsTransaction
-import com.teamforce.thanksapp.utils.UserDataRepository
-import com.teamforce.thanksapp.utils.activityNavController
-import com.teamforce.thanksapp.utils.navigateSafely
+import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -39,6 +38,7 @@ class BalanceFragment : Fragment() {
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
     private val viewModel: BalanceViewModel by viewModels()
+    private val sharedViewModel: NotificationSharedViewModel by activityViewModels()
 
     private lateinit var count: TextView
     private lateinit var distributed: TextView
@@ -76,19 +76,18 @@ class BalanceFragment : Fragment() {
         initViews(view)
         loadBalanceData()
         setBalanceData()
-       // displaySnack()
+        // displaySnack()
         viewModel.isLoading.observe(
-            viewLifecycleOwner,
-            Observer { isLoading ->
-                if (isLoading) {
-                    swipeToRefresh.isRefreshing = true
-                    wholeScreen.visibility = View.GONE
-                } else {
-                    wholeScreen.visibility = View.VISIBLE
-                    swipeToRefresh.isRefreshing = false
-                }
+            viewLifecycleOwner
+        ) { isLoading ->
+            if (isLoading) {
+                swipeToRefresh.isRefreshing = true
+                wholeScreen.visibility = View.GONE
+            } else {
+                wholeScreen.visibility = View.VISIBLE
+                swipeToRefresh.isRefreshing = false
             }
-        )
+        }
 
         swipeToRefresh.setOnRefreshListener {
             loadBalanceData()
@@ -102,37 +101,26 @@ class BalanceFragment : Fragment() {
             )
         }
 
-    }
+        binding.notifyLayout.setOnClickListener {
+            findNavController().navigate(R.id.action_balanceFragment_to_notificationFragment)
+        }
 
-//    private fun displaySnack(){
-//        binding.notify.setOnClickListener {
-//            binding.fab.hide()
-//            val snack = Snackbar.make(
-//                binding.fab.rootView,
-//                requireContext().resources.getString(R.string.joke),
-//                Snackbar.LENGTH_LONG
-//            )
-//            snack.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>(){
-//                override fun onShown(transientBottomBar: Snackbar?) {
-//                    super.onShown(transientBottomBar)
-//                }
-//
-//                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-//                    super.onDismissed(transientBottomBar, event)
-//                    if(event != Snackbar.Callback.DISMISS_EVENT_ACTION){
-//                        binding.fab.show()
-//                    }
-//                }
-//            })
-//            snack.setTextMaxLines(3)
-//                .setTextColor(context?.getColor(R.color.white)!!)
-//                .setAction(context?.getString(R.string.OK)!!) {
-//                    snack.dismiss()
-//                }
-//            snack.show()
-//
-//        }
-//    }
+        sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
+            if (notificationsCount == 0) {
+                binding.apply {
+                    activeNotifyLayout.invisible()
+                    notify.visible()
+                }
+            } else {
+                binding.apply {
+                    activeNotifyLayout.visible()
+                    notify.invisible()
+                    notifyBadge.text = notificationsCount.toString()
+                }
+            }
+        }
+
+    }
 
 
     private fun loadBalanceData() {
