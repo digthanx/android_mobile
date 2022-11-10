@@ -34,11 +34,14 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
     private var dataOfChallenge: ChallengeModelById? = null
     private var doIHaveResult: Boolean? = null
     private var challengeId: Int? = null
+    private var page: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             challengeId = it.getInt(CHALLENGER_ID)
+            page = it.getInt(Consts.NEEDED_PAGE_POSITION)
+
         }
     }
 
@@ -72,6 +75,9 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                     4 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
+            if (page != null) {
+                binding.pager.setCurrentItem(page!!, false)
+            }
         } else if (dataOfChallenge?.creator_id == viewModel.getProfileId()) {
             // Пока что если ты создать
             // я всегда буду показывать мой результат пока от бека нет поля
@@ -84,6 +90,9 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                     4 -> tab.text = context?.getString(R.string.myResult)
                 }
             }.attach()
+            if (page != null) {
+                binding.pager.setCurrentItem(page!!, false)
+            }
         } else if (myResultWasReceivedSuccessfully) {
             TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
                 when (position) {
@@ -129,7 +138,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                 initTabLayoutMediator(it)
             }
         }
-        viewModel.challenge.observe(viewLifecycleOwner){
+        viewModel.challenge.observe(viewLifecycleOwner) {
             dataOfChallenge = it
             if (doIHaveResult == true && dataOfChallenge != null) {
                 initTabLayoutMediator(doIHaveResult!!)
@@ -171,7 +180,7 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
             }
-        }else{
+        } else {
             binding.standardCard.visibility = View.VISIBLE
             binding.secondaryCard.visibility = View.GONE
         }

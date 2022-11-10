@@ -29,8 +29,8 @@ import java.lang.NumberFormatException
 
 class NotificationPageAdapter(
     private val onUserClicked: (userId: Int) -> Unit,
-    private val onTransactionClicked: (transactionId: Int) -> Unit,
-    private val onChallengeClicked: (challengeId: Int) -> Unit,
+    private val onTransactionClicked: (transactionId: Int, isReaction: Boolean?) -> Unit,
+    private val onChallengeClicked: (challengeId: Int, isTabChangeRequired: Boolean) -> Unit,
 
     ) : PagingDataAdapter<NotificationItem, RecyclerView.ViewHolder>(DIffCallback) {
 
@@ -130,7 +130,9 @@ class NotificationPageAdapter(
 
         private fun bindTransaction(data: NotificationItem.NotificationModel) {
             val data = data.data as NotificationAdditionalData.NotificationTransactionDataModel
+
             binding.apply {
+                image.setImageResource(R.drawable.ic_transaction_event)
                 val spannable = SpannableStringBuilder()
                     .append(
                         createClickableSpannable(
@@ -168,7 +170,7 @@ class NotificationPageAdapter(
             }
 
             binding.root.setOnClickListener {
-                onTransactionClicked(data.transactionId)
+                onTransactionClicked(data.transactionId, null)
             }
         }
 
@@ -188,28 +190,32 @@ class NotificationPageAdapter(
                 }
 
             binding.apply {
+                image.setImageResource(R.drawable.ic_comment_event)
+
                 val spannable = SpannableStringBuilder()
                     .append(
                         root.context.getString(R.string.new_comment_to) + " "
                     )
-                    .append(createClickableSpannable(target, R.color.general_brand) {
-                        when (targetType) {
-                            Targets.Challenge -> {
-                                if (data.challengeId != null) {
-                                    onChallengeClicked(data.challengeId)
-                                }
-                            }
-                            Targets.Transaction -> {
-                                if (data.transactionId != null) {
-                                    onTransactionClicked(data.transactionId)
-                                }
-                            }
-                            else -> {
-                                //nothing to do
+                    .append(createClickableSpannable(target, R.color.general_brand, null))
+                description.text = spannable
+
+                root.setOnClickListener {
+                    when (targetType) {
+                        Targets.Challenge -> {
+                            if (data.challengeId != null) {
+                                onChallengeClicked(data.challengeId, false)
                             }
                         }
-                    })
-                description.text = spannable
+                        Targets.Transaction -> {
+                            if (data.transactionId != null) {
+                                onTransactionClicked(data.transactionId, false)
+                            }
+                        }
+                        else -> {
+                            //nothing to do
+                        }
+                    }
+                }
             }
         }
 
@@ -230,46 +236,59 @@ class NotificationPageAdapter(
                 }
 
             binding.apply {
+                image.setImageResource(R.drawable.ic_like_event)
+
                 val spannable = SpannableStringBuilder()
                     .append(
                         root.context.getString(R.string.new_reaction_to) + " "
                     )
-                    .append(createClickableSpannable(
-                        target,
-                        R.color.general_brand
-                    ) {
-                        when (targetType) {
-                            Targets.Transaction -> {
-                                if (data.transactionId != null) {
-                                    onTransactionClicked(data.transactionId)
-                                }
-                            }
-                            Targets.Challenge -> {
-                                if (data.challengeId != null) {
-                                    onChallengeClicked(data.challengeId)
-                                }
-                            }
-                            else -> {
-                                //nothing to do
+                    .append(
+                        createClickableSpannable(
+                            target,
+                            R.color.general_brand,
+                            null
+                        )
+                    )
+                description.text = spannable
+                root.setOnClickListener {
+                    when (targetType) {
+                        Targets.Transaction -> {
+                            if (data.transactionId != null) {
+                                onTransactionClicked(data.transactionId, true)
                             }
                         }
-                    })
-                description.text = spannable
+                        Targets.Challenge -> {
+                            if (data.challengeId != null) {
+                                onChallengeClicked(data.challengeId, false)
+                            }
+                        }
+                        else -> {
+                            //nothing to do
+                        }
+                    }
+                }
             }
         }
 
         private fun bindChallenge(data: NotificationItem.NotificationModel) {
             val data = data.data as NotificationAdditionalData.NotificationChallengeDataModel
+
             binding.apply {
+                image.setImageResource(R.drawable.ic_new_challenge_event)
                 val spannable = SpannableStringBuilder()
                     .append(root.context.getString(R.string.new_challenge) + " ")
-                    .append(createClickableSpannable(
-                        data.challengeName.doubleQuoted(),
-                        R.color.general_brand,
-                    ) {
-                        onChallengeClicked(data.challengeId)
-                    })
+                    .append(
+                        createClickableSpannable(
+                            data.challengeName.doubleQuoted(),
+                            R.color.general_brand,
+                            null
+                        )
+                    )
                 description.text = spannable
+                root.setOnClickListener {
+                    onChallengeClicked(data.challengeId, false)
+
+                }
             }
 
         }
@@ -277,30 +296,41 @@ class NotificationPageAdapter(
         private fun bindReport(data: NotificationItem.NotificationModel) {
             val data = data.data as NotificationAdditionalData.NotificationChallengeReportDataModel
             binding.apply {
+                image.setImageResource(R.drawable.ic_challenge_related_event)
                 val spannable = SpannableStringBuilder()
                     .append(root.context.getString(R.string.new_report_to_challenge) + " ")
-                    .append(createClickableSpannable(
-                        data.challengeName.doubleQuoted(),
-                        R.color.general_brand
-                    ) {
-                        onChallengeClicked(data.challengeId)
-                    })
+                    .append(
+                        createClickableSpannable(
+                            data.challengeName.doubleQuoted(),
+                            R.color.general_brand,
+                            null
+                        )
+                    )
                 description.text = spannable
+                root.setOnClickListener {
+                    onChallengeClicked(data.challengeId, true)
+                }
             }
         }
 
         private fun bindWinner(data: NotificationItem.NotificationModel) {
             val data = data.data as NotificationAdditionalData.NotificationChallengeWinnerDataModel
             binding.apply {
+                image.setImageResource(R.drawable.ic_new_challenge_event)
+
                 val spannable = SpannableStringBuilder()
                     .append(root.context.getString(R.string.you_win_challenge) + " ")
-                    .append(createClickableSpannable(
-                        data.challengeName.doubleQuoted(),
-                        R.color.general_brand
-                    ) {
-                        onChallengeClicked(data.challengeId)
-                    })
+                    .append(
+                        createClickableSpannable(
+                            data.challengeName.doubleQuoted(),
+                            R.color.general_brand,
+                            null
+                        )
+                    )
                 description.text = spannable
+                root.setOnClickListener {
+                    onChallengeClicked(data.challengeId, false)
+                }
             }
         }
 
@@ -373,3 +403,4 @@ enum class Targets {
     Transaction,
     Report
 }
+
