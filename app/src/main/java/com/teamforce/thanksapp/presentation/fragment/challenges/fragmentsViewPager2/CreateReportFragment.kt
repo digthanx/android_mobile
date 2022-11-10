@@ -156,6 +156,7 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
             Glide.with(this)
                 .load(filePath)
                 .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.image)
             uriToMultipart(filePath!!)
         }
@@ -203,6 +204,7 @@ class CreateReportFragment : Fragment(R.layout.fragment_create_report) {
                     Glide.with(this)
                         .load(path)
                         .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade())
                         .into(binding.image)
                     uriToMultipart(path)
                 }

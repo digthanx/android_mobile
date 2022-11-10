@@ -9,6 +9,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.ItemChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
@@ -72,8 +73,8 @@ class ChallengePagerAdapter(
             if (!data.photo.isNullOrEmpty()) {
                 Glide.with(binding.root.context)
                     .load("${Consts.BASE_URL}${data.photo}".toUri())
-                    .fitCenter()
                     .centerCrop()
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.imageBackground)
                 binding.apply {
                     successfulPersonImage.visibility = View.INVISIBLE

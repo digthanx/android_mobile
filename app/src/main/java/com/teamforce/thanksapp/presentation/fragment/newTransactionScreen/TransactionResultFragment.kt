@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentTransactionResultBinding
 import com.teamforce.thanksapp.utils.Consts
@@ -60,6 +61,7 @@ class TransactionResultFragment : Fragment() {
             Glide.with(view)
                 .load(receiverPhoto?.toUri())
                 .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.receiverAvatar)
         }else{
             binding.receiverAvatar.setImageResource(R.drawable.ic_anon_avatar)

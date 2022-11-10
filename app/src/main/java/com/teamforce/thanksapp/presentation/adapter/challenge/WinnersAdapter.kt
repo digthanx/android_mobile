@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.GetChallengeWinnersResponse
@@ -71,6 +72,7 @@ class WinnersAdapter(
                 Glide.with(binding.root.context)
                     .load("${Consts.BASE_URL}${currentList[position].participant_photo}".toUri())
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.userAvatar)
             }
             binding.userItem.setOnClickListener {

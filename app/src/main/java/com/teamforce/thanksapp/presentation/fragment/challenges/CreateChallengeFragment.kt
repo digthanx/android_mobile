@@ -214,6 +214,7 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
                     Glide.with(this)
                         .load(path)
                         .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade())
                         .into(binding.image)
                     uriToMultipart(path)
                 }

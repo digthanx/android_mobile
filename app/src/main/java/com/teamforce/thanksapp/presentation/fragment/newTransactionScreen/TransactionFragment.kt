@@ -301,6 +301,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         Glide.with(this)
             .load(path)
             .centerCrop()
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.image)
         val file = File(path)
         val requestFile: RequestBody =
@@ -458,6 +459,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                     Glide.with(v)
                         .load("${Consts.BASE_URL}/media/${user?.photo}".toUri())
                         .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade())
                         .into(receiverAvatar)
                 }
                 receiverTgName.text = user?.tgName

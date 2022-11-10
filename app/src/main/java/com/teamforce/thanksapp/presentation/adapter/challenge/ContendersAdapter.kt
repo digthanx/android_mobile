@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
@@ -67,12 +68,14 @@ class ContendersAdapter(
                 Glide.with(holder.binding.root.context)
                     .load("${Consts.BASE_URL}${currentList[position].participant_photo}".toUri())
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.binding.userAvatar)
             }
             if(!currentList[position].report_photo.isNullOrEmpty()){
                 Glide.with(holder.binding.root.context)
                     .load("${Consts.BASE_URL}${currentList[position].report_photo}".toUri())
                     .centerCrop()
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.binding.image)
             }else{
                 binding.showAttachedImgCard.visibility = View.GONE

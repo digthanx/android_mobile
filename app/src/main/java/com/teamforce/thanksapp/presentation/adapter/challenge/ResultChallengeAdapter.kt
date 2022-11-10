@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.GetChallengeResultResponse
 import com.teamforce.thanksapp.databinding.ItemResultChallengeBinding
@@ -58,8 +59,8 @@ class ResultChallengeAdapter(
     override fun onBindViewHolder(holder: ResultChallengeViewHolder, position: Int) {
         Glide.with(holder.binding.root.context)
             .load("${Consts.BASE_URL}${currentList[position].photo}".toUri())
-            .fitCenter()
             .centerCrop()
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(holder.binding.image)
         with(holder.binding){
             stateEt.text = currentList[position].status
