@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NotificationSharedViewModel @Inject constructor(
     private val notificationsRepository: NotificationsRepository,
-    private val sharedPreferences: SharedPreferences,
+    sharedPreferences: SharedPreferences,
     app: Application
 ) : AndroidViewModel(app) {
     init {
@@ -28,15 +28,7 @@ class NotificationSharedViewModel @Inject constructor(
                 app.contentResolver,
                 Settings.Secure.ANDROID_ID
             )
-            viewModelScope.launch {
-
-                notificationsRepository.updatePushToken(
-                    PushTokenEntity(
-                        device = id,
-                        token = sharedPreferences.pushToken!!
-                    )
-                )
-            }
+            updatePushToken(token = sharedPreferences.pushToken!!, deviceId = id)
         }
     }
 
@@ -48,14 +40,7 @@ class NotificationSharedViewModel @Inject constructor(
                 value = counter
             }
             if (it is NotificationStates.PushTokenUpdated) {
-                viewModelScope.launch {
-                    notificationsRepository.updatePushToken(
-                        PushTokenEntity(
-                            device = it.deviceId,
-                            token = it.token
-                        )
-                    )
-                }
+                updatePushToken(token = it.token, deviceId = it.deviceId)
             }
         }
     }
@@ -66,7 +51,6 @@ class NotificationSharedViewModel @Inject constructor(
                 is ResultWrapper.Success -> state.value = result.value.unreadNotificationsAmount
                 else -> state.value = 0
             }
-
         }
     }
 
@@ -75,4 +59,14 @@ class NotificationSharedViewModel @Inject constructor(
         state.value = counter
     }
 
+    fun updatePushToken(token: String, deviceId: String) {
+        viewModelScope.launch {
+            notificationsRepository.updatePushToken(
+                PushTokenEntity(
+                    device = deviceId,
+                    token = token
+                )
+            )
+        }
+    }
 }

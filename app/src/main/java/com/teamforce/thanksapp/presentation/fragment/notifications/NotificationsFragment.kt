@@ -88,21 +88,30 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
         )
     }
 
-    private fun onTransactionClicked(transactionId: Int) {
+    private fun onTransactionClicked(transactionId: Int, isReaction: Boolean?) {
+        var page = 0
+        if (isReaction != null) {
+            page = if (isReaction) 2
+            else 1
+        }
         findNavController().navigate(
             R.id.action_notificationsFragment_to_additionalInfoFeedItemFragment2,
             bundleOf(
                 Consts.TRANSACTION_ID to transactionId,
+                Consts.NEEDED_PAGE_POSITION to page
             ),
             OptionsTransaction().optionForEditProfile
 
         )
     }
 
-    private fun onChallengeClicked(challengeId: Int) {
+    private fun onChallengeClicked(challengeId: Int, isTabChangeRequired: Boolean) {
         findNavController().navigateSafely(
             R.id.action_global_detailsMainChallengeFragment,
-            bundleOf(ChallengesConsts.CHALLENGER_ID to challengeId),
+            bundleOf(
+                ChallengesConsts.CHALLENGER_ID to challengeId,
+                if (isTabChangeRequired) Consts.NEEDED_PAGE_POSITION to 3 else Consts.NEEDED_PAGE_POSITION to 0
+            ),
             OptionsTransaction().optionForAdditionalInfoFeedFragment
         )
     }
