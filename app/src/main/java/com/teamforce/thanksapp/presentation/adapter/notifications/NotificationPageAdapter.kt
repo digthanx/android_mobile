@@ -57,7 +57,6 @@ class NotificationPageAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        Log.d(PushNotificationService.TAG, "onCreateViewHolder: $viewType")
         return when (viewType) {
             TRANSACTION_VIEW_TYPE, CHALLENGE_VIEW_TYPE, COMMENT_VIEW_TYPE, LIKE_VIEW_TYPE,
             WINNER_VIEW_TYPE, CHALLENGE_REPORT_VIEW_TYPE -> {
