@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,30 +17,28 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.canhub.cropper.CropImageContract
-import com.canhub.cropper.CropImageContractOptions
-import com.canhub.cropper.CropImageOptions
-import com.canhub.cropper.CropImageView
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.teamforce.thanksapp.BuildConfig
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.UserBean
 import com.teamforce.thanksapp.databinding.FragmentTransactionBinding
 import com.teamforce.thanksapp.model.domain.TagModel
 import com.teamforce.thanksapp.presentation.adapter.UsersAdapter
-import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.TransactionViewModel
 import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,6 +46,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+
 
 @AndroidEntryPoint
 class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClickListener {
@@ -60,7 +61,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                addPhotoFromIntent(useGallery = true, useCamera = true)
+                showDialogCameraOrGallery()
             } else {
                 showDialogAboutPermissions()
             }
@@ -69,8 +70,10 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
 
     private var listValues: List<TagModel> = listOf() // Изначальный списко полученных tags
     var listCheckedIdByOrder = mutableListOf<Int>() // Список id chips выбранных
+
     // Конечный список id tags который отправиться в запрос
     private var listCheckedIdTags: MutableList<Int> = mutableListOf()
+
     // Число на которое нужно будет вычесть(порядковый id первого чипа)
     private var numberForSubtraction = 0
 
@@ -162,7 +165,10 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
             // Сохраняем id чипов(их id начинаются с 29 самый первый чип)
             listCheckedIdByOrder = checkedIds
             numberForSubtraction = group.children.first().id
-            Log.d("Token", "list of checked chips ${checkedIds} и id первого дочернего элемента ${numberForSubtraction}")
+            Log.d(
+                "Token",
+                "list of checked chips ${checkedIds} и id первого дочернего элемента ${numberForSubtraction}"
+            )
         }
     }
 
@@ -185,15 +191,51 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     }
 
     private val resultLauncher =
-        registerForActivityResult(CropImageContract()) { result ->
-            if (result.isSuccessful && result.uriContent != null) {
-                val pathCroppedPhoto = result.getUriFilePath(requireContext(), false)
-                if (pathCroppedPhoto != null) {
-                    uriToMultipart(pathCroppedPhoto)
-                }
-
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val path = result.data?.data?.let { getPath(requireContext(), it) }
+                if (path != null)
+                    uriToMultipart(path = path)
             }
         }
+
+    private var latestTmpUri: Uri? = null
+    private val takeImageResult =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+            if(isSuccess){
+                latestTmpUri?.let {
+                    binding.showAttachedImgCard.visible()
+                    binding.image.setImageURI(it)
+                    val path = getFilePathFromUri(requireContext(), it, true)
+                    uriToMultipart(path = path)
+                }
+            }
+        }
+
+    private fun takeImage() {
+        lifecycleScope.launchWhenStarted {
+            getTmpFileUri().let { uri ->
+                latestTmpUri = uri
+                takeImageResult.launch(uri)
+            }
+        }
+    }
+    private fun getTmpFileUri(): Uri? {
+        val cacheDir: File? = activity?.cacheDir
+        val tmpFile = File.createTempFile("tmp_image_file", ".png", cacheDir).apply {
+            createNewFile()
+            deleteOnExit()
+        }
+
+        return activity?.applicationContext?.let {
+            FileProvider.getUriForFile(
+                it,
+                "${BuildConfig.APPLICATION_ID}.provider", tmpFile
+            )
+        }
+    }
+
+
 
     private fun showPhoneStatePermission() {
 
@@ -202,7 +244,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 requireContext(),
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
-                addPhotoFromIntent(useGallery = true, useCamera = true)
+                showDialogCameraOrGallery()
             }
             shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
                 showRequestPermissionRational()
@@ -211,6 +253,20 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
                 requestPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
+    }
+
+    private fun showDialogCameraOrGallery(){
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.whatApproachToGetImage))
+            .setNegativeButton(resources.getString(R.string.gallery)) { dialog, _ ->
+                getImageFromGallery()
+                dialog.cancel()
+            }
+            .setPositiveButton(resources.getString(R.string.camera)) { dialog, _ ->
+                captureImage()
+                dialog.cancel()
+            }
+            .show()
     }
 
     private fun showRequestPermissionRational() {
@@ -228,33 +284,28 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
     }
 
 
-
-    private fun addPhotoFromIntent(useGallery: Boolean, useCamera: Boolean) {
+    private fun getImageFromGallery() {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.type = "image/*"
-        resultLauncher.launch(
-            CropImageContractOptions(
-                pickIntent.data, CropImageOptions(
-                    imageSourceIncludeGallery = useGallery,
-                    imageSourceIncludeCamera = useCamera,
-                    guidelines = CropImageView.Guidelines.ON,
-                    backgroundColor = requireContext().getColor(R.color.general_contrast),
-                    activityBackgroundColor = requireContext().getColor(R.color.general_contrast)
-                )
-            )
-        )
+        resultLauncher.launch(pickIntent)
+    }
+
+    private fun captureImage() {
+//        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//        intent.putExtra("camera", true)
+//        resultLauncher.launch(intent)
+
+        takeImage()
     }
 
 
-    private fun uriToMultipart(filePathOfCroppedPhoto: String) {
-        // Хардовая вставка картинки с самого начала
-        // Убрать как только сделаю обновление по свайпам
+    private fun uriToMultipart(path: String) {
         binding.showAttachedImgCard.visible()
         Glide.with(this)
-            .load(filePathOfCroppedPhoto)
+            .load(path)
             .centerCrop()
             .into(binding.image)
-        val file = File(filePathOfCroppedPhoto)
+        val file = File(path)
         val requestFile: RequestBody =
             RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
