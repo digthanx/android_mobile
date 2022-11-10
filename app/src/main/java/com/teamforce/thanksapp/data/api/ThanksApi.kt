@@ -2,6 +2,7 @@ package com.teamforce.thanksapp.data.api
 
 import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEntity
 import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
+import com.teamforce.thanksapp.data.entities.notifications.*
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.request.*
@@ -248,4 +249,20 @@ interface ThanksApi {
     suspend fun getReactionsForTransaction(
         @Body data: GetReactionsForTransactionRequest
     ): GetReactionsForTransactionsResponse
+
+    @POST("/set-fcm-token/")
+    suspend fun setPushToken(@Body token: PushTokenEntity): PushTokenEntity
+
+    @POST("/remove-fcm-token/")
+    suspend fun removePushToken(@Body remove: RemovePushTokenEntity): RemovePushTokenResultEntity
+
+    @GET("/notifications/")
+    suspend fun getNotifications(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): List<NotificationEntity>
+
+
+    @GET("/notifications/unread/amount/")
+    suspend fun getUnreadNotificationAmount(): UnreadNotificationsAmountEntity
 }

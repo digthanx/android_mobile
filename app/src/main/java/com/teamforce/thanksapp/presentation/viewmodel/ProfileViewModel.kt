@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamforce.thanksapp.NotificationsRepository
+import com.teamforce.thanksapp.PushNotificationService
 import com.teamforce.thanksapp.domain.models.profile.ProfileModel
 import com.teamforce.thanksapp.domain.repositories.ProfileRepository
 import com.teamforce.thanksapp.domain.usecases.LoadProfileUseCase
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
     private val loadProfileUseCase: LoadProfileUseCase,
-    private val profileRepository: ProfileRepository
+    private val profileRepository: ProfileRepository,
+    private val notificationsRepository: NotificationsRepository
 ) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -84,9 +87,21 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun logout() {
-        userDataRepository.logout()
+    fun logout(deviceId: String) {
+        //при выходе из аккаунта удаляем пуш токен, чтобы не приходили уведомления
+        viewModelScope.launch {
+            try {
+                notificationsRepository.deletePushToken(
+                    deviceId
+                )
+            } catch (e:Exception) {
+                Log.d(PushNotificationService.TAG, "logout: error $e")
+            }
+            userDataRepository.logout()
+        }
     }
+
+
 
     fun isUserAuthorized() = userDataRepository.getAuthToken() != null
 

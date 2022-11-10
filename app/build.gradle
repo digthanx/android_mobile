@@ -39,7 +39,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-
     buildTypes {
         release {
             //signingConfig signingConfigs.release
@@ -78,9 +77,10 @@ android {
     viewBinding {
         enabled = true
     }
-
 }
 dependencies {
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
+
 
     // Library for Cropping Image
     implementation("com.vanniktech:android-image-cropper:4.4.0")

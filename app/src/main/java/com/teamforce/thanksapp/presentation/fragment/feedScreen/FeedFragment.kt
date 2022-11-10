@@ -5,15 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.teamforce.thanksapp.NotificationSharedViewModel
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentFeedBinding
 import com.teamforce.thanksapp.presentation.adapter.feed.PagerAdapter
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import com.teamforce.thanksapp.utils.ViewLifecycleDelegate
+import com.teamforce.thanksapp.utils.invisible
+import com.teamforce.thanksapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -21,8 +25,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     private val binding: FragmentFeedBinding by viewBinding()
-    private val pagerAdapter by ViewLifecycleDelegate {PagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)}
+    private val pagerAdapter by ViewLifecycleDelegate {
+        PagerAdapter(
+            childFragmentManager,
+            viewLifecycleOwner.lifecycle
+        )
+    }
     private var mediator: TabLayoutMediator? = null
+    private val sharedViewModel: NotificationSharedViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,6 +60,25 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 R.id.action_feedFragment_to_profileGraph, null,
                 OptionsTransaction().optionForProfileFragment
             )
+        }
+
+        binding.notifyLayout.setOnClickListener {
+            findNavController().navigate(R.id.action_feedFragment_to_notificationFragment)
+        }
+
+        sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
+            if (notificationsCount == 0) {
+                binding.apply {
+                    activeNotifyLayout.invisible()
+                    notify.visible()
+                }
+            } else {
+                binding.apply {
+                    activeNotifyLayout.visible()
+                    notify.invisible()
+                    notifyBadge.text = notificationsCount.toString()
+                }
+            }
         }
     }
 

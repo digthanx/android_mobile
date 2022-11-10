@@ -241,6 +241,22 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gallery_title">Gallery title</string>
     <string name="grant_permission">Grant Permission</string>
+    <!--    Notifications-->
+    <string name="notifications">Уведомления</string>
+    <string name="received_part">Получено</string>
+    <string name="thanks_from_part">спасибок от</string>
+    <string name="new_reaction_to">Новая реакция на</string>
+    <string name="to_transaction">переводу</string>
+    <string name="to_challenge">челленджу</string>
+    <string name="to_your_report">вашей заявке</string>
+    <string name="new_comment_to">Новый комментарий к</string>
+    <string name="transaction">перевод</string>
+    <string name="challenge">челлендж</string>
+    <string name="your_report">вашу заявку</string>
+    <string name="new_challenge">Новый челлендж</string>
+    <string name="new_report_to_challenge">Новый отчет к челленджу</string>
+    <string name="you_win_challenge">Вы победили в челлендже</string>
+    <!--    feed-->
 
 
     <!--feed-->
