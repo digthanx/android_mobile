@@ -120,6 +120,7 @@
     <string name="successfulCancel">Спасибки вернутся на ваш счет :)</string>
     <string name="setTag">#%s</string>
     <string name="forWinningInChallenge">за победу в челлендже</string>
+    <string name="inFundOfChallenge">в фонд челленджа</string>
     <!-- Additional Info Bottom Sheet Dialog Fragment -->
     <string name="message">Сообщение</string>
     <string name="photo">Фотография</string>

@@ -17,6 +17,7 @@ import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -72,8 +73,10 @@ class HistoryPageAdapter(
                 }
                 is HistoryItem.UserTransactionsResponse -> {
                     val viewHolder = holder as HistoryItemViewHolder
-                    viewHolder.bind(item, username, onCancelClicked,
-                        onChallengeClicked, onSomeonesClicked)
+                    viewHolder.bind(
+                        item, username, onCancelClicked,
+                        onChallengeClicked, onSomeonesClicked
+                    )
                 }
 
             }
@@ -126,39 +129,78 @@ class HistoryPageAdapter(
                     refuseTransactionBtn.visibility = View.GONE
 
                 }
-                if (data.sender?.sender_tg_name != "anonymous" && data.sender?.sender_tg_name == username
+                if (data.sender?.sender_tg_name != "anonymous" &&
+                    data.sender?.sender_tg_name == username
                 ) {
-                    // Я отправитель
-                    val spannable = SpannableStringBuilder(
-                    ).append(
-                        createClickableSpannable(
-                            root.context.getString(R.string.youSended) + " ",
-                            R.color.black,
-                            null
-                        )
-                    ).append(
-                        createClickableSpannable(
-                            root.context.getString(
-                                R.string.amountThanks,
-                                data.amount
-                            ) + " ",
-                            R.color.minor_success,
-                            null
-                        )
-                    ).append(
-                        createClickableSpannable(
-                            data.recipient?.recipient_surname + " " +
-                                    data.recipient?.recipient_first_name + " ",
-                            R.color.general_brand
-                        ) {
-                            data.recipient_id?.let {
-                                onSomeonesClicked(it)
+                    if (data.transactionClass.id == "H") {
+                        // Я отправитель
+                        // В случае создания челленджа
+                        val spannable = SpannableStringBuilder(
+                        ).append(
+                            createClickableSpannable(
+                                root.context.getString(R.string.youSended) + " ",
+                                R.color.black,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                root.context.getString(
+                                    R.string.amountThanks,
+                                    data.amount
+                                ) + " ",
+                                R.color.minor_success,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                " " + root.context.getString(R.string.inFundOfChallenge) + " ",
+                                R.color.black,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                data.sender?.challenge_name?.doubleQuoted() ?: "",
+                                R.color.general_brand
+                            ) {
+                                data.sender?.challenge_id?.let { onChallengeClicked(it) }
                             }
-                        }
-                    )
-                    message.text = spannable
-                    descr_transaction_1 = binding.root.context.getString(R.string.youSended)
-                    labelStatusTransaction = binding.root.context.getString(R.string.statusTransfer)
+                        )
+                        message.text = spannable
+
+                    }else{
+                        // Я отправитель
+                        val spannable = SpannableStringBuilder(
+                        ).append(
+                            createClickableSpannable(
+                                root.context.getString(R.string.youSended) + " ",
+                                R.color.black,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                root.context.getString(
+                                    R.string.amountThanks,
+                                    data.amount
+                                ) + " ",
+                                R.color.minor_success,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                data.recipient?.recipient_surname + " " +
+                                        data.recipient?.recipient_first_name + " ",
+                                R.color.general_brand
+                            ) {
+                                data.recipient_id?.let {
+                                    onSomeonesClicked(it)
+                                }
+                            }
+                        )
+                        descr_transaction_1 = binding.root.context.getString(R.string.youSended)
+                        labelStatusTransaction = binding.root.context.getString(R.string.statusTransfer)
+                        message.text = spannable
+                    }
+
                     if (!data.recipient?.recipient_photo.isNullOrEmpty()) {
                         Glide.with(binding.root.context)
                             .load("${Consts.BASE_URL}${data.recipient?.recipient_photo}".toUri())
@@ -168,63 +210,7 @@ class HistoryPageAdapter(
                         avatar =
                             "${Consts.BASE_URL}${data.recipient?.recipient_photo}"
                     }
-
-                    if (status.equals("A")) {
-                        statusTransferTextView.text =
-                            binding.root.context.getString(R.string.occured)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_success))
-
-                        comingStatusTransaction = binding.root.context.getString(R.string.occured)
-
-                    } else if (status.equals("D")) {
-                        // отклонен контролером
-                        statusTransferTextView.text =
-                            binding.root.context.getString(R.string.refused)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_error))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_error))
-                        descr_transaction_1 =
-                            binding.root.context.getString(R.string.youWantedToSend)
-                        weRefusedYourOperation =
-                            binding.root.context.getString(R.string.weRefusedYourOperation)
-                        comingStatusTransaction =
-                            binding.root.context.getString(R.string.operationWasRefused)
-                        // Убираю причину отмены
-                        // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
-                        // Где мне брать причину отказа? Записывать в переменную ниже
-                        // holder.comingStatusTransaction = context.getString(R.string.on_approval)
-                    } else if (status.equals("W")) {
-                        statusTransferTextView.text =
-                            binding.root.context.getString(R.string.on_approval)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_warning))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_warning))
-
-                        comingStatusTransaction =
-                            binding.root.context.getString(R.string.on_approval)
-                    } else if (status.equals("G")) {
-                        statusTransferTextView.text = binding.root.context.getString(R.string.G)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_warning))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_warning))
-                        comingStatusTransaction = binding.root.context.getString(R.string.G)
-                    } else if (status.equals("R")) {
-                        statusTransferTextView.text =
-                            binding.root.context.getString(R.string.occured)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_success))
-                        comingStatusTransaction = binding.root.context.getString(R.string.occured)
-                    } else if (status.equals("C")) {
-                        statusTransferTextView.text =
-                            binding.root.context.getString(R.string.refused)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_error))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_error))
-                        descr_transaction_1 =
-                            binding.root.context.getString(R.string.youWantedToSend)
-                        weRefusedYourOperation =
-                            binding.root.context.getString(R.string.iRefusedMyOperation)
-                        comingStatusTransaction =
-                            binding.root.context.getString(R.string.operationWasRefused)
-                        //holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
-                    }
+                    setStatusTransaction(data)
                 } else {
                     if (data.sender?.sender_tg_name == "anonymous") {
                         // Я получатель от анонима
@@ -314,7 +300,7 @@ class HistoryPageAdapter(
                                 }
                             )
                             message.text = spannable
-                        }else{
+                        } else {
                             val spannable = SpannableStringBuilder(
                             ).append(
                                 createClickableSpannable(
@@ -350,47 +336,7 @@ class HistoryPageAdapter(
                             binding.root.context.getString(R.string.comingTransfer)
                     }
 
-                    if (status.equals("A")) {
-                        statusTransferTextView.text =
-                            binding.root.context.getString(R.string.occured)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_success))
-                    } else if (status.equals("D")) {
-                        // Отклонен контролером
-                        comingStatusTransaction =
-                            binding.root.context.getString(R.string.operationWasRefused)
-                        statusTransferTextView.text =
-                            binding.root.context.getString(R.string.refused)
-                        weRefusedYourOperation =
-                            binding.root.context.getString(R.string.weRefusedYourOperation)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_error))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_error))
-
-                    } else if (status.equals("G")) {
-                        statusTransferTextView.text = binding.root.context.getString(R.string.G)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_warning))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_warning))
-                        comingStatusTransaction = binding.root.context.getString(R.string.G)
-                    } else if (status.equals("R")) {
-                        statusTransferTextView.text =
-                            binding.root.context.getString(R.string.occured)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_success))
-                        comingStatusTransaction = binding.root.context.getString(R.string.occured)
-                    } else if (status.equals("C")) {
-                        statusTransferTextView.text =
-                            binding.root.context.getString(R.string.refused)
-                        statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_error))
-                        statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_error))
-                        descr_transaction_1 =
-                            binding.root.context.getString(R.string.youWantedToSend)
-                        weRefusedYourOperation =
-                            binding.root.context.getString(R.string.iRefusedMyOperation)
-                        comingStatusTransaction =
-                            binding.root.context.getString(R.string.operationWasRefused)
-
-                        // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
-                    }
+                   setStatusTransaction(data)
                 }
 
                 chipGroup.removeAllViews()
@@ -398,7 +344,7 @@ class HistoryPageAdapter(
                 if (!data.tags.isNullOrEmpty()) {
                     binding.scrollForChipGroup.visibility = View.VISIBLE
                     setTags(chipGroup, data.tags)
-                }else{
+                } else {
                     binding.scrollForChipGroup.visibility = View.GONE
                 }
 
@@ -406,7 +352,7 @@ class HistoryPageAdapter(
                 transactionToAnotherProfile(username, data)
 
                 photoFromSender = data.photo
-                if(data.transactionClass.id != "W"){
+                if (data.transactionClass.id != "W" && data.transactionClass.id != "H") {
                     mainCard.setOnClickListener { v ->
                         val bundle = Bundle()
                         bundle.apply {
@@ -443,13 +389,60 @@ class HistoryPageAdapter(
                             bundle
                         )
                     }
-                }else{
-                    mainCard.setOnClickListener{ view ->
+                } else {
+                    mainCard.setOnClickListener { view ->
                         data.sender?.challenge_id?.let { it -> onChallengeClicked(it) }
                     }
                 }
 
             }
+        }
+
+        private fun setStatusTransaction(data: HistoryItem.UserTransactionsResponse){
+            binding.apply {
+                if (data.transaction_status.id.equals("A")) {
+                    statusTransferTextView.text =
+                        binding.root.context.getString(R.string.occured)
+                    statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
+                    statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_success))
+                } else if (data.transaction_status.id.equals("D")) {
+                    // Отклонен контролером
+                    comingStatusTransaction =
+                        binding.root.context.getString(R.string.operationWasRefused)
+                    statusTransferTextView.text =
+                        binding.root.context.getString(R.string.refused)
+                    weRefusedYourOperation =
+                        binding.root.context.getString(R.string.weRefusedYourOperation)
+                    statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_error))
+                    statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_error))
+
+                } else if (data.transaction_status.id.equals("G")) {
+                    statusTransferTextView.text = binding.root.context.getString(R.string.G)
+                    statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_warning))
+                    statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_warning))
+                    comingStatusTransaction = binding.root.context.getString(R.string.G)
+                } else if (data.transaction_status.id.equals("R")) {
+                    statusTransferTextView.text =
+                        binding.root.context.getString(R.string.occured)
+                    statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_success))
+                    statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_success))
+                    comingStatusTransaction = binding.root.context.getString(R.string.occured)
+                } else if (data.transaction_status.id.equals("C")) {
+                    statusTransferTextView.text =
+                        binding.root.context.getString(R.string.refused)
+                    statusTransferTextView.setBackgroundColor(binding.root.context.getColor(R.color.minor_error))
+                    statusCard.setCardBackgroundColor(binding.root.context.getColor(R.color.minor_error))
+                    descr_transaction_1 =
+                        binding.root.context.getString(R.string.youWantedToSend)
+                    weRefusedYourOperation =
+                        binding.root.context.getString(R.string.iRefusedMyOperation)
+                    comingStatusTransaction =
+                        binding.root.context.getString(R.string.operationWasRefused)
+
+                    // holder.labelStatusTransaction = context.getString(R.string.reasonOfRefusing)
+                }
+            }
+
         }
 
         private fun createClickableSpannable(
