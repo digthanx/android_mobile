@@ -1,11 +1,14 @@
 package com.teamforce.thanksapp.presentation.viewmodel
 
+import android.app.Application
+import android.provider.Settings
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.*
+import com.teamforce.thanksapp.NotificationsRepository
+import com.teamforce.thanksapp.data.SharedPreferences
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.data.entities.notifications.PushTokenEntity
 import com.teamforce.thanksapp.data.request.AuthorizationRequest
 import com.teamforce.thanksapp.data.request.VerificationRequest
 import com.teamforce.thanksapp.data.response.VerificationResponse
@@ -30,7 +33,10 @@ class LoginViewModel @Inject constructor(
     private val thanksApi: ThanksApi,
     val userDataRepository: UserDataRepository,
     private val loadProfileUseCase: LoadProfileUseCase,
-    ) : ViewModel() {
+    private val sharedPreferences: SharedPreferences,
+    private val notificationsRepository: NotificationsRepository,
+    private val app: Application
+) : AndroidViewModel(app) {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -163,6 +169,7 @@ class LoginViewModel @Inject constructor(
                                         )
                                     )
                                 )
+                                updatePushToken()
                             }
                         } else {
                             _verifyResult.postValue(Result.Error(response.message() + " " + response.code()))
@@ -175,6 +182,25 @@ class LoginViewModel @Inject constructor(
                     }
                 })
         }
+    }
+
+    private fun updatePushToken() {
+        val token = sharedPreferences.pushToken
+        if (token != null) {
+            val deviceId = Settings.Secure.getString(
+                app.contentResolver,
+                Settings.Secure.ANDROID_ID
+            )
+            viewModelScope.launch {
+                notificationsRepository.updatePushToken(
+                    PushTokenEntity(
+                        token = token,
+                        device = deviceId
+                    )
+                )
+            }
+        }
+
     }
 
     fun verifyCodeEmail(code: String) {
