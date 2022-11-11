@@ -28,9 +28,10 @@ class MainFlowFragment : BaseFlowFragment(
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMainFlowBinding.inflate(inflater, container, false)
-val color =        ColorDrawable(0x000000)
+        val color = ColorDrawable(0x000000)
         color.alpha = 0
-        binding.bottomNavigation.findViewById<BottomNavigationItemView>(R.id.transaction_graph).background = color
+        binding.bottomNavigation.findViewById<BottomNavigationItemView>(R.id.transaction_graph).background =
+            color
 
         return binding.root
     }
@@ -42,7 +43,11 @@ val color =        ColorDrawable(0x000000)
 
 
         binding.fab.setOnClickListener {
-            navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransactionWithSaveBackStack)
+            navController.navigate(
+                R.id.transaction_graph,
+                null,
+                OptionsTransaction().optionForTransactionWithSaveBackStack
+            )
         }
 
 
@@ -51,11 +56,19 @@ val color =        ColorDrawable(0x000000)
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.feed_graph -> {
-                    navController.navigate(R.id.feed_graph, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.feed_graph,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
                 R.id.balance_graph -> {
-                    navController.navigate(R.id.balance_graph, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.balance_graph,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
 //                R.id.transaction_graph -> {
@@ -63,11 +76,19 @@ val color =        ColorDrawable(0x000000)
 //                    return@OnItemSelectedListener true
 //                }
                 R.id.history_graph -> {
-                    navController.navigate(R.id.history_graph, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.history_graph,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
                 R.id.challenge_graph -> {
-                    navController.navigate(R.id.challengesFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.challengesFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemSelectedListener true
                 }
             }
@@ -77,23 +98,43 @@ val color =        ColorDrawable(0x000000)
         binding.bottomNavigation.setOnItemReselectedListener(NavigationBarView.OnItemReselectedListener { item ->
             when (item.itemId) {
                 R.id.feed_graph -> {
-                    navController.navigate(R.id.feed_graph, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.feed_graph,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
                 R.id.balance_graph -> {
-                    navController.navigate(R.id.balance_graph, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.balance_graph,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
                 R.id.transaction_graph -> {
-                    navController.navigate(R.id.transaction_graph, null, OptionsTransaction().optionForTransactionWithSaveBackStack)
+                    navController.navigate(
+                        R.id.transaction_graph,
+                        null,
+                        OptionsTransaction().optionForTransactionWithSaveBackStack
+                    )
                     return@OnItemReselectedListener
                 }
                 R.id.history_graph -> {
-                    navController.navigate(R.id.history_graph, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.history_graph,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
                 R.id.challenge_graph -> {
-                    navController.navigate(R.id.challengesFragment, null, OptionsTransaction().optionForTransaction)
+                    navController.navigate(
+                        R.id.challengesFragment,
+                        null,
+                        OptionsTransaction().optionForTransaction
+                    )
                     return@OnItemReselectedListener
                 }
             }
@@ -101,7 +142,7 @@ val color =        ColorDrawable(0x000000)
         })
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if( destination.id == R.id.transactionFragment ||
+            if (destination.id == R.id.transactionFragment ||
                 destination.id == R.id.someonesProfileFragment ||
                 destination.id == R.id.additionalInfoFeedItemFragment ||
                 destination.id == R.id.editProfileBottomSheetFragment ||
@@ -111,21 +152,23 @@ val color =        ColorDrawable(0x000000)
                 destination.id == R.id.challengesWinnersDetailFragment ||
                 destination.id == R.id.notificationFragment ||
                 destination.id == R.id.notificationsFragment ||
-                destination.id == R.id.additionalInfoFeedItemFragment2){
+                destination.id == R.id.additionalInfoFeedItemFragment2 ||
+                destination.id == R.id.transactionResultFragment
+            ) {
                 hideBottomNavigation()
-            }else{
+            } else {
                 showBottomNavigation()
             }
         }
     }
 
-    private fun hideBottomNavigation(){
+    private fun hideBottomNavigation() {
         binding.bottomNavigation.visibility = View.GONE
         binding.bottomAppBar.visibility = View.GONE
         binding.fab.hide()
     }
 
-    private fun showBottomNavigation(){
+    private fun showBottomNavigation() {
         binding.bottomNavigation.visibility = View.VISIBLE
         binding.bottomAppBar.visibility = View.VISIBLE
         binding.fab.show()

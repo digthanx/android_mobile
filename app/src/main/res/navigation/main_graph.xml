@@ -108,6 +108,9 @@
                 app:destination="@id/history_graph"
                 app:popUpToInclusive="false" />
         </fragment>
+        <action
+            android:id="@+id/action_global_feed_graph"
+            app:destination="@id/feed_graph" />
     </navigation>
     <navigation android:id="@+id/history_graph"
         app:startDestination="@id/historyFragment">

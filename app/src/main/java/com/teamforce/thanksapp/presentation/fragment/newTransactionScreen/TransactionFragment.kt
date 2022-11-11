@@ -418,7 +418,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
 //            binding.sendCoinLinear.visibility = View.GONE
 //            binding.textField.visibility = View.VISIBLE
             binding.messageValueEt.setText("")
-            binding.countValueEt.setText("")
+            binding.countValueEt.setText("1")
             //Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
             val snack = Snackbar.make(
                 requireView(),
@@ -518,7 +518,7 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction), View.OnClic
         receiverSurname: String, photo: String
     ) {
         binding.textField.editText?.setText("")
-        binding.countValueEt.setText(R.string.empty)
+        binding.countValueEt.setText("1")
         binding.messageValueEt.setText(R.string.empty)
         binding.sendCoinLinear.visibility = View.GONE
         val bundle = Bundle()

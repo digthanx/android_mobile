@@ -1,8 +1,10 @@
 package com.teamforce.thanksapp.presentation.fragment.newTransactionScreen
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
@@ -30,6 +32,11 @@ class TransactionResultFragment : Fragment() {
     private var receiverName: String? = null
     private var receiverSurname: String? = null
     private var receiverPhoto: String? = null
+
+    private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,8 +76,9 @@ class TransactionResultFragment : Fragment() {
 
         binding.btnToTheBeginning.setOnClickListener {
             findNavController().navigate(
-                R.id.action_transactionResultFragment_to_transactionFragment,
-                null, OptionsTransaction().optionForResult)
+                R.id.action_global_feed_graph,
+                null, OptionsTransaction().optionForTransaction)
+
         }
         binding.btnToTheHistory.setOnClickListener {
 
