@@ -230,6 +230,7 @@ class TransactionViewModel @Inject constructor(
                         _sendCoinsError.postValue(t.message)
                     }
                 })
+            _isSuccessOperation.postValue(false)
         }
     }
 
