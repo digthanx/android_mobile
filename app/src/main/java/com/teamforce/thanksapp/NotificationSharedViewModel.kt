@@ -59,7 +59,7 @@ class NotificationSharedViewModel @Inject constructor(
         state.value = counter
     }
 
-    fun updatePushToken(token: String, deviceId: String) {
+    private fun updatePushToken(token: String, deviceId: String) {
         viewModelScope.launch {
             notificationsRepository.updatePushToken(
                 PushTokenEntity(
