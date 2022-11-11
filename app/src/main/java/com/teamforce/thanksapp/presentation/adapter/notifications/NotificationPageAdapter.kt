@@ -154,7 +154,8 @@ class NotificationPageAdapter(
                         root.context.getString(R.string.from) + " "
                     ).append(
                         createClickableSpannable(
-                            data.senderTgName.username(),
+                            if (data.senderId == null) root.context.getString(R.string.anonymous)
+                                .username() else data.senderTgName.username(),
                             R.color.general_brand,
                         ) {
                             if (data.senderId != null) {
