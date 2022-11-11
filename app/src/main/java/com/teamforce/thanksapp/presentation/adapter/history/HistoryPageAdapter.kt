@@ -72,8 +72,10 @@ class HistoryPageAdapter(
                 }
                 is HistoryItem.UserTransactionsResponse -> {
                     val viewHolder = holder as HistoryItemViewHolder
-                    viewHolder.bind(item, username, onCancelClicked,
-                        onChallengeClicked, onSomeonesClicked)
+                    viewHolder.bind(
+                        item, username, onCancelClicked,
+                        onChallengeClicked, onSomeonesClicked
+                    )
                 }
 
             }
@@ -126,39 +128,78 @@ class HistoryPageAdapter(
                     refuseTransactionBtn.visibility = View.GONE
 
                 }
-                if (data.sender?.sender_tg_name != "anonymous" && data.sender?.sender_tg_name == username
+                if (data.sender?.sender_tg_name != "anonymous" &&
+                    data.sender?.sender_tg_name == username
                 ) {
-                    // Я отправитель
-                    val spannable = SpannableStringBuilder(
-                    ).append(
-                        createClickableSpannable(
-                            root.context.getString(R.string.youSended) + " ",
-                            R.color.black,
-                            null
-                        )
-                    ).append(
-                        createClickableSpannable(
-                            root.context.getString(
-                                R.string.amountThanks,
-                                data.amount
-                            ) + " ",
-                            R.color.minor_success,
-                            null
-                        )
-                    ).append(
-                        createClickableSpannable(
-                            data.recipient?.recipient_surname + " " +
-                                    data.recipient?.recipient_first_name + " ",
-                            R.color.general_brand
-                        ) {
-                            data.recipient_id?.let {
-                                onSomeonesClicked(it)
+                    if (data.transactionClass.id == "H") {
+                        // Я отправитель
+                        // В случае создания челленджа
+                        val spannable = SpannableStringBuilder(
+                        ).append(
+                            createClickableSpannable(
+                                root.context.getString(R.string.youSended) + " ",
+                                R.color.black,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                root.context.getString(
+                                    R.string.amountThanks,
+                                    data.amount
+                                ) + " ",
+                                R.color.minor_success,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                " " + root.context.getString(R.string.inFundOfChallenge) + " ",
+                                R.color.black,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                data.sender?.challenge_name?.doubleQuoted() ?: "",
+                                R.color.general_brand
+                            ) {
+                                data.sender?.challenge_id?.let { onChallengeClicked(it) }
                             }
-                        }
-                    )
-                    message.text = spannable
-                    descr_transaction_1 = binding.root.context.getString(R.string.youSended)
-                    labelStatusTransaction = binding.root.context.getString(R.string.statusTransfer)
+                        )
+                        message.text = spannable
+
+                    }else{
+                        // Я отправитель
+                        val spannable = SpannableStringBuilder(
+                        ).append(
+                            createClickableSpannable(
+                                root.context.getString(R.string.youSended) + " ",
+                                R.color.black,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                root.context.getString(
+                                    R.string.amountThanks,
+                                    data.amount
+                                ) + " ",
+                                R.color.minor_success,
+                                null
+                            )
+                        ).append(
+                            createClickableSpannable(
+                                data.recipient?.recipient_surname + " " +
+                                        data.recipient?.recipient_first_name + " ",
+                                R.color.general_brand
+                            ) {
+                                data.recipient_id?.let {
+                                    onSomeonesClicked(it)
+                                }
+                            }
+                        )
+                        descr_transaction_1 = binding.root.context.getString(R.string.youSended)
+                        labelStatusTransaction = binding.root.context.getString(R.string.statusTransfer)
+                        message.text = spannable
+                    }
+
                     if (!data.recipient?.recipient_photo.isNullOrEmpty()) {
                         Glide.with(binding.root.context)
                             .load("${Consts.BASE_URL}${data.recipient?.recipient_photo}".toUri())
@@ -314,7 +355,7 @@ class HistoryPageAdapter(
                                 }
                             )
                             message.text = spannable
-                        }else{
+                        } else {
                             val spannable = SpannableStringBuilder(
                             ).append(
                                 createClickableSpannable(
@@ -398,7 +439,7 @@ class HistoryPageAdapter(
                 if (!data.tags.isNullOrEmpty()) {
                     binding.scrollForChipGroup.visibility = View.VISIBLE
                     setTags(chipGroup, data.tags)
-                }else{
+                } else {
                     binding.scrollForChipGroup.visibility = View.GONE
                 }
 
@@ -406,7 +447,7 @@ class HistoryPageAdapter(
                 transactionToAnotherProfile(username, data)
 
                 photoFromSender = data.photo
-                if(data.transactionClass.id != "W"){
+                if (data.transactionClass.id != "W" && data.transactionClass.id != "H") {
                     mainCard.setOnClickListener { v ->
                         val bundle = Bundle()
                         bundle.apply {
@@ -443,8 +484,8 @@ class HistoryPageAdapter(
                             bundle
                         )
                     }
-                }else{
-                    mainCard.setOnClickListener{ view ->
+                } else {
+                    mainCard.setOnClickListener { view ->
                         data.sender?.challenge_id?.let { it -> onChallengeClicked(it) }
                     }
                 }

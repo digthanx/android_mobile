@@ -41,5 +41,5 @@ object Consts {
     private const val SP_ARG_TELEGRAM = "Telegram"
     private const val SP_ARG_TOKEN = "Token"
 
-    const val PAGE_SIZE = 5
+    const val PAGE_SIZE = 10
 }
