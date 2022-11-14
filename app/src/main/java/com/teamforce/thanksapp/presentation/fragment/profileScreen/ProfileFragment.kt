@@ -204,12 +204,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 }
             }
 
-            binding.userAvatar.setOnLongClickListener { view ->
-                it.profile.photo?.let { photo ->
-                    showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
-                }
-                return@setOnLongClickListener true
-            }
         }
 
     }

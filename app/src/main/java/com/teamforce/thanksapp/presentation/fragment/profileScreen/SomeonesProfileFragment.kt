@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -22,6 +23,7 @@ import com.teamforce.thanksapp.databinding.FragmentSomeonesProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.SomeonesProfileViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.UserDataRepository
+import com.teamforce.thanksapp.utils.showDialogAboutDownloadImage
 import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -132,6 +134,13 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
                 it.profile.photo?.let { photo ->
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
+            }
+
+            binding.userAvatar.setOnLongClickListener { view ->
+                it.profile.photo?.let { photo ->
+                    showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                }
+                return@setOnLongClickListener true
             }
         }
     }

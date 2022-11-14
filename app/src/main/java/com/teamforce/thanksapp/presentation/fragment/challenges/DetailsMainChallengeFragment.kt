@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -19,6 +20,7 @@ import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsMainChall
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_DATA
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.showDialogAboutDownloadImage
 import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -179,6 +181,12 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                 urlPhoto?.let { photo ->
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
+            }
+            binding.imageBackground.setOnLongClickListener { view ->
+                urlPhoto?.let { photo ->
+                    showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                }
+                return@setOnLongClickListener true
             }
         } else {
             binding.standardCard.visibility = View.VISIBLE

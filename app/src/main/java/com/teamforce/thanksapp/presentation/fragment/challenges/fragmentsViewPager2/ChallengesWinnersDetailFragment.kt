@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -57,6 +58,13 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
                 it?.challengePhoto?.let { photo ->
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
+            }
+
+            binding.imageBackground.setOnLongClickListener { view ->
+                it?.challengePhoto?.let { photo ->
+                    showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                }
+                return@setOnLongClickListener true
             }
                 Glide.with(requireContext())
                     .load("${Consts.BASE_URL}${it?.user?.avatar}".toUri())
