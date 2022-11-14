@@ -20,6 +20,10 @@ class VerticalDividerDecoratorForListWithBottomBar(
             bottom = divider
         }
 
+        if(parent.getChildLayoutPosition(view) == 0){
+            outRect.top = 20
+        }
+
         // Для последнего элемента устанавливаем отдельный отступ
         if (parent.getChildLayoutPosition(view) == parent.adapter?.itemCount?.minus(1)) {
             outRect.bottom = 200
