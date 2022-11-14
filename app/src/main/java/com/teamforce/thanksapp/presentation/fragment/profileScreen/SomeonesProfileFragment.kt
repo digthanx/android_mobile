@@ -105,7 +105,7 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
             .setNegativeButton(resources.getString(R.string.close)) { dialog, _ ->
                 dialog.cancel()
             }
-            .setPositiveButton("Хорошо") { dialog, _ ->
+            .setPositiveButton(resources.getString(R.string.good)) { dialog, _ ->
                 requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 dialog.cancel()
             }
@@ -204,12 +204,17 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
             } else {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
             }
-
+            binding.userAvatar.setOnClickListener { view ->
+                it.profile.photo?.let { photo ->
+                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                }
+            }
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-                binding.userAvatar.setOnClickListener { view ->
+                binding.userAvatar.setOnLongClickListener { view ->
                     it.profile.photo?.let { photo ->
-                        (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                        showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
                     }
+                    return@setOnLongClickListener true
                 }
             }else{
                 if(checkPermission()){

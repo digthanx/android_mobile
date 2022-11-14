@@ -283,5 +283,6 @@
 
     <!--Разрешения-->
     <string name="dontHaveEnoughPermissions">Нет разрешений. Перейдите в настройки</string>
+    <string name="good">Хорошо</string>
 
 </resources>
