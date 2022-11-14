@@ -16,6 +16,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.stfalcon.imageviewer.StfalconImageViewer
@@ -43,6 +44,22 @@ fun ImageView.viewSinglePhoto(image: String, context: Context) {
             .into(imageView)
     }.withHiddenStatusBar(false).show()
 }
+//  TODO Пытался добавить внутрь просмотра сразу фичу скачивания, но там ничего не вышло у меня, разрабы библы пишут тчо нужно кастом вью делать
+//fun ImageView.viewSinglePhoto2(image: String, context: Context) {
+//    val images = mutableListOf<String>()
+//    val fullSizeImage = image.replace("_thumb", "").replace(Consts.BASE_URL, "")
+//    images.add(fullSizeImage)
+//    StfalconImageViewer.Builder<String>(context, images) { imageView, image ->
+//        Glide.with(this)
+//            .load("${Consts.BASE_URL}${image}".toUri())
+//            .fitCenter()
+//            .transition(DrawableTransitionOptions.withCrossFade())
+//            .error(R.drawable.ic_anon_avatar)
+//            .into(imageView)
+//    }.withHiddenStatusBar(false)
+//        .withImageChangeListener(showDialogAboutDownloadImage())
+//        .show()
+//}
 
 // С ростом данного файла скоро придется расписать его в виде класса, хотя какой с этого толк...
 fun showDialogAboutDownloadImage(photo: String, clickedView: View, context: Context, lifecycleScope: LifecycleCoroutineScope){
