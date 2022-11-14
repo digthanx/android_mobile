@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -30,6 +31,10 @@ import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.*
 import java.util.*
 
@@ -197,6 +202,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 it.profile.photo?.let { photo ->
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
+            }
+
+            binding.userAvatar.setOnLongClickListener { view ->
+                it.profile.photo?.let { photo ->
+                    lifecycleScope.launch(Dispatchers.Main){
+                        (view as ShapeableImageView).saveToStorage(photo, requireContext())
+                    }
+                }
+                return@setOnLongClickListener true
             }
         }
     }
