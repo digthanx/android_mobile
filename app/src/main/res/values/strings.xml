@@ -23,6 +23,9 @@
     <string name="confirmation_code_label">Введите код подтверждения</string>
     <string name="incorrect_code">Неверный код</string>
     <string name="auth">Авторизация</string>
+    <string name="login_description">Построение культуры признания
+    и благодарности</string>
+    <string name="login_title">Цифровое спасибо</string>
     <!-- Profile Fragment -->
     <string name="username_label">ФИО</string>
     <string name="greeting_label">Привет, %s!</string>
