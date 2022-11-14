@@ -50,11 +50,15 @@
         Вы не дали нам достаточно разрешений для работы.
         Данные разрешения нам нужны для обновления аватара.
         Запросить разрешения повторно?</string>
+    <string name="wouldYouLikeToSaveImage"> Сохранить изображение?
+        </string>
     <string name="avatar">Аватар</string>
     <string name="settings">Настройки</string>
     <string name="stringData">Личную информацию</string>
     <string name="exit">Выйти</string>
     <string name="close">Закрыть</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
     <!-- Edit Profile Bottom Sheet Fragment -->
     <string name="contacts">КОНТАКТЫ</string>
     <string name="save">Сохранить</string>

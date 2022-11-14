@@ -56,28 +56,29 @@ fun ShapeableImageView.viewSinglePhoto(image: String, context: Context) {
 }
 
 
-
-suspend fun ImageView.saveToStorage(imageUri: String, context: Context){
+suspend fun ImageView.saveToStorage(imageUri: String, context: Context) {
     val fullSizeImage = imageUri.replace("_thumb", "")
-    val imageBitmap = withContext(Dispatchers.IO){
-         getUriFromBitmap(fullSizeImage)
+    val imageBitmap = withContext(Dispatchers.IO) {
+        getUriFromBitmap(fullSizeImage)
     }
     val imageName = "thanksApp_${System.currentTimeMillis()}.jpg"
     var fos: OutputStream? = null
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         context.contentResolver?.also { resolver ->
             val contentValues = ContentValues().apply {
                 put(MediaStore.MediaColumns.DISPLAY_NAME, imageName)
                 put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
             }
-            val imageURI: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            val imageURI: Uri? =
+                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
             fos = imageURI?.let {
                 resolver.openOutputStream(it)
             }
         }
-    }else{
-        val imageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+    } else {
+        val imageDirectory =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         val image = File(imageDirectory, imageName)
         // TODO Может привести к голоданию потока, что сделать?
         fos = FileOutputStream(image)
@@ -91,7 +92,8 @@ suspend fun ImageView.saveToStorage(imageUri: String, context: Context){
 }
 
 
- suspend fun getUriFromBitmap(imageUri: String): Bitmap?{
+
+fun getUriFromBitmap(imageUri: String): Bitmap? {
     var image: Bitmap? = null
     try {
         val stringUrl = "${Consts.BASE_URL}${imageUri}"
