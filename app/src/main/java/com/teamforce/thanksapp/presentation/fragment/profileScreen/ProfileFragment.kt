@@ -195,7 +195,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
             binding.userAvatar.setOnClickListener { view ->
                 it.profile.photo?.let { photo ->
-                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                    (view as ShapeableImageView).imageView(
+                        photo,
+                        requireContext(),
+                        PosterOverlayView(requireContext()) {
+
+                        }
+                    )
                 }
             }
         }
@@ -296,8 +302,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
             .show()
     }
-
-
 
 
     private fun initViews() {
