@@ -206,28 +206,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
             binding.userAvatar.setOnLongClickListener { view ->
                 it.profile.photo?.let { photo ->
-                    showDialogAboutDownloadImage(photo, view)
+                    showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
                 }
                 return@setOnLongClickListener true
             }
         }
+
     }
 
-    private fun showDialogAboutDownloadImage(photo: String, clickedView: View){
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage(resources.getString(R.string.wouldYouLikeToSaveImage))
-
-            .setNegativeButton(resources.getString(R.string.no)) { dialog, _ ->
-                dialog.cancel()
-            }
-            .setPositiveButton(resources.getString(R.string.yes)) { dialog, which ->
-                dialog.cancel()
-                lifecycleScope.launch(Dispatchers.Main){
-                    (clickedView as ShapeableImageView).saveToStorage(photo, requireContext())
-                }
-            }
-            .show()
-    }
 
     private fun greetingUser(username: String) {
         val spannable = SpannableStringBuilder(

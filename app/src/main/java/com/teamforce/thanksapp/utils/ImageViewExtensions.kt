@@ -2,23 +2,26 @@ package com.teamforce.thanksapp.utils
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.net.toUri
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.teamforce.thanksapp.R
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
@@ -41,7 +44,24 @@ fun ImageView.viewSinglePhoto(image: String, context: Context) {
     }.withHiddenStatusBar(false).show()
 }
 
-suspend fun ImageView.saveToStorage(imageUri: String, context: Context) {
+// С ростом данного файла скоро придется расписать его в виде класса, хотя какой с этого толк...
+fun showDialogAboutDownloadImage(photo: String, clickedView: View, context: Context, lifecycleScope: LifecycleCoroutineScope){
+    MaterialAlertDialogBuilder(context)
+        .setMessage(context.resources.getString(R.string.wouldYouLikeToSaveImage))
+
+        .setNegativeButton(context.resources.getString(R.string.no)) { dialog, _ ->
+            dialog.cancel()
+        }
+        .setPositiveButton(context.resources.getString(R.string.yes)) { dialog, which ->
+            dialog.cancel()
+            lifecycleScope.launch(Dispatchers.Main){
+                if (clickedView is ImageView) clickedView.saveToStorage(photo, context)
+            }
+        }
+        .show()
+}
+
+private suspend fun ImageView.saveToStorage(imageUri: String, context: Context) {
     val fullSizeImage = imageUri.replace("_thumb", "")
     val imageBitmap = withContext(Dispatchers.IO) {
         getUriFromBitmap(fullSizeImage)
@@ -90,44 +110,6 @@ fun getUriFromBitmap(imageUri: String): Bitmap? {
     return image
 }
 
-//private fun saveImage(image: Bitmap, context: Context): String? {
-//    var savedImagePath: String? = null
-//    val imageFileName = "JPEG_" + "FILE_NAME" + ".jpg"
-//    val storageDir = File(
-//        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-//            .toString() + "/YOUR_FOLDER_NAME"
-//    )
-//    var success = true
-//    if (!storageDir.exists()) {
-//        success = storageDir.mkdirs()
-//    }
-//    if (success) {
-//        val imageFile = File(storageDir, imageFileName)
-//        savedImagePath = imageFile.getAbsolutePath()
-//        try {
-//            val fOut: OutputStream = FileOutputStream(imageFile)
-//            image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
-//            fOut.close()
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-//
-//        // Add the image to the system gallery
-//        galleryAddPic(savedImagePath, context)
-//        //Toast.makeText(this, "IMAGE SAVED", Toast.LENGTH_LONG).show() // to make this working, need to manage coroutine, as this execution is something off the main thread
-//    }
-//    return savedImagePath
-//}
-//
-//private fun galleryAddPic(imagePath: String?, context: Context) {
-//    imagePath?.let { path ->
-//        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_MOUNTED)
-//        val f = File(path)
-//        val contentUri: Uri = Uri.fromFile(f)
-//        mediaScanIntent.data = contentUri
-//        context.sendBroadcast(mediaScanIntent)
-//    }
-//}
 
 
 
