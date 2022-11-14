@@ -8,6 +8,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -19,6 +20,7 @@ import com.teamforce.thanksapp.presentation.adapter.decorators.VerticalDividerIt
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.ContendersChallengeViewModel
 import com.teamforce.thanksapp.utils.invisible
+import com.teamforce.thanksapp.utils.showDialogAboutDownloadImage
 import com.teamforce.thanksapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -60,6 +62,9 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
                 contendersAdapter!!.itemCount
             )
         )
+        contendersAdapter?.onImageLongClicked = { clickedView, photo ->
+            showDialogAboutDownloadImage(photo, clickedView, requireContext(), lifecycleScope)
+        }
         loadParticipants()
         setData()
         listeners()
