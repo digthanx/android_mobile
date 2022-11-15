@@ -27,6 +27,8 @@ import com.teamforce.thanksapp.utils.*
 import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.TRANSACTION_ID
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AdditionalInfoFeedItemFragment : Fragment() {
@@ -181,17 +183,20 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 userIdSender = it?.sender_id
                 setLikes(it?.like_amount, it?.user_liked)
 
-                // Переход к просмотру фото
+                // Переход к просмотру фото с скачиванием
                 binding.userAvatar.setOnClickListener { view ->
                     it?.recipient_photo?.let { photo ->
-                        (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                        (view as ShapeableImageView).imageView(
+                            photo,
+                            requireContext(),
+                            PosterOverlayView(requireContext()) {
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                    downloadImage(url, requireContext())
+                                }
+                            }
+                        )
                     }
-                }
-                binding.userAvatar.setOnLongClickListener { view ->
-                    it?.recipient_photo?.let { photo ->
-                        showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
-                    }
-                    return@setOnLongClickListener true
                 }
             }
         }

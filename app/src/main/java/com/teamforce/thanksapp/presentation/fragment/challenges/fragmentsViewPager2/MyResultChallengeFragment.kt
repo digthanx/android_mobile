@@ -16,13 +16,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentMyResultChallengeBinding
 import com.teamforce.thanksapp.presentation.adapter.challenge.ResultChallengeAdapter
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.MyResultChallengeViewModel
-import com.teamforce.thanksapp.utils.showDialogAboutDownloadImage
+import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MyResultChallengeFragment : Fragment(R.layout.fragment_my_result_challenge) {
@@ -113,18 +116,32 @@ class MyResultChallengeFragment : Fragment(R.layout.fragment_my_result_challenge
         binding.listOfResults.adapter = listAdapter
         loadMyResult()
         listeners()
-        listAdapter?.onImageLongClicked = { clickedView, photo ->
-            showDialogAboutDownloadImage(photo, clickedView, requireContext(), lifecycleScope)
-        }
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-            listAdapter?.onImageLongClicked = { clickedView, photo ->
-                showDialogAboutDownloadImage(photo, clickedView, requireContext(), lifecycleScope)
-            }
+            listAdapter?.onImageClicked = { clickedView, photo ->
+                (view as ShapeableImageView).imageView(
+                    photo,
+                    requireContext(),
+                    PosterOverlayView(requireContext()) {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                            downloadImage(url, requireContext())
+                        }
+                    }
+                )            }
         }else{
             if(checkPermission()){
-                listAdapter?.onImageLongClicked = { clickedView, photo ->
-                    showDialogAboutDownloadImage(photo, clickedView, requireContext(), lifecycleScope)
-                }
+                listAdapter?.onImageClicked = { clickedView, photo ->
+                    (view as ShapeableImageView).imageView(
+                        photo,
+                        requireContext(),
+                        PosterOverlayView(requireContext()) {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                downloadImage(url, requireContext())
+                            }
+                        }
+                    )                }
             }else{
                 Toast.makeText(
                     requireContext(),

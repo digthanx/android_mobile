@@ -23,6 +23,8 @@ import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.WinnersDetailChallengeViewModel
 import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_winners_detail) {
@@ -60,11 +62,19 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
                 }
             }
 
-            binding.imageBackground.setOnLongClickListener { view ->
+            binding.imageBackground.setOnClickListener { view ->
                 it?.challengePhoto?.let { photo ->
-                    showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                    (view as ShapeableImageView).imageView(
+                        photo,
+                        requireContext(),
+                        PosterOverlayView(requireContext()) {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                downloadImage(url, requireContext())
+                            }
+                        }
+                    )
                 }
-                return@setOnLongClickListener true
             }
                 Glide.with(requireContext())
                     .load("${Consts.BASE_URL}${it?.user?.avatar}".toUri())

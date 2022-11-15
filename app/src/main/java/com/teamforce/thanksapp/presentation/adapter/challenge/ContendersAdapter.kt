@@ -30,7 +30,7 @@ class ContendersAdapter(
 ): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(
     DiffCallback
 ){
-    var onImageLongClicked: ((view: View, photo: String) -> Unit)? = null
+    var onImageClicked: ((view: View, photo: String) -> Unit)? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContenderViewHolder {
@@ -78,13 +78,12 @@ class ContendersAdapter(
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.binding.image)
-                binding.image.setOnLongClickListener { clickedView ->
+                binding.image.setOnClickListener { clickedView ->
                     currentList[position].report_photo?.let {
-                        onImageLongClicked?.invoke(clickedView,
+                        onImageClicked?.invoke(clickedView,
                             it
                         )
                     }
-                    return@setOnLongClickListener true
                 }
             }else{
                 binding.showAttachedImgCard.visibility = View.GONE

@@ -31,11 +31,10 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentSomeonesProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.SomeonesProfileViewModel
-import com.teamforce.thanksapp.utils.Consts
-import com.teamforce.thanksapp.utils.UserDataRepository
-import com.teamforce.thanksapp.utils.showDialogAboutDownloadImage
-import com.teamforce.thanksapp.utils.viewSinglePhoto
+import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
@@ -204,25 +203,37 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
             } else {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
             }
-            binding.userAvatar.setOnClickListener { view ->
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                binding.userAvatar.setOnClickListener { view ->
                 it.profile.photo?.let { photo ->
-                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                    (view as ShapeableImageView).imageView(
+                        photo,
+                        requireContext(),
+                        PosterOverlayView(requireContext()) {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                downloadImage(url, requireContext())
+                            }
+                        }
+                    )
                 }
             }
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-                binding.userAvatar.setOnLongClickListener { view ->
-                    it.profile.photo?.let { photo ->
-                        showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
-                    }
-                    return@setOnLongClickListener true
-                }
             }else{
                 if(checkPermission()){
-                    binding.userAvatar.setOnLongClickListener { view ->
+                    binding.userAvatar.setOnClickListener { view ->
                         it.profile.photo?.let { photo ->
-                            showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                            (view as ShapeableImageView).imageView(
+                                photo,
+                                requireContext(),
+                                PosterOverlayView(requireContext()) {
+                                    lifecycleScope.launch(Dispatchers.Main) {
+                                        val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                        downloadImage(url, requireContext())
+                                    }
+                                }
+                            )
                         }
-                        return@setOnLongClickListener true
                     }
                 }else{
                     Toast.makeText(

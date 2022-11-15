@@ -27,10 +27,10 @@ import com.teamforce.thanksapp.model.domain.ChallengeModelById
 import com.teamforce.thanksapp.presentation.adapter.challenge.FragmentDetailChallengeStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsMainChallengeViewModel
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
-import com.teamforce.thanksapp.utils.Consts
-import com.teamforce.thanksapp.utils.showDialogAboutDownloadImage
-import com.teamforce.thanksapp.utils.viewSinglePhoto
+import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -252,29 +252,49 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
 
             binding.imageBackground.setOnClickListener { view ->
                 urlPhoto?.let { photo ->
-                    (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                    (view as ShapeableImageView).imageView(
+                        photo,
+                        requireContext(),
+                        PosterOverlayView(requireContext()) {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                downloadImage(url, requireContext())
+                            }
+                        }
+                    )
                 }
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                binding.imageBackground.setOnLongClickListener { view ->
+                binding.imageBackground.setOnClickListener { view ->
                     urlPhoto?.let { photo ->
-                        showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                        (view as ShapeableImageView).imageView(
+                            photo,
+                            requireContext(),
+                            PosterOverlayView(requireContext()) {
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                    downloadImage(url, requireContext())
+                                }
+                            }
+                        )
                     }
-                    return@setOnLongClickListener true
                 }
             } else {
                 if (checkPermission()) {
-                    binding.imageBackground.setOnLongClickListener { view ->
+                    binding.imageBackground.setOnClickListener { view ->
                         urlPhoto?.let { photo ->
-                            showDialogAboutDownloadImage(
+                            (view as ShapeableImageView).imageView(
                                 photo,
-                                view,
                                 requireContext(),
-                                lifecycleScope
+                                PosterOverlayView(requireContext()) {
+                                    lifecycleScope.launch(Dispatchers.Main) {
+                                        val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                        downloadImage(url, requireContext())
+                                    }
+                                }
                             )
                         }
-                        return@setOnLongClickListener true
                     }
                 } else {
                     Toast.makeText(

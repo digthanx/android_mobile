@@ -87,27 +87,27 @@ fun ShapeableImageView.imageView(image: String, context: Context, view: View) {
         .show()
 }
 
-fun showDialogAboutDownloadImage(
-    photo: String,
-    clickedView: View,
-    context: Context,
-    lifecycleScope: LifecycleCoroutineScope
-) {
-    MaterialAlertDialogBuilder(context)
-        .setMessage(context.resources.getString(R.string.wouldYouLikeToSaveImage))
-
-        .setNegativeButton(context.resources.getString(R.string.no)) { dialog, _ ->
-            dialog.cancel()
-        }
-        .setPositiveButton(context.resources.getString(R.string.yes)) { dialog, which ->
-            dialog.cancel()
-            lifecycleScope.launch(Dispatchers.Main) {
-                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
-                //if (clickedView is ImageView) clickedView.downloadImage(url, context)
-            }
-        }
-        .show()
-}
+//fun showDialogAboutDownloadImage(
+//    photo: String,
+//    clickedView: View,
+//    context: Context,
+//    lifecycleScope: LifecycleCoroutineScope
+//) {
+//    MaterialAlertDialogBuilder(context)
+//        .setMessage(context.resources.getString(R.string.wouldYouLikeToSaveImage))
+//
+//        .setNegativeButton(context.resources.getString(R.string.no)) { dialog, _ ->
+//            dialog.cancel()
+//        }
+//        .setPositiveButton(context.resources.getString(R.string.yes)) { dialog, which ->
+//            dialog.cancel()
+//            lifecycleScope.launch(Dispatchers.Main) {
+//                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+//                //if (clickedView is ImageView) clickedView.downloadImage(url, context)
+//            }
+//        }
+//        .show()
+//}
 
 private suspend fun ImageView.saveToStorage(imageUri: String, context: Context) {
     val fullSizeImage = imageUri.replace("_thumb", "")

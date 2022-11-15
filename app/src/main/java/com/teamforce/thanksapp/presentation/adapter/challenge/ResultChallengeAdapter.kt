@@ -27,7 +27,7 @@ class ResultChallengeAdapter(
 ) : ListAdapter<GetChallengeResultResponse,
         ResultChallengeAdapter.ResultChallengeViewHolder>(DiffCallback) {
 
-     var onImageLongClicked: ((view: View, photo: String) -> Unit)? = null
+     var onImageClicked: ((view: View, photo: String) -> Unit)? = null
 
 
     companion object {
@@ -80,11 +80,10 @@ class ResultChallengeAdapter(
                     (view as ImageView).viewSinglePhoto(photo, holder.binding.root.context)
                 }
             }
-            holder.binding.image.setOnLongClickListener{ view ->
+            holder.binding.image.setOnClickListener{ view ->
                 currentList[position].photo?.let { photo ->
-                    onImageLongClicked?.invoke(view, photo)
+                    onImageClicked?.invoke(view, photo)
                 }
-                return@setOnLongClickListener true
             }
         }
         with(holder.binding) {

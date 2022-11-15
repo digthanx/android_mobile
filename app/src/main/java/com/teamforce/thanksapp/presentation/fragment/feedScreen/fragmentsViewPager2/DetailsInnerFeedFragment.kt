@@ -22,15 +22,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.entities.feed.Tag
 import com.teamforce.thanksapp.databinding.FragmentDetailsInnerFeedBinding
 import com.teamforce.thanksapp.presentation.viewmodel.feed.DetailInnerFeedViewModel
-import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.*
 import com.teamforce.thanksapp.utils.Consts.TRANSACTION_ID
-import com.teamforce.thanksapp.utils.showDialogAboutDownloadImage
-import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 /**
@@ -150,31 +151,36 @@ class DetailsInnerFeedFragment : Fragment(R.layout.fragment_details_inner_feed) 
                     cardViewImg.visibility = View.GONE
                 }
 
-                binding.senderImage.setOnClickListener { view ->
-                    it?.photo?.let { photo ->
-                        (view as ImageView).viewSinglePhoto(photo, requireContext())
-                    }
-                }
-
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-                    binding.senderImage.setOnLongClickListener { view ->
+                    binding.senderImage.setOnClickListener { view ->
                         it?.photo?.let { photo ->
-                            showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                            (view as ShapeableImageView).imageView(
+                                photo,
+                                requireContext(),
+                                PosterOverlayView(requireContext()) {
+                                    lifecycleScope.launch(Dispatchers.Main) {
+                                        val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                        downloadImage(url, requireContext())
+                                    }
+                                }
+                            )
                         }
-                        return@setOnLongClickListener true
                     }
                 }else {
                     if (checkPermission()) {
-                        binding.senderImage.setOnLongClickListener { view ->
+                        binding.senderImage.setOnClickListener { view ->
                             it?.photo?.let { photo ->
-                                showDialogAboutDownloadImage(
+                                (view as ShapeableImageView).imageView(
                                     photo,
-                                    view,
                                     requireContext(),
-                                    lifecycleScope
+                                    PosterOverlayView(requireContext()) {
+                                        lifecycleScope.launch(Dispatchers.Main) {
+                                            val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                            downloadImage(url, requireContext())
+                                        }
+                                    }
                                 )
                             }
-                            return@setOnLongClickListener true
                         }
                     } else {
                         Toast.makeText(

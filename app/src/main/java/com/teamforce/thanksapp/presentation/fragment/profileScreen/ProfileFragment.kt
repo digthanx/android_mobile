@@ -246,8 +246,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                                 val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
                                 downloadImage(url, requireContext())
                             }
-                            Toast.makeText(requireContext(), "Download goes here", Toast.LENGTH_SHORT).show()
-
                         }
                     )
                 }
