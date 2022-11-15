@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.forEach
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -50,7 +51,8 @@ fun ImageView.viewSinglePhoto(image: String, context: Context) {
             .transition(DrawableTransitionOptions.withCrossFade())
             .error(R.drawable.ic_anon_avatar)
             .into(imageView)
-    }
+    }        .withBackgroundColor(context.getColor(R.color.black))
+
         .show()
 }
 
@@ -81,9 +83,9 @@ fun ShapeableImageView.imageView(image: String, context: Context, view: View) {
             .error(R.drawable.ic_anon_avatar)
             .into(imageView)
     }
+        .withBackgroundColor(context.getColor(R.color.black))
+        .withHiddenStatusBar(false)
         .withOverlayView(view)
-        .withBackgroundColor(context.getColor(R.color.general_color_grey))
-        .withHiddenStatusBar(true)
         .show()
 }
 
@@ -264,6 +266,7 @@ class PosterOverlayView @JvmOverloads constructor(
     init {
         View.inflate(context, R.layout.layout_image_overlay, this)
         val toolbar = findViewById<Toolbar>(R.id.image_viewer_toolbar)
+
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.download -> {
