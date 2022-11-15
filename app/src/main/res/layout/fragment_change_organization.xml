@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/general_brand"
+    tools:context=".presentation.fragment.auth.ChangeOrganizationFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/general_brand"
+        android:layout_marginTop="48dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginBottom="32dp"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/ic_app_logo"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auth"
+            android:textAppearance="@style/Headline3.White" />
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/MyCardView"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/padding_x"
+            android:orientation="vertical">
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textFieldCode"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                app:boxCornerRadiusTopStart="15dp"
+                android:layout_marginBottom="26dp"
+                app:boxStrokeWidth="0.5dp"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/general_brand"
+                app:boxStrokeColor="@color/general_color_grey">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/code_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/confirmation_code_label"
+                    android:lines="1"
+                    android:inputType="number"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/helperText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:visibility="visible"
+                android:linksClickable="true"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@color/general_brand"
+                android:text="@string/helperTextStandard" />
+
+            <TextView
+                android:id="@+id/helperLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:visibility="gone"
+                android:linksClickable="true"
+                android:textStyle="italic"
+                android:clickable="false"
+                android:focusable="true"
+                android:layout_gravity="center"
+                android:textColor="@color/general_brand"
+                android:layout_marginBottom="@dimen/margin_huge"
+                android:text="@string/helperLink"
+                />
+
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</LinearLayout>

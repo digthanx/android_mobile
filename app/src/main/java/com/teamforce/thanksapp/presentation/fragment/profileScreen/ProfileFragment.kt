@@ -115,6 +115,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 setData(adapter)
             }
         }
+        viewModel.authResult.observe(viewLifecycleOwner){
+            if(it) activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
+        }
     }
 
     private fun showAlertDialogForChangeOrg(adapter: ArrayAdapter<String>, id: Long) {

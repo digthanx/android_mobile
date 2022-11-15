@@ -48,8 +48,8 @@ class ProfileViewModel @Inject constructor(
     private val _organisationsError = MutableLiveData<String>()
     val organizationsError: LiveData<String> = _organisationsError
 
-    private val _authResult = MutableLiveData<Result<Boolean>>()
-    val authResult: LiveData<Result<Boolean>> = _authResult
+    private val _authResult = MutableLiveData<Boolean>()
+    val authResult: LiveData<Boolean> = _authResult
 
     private var xCode: String? = null
     private var xId: String? = null
@@ -88,15 +88,15 @@ class ProfileViewModel @Inject constructor(
                                 authorizationType = AuthorizationType.Email
                             }
                             xCode = response.headers().get("X-Code")
-                            _authResult.postValue(Result.Success(true))
+                            _authResult.postValue(true)
                         } else {
-                            _authResult.postValue(Result.Error("${response.message()} ${response.code()}"))
+                            _authResult.postValue(false)
                         }
                     }
 
                     override fun onFailure(call: Call<Any>, t: Throwable) {
                         _isLoading.postValue(false)
-                        _authResult.postValue(Result.Error(t.message ?: "Something went wrong"))
+                        _authResult.postValue(false)
                     }
                 })
         }
