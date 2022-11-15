@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.NotificationsRepository
 import com.teamforce.thanksapp.PushNotificationService
+import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.domain.models.profile.ProfileModel
 import com.teamforce.thanksapp.domain.repositories.ProfileRepository
 import com.teamforce.thanksapp.domain.usecases.LoadProfileUseCase
@@ -35,6 +36,32 @@ class ProfileViewModel @Inject constructor(
 
     val profile: LiveData<ProfileModel> = _profile
     private val _profileError = MutableLiveData<String>()
+
+    private val _organisations = MutableLiveData<List<OrganizationModel>?>()
+    val organizations: LiveData<List<OrganizationModel>?> = _organisations
+    private val _organisationsError = MutableLiveData<String>()
+    val organizationsError: LiveData<String> = _organisationsError
+
+    fun loadUserOrganizations() {
+        _isLoading.postValue(true)
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _isLoading.postValue(true)
+
+                when (val result = profileRepository.getOrganizations()) {
+                    is ResultWrapper.Success -> {
+                        _organisations.postValue(result.value)
+                    }
+                    is ResultWrapper.GenericError ->
+                        _organisationsError.postValue(result.error + " " + result.code)
+
+                    is ResultWrapper.NetworkError ->
+                        _organisationsError.postValue("Ошибка сети")
+                }
+                _isLoading.postValue(false)
+            }
+        }
+    }
 
     fun loadUserProfile() {
         _isLoading.postValue(true)

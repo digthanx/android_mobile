@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.data.repository
 
 import com.teamforce.thanksapp.data.api.ThanksApi
+import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
@@ -38,6 +39,12 @@ class ProfileRepositoryImpl @Inject constructor(
             val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
             thanksApi.putUserAvatar(userId, body, bodyCropped)
             // Отправляю ориг и обрезку на бек, протестировать с Андреем
+        }
+    }
+
+    override suspend fun getOrganizations(): ResultWrapper<List<OrganizationModel>> {
+        return safeApiCall(Dispatchers.IO) {
+            thanksApi.getOrganizations()
         }
     }
 

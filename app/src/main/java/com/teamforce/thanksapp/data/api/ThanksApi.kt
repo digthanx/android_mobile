@@ -4,6 +4,7 @@ import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEntity
 import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
 import com.teamforce.thanksapp.data.entities.notifications.*
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
+import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
@@ -37,6 +38,9 @@ interface ThanksApi {
 
     @GET("/user/profile/")
     suspend fun getProfile(): ProfileEntity
+
+    @GET("/user/organizations/")
+    suspend fun getOrganizations(): List<OrganizationModel>
 
     @GET("/user/balance/")
     fun getBalance(): Call<BalanceResponse>
