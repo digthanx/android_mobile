@@ -40,6 +40,7 @@
     <string name="contactInformation">Контактные данные</string>
     <string name="information">Информация</string>
     <string name="wouldYouLikeToExit">Выйти из профиля?</string>
+    <string name="wouldYouLikeToChangeOrg">Сменить организацию?</string>
     <string name="accept">Да</string>
     <string name="decline">Нет</string>
     <string name="whatEditInProfile">Что именно вы хотите отредактировать?</string>

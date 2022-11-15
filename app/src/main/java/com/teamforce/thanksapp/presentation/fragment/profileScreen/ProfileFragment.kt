@@ -37,6 +37,7 @@ import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
 import com.teamforce.thanksapp.utils.getFilePathFromUri
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.FieldPosition
 
 
 @AndroidEntryPoint
@@ -93,8 +94,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding.typesFilterSpinner.setAdapter(adapter)
         binding.typesFilterSpinner.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id->
-                // Вызов запроса на смену орг если элемент имеет не 0 индекс
-                Toast.makeText(requireContext(), "Id list ${id}", Toast.LENGTH_SHORT).show()
+                if(id != 0L){
+                    showAlertDialogForChangeOrg(adapter, id)
+                }
             }
 
         binding.exitBtn.setOnClickListener {
@@ -115,8 +117,23 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-    private fun getNameOrgFromOrgModel(){
+    private fun showAlertDialogForChangeOrg(adapter: ArrayAdapter<String>, id: Long) {
 
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.wouldYouLikeToChangeOrg))
+
+            .setNegativeButton(resources.getString(R.string.decline)) { dialog, which ->
+                binding.typesFilterSpinner.setText("")
+                // Сбросить выделение после отказа
+                dialog.dismiss()
+            }
+            .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
+                dialog.cancel()
+                // Выход из организации и переход на экран ввода пароля
+                Toast.makeText(requireContext(), "Id list ${id}", Toast.LENGTH_SHORT).show()
+                //activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
+            }
+            .show()
     }
 
 

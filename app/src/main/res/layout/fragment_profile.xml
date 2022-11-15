@@ -75,7 +75,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/dateFilterContainer"
+                    android:id="@+id/typeFilterContainer"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                         android:id="@+id/typesFilterSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="none"/>
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.card.MaterialCardView
