@@ -12,24 +12,20 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.View
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.imageview.ShapeableImageView
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.teamforce.thanksapp.R
 import kotlinx.coroutines.Dispatchers
@@ -88,24 +84,7 @@ fun ShapeableImageView.imageView(image: String, context: Context, view: View) {
         .withOverlayView(view)
         .show()
 }
-//  TODO Пытался добавить внутрь просмотра сразу фичу скачивания, но там ничего не вышло у меня, разрабы библы пишут тчо нужно кастом вью делать
-//fun ImageView.viewSinglePhoto2(image: String, context: Context) {
-//    val images = mutableListOf<String>()
-//    val fullSizeImage = image.replace("_thumb", "").replace(Consts.BASE_URL, "")
-//    images.add(fullSizeImage)
-//    StfalconImageViewer.Builder<String>(context, images) { imageView, image ->
-//        Glide.with(this)
-//            .load("${Consts.BASE_URL}${image}".toUri())
-//            .fitCenter()
-//            .transition(DrawableTransitionOptions.withCrossFade())
-//            .error(R.drawable.ic_anon_avatar)
-//            .into(imageView)
-//    }.withHiddenStatusBar(false)
-//        .withImageChangeListener(showDialogAboutDownloadImage())
-//        .show()
-//}
 
-// С ростом данного файла скоро придется расписать его в виде класса, хотя какой с этого толк...
 fun showDialogAboutDownloadImage(
     photo: String,
     clickedView: View,
@@ -277,22 +256,16 @@ class PosterOverlayView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    download: () -> Unit
+    private val download: () -> Unit
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
-
-    var onDeleteClick: () -> Unit = {}
 
     init {
         View.inflate(context, R.layout.layout_image_overlay, this)
-        update()
-    }
-
-    fun update() {
         val toolbar = findViewById<Toolbar>(R.id.image_viewer_toolbar)
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.download -> {
-                    Toast.makeText(this.context, "download clicked", Toast.LENGTH_SHORT).show()
+                    download()
                     true
                 }
                 else -> true

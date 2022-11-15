@@ -239,7 +239,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         photo,
                         requireContext(),
                         PosterOverlayView(requireContext()) {
-
+                            Toast.makeText(requireContext(), "Download goes here", Toast.LENGTH_SHORT).show()
                         }
                     )
                 }
