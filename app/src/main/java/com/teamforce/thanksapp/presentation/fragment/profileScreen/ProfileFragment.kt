@@ -11,9 +11,9 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -22,16 +22,20 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.canhub.cropper.*
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
+
+import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
+import com.teamforce.thanksapp.utils.getFilePathFromUri
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.*
-import java.util.*
 
 
 @AndroidEntryPoint
@@ -75,6 +79,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         initViews()
         requestData()
         setData()
+        // work With Spinner
+        val organizations = listOf("ТимФорс", "Интерсвязь")
+        val spinner: Spinner = binding.spinner
+        // Создаем адаптер ArrayAdapter с помощью массива строк и стандартной разметки элемета spinner
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_organization, organizations);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Применяем адаптер к элементу spinner
+        spinner.adapter = adapter
         binding.exitBtn.setOnClickListener {
             showAlertDialogForExit()
         }

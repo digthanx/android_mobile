@@ -74,6 +74,11 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/information"
                     android:layout_width="match_parent"
