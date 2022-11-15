@@ -74,10 +74,22 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <Spinner
-                    android:id="@+id/spinner"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/change_org_btn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:backgroundTint="@color/general_brand"
+                    android:elegantTextHeight="true"
+                    android:elevation="20dp"
+                    android:paddingVertical="10dp"
+                    android:textAllCaps="false"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/changeOrganisation"
+                    app:cornerRadius="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/information"

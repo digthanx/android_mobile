@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.databinding.ItemOrganizationBinding
 class OrganizationsAdapter(
-
+private val listOfOrganization: List<OrganizationModel>
 ): ListAdapter<OrganizationModel, OrganizationsAdapter.OrganizationViewHolder>(DiffCallback)
 {
 

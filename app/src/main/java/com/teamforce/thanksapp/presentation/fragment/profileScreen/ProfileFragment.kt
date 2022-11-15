@@ -1,6 +1,8 @@
 package com.teamforce.thanksapp.presentation.fragment.profileScreen
 
 import android.Manifest
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -10,8 +12,10 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -19,6 +23,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -26,12 +31,14 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
 
 import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
+import com.teamforce.thanksapp.presentation.adapter.profile.OrganizationsAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
 import com.teamforce.thanksapp.utils.getFilePathFromUri
@@ -79,14 +86,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         initViews()
         requestData()
         setData()
-        // work With Spinner
-        val organizations = listOf("ТимФорс", "Интерсвязь")
-        val spinner: Spinner = binding.spinner
-        // Создаем адаптер ArrayAdapter с помощью массива строк и стандартной разметки элемета spinner
-        val adapter = ArrayAdapter(requireContext(), R.layout.item_organization, organizations);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Применяем адаптер к элементу spinner
-        spinner.adapter = adapter
+
         binding.exitBtn.setOnClickListener {
             showAlertDialogForExit()
         }
@@ -103,6 +103,36 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 setData()
             }
         }
+    }
+
+    private fun createDialog(list: List<OrganizationModel>){
+        val builderDialog = AlertDialog.Builder(context, R.style.FullscreenDialogTheme)
+        val inflater = requireActivity().layoutInflater
+        val newListValues = inflater.inflate(R.layout.fragment_list_of_organization, null)
+        val recyclerViewDialog = newListValues.findViewById<RecyclerView>(R.id.organizations_rv)
+        //val btnApplyValues = newListValues.findViewById<MaterialButton>(R.id.add_values_btn)
+        val adapter = OrganizationsAdapter(listOf(OrganizationModel(1, "Тим форс"), OrganizationModel(2, "Интерсвязь")))
+        recyclerViewDialog.adapter = adapter
+        builderDialog.setView(newListValues)
+            .setPositiveButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
+                // Отправка выбранной организации для перехода
+                dialog.cancel()
+            })
+            .setNeutralButton(getString(R.string.applyValues), DialogInterface.OnClickListener { dialog, which ->
+                dialog.cancel()
+            })
+
+        val dialog = builderDialog.create()
+
+        dialog.show()
+        val neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+        neutralButton.visibility = View.GONE
+        val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        val parent: LinearLayout = positiveButton.parent as LinearLayout
+        parent.gravity = Gravity.CENTER_HORIZONTAL
+        val leftSpacer = parent.getChildAt(1)
+        leftSpacer.visibility = View.GONE
+
     }
 
     private fun showPhoneStatePermission() {
