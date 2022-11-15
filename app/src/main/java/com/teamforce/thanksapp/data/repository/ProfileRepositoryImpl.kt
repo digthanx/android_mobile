@@ -3,8 +3,10 @@ package com.teamforce.thanksapp.data.repository
 import com.teamforce.thanksapp.data.api.ThanksApi
 import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
+import com.teamforce.thanksapp.data.request.VerificationRequest
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
+import com.teamforce.thanksapp.data.response.VerificationResponse
 import com.teamforce.thanksapp.domain.repositories.ProfileRepository
 import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.safeApiCall
@@ -51,6 +53,34 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun changeOrganization(organizationId: Int):  Call<Any> {
         return thanksApi.changeOrganization(organizationId)
+    }
+
+    override suspend fun changeOrganizationVerifyWithTelegram(
+        xId: String,
+        xCode: String,
+        code: String
+    ): ResultWrapper<VerificationResponse> {
+        return safeApiCall(Dispatchers.IO){
+            thanksApi.changeOrganizationVerifyWithTelegram(
+                xId = xId,
+                xCode = xCode,
+                VerificationRequest(code = code)
+            )
+        }
+    }
+
+    override suspend fun changeOrganizationVerifyWithEmail(
+        xEmail: String,
+        xCode: String,
+        code: String
+    ): ResultWrapper<VerificationResponse> {
+        return safeApiCall(Dispatchers.IO){
+            thanksApi.changeOrganizationVerifyWithEmail(
+                xEmail = xEmail,
+                xCode = xCode,
+                VerificationRequest(code = code)
+            )
+        }
     }
 
 

@@ -41,6 +41,20 @@ interface ThanksApi {
         @Body organization_id: Int
     ): Call<Any>
 
+    @POST("/user/change-organization/verify/")
+    suspend fun changeOrganizationVerifyWithTelegram(
+        @Header("X-Telegram") xId: String?,
+        @Header("X-Code") xCode: String?,
+        @Body verificationRequest: VerificationRequest
+    ): VerificationResponse
+
+    @POST("/user/change-organization/verify/")
+    suspend fun changeOrganizationVerifyWithEmail(
+        @Header("X-Email") xEmail: String?,
+        @Header("X-Code") xCode: String?,
+        @Body verificationRequest: VerificationRequest
+    ): VerificationResponse
+
     @GET("/user/profile/")
     suspend fun getProfile(): ProfileEntity
 
