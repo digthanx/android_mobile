@@ -74,22 +74,29 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/change_org_btn"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dateFilterContainer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:backgroundTint="@color/general_brand"
-                    android:elegantTextHeight="true"
-                    android:elevation="20dp"
-                    android:paddingVertical="10dp"
-                    android:textAllCaps="false"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/changeOrganisation"
-                    app:cornerRadius="12dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:boxBackgroundColor="@color/general_brand_secondary"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    android:layout_marginBottom="12dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    tools:ignore="LabelFor"
+                    android:hint="@string/changeOrganisation">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/typesFilterSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/information"
