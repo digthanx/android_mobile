@@ -80,8 +80,10 @@ fun ShapeableImageView.imageView(image: String, context: Context, view: View) {
             .transition(DrawableTransitionOptions.withCrossFade())
             .error(R.drawable.ic_anon_avatar)
             .into(imageView)
-    }.withHiddenStatusBar(true)
+    }
         .withOverlayView(view)
+        .withBackgroundColor(context.getColor(R.color.general_color_grey))
+        .withHiddenStatusBar(true)
         .show()
 }
 
@@ -101,7 +103,7 @@ fun showDialogAboutDownloadImage(
             dialog.cancel()
             lifecycleScope.launch(Dispatchers.Main) {
                 val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
-                if (clickedView is ImageView) clickedView.downloadImage(url, context)
+                //if (clickedView is ImageView) clickedView.downloadImage(url, context)
             }
         }
         .show()
@@ -159,7 +161,7 @@ fun getUriFromBitmap(imageUri: String): Bitmap? {
 }
 
 
-private fun ImageView.downloadImage(imageURL: String, context: Context) {
+fun downloadImage(imageURL: String, context: Context) {
     if (!verifyPermissions(context)) return
 
     //val dirPath = Environment.getExternalStorageDirectory().absolutePath + "/" + context.getString(R.string.app_name) + "/"

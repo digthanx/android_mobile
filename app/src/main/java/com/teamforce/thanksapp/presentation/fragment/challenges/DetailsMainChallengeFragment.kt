@@ -23,11 +23,9 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentDetailsMainChallengeBinding
-import com.teamforce.thanksapp.model.domain.ChallengeModel
 import com.teamforce.thanksapp.model.domain.ChallengeModelById
 import com.teamforce.thanksapp.presentation.adapter.challenge.FragmentDetailChallengeStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.DetailsMainChallengeViewModel
-import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_DATA
 import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts.CHALLENGER_ID
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.showDialogAboutDownloadImage
@@ -258,18 +256,23 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                 }
             }
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 binding.imageBackground.setOnLongClickListener { view ->
                     urlPhoto?.let { photo ->
                         showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
                     }
                     return@setOnLongClickListener true
                 }
-            }else {
+            } else {
                 if (checkPermission()) {
                     binding.imageBackground.setOnLongClickListener { view ->
                         urlPhoto?.let { photo ->
-                            showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                            showDialogAboutDownloadImage(
+                                photo,
+                                view,
+                                requireContext(),
+                                lifecycleScope
+                            )
                         }
                         return@setOnLongClickListener true
                     }

@@ -12,6 +12,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -32,6 +33,8 @@ import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
 
@@ -239,34 +242,39 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         photo,
                         requireContext(),
                         PosterOverlayView(requireContext()) {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                downloadImage(url, requireContext())
+                            }
                             Toast.makeText(requireContext(), "Download goes here", Toast.LENGTH_SHORT).show()
+
                         }
                     )
                 }
             }
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-                binding.userAvatar.setOnLongClickListener { view ->
-                    it.profile.photo?.let { photo ->
-                        showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
-                    }
-                    return@setOnLongClickListener true
-                }
-            }else{
-                if(checkPermission()){
-                    binding.userAvatar.setOnLongClickListener { view ->
-                        it.profile.photo?.let { photo ->
-                            showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
-                        }
-                        return@setOnLongClickListener true
-                    }
-                }else{
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().getString(R.string.dontHaveEnoughPermissions),
-                        Toast.LENGTH_LONG).show()
-                }
-            }
+//            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+//                binding.userAvatar.setOnLongClickListener { view ->
+//                    it.profile.photo?.let { photo ->
+//                        showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+//                    }
+//                    return@setOnLongClickListener true
+//                }
+//            }else{
+//                if(checkPermission()){
+//                    binding.userAvatar.setOnLongClickListener { view ->
+//                        it.profile.photo?.let { photo ->
+//                            showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+//                        }
+//                        return@setOnLongClickListener true
+//                    }
+//                }else{
+//                    Toast.makeText(
+//                        requireContext(),
+//                        requireContext().getString(R.string.dontHaveEnoughPermissions),
+//                        Toast.LENGTH_LONG).show()
+//                }
+//            }
         }
 
     }
