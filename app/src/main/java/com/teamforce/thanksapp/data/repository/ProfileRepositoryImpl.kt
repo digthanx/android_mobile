@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Call
 import java.io.File
 import javax.inject.Inject
 
@@ -46,6 +47,10 @@ class ProfileRepositoryImpl @Inject constructor(
         return safeApiCall(Dispatchers.IO) {
             thanksApi.getOrganizations()
         }
+    }
+
+    override suspend fun changeOrganization(organizationId: Int):  Call<Any> {
+        return thanksApi.changeOrganization(organizationId)
     }
 
 

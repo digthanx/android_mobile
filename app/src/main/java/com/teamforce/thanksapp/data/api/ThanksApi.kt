@@ -36,6 +36,11 @@ interface ThanksApi {
         @Body verificationRequest: VerificationRequest
     ): Call<VerificationResponse>
 
+    @POST("/user/change-organization/")
+    suspend fun changeOrganization(
+        @Body organization_id: Int
+    ): Call<Any>
+
     @GET("/user/profile/")
     suspend fun getProfile(): ProfileEntity
 
