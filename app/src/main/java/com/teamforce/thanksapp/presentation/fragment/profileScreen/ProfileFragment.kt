@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Spannable
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -45,6 +47,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
+                // TODO Добавить множественный запрос разрешений и верно их обработать для всех Android версий
                 addPhotoFromIntent(useGallery = true, useCamera = true)
             } else {
                 showDialogAboutPermissions()
@@ -59,7 +62,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             if (result.isSuccessful && result.uriContent != null) {
                 val pathCroppedPhoto = result.getUriFilePath(requireContext())
                 val pathOrigPhoto =
-                    result.originalUri?.let { getFilePathFromUri(requireContext(), it, false) }
+                    result.originalUri?.let { getFilePathFromUri(requireContext(), it, true) }
                 Log.d("Token", "OrigPhoto - ${pathOrigPhoto}")
                 Log.d("Token", "CroppedPhoto - ${pathCroppedPhoto}")
                 val imageUri = result.uriContent
@@ -93,23 +96,60 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-    private fun showPhoneStatePermission() {
-
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                addPhotoFromIntent(useGallery = true, useCamera = true)
+    private fun checkPermission(): Boolean {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            when {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    return true
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                    showRequestPermissionRational()
+                    return false
+                }
+                else -> {
+                    requestMultiplePermissionsLauncher.launch(Manifest.permission.CAMERA)
+                    return false
+                }
             }
-            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
-                showRequestPermissionRational()
+        }else{
+            if (hasPermissions(Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                return true
             }
-            else -> {
-                requestMultiplePermissionsLauncher.launch(Manifest.permission.CAMERA)
-            }
+            return false
         }
     }
+
+//    fun hasPermissions(vararg permissions: String): Boolean = permissions.all {
+//        ActivityCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED {
+//            shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {}
+//        }
+//    }
+
+    private fun hasPermissions(vararg permissions: String?): Boolean {
+        for (permission in permissions) {
+            when {
+                ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED -> {}
+                shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                    showRequestPermissionRational()
+                    return false
+                }
+                else -> {
+                    requestMultiplePermissionsLauncher.launch(Manifest.permission.CAMERA)
+                    return false
+                }
+            }
+        }
+        return true
+
+    }
+
 
 
     private fun addPhotoFromIntent(useGallery: Boolean, useCamera: Boolean) {
@@ -204,8 +244,33 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     )
                 }
             }
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                binding.userAvatar.setOnLongClickListener { view ->
+                    it.profile.photo?.let { photo ->
+                        showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                    }
+                    return@setOnLongClickListener true
+                }
+            }else{
+                if(checkPermission()){
+                    binding.userAvatar.setOnLongClickListener { view ->
+                        it.profile.photo?.let { photo ->
+                            showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                        }
+                        return@setOnLongClickListener true
+                    }
+                }else{
+                    Toast.makeText(
+                        requireContext(),
+                        requireContext().getString(R.string.dontHaveEnoughPermissions),
+                        Toast.LENGTH_LONG).show()
+                }
+            }
         }
+
     }
+
 
     private fun greetingUser(username: String) {
         val spannable = SpannableStringBuilder(
@@ -251,7 +316,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
             .setNegativeButton(resources.getString(R.string.avatar)) { dialog, _ ->
                 dialog.cancel()
-                showPhoneStatePermission()
+                checkPermission()
             }
             .setPositiveButton(resources.getString(R.string.stringData)) { dialog, which ->
                 dialog.cancel()

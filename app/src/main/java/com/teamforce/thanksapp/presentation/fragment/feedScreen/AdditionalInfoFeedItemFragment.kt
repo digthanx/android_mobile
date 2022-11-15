@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -22,12 +23,9 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
 import com.teamforce.thanksapp.presentation.adapter.feed.DetailFeedStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.feed.AdditionalInfoFeedItemViewModel
-import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.*
 import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.TRANSACTION_ID
-import com.teamforce.thanksapp.utils.OptionsTransaction
-import com.teamforce.thanksapp.utils.username
-import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -188,6 +186,12 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                     it?.recipient_photo?.let { photo ->
                         (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                     }
+                }
+                binding.userAvatar.setOnLongClickListener { view ->
+                    it?.recipient_photo?.let { photo ->
+                        showDialogAboutDownloadImage(photo, view, requireContext(), lifecycleScope)
+                    }
+                    return@setOnLongClickListener true
                 }
             }
         }

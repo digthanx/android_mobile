@@ -44,17 +44,21 @@
     <string name="decline">Нет</string>
     <string name="whatEditInProfile">Что именно вы хотите отредактировать?</string>
     <string name="explainingAboutPermissions">Вы не дали нам достаточно разрешений.
-        Данные разрешения нам нужны для обновления аватара.
+        Данные разрешения нам нужны для работы с медиа.
         Вы можете разрешить их в настройках телефона.</string>
     <string name="explainingAboutPermissionsRational">
         Вы не дали нам достаточно разрешений для работы.
-        Данные разрешения нам нужны для обновления аватара.
+        Данные разрешения нам нужны для работы с медиа.
         Запросить разрешения повторно?</string>
+    <string name="wouldYouLikeToSaveImage"> Сохранить изображение?
+        </string>
     <string name="avatar">Аватар</string>
     <string name="settings">Настройки</string>
     <string name="stringData">Личную информацию</string>
     <string name="exit">Выйти</string>
     <string name="close">Закрыть</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
     <!-- Edit Profile Bottom Sheet Fragment -->
     <string name="contacts">КОНТАКТЫ</string>
     <string name="save">Сохранить</string>
@@ -276,4 +280,9 @@
     <string name="events">События</string>
     <string name="challenges">Челленджи</string>
     <string name="createdChallenge">Создан челлендж</string>
+
+    <!--Разрешения-->
+    <string name="dontHaveEnoughPermissions">Нет разрешений. Перейдите в настройки</string>
+    <string name="good">Хорошо</string>
+
 </resources>
