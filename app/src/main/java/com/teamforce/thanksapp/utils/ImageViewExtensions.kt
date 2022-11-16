@@ -67,7 +67,7 @@ fun ShapeableImageView.viewSinglePhoto(image: String, context: Context) {
             .transition(DrawableTransitionOptions.withCrossFade())
             .error(R.drawable.ic_anon_avatar)
             .into(imageView)
-    }.withHiddenStatusBar(true)
+    }.withHiddenStatusBar(false)
         .show()
 }
 
@@ -164,8 +164,6 @@ fun getUriFromBitmap(imageUri: String): Bitmap? {
 
 
 fun downloadImage(imageURL: String, context: Context) {
-    if (!verifyPermissions(context)) return
-
     //val dirPath = Environment.getExternalStorageDirectory().absolutePath + "/" + context.getString(R.string.app_name) + "/"
     val dirPath =
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
