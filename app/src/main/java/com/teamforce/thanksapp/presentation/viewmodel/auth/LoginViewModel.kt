@@ -139,9 +139,9 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    fun verifyCodeTelegram(telegramId: String) {
+    fun verifyCodeTelegram(codeFromTg: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callVerificationEndpointTelegram(telegramId, Dispatchers.Default) }
+        viewModelScope.launch { callVerificationEndpointTelegram(codeFromTg, Dispatchers.Default) }
     }
 
     private suspend fun callVerificationEndpointTelegram(
@@ -203,9 +203,9 @@ class LoginViewModel @Inject constructor(
 
     }
 
-    fun verifyCodeEmail(code: String) {
+    fun verifyCodeEmail(codeFromTg: String) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callVerificationEndpointEmail(code, Dispatchers.Default) }
+        viewModelScope.launch { callVerificationEndpointEmail(codeFromTg, Dispatchers.Default) }
     }
 
     private suspend fun callVerificationEndpointEmail(

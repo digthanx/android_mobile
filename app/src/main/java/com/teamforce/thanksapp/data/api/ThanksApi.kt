@@ -37,14 +37,15 @@ interface ThanksApi {
     ): Call<VerificationResponse>
 
     @POST("/user/change-organization/")
-    suspend fun changeOrganization(
-        @Body organization_id: Int
-    ): Call<Any>
+    fun changeOrganization(
+        @Body data: ChangeOrgRequest
+    ): Call<ChangeOrgResponse>
 
     @POST("/user/change-organization/verify/")
     suspend fun changeOrganizationVerifyWithTelegram(
         @Header("X-Telegram") xId: String?,
         @Header("X-Code") xCode: String?,
+        @Header("organization_id") orgCode: String?,
         @Body verificationRequest: VerificationRequest
     ): VerificationResponse
 

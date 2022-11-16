@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -116,9 +117,38 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         }
         viewModel.authResult.observe(viewLifecycleOwner){
-            if(it) activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
+            val bundle = Bundle()
+            bundle.putString(XCODE, viewModel.xCode)
+            bundle.putString(XID, viewModel.xId)
+            bundle.putString(ORGID, viewModel.orgCode)
+            if(viewModel.xId != null && viewModel.xCode != null && viewModel.orgCode != null){
+                sendToastAboutVerifyCode()
+                if(it)activityNavController().navigateSafely(R.id.action_global_signFlowFragment,
+                    bundle,
+                    OptionsTransaction().optionForTransaction
+                )
+            }
+
         }
     }
+
+    private fun sendToastAboutVerifyCode() {
+        if (viewModel.authorizationType is ProfileViewModel.AuthorizationType.Telegram) {
+            Toast.makeText(
+                requireContext(),
+                R.string.Toast_verifyCode_hintTg,
+                Toast.LENGTH_LONG
+            ).show()
+
+        } else {
+            Toast.makeText(
+                requireContext(),
+                R.string.Toast_verifyCode_hintEmail,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
 
     private fun showAlertDialogForChangeOrg(adapter: ArrayAdapter<String>, id: Long) {
 
@@ -132,9 +162,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
             .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
                 dialog.cancel()
-                // Выход из организации и переход на экран ввода пароля
-                Toast.makeText(requireContext(), "Id list ${id}", Toast.LENGTH_SHORT).show()
-                //activityNavController().navigateSafely(R.id.action_global_signFlowFragment)
+                viewModel.changeOrg(listOfOrg[id.toInt()].id)
             }
             .show()
     }
@@ -254,6 +282,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 it.forEach{ orgModel ->
                     listOfOrgName.add(orgModel.name)
                 }
+                listOfOrg.add(0, OrganizationModel(-1, "Все организации"))
                 listOfOrg.addAll(it)
                 listOfOrgName.add(0, "Все организации")
                 adapter.addAll(listOfOrgName)
@@ -379,5 +408,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     companion object {
         const val TAG = "ProfileFragment"
+        private const val XCODE = "xCode"
+        private const val XID = "xId"
+        private const val ORGID = "organization_id"
     }
 }

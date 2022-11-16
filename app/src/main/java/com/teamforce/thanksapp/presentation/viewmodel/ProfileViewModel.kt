@@ -9,6 +9,7 @@ import com.teamforce.thanksapp.NotificationsRepository
 import com.teamforce.thanksapp.PushNotificationService
 import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.data.request.AuthorizationRequest
+import com.teamforce.thanksapp.data.response.ChangeOrgResponse
 import com.teamforce.thanksapp.domain.models.profile.ProfileModel
 import com.teamforce.thanksapp.domain.repositories.ProfileRepository
 import com.teamforce.thanksapp.domain.usecases.LoadProfileUseCase
@@ -51,8 +52,9 @@ class ProfileViewModel @Inject constructor(
     private val _authResult = MutableLiveData<Boolean>()
     val authResult: LiveData<Boolean> = _authResult
 
-    private var xCode: String? = null
-    private var xId: String? = null
+    var xCode: String? = null
+    var orgCode: String? = null
+    var xId: String? = null
     private var xEmail: String? = null
     var authorizationType: AuthorizationType? = null
 
@@ -70,31 +72,33 @@ class ProfileViewModel @Inject constructor(
     ) {
         withContext(coroutineDispatcher) {
             profileRepository.changeOrganization(orgId)
-                .enqueue(object : Callback<Any> {
+                .enqueue(object : Callback<ChangeOrgResponse> {
                     override fun onResponse(
-                        call: Call<Any>,
-                        response: Response<Any>
+                        call: Call<ChangeOrgResponse>,
+                        response: Response<ChangeOrgResponse>
                     ) {
                         _isLoading.postValue(false)
                         if (response.code() == 200) {
                             Log.d("Token", "Status запроса: ${response.body().toString()}")
-                            if (response.body().toString() == "{status=Код отправлен в телеграм}") {
-                                xId = response.headers().get("X-Telegram")
+                            if (response.body()?.status == "Код для подтверждения смены организации отправлен в телеграм") {
+                                xId = response.headers().get("tg_id")
+                                authorizationType = AuthorizationType.Telegram
                             }
                             if (response.body()
-                                    .toString() == "{status=Код отправлен на указанную электронную почту}"
+                                    .toString() == "{status=Код для подтверждения смены организации отправлен на указанную электронную почту}"
                             ) {
                                 xEmail = response.headers().get("X-Email")
                                 authorizationType = AuthorizationType.Email
                             }
                             xCode = response.headers().get("X-Code")
+                            orgCode = response.headers().get("organization_id")
                             _authResult.postValue(true)
                         } else {
                             _authResult.postValue(false)
                         }
                     }
 
-                    override fun onFailure(call: Call<Any>, t: Throwable) {
+                    override fun onFailure(call: Call<ChangeOrgResponse>, t: Throwable) {
                         _isLoading.postValue(false)
                         _authResult.postValue(false)
                     }

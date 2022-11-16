@@ -44,6 +44,9 @@
         <action
             android:id="@+id/action_changeOrganizationFragment_to_greetFragment"
             app:destination="@id/greetFragment" />
+        <action
+            android:id="@+id/action_changeOrganizationFragment_to_mainFlowFragment"
+            app:destination="@id/mainFlowFragment" />
     </fragment>
     <action android:id="@+id/action_global_changeOrganizationFragment" app:destination="@id/changeOrganizationFragment" />
 </navigation>
