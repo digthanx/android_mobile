@@ -2,6 +2,7 @@ package com.teamforce.thanksapp.presentation.adapter.challenge
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.net.toUri
@@ -10,7 +11,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.response.GetChallengeResultResponse
 import com.teamforce.thanksapp.databinding.ItemResultChallengeBinding
@@ -26,6 +26,9 @@ import java.time.format.DateTimeFormatter
 class ResultChallengeAdapter(
 ) : ListAdapter<GetChallengeResultResponse,
         ResultChallengeAdapter.ResultChallengeViewHolder>(DiffCallback) {
+
+     var onImageClicked: ((view: View, photo: String) -> Unit)? = null
+
 
     companion object {
         object DiffCallback : DiffUtil.ItemCallback<GetChallengeResultResponse>() {
@@ -75,6 +78,11 @@ class ResultChallengeAdapter(
             holder.binding.image.setOnClickListener { view ->
                 currentList[position].photo?.let { photo ->
                     (view as ImageView).viewSinglePhoto(photo, holder.binding.root.context)
+                }
+            }
+            holder.binding.image.setOnClickListener{ view ->
+                currentList[position].photo?.let { photo ->
+                    onImageClicked?.invoke(view, photo)
                 }
             }
         }

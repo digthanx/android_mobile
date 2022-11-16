@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -22,6 +23,8 @@ import com.teamforce.thanksapp.presentation.fragment.challenges.ChallengesConsts
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.WinnersDetailChallengeViewModel
 import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_winners_detail) {
@@ -56,6 +59,21 @@ class ChallengesWinnersDetailFragment : Fragment(R.layout.fragment_challenges_wi
             binding.imageBackground.setOnClickListener { view ->
                 it?.challengePhoto?.let { photo ->
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                }
+            }
+
+            binding.imageBackground.setOnClickListener { view ->
+                it?.challengePhoto?.let { photo ->
+                    (view as ShapeableImageView).imageView(
+                        photo,
+                        requireContext(),
+                        PosterOverlayView(requireContext()) {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                downloadImage(url, requireContext())
+                            }
+                        }
+                    )
                 }
             }
                 Glide.with(requireContext())

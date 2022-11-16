@@ -27,11 +27,12 @@ import java.time.format.DateTimeFormatter
 class ContendersAdapter(
     private val applyClickListener: (reportId: Int, state: Char) -> Unit,
     private val refuseClickListener: (reportId: Int, state: Char) -> Unit,
-
 ): ListAdapter<GetChallengeContendersResponse.Contender, ContendersAdapter.ContenderViewHolder>(
     DiffCallback
-)
-{
+){
+    var onImageClicked: ((view: View, photo: String) -> Unit)? = null
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContenderViewHolder {
         val binding = ItemContenderBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
@@ -77,6 +78,13 @@ class ContendersAdapter(
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.binding.image)
+                binding.image.setOnClickListener { clickedView ->
+                    currentList[position].report_photo?.let {
+                        onImageClicked?.invoke(clickedView,
+                            it
+                        )
+                    }
+                }
             }else{
                 binding.showAttachedImgCard.visibility = View.GONE
             }

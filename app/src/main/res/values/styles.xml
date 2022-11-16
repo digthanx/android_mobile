@@ -307,6 +307,10 @@
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
+    <style name="PhotoViewerToolbar" parent="Theme.ThanksApp">
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
 
     <style name="MyCardView" parent="@style/Widget.MaterialComponents.CardView">
         <item name="shapeAppearance">@style/ShapeAppearanceOverlay.MaterialCardView.Cut</item>
@@ -440,5 +444,7 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>
     </style>
+
+
 
 </resources>
