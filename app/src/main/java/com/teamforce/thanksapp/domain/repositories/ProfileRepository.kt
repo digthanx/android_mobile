@@ -24,6 +24,6 @@ interface ProfileRepository {
     suspend fun changeOrganizationVerifyWithTelegram(
         xId: String, xCode: String, code: String, orgCode: String): ResultWrapper<VerificationResponse>
 
-    suspend fun changeOrganizationVerifyWithEmail(
-        xEmail: String, xCode: String, code: String):ResultWrapper<VerificationResponse>
+//    suspend fun changeOrganizationVerifyWithEmail(
+//        xEmail: String, xCode: String, code: String):ResultWrapper<VerificationResponse>
 }

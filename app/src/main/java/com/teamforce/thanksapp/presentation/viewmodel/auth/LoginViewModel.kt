@@ -53,14 +53,15 @@ class LoginViewModel @Inject constructor(
     private val _authResult = MutableLiveData<Result<Boolean>>()
     val authResult: LiveData<Result<Boolean>> = _authResult
 
-    private val _chooseOrgResult = MutableLiveData<VerificationResponse>()
-    val chooseOrgResult: LiveData<VerificationResponse> = _chooseOrgResult
 
     private val _organizations = MutableLiveData<AuthResponse>()
     val organizations: LiveData<AuthResponse> = _organizations
 
     private val _verifyResult = MutableLiveData<Result<UserData>>()
     val verifyResult: LiveData<Result<UserData>> = _verifyResult
+
+    private val _needChooseOrg = MutableLiveData<Boolean>()
+    val needChooseOrg: LiveData<Boolean> = _needChooseOrg
 
     fun logout() {
         userDataRepository.logout()
@@ -121,18 +122,25 @@ class LoginViewModel @Inject constructor(
                         if (response.code() == 200) {
                             _organizations.postValue(response.body())
                             Log.d("Token", "Status запроса: ${response.body().toString()}")
-                            if (response.body()?.status.toString() == "{status=Код отправлен в телеграм}") {
+                            if (response.body()?.status.toString() == "Код отправлен в телеграм") {
                                 xId = response.headers().get("X-Telegram")
+                                xCode = response.headers().get("X-Code")
                                 authorizationType = AuthorizationType.Telegram
+                                _needChooseOrg.postValue(false)
                             }
                             if (response.body()?.status
-                                    .toString() == "{status=Код отправлен на указанную электронную почту}"
+                                    .toString() == "Код отправлен на указанную электронную почту"
                             ) {
                                 xEmail = response.headers().get("X-Email")
+                                xCode = response.headers().get("X-Code")
                                 authorizationType = AuthorizationType.Email
-
+                                _needChooseOrg.postValue(false)
                             }
-                            xCode = response.headers().get("X-Code")
+                            if (response.body()?.status
+                                    .toString() == "Необходимо выбрать организацию"
+                            ) {
+                                _needChooseOrg.postValue(true)
+                            }
                             _authResult.postValue(Result.Success(true))
                         } else {
                             _authResult.postValue(Result.Error("${response.message()} ${response.code()}"))
@@ -160,25 +168,34 @@ class LoginViewModel @Inject constructor(
     ) {
         withContext(coroutineDispatcher) {
             thanksApi.chooseOrganization(login, ChooseOrgRequest(userId, orgId))
-                .enqueue(object : Callback<VerificationResponse> {
+                .enqueue(object : Callback<AuthResponse> {
                     override fun onResponse(
-                        call: Call<VerificationResponse>,
-                        response: Response<VerificationResponse>
+                        call: Call<AuthResponse>,
+                        response: Response<AuthResponse>
                     ) {
                         _isLoading.postValue(false)
                         if (response.code() == 200) {
-                            _chooseOrgResult.postValue(response.body())
-                            Log.d("Token", "Status запроса: ${response.body().toString()}")
-                            xId = response.headers().get("X-Telegram")
-                            xEmail = response.headers().get("X-Email")
+                            if (response.body()?.status.toString() == "Код отправлен в телеграм") {
+                                xId = response.headers().get("X-Telegram")
+                                authorizationType = AuthorizationType.Telegram
+                                _needChooseOrg.postValue(false)
+                            }
+                            if (response.body()?.status
+                                    .toString() == "Код отправлен на указанную электронную почту"
+                            ) {
+                                xEmail = response.headers().get("X-Email")
+                                authorizationType = AuthorizationType.Email
+                                _needChooseOrg.postValue(false)
+                            }
                             xCode = response.headers().get("X-Code")
+                            Log.d("Token", "Status запроса: ${response.body().toString()}")
                             _authResult.postValue(Result.Success(true))
                         } else {
                             _authResult.postValue(Result.Error("${response.message()} ${response.code()}"))
                         }
                     }
 
-                    override fun onFailure(call: Call<VerificationResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                         _isLoading.postValue(false)
                         _authResult.postValue(Result.Error(t.message ?: "Something went wrong"))
                     }
@@ -187,17 +204,18 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    fun verifyCodeTelegram(codeFromTg: String) {
+    fun verifyCodeTelegram(codeFromTg: String, orgId: Int?) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callVerificationEndpointTelegram(codeFromTg, Dispatchers.Default) }
+        viewModelScope.launch { callVerificationEndpointTelegram(codeFromTg, orgId, Dispatchers.Default) }
     }
 
     private suspend fun callVerificationEndpointTelegram(
         code: String,
+        orgId: Int?,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
-            thanksApi.verificationWithTelegram(xId, xCode, VerificationRequest(code = code))
+            thanksApi.verificationWithTelegram(xId, xCode, VerificationRequest(code = code, organization_id = orgId))
                 .enqueue(object : Callback<VerificationResponse> {
                     override fun onResponse(
                         call: Call<VerificationResponse>,
@@ -251,18 +269,19 @@ class LoginViewModel @Inject constructor(
 
     }
 
-    fun verifyCodeEmail(codeFromTg: String) {
+    fun verifyCodeEmail(codeFromTg: String, orgId: Int?) {
         _isLoading.postValue(true)
-        viewModelScope.launch { callVerificationEndpointEmail(codeFromTg, Dispatchers.Default) }
+        viewModelScope.launch { callVerificationEndpointEmail(codeFromTg, orgId,  Dispatchers.Default) }
     }
 
     private suspend fun callVerificationEndpointEmail(
         code: String,
+        orgId: Int?,
         coroutineDispatcher: CoroutineDispatcher
     ) {
         withContext(coroutineDispatcher) {
             Log.d("Token", "xEmail:${xEmail} --- xCode:${xCode}---- verifyCode:${code} ")
-            thanksApi.verificationWithEmail(xEmail, xCode, VerificationRequest(code = code))
+            thanksApi.verificationWithEmail(xEmail, xCode, VerificationRequest(code = code, organization_id = orgId))
                 .enqueue(object : Callback<VerificationResponse> {
                     override fun onResponse(
                         call: Call<VerificationResponse>,

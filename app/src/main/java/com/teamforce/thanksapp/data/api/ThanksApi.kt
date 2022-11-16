@@ -40,7 +40,7 @@ interface ThanksApi {
     fun chooseOrganization(
         @Header("login") login: String?,
         @Body chooseOrgRequest: ChooseOrgRequest
-    ): Call<VerificationResponse>
+    ): Call<AuthResponse>
 
     @POST("/user/change-organization/")
     fun changeOrganization(

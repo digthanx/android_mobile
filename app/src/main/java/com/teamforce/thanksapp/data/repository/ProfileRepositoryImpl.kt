@@ -74,19 +74,19 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun changeOrganizationVerifyWithEmail(
-        xEmail: String,
-        xCode: String,
-        code: String
-    ): ResultWrapper<VerificationResponse> {
-        return safeApiCall(Dispatchers.IO){
-            thanksApi.changeOrganizationVerifyWithEmail(
-                xEmail = xEmail,
-                xCode = xCode,
-                VerificationRequest(code = code)
-            )
-        }
-    }
+//    override suspend fun changeOrganizationVerifyWithEmail(
+//        xEmail: String,
+//        xCode: String,
+//        code: String
+//    ): ResultWrapper<VerificationResponse> {
+//        return safeApiCall(Dispatchers.IO){
+//            thanksApi.changeOrganizationVerifyWithEmail(
+//                xEmail = xEmail,
+//                xCode = xCode,
+//                VerificationRequest(code = code)
+//            )
+//        }
+//    }
 
 
 }

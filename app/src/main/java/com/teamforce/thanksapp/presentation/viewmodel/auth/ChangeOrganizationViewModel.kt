@@ -69,7 +69,7 @@ class ChangeOrganizationViewModel @Inject constructor(
                             _verifyResult.postValue(
                                 Result.Success(
                                     UserData(
-                                        token,
+                                        result.value.token,
                                         telegramOrEmail
                                     )
                                 )

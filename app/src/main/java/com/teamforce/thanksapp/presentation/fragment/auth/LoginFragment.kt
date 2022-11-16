@@ -70,6 +70,12 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
                 if(id != 0L){
                     // Получение id выбранной организации
                     checkedOrgId = listOfOrg[id.toInt()].organization_id
+                    username?.let {
+                        viewModel.chooseOrg(
+                            login = it,
+                            orgId = checkedOrgId,
+                            userId = listOfOrg[id.toInt()].user_id)
+                    }
                 }
             }
 
@@ -90,11 +96,11 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
                     if (s?.trim()?.length == 4) {
                         when (viewModel.authorizationType) {
                             AuthorizationType.Telegram -> {
-                                viewModel.verifyCodeTelegram(binding.codeEt.text?.trim().toString())
+                                viewModel.verifyCodeTelegram(orgId = checkedOrgId, codeFromTg = binding.codeEt.text?.trim().toString())
                             }
                             AuthorizationType.Email -> {
                                 Log.d("Token", "Я по почте захожу")
-                                viewModel.verifyCodeEmail(binding.codeEt.text?.trim().toString())
+                                viewModel.verifyCodeEmail(orgId = checkedOrgId, codeFromTg = binding.codeEt.text?.trim().toString())
                             }
                             else -> {
                                 Log.d("Token", "Ни один статус не прошел CheckCodeFragment OnClick")
@@ -122,8 +128,11 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
                 if(listOfOrgName.size > 1){
                     adapter.addAll(listOfOrgName)
                     binding.orgFilterContainer.visible()
+                    binding.orgFilterSpinner.visible()
+
                 }else{
                     binding.orgFilterContainer.invisible()
+                    binding.orgFilterSpinner.invisible()
                 }
 
             }
@@ -140,10 +149,17 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
                 }
                 is Result.Success -> {
                     if (result.value && username != null) {
-                        dataBundle = sendToastAboutVerifyCode()
-                        binding.helperText.visibility = View.VISIBLE
-                        setEditTextCode()
-                        hideGetCodeBtn()
+                        if (viewModel.needChooseOrg.value == false){
+                            binding.orgFilterSpinner.invisible()
+                            binding.orgFilterContainer.invisible()
+                            dataBundle = sendToastAboutVerifyCode()
+                            binding.helperText.visibility = View.VISIBLE
+                            setEditTextCode()
+                            hideGetCodeBtn()
+                        }else{
+                            binding.orgFilterSpinner.visible()
+                            binding.orgFilterContainer.visible()
+                        }
                     }
                 }
                 else -> {

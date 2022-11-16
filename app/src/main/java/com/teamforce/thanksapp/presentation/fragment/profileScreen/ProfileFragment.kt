@@ -94,10 +94,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         binding.typesFilterSpinner.setAdapter(adapter)
         binding.typesFilterSpinner.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id->
-                if(id != 0L){
-                    showAlertDialogForChangeOrg(adapter, id)
-                }
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                showAlertDialogForChangeOrg(adapter, id)
             }
 
         binding.exitBtn.setOnClickListener {
@@ -116,15 +114,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 setData(adapter)
             }
         }
-        viewModel.authResult.observe(viewLifecycleOwner){
+        viewModel.authResult.observe(viewLifecycleOwner) {
             val bundle = Bundle()
             bundle.putString(XCODE, viewModel.xCode)
             bundle.putString(XID, viewModel.xId)
             bundle.putString(ORGID, viewModel.orgCode)
-            if(viewModel.xId != null && viewModel.xCode != null && viewModel.orgCode != null){
+            if (viewModel.xId != null && viewModel.xCode != null && viewModel.orgCode != null) {
                 sendToastAboutVerifyCode()
                 viewModel.saveCredentialsForChangeOrg()
-                if(it) activityNavController().navigateSafely(R.id.action_global_signFlowFragment,
+                if (it) activityNavController().navigateSafely(
+                    R.id.action_global_signFlowFragment,
                     bundle,
                     OptionsTransaction().optionForTransaction
                 )
@@ -276,16 +275,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 }
             }
         }
-        viewModel.organizations.observe(viewLifecycleOwner){
+        viewModel.organizations.observe(viewLifecycleOwner) {
             it?.let {
                 listOfOrgName.clear()
                 adapter.clear()
-                it.forEach{ orgModel ->
+                it.forEach { orgModel ->
                     listOfOrgName.add(orgModel.name)
                 }
-                listOfOrg.add(0, OrganizationModel(-1, "Все организации"))
                 listOfOrg.addAll(it)
-                listOfOrgName.add(0, "Все организации")
                 adapter.addAll(listOfOrgName)
             }
         }
@@ -386,8 +383,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
             .show()
     }
-
-
 
 
     private fun initViews() {
