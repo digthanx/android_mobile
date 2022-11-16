@@ -9,17 +9,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
+import com.teamforce.thanksapp.data.response.AuthResponse
 import com.teamforce.thanksapp.databinding.FragmentLoginBinding
 import com.teamforce.thanksapp.presentation.activity.ILoginAction
 import com.teamforce.thanksapp.presentation.viewmodel.AuthorizationType
 import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Result
+import com.teamforce.thanksapp.utils.invisible
+import com.teamforce.thanksapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +38,10 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     private var dataBundle: Bundle? = null
     private var username: String? = null
+
+    private var listOfOrgName: MutableList<String> = mutableListOf()
+    private var listOfOrg: MutableList<AuthResponse.Organization> = mutableListOf()
+    private var checkedOrgId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +56,24 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         super.onViewCreated(view, savedInstanceState)
         checkAuth()
         checkVerifyCode()
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            arrayListOf("")
+        )
+        setData(adapter)
+
+        binding.orgFilterSpinner.setAdapter(adapter)
+        binding.orgFilterSpinner.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id->
+                if(id != 0L){
+                    // Получение id выбранной организации
+                    checkedOrgId = listOfOrg[id.toInt()].organization_id
+                }
+            }
+
+
         binding.apply {
             getCodeBtn.setOnClickListener(this@LoginFragment)
 
@@ -77,6 +105,28 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
                 override fun afterTextChanged(p0: Editable?) {}
             })
+        }
+    }
+
+    private fun setData(adapter: ArrayAdapter<String>){
+        viewModel.organizations.observe(viewLifecycleOwner){
+            it?.let {
+                listOfOrgName.clear()
+                adapter.clear()
+                it.organizations?.forEach{ orgModel ->
+                    listOfOrgName.add(orgModel.organization_name)
+                }
+                listOfOrg.add(0, AuthResponse.Organization(-1, -1, "Все организации", null))
+                it.organizations?.let { it1 -> listOfOrg.addAll(it1) }
+                listOfOrgName.add(0, "Все организации")
+                if(listOfOrgName.size > 1){
+                    adapter.addAll(listOfOrgName)
+                    binding.orgFilterContainer.visible()
+                }else{
+                    binding.orgFilterContainer.invisible()
+                }
+
+            }
         }
     }
 

@@ -20,7 +20,7 @@ interface ThanksApi {
     @POST("/auth/")
     fun authorization(
         @Body authorizationRequest: AuthorizationRequest
-    ): Call<Any>
+    ): Call<AuthResponse>
 
     @POST("/verify/")
     fun verificationWithTelegram(
@@ -34,6 +34,12 @@ interface ThanksApi {
         @Header("X-Email") xEmail: String?,
         @Header("X-Code") xCode: String?,
         @Body verificationRequest: VerificationRequest
+    ): Call<VerificationResponse>
+
+    @POST("/choose-organization/")
+    fun chooseOrganization(
+        @Header("login") login: String?,
+        @Body chooseOrgRequest: ChooseOrgRequest
     ): Call<VerificationResponse>
 
     @POST("/user/change-organization/")

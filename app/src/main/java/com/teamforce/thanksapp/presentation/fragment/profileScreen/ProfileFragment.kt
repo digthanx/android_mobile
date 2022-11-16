@@ -288,7 +288,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 listOfOrgName.add(0, "Все организации")
                 adapter.addAll(listOfOrgName)
             }
-
         }
     }
 

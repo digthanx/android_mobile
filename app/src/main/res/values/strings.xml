@@ -16,6 +16,7 @@
     <string name="helperTextAboutTg">Перейдите в диалог с ботом %s,
         напишите ему что-нибудь после чего повторите процедуру аутентификации</string>
     <string name="helperTextAboutEmail">Проверьте корректность введенной почты %s</string>
+    <string name="chooseOrg">Выбрать организацию</string>
     <string name="helperTextStandard">Не пришел код?</string>
     <string name="helperLink"><u>Повторить процедуру аутентификации</u></string>
     <string name="auth_label">Введите имя пользователя</string>
