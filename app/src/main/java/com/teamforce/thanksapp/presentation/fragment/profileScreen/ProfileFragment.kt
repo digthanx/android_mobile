@@ -123,7 +123,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             bundle.putString(ORGID, viewModel.orgCode)
             if(viewModel.xId != null && viewModel.xCode != null && viewModel.orgCode != null){
                 sendToastAboutVerifyCode()
-                if(it)activityNavController().navigateSafely(R.id.action_global_signFlowFragment,
+                viewModel.saveCredentialsForChangeOrg()
+                if(it) activityNavController().navigateSafely(R.id.action_global_signFlowFragment,
                     bundle,
                     OptionsTransaction().optionForTransaction
                 )

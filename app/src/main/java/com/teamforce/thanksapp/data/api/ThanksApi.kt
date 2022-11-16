@@ -43,10 +43,10 @@ interface ThanksApi {
 
     @POST("/user/change-organization/verify/")
     suspend fun changeOrganizationVerifyWithTelegram(
-        @Header("X-Telegram") xId: String?,
+        @Header("tg_id") xId: String?,
         @Header("X-Code") xCode: String?,
         @Header("organization_id") orgCode: String?,
-        @Body verificationRequest: VerificationRequest
+        @Body verificationRequest: VerificationRequestForChangeOrg
     ): VerificationResponse
 
     @POST("/user/change-organization/verify/")

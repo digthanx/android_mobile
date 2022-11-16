@@ -20,7 +20,9 @@ class SharedPreferences @Inject constructor(
             putString(SP_ARG_USERNAME, null)
             putString(SP_ARG_EMAIL, null)
             putString(SP_ARG_USER_ID, null)
-
+            putString(SP_ARG_TG_CODE, null)
+            putString(SP_ARG_X_CODE, null)
+            putString(SP_ARG_ORG_CODE, null)
         }
 
     }
@@ -37,6 +39,43 @@ class SharedPreferences @Inject constructor(
         editor.putString(SP_ARG_USERNAME, username)
         editor.apply()
     }
+
+    fun savePreferencesForChangeOrg(
+        xCode: String?,
+        orgCode: String?,
+        xId: String?,
+    ) {
+        val prefs: SharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = prefs.edit()
+        editor.putString(SP_ARG_TG_CODE, xId)
+        editor.putString(SP_ARG_X_CODE, xCode)
+        editor.putString(SP_ARG_ORG_CODE, orgCode)
+        editor.apply()
+    }
+
+    var xId: String?
+        get() = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).getString(
+            SP_ARG_TG_CODE, null
+        )
+        set(value) = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).edit {
+            putString(SP_ARG_TG_CODE, value)
+        }
+
+    var xCode: String?
+        get() = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).getString(
+            SP_ARG_X_CODE, null
+        )
+        set(value) = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).edit {
+            putString(SP_ARG_X_CODE, value)
+        }
+
+    var orgCode: String?
+        get() = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).getString(
+            SP_ARG_ORG_CODE, null
+        )
+        set(value) = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).edit {
+            putString(SP_ARG_ORG_CODE, value)
+        }
 
     fun getToken(): String? {
         val prefs: SharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
@@ -75,5 +114,8 @@ class SharedPreferences @Inject constructor(
         private const val SP_ARG_EMAIL = "Email"
         private const val SP_ARG_USER_ID = "UserId"
         private const val SP_ARG_PUSH_TOKEN = "pushToken"
+        private const val SP_ARG_TG_CODE = "tgCode"
+        private const val SP_ARG_X_CODE = "xCode"
+        private const val SP_ARG_ORG_CODE = "orgCode"
     }
 }

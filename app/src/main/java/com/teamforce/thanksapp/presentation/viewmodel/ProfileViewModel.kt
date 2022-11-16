@@ -214,6 +214,11 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun saveCredentialsForChangeOrg(){
+        userDataRepository.saveCredentialsForChangeOrg(
+            xCode = xCode, xId = xId, orgCode = orgCode)
+    }
+
 
 
     fun isUserAuthorized() = userDataRepository.getAuthToken() != null

@@ -5,6 +5,7 @@ import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.request.ChangeOrgRequest
 import com.teamforce.thanksapp.data.request.VerificationRequest
+import com.teamforce.thanksapp.data.request.VerificationRequestForChangeOrg
 import com.teamforce.thanksapp.data.response.ChangeOrgResponse
 import com.teamforce.thanksapp.data.response.ProfileResponse
 import com.teamforce.thanksapp.data.response.PutUserAvatarResponse
@@ -68,7 +69,7 @@ class ProfileRepositoryImpl @Inject constructor(
                 xId = xId,
                 xCode = xCode,
                 orgCode = orgCode,
-                VerificationRequest(code = code)
+                VerificationRequestForChangeOrg(code = code)
             )
         }
     }

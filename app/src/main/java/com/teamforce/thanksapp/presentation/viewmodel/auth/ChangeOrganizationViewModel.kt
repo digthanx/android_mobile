@@ -167,6 +167,10 @@ class ChangeOrganizationViewModel @Inject constructor(
 
     }
 
+    fun getXcode() = userDataRepository.getXcode()
+    fun getXId() = userDataRepository.getXid()
+    fun getOrgId() = userDataRepository.getOrgCode()
+
     sealed class AuthorizationType {
         object Email : AuthorizationType()
         object Telegram : AuthorizationType()

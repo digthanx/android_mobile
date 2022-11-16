@@ -13,8 +13,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentChangeOrganizationBinding
+import com.teamforce.thanksapp.databinding.FragmentGreetBinding
 import com.teamforce.thanksapp.databinding.FragmentLoginBinding
 import com.teamforce.thanksapp.presentation.viewmodel.AuthorizationType
 import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
@@ -31,22 +33,19 @@ class ChangeOrganizationFragment : Fragment(R.layout.fragment_change_organizatio
     private var xId: String? = null
     private var orgId: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            xCode = it.getString(XCODE)
-            xId = it.getString(XID)
-            orgId = it.getString(ORGID)
-        }
-    }
 
-    private var _binding: FragmentChangeOrganizationBinding? = null
-    private val binding: FragmentChangeOrganizationBinding get() = _binding!!
+    private val binding: FragmentChangeOrganizationBinding by viewBinding()
+
 
     private val viewModel: ChangeOrganizationViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.apply {
+            xCode = getXcode()
+            orgId = getOrgId()
+            xId = getXId()
+        }
 
         checkVerifyCode()
 
@@ -83,6 +82,14 @@ class ChangeOrganizationFragment : Fragment(R.layout.fragment_change_organizatio
                             }
                             else -> {
                                 Log.d("Token", "Ни один статус не прошел CheckCodeFragment OnClick")
+                                if(xId != null && xCode != null){
+                                    viewModel.changeOrgWithTelegram(
+                                        telegramId = xId!!,
+                                        xCode = xCode!!,
+                                        orgCode = orgId!!,
+                                        codeFromTg = binding.codeEt.text?.trim().toString()
+                                    )
+                                }
                             }
                         }
                     }
@@ -92,7 +99,6 @@ class ChangeOrganizationFragment : Fragment(R.layout.fragment_change_organizatio
             })
         }
 
-        viewModel.verifyResult
     }
 
     private fun finishLogin(authToken: String?, telegramOrEmail: String?) {
@@ -140,11 +146,12 @@ class ChangeOrganizationFragment : Fragment(R.layout.fragment_change_organizatio
 
 
         @JvmStatic
-        fun newInstance(xCode: String, xId: String) =
+        fun newInstance(xCode: String, xId: String, orgId: String) =
             ChangeOrganizationFragment().apply {
                 arguments = Bundle().apply {
                     putString(XCODE, xCode)
                     putString(XID, xId)
+                    putString(ORGID, orgId)
                 }
             }
     }
