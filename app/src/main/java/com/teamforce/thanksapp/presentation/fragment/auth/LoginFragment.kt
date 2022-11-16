@@ -41,7 +41,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     private var listOfOrgName: MutableList<String> = mutableListOf()
     private var listOfOrg: MutableList<AuthResponse.Organization> = mutableListOf()
-    private var checkedOrgId: Int = -1
+    private var checkedOrgId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,

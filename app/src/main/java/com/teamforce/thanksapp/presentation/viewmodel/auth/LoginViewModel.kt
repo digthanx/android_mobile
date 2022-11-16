@@ -155,14 +155,14 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun chooseOrg(userId: Int, orgId: Int, login: String) {
+    fun chooseOrg(userId: Int, orgId: Int?, login: String) {
         _isLoading.postValue(true)
         viewModelScope.launch { callChooseOrgEndpoint(userId, orgId, login, Dispatchers.Default) }
     }
 
     private suspend fun callChooseOrgEndpoint(
         userId: Int,
-        orgId: Int,
+        orgId: Int?,
         login: String,
         coroutineDispatcher: CoroutineDispatcher
     ) {
