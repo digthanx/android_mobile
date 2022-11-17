@@ -42,90 +42,6 @@ class ProfileViewModel @Inject constructor(
     val profile: LiveData<ProfileModel> = _profile
     private val _profileError = MutableLiveData<String>()
 
-    private val _organisations = MutableLiveData<List<OrganizationModel>?>()
-    val organizations: LiveData<List<OrganizationModel>?> = _organisations
-    private val _organisationsError = MutableLiveData<String>()
-    val organizationsError: LiveData<String> = _organisationsError
-
-    private val _authResult = MutableLiveData<Boolean>()
-    val authResult: LiveData<Boolean> = _authResult
-
-    var xCode: String? = null
-    var orgCode: String? = null
-    var xId: String? = null
-    private var xEmail: String? = null
-    var authorizationType: AuthorizationType? = null
-
-
-
-
-    fun changeOrg(orgId: Int) {
-        _isLoading.postValue(true)
-        viewModelScope.launch { callChangeOrg(orgId, Dispatchers.Default) }
-    }
-
-    private suspend fun callChangeOrg(
-        orgId: Int,
-        coroutineDispatcher: CoroutineDispatcher
-    ) {
-        withContext(coroutineDispatcher) {
-            profileRepository.changeOrganization(orgId)
-                .enqueue(object : Callback<ChangeOrgResponse> {
-                    override fun onResponse(
-                        call: Call<ChangeOrgResponse>,
-                        response: Response<ChangeOrgResponse>
-                    ) {
-                        _isLoading.postValue(false)
-                        if (response.code() == 200) {
-                            Log.d("Token", "Status запроса: ${response.body().toString()}")
-                            if (response.body()?.status == "Код для подтверждения смены организации отправлен в телеграм") {
-                                xId = response.headers().get("tg_id")
-                                authorizationType = AuthorizationType.Telegram
-                            }
-                            if (response.body()
-                                    .toString() == "{status=Код для подтверждения смены организации отправлен на указанную электронную почту}"
-                            ) {
-                                xEmail = response.headers().get("X-Email")
-                                authorizationType = AuthorizationType.Email
-                            }
-                            xCode = response.headers().get("X-Code")
-                            orgCode = response.headers().get("organization_id")
-                            _authResult.postValue(true)
-                        } else {
-                            _authResult.postValue(false)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ChangeOrgResponse>, t: Throwable) {
-                        _isLoading.postValue(false)
-                        _authResult.postValue(false)
-                    }
-                })
-        }
-    }
-
-
-    fun loadUserOrganizations() {
-        _isLoading.postValue(true)
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _isLoading.postValue(true)
-
-                when (val result = profileRepository.getOrganizations()) {
-                    is ResultWrapper.Success -> {
-                        _organisations.postValue(result.value)
-                    }
-                    is ResultWrapper.GenericError ->
-                        _organisationsError.postValue(result.error + " " + result.code)
-
-                    is ResultWrapper.NetworkError ->
-                        _organisationsError.postValue("Ошибка сети")
-                }
-                _isLoading.postValue(false)
-            }
-        }
-    }
-
     fun loadUserProfile() {
         _isLoading.postValue(true)
         viewModelScope.launch {
@@ -191,19 +107,8 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun saveCredentialsForChangeOrg(){
-        userDataRepository.saveCredentialsForChangeOrg(
-            xCode = xCode, xId = xId, orgCode = orgCode)
-    }
-
 
 
     fun isUserAuthorized() = userDataRepository.getAuthToken() != null
-
-
-    sealed class AuthorizationType {
-        object Email : AuthorizationType()
-        object Telegram : AuthorizationType()
-    }
 
 }

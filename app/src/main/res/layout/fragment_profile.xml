@@ -74,31 +74,6 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/orgFilterContainer"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    app:boxBackgroundColor="@color/general_brand_secondary"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    android:layout_marginBottom="12dp"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
-                    tools:ignore="LabelFor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/orgFilterSpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:completionThreshold="40"
-                        android:textColorHint="@color/general_contrast"
-                        android:inputType="none"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/information"
                     android:layout_width="match_parent"

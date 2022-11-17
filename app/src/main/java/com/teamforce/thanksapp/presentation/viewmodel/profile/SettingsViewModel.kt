@@ -42,7 +42,7 @@ class SettingsViewModel @Inject constructor(
     var orgCode: String? = null
     var xId: String? = null
     private var xEmail: String? = null
-    var authorizationType: ProfileViewModel.AuthorizationType? = null
+    var authorizationType: AuthorizationType? = null
 
     fun changeOrg(orgId: Int) {
         _isLoading.postValue(true)
@@ -65,13 +65,13 @@ class SettingsViewModel @Inject constructor(
                             Log.d("Token", "Status запроса: ${response.body().toString()}")
                             if (response.body()?.status == "Код для подтверждения смены организации отправлен в телеграм") {
                                 xId = response.headers().get("tg_id")
-                                authorizationType = ProfileViewModel.AuthorizationType.Telegram
+                                authorizationType = AuthorizationType.Telegram
                             }
                             if (response.body()
                                     .toString() == "{status=Код для подтверждения смены организации отправлен на указанную электронную почту}"
                             ) {
                                 xEmail = response.headers().get("X-Email")
-                                authorizationType = ProfileViewModel.AuthorizationType.Email
+                                authorizationType = AuthorizationType.Email
                             }
                             xCode = response.headers().get("X-Code")
                             orgCode = response.headers().get("organization_id")
@@ -114,5 +114,10 @@ class SettingsViewModel @Inject constructor(
     fun saveCredentialsForChangeOrg(){
         userDataRepository.saveCredentialsForChangeOrg(
             xCode = xCode, xId = xId, orgCode = orgCode)
+    }
+
+    sealed class AuthorizationType {
+        object Email : AuthorizationType()
+        object Telegram : AuthorizationType()
     }
 }

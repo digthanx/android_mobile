@@ -75,31 +75,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         }
 
-    var adapter: ArrayAdapter<String>? = null
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        adapter = null
-        binding.orgFilterSpinner.setAdapter(null)
-    }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         requestData()
-        adapter = ArrayAdapter<String>(requireContext(),
-            android.R.layout.simple_spinner_dropdown_item)
-        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.orgFilterSpinner.setAdapter(adapter)
-
-        adapter?.let { setData(it) }
-
-        binding.orgFilterSpinner.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
-                adapter?.let { showAlertDialogForChangeOrg(it, id) }
-            }
-
+        setData()
 
         binding.exitBtn.setOnClickListener {
             showAlertDialogForExit()
@@ -122,57 +107,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                // setData(adapter)
             }
         }
-        viewModel.authResult.observe(viewLifecycleOwner) {
-
-            if (viewModel.xId != null && viewModel.xCode != null && viewModel.orgCode != null) {
-                sendToastAboutVerifyCode()
-                viewModel.saveCredentialsForChangeOrg()
-                if (it) activityNavController().navigateSafely(
-                    R.id.action_global_signFlowFragment,
-                    null,
-                    OptionsTransaction().optionForTransaction
-                )
-            }
-
-        }
-    }
-
-    private fun sendToastAboutVerifyCode() {
-        if (viewModel.authorizationType is ProfileViewModel.AuthorizationType.Telegram) {
-            Toast.makeText(
-                requireContext(),
-                R.string.Toast_verifyCode_hintTg,
-                Toast.LENGTH_LONG
-            ).show()
-
-        } else {
-            Toast.makeText(
-                requireContext(),
-                R.string.Toast_verifyCode_hintEmail,
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-
-
-    private fun showAlertDialogForChangeOrg(adapter: ArrayAdapter<String>, id: Long) {
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage(resources.getString(R.string.wouldYouLikeToChangeOrg))
-
-            .setNegativeButton(resources.getString(R.string.decline)) { dialog, which ->
-                binding.orgFilterSpinner.setText("")
-                // Сбросить выделение после отказа
-                dialog.dismiss()
-            }
-            .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
-                dialog.cancel()
-                if (listOfOrg.size > 0){
-                    viewModel.changeOrg(listOfOrg[id.toInt()].id)
-                }
-
-            }
-            .show()
     }
 
 
@@ -224,10 +158,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun requestData() {
         viewModel.loadUserProfile()
-        viewModel.loadUserOrganizations()
     }
 
-    private fun setData(adapter: ArrayAdapter<String>) {
+    private fun setData() {
         viewModel.profile.observe(viewLifecycleOwner) {
             //userName.text = it.profile.firstname
             binding.firstNameValueTv.text = it.profile.firstname
@@ -281,23 +214,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 it.profile.photo?.let { photo ->
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
-            }
-        }
-        viewModel.organizations.observe(viewLifecycleOwner) {
-            it?.let {
-                listOfOrg.clear()
-                adapter.clear()
-                it.forEach { orgModel ->
-                    adapter.add(orgModel.name)
-                    listOfOrg.add(orgModel)
-                    if(orgModel.is_current){
-                        binding.orgFilterSpinner.hint = (orgModel.name)
-                        binding.orgFilterContainer.hint = requireContext().getString(R.string.currentOrganisation)
-                        binding.orgFilterContainer.requestFocus()
-                    }
-                }
-                Log.d(TAG, "Size adapter ${adapter.count}")
-                Log.d(TAG, "Size listOfOrg ${listOfOrg.size}")
             }
         }
     }
