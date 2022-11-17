@@ -66,17 +66,16 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
         binding.orgFilterSpinner.setAdapter(adapter)
         binding.orgFilterSpinner.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id->
-                if(id != 0L){
-                    // Получение id выбранной организации
-                    checkedOrgId = listOfOrg[id.toInt()].organization_id
-                    username?.let {
-                        viewModel.chooseOrg(
-                            login = it,
-                            orgId = checkedOrgId,
-                            userId = listOfOrg[id.toInt()].user_id)
-                    }
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                checkedOrgId = listOfOrg[id.toInt()].organization_id
+                username?.let {
+                    viewModel.chooseOrg(
+                        login = it,
+                        orgId = checkedOrgId,
+                        userId = listOfOrg[id.toInt()].user_id
+                    )
                 }
+
             }
 
 
@@ -96,11 +95,17 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
                     if (s?.trim()?.length == 4) {
                         when (viewModel.authorizationType) {
                             AuthorizationType.Telegram -> {
-                                viewModel.verifyCodeTelegram(orgId = checkedOrgId, codeFromTg = binding.codeEt.text?.trim().toString())
+                                viewModel.verifyCodeTelegram(
+                                    orgId = checkedOrgId,
+                                    codeFromTg = binding.codeEt.text?.trim().toString()
+                                )
                             }
                             AuthorizationType.Email -> {
                                 Log.d("Token", "Я по почте захожу")
-                                viewModel.verifyCodeEmail(orgId = checkedOrgId, codeFromTg = binding.codeEt.text?.trim().toString())
+                                viewModel.verifyCodeEmail(
+                                    orgId = checkedOrgId,
+                                    codeFromTg = binding.codeEt.text?.trim().toString()
+                                )
                             }
                             else -> {
                                 Log.d("Token", "Ни один статус не прошел CheckCodeFragment OnClick")
@@ -114,23 +119,21 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         }
     }
 
-    private fun setData(adapter: ArrayAdapter<String>){
-        viewModel.organizations.observe(viewLifecycleOwner){
+    private fun setData(adapter: ArrayAdapter<String>) {
+        viewModel.organizations.observe(viewLifecycleOwner) {
             it?.let {
                 listOfOrgName.clear()
                 adapter.clear()
-                it.organizations?.forEach{ orgModel ->
+                it.organizations?.forEach { orgModel ->
                     listOfOrgName.add(orgModel.organization_name)
                 }
-                listOfOrg.add(0, AuthResponse.Organization(-1, -1, "Все организации", null))
                 it.organizations?.let { it1 -> listOfOrg.addAll(it1) }
-                listOfOrgName.add(0, "Все организации")
-                if(listOfOrgName.size > 1){
+                if (listOfOrgName.size > 1) {
                     adapter.addAll(listOfOrgName)
                     binding.orgFilterContainer.visible()
                     binding.orgFilterSpinner.visible()
 
-                }else{
+                } else {
                     binding.orgFilterContainer.invisible()
                     binding.orgFilterSpinner.invisible()
                 }
@@ -149,14 +152,14 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
                 }
                 is Result.Success -> {
                     if (result.value && username != null) {
-                        if (viewModel.needChooseOrg.value == false){
+                        if (viewModel.needChooseOrg.value == false) {
                             binding.orgFilterSpinner.invisible()
                             binding.orgFilterContainer.invisible()
                             dataBundle = sendToastAboutVerifyCode()
                             binding.helperText.visibility = View.VISIBLE
                             setEditTextCode()
                             hideGetCodeBtn()
-                        }else{
+                        } else {
                             binding.orgFilterSpinner.visible()
                             binding.orgFilterContainer.visible()
                         }
@@ -196,7 +199,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         }
     }
 
-    private fun hideKeyboard(){
+    private fun hideKeyboard() {
         val view: View? = activity?.currentFocus
         if (view != null) {
             val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
