@@ -118,16 +118,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         }
         viewModel.authResult.observe(viewLifecycleOwner) {
-            val bundle = Bundle()
-            bundle.putString(XCODE, viewModel.xCode)
-            bundle.putString(XID, viewModel.xId)
-            bundle.putString(ORGID, viewModel.orgCode)
+
             if (viewModel.xId != null && viewModel.xCode != null && viewModel.orgCode != null) {
                 sendToastAboutVerifyCode()
                 viewModel.saveCredentialsForChangeOrg()
                 if (it) activityNavController().navigateSafely(
                     R.id.action_global_signFlowFragment,
-                    bundle,
+                    null,
                     OptionsTransaction().optionForTransaction
                 )
             }
