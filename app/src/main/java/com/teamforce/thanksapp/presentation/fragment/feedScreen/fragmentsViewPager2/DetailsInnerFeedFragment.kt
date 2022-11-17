@@ -127,18 +127,18 @@ class DetailsInnerFeedFragment : Fragment(R.layout.fragment_details_inner_feed) 
 
     }
 
-    private fun setDetail(){
-        viewModel.dataOfTransaction.observe(viewLifecycleOwner){
-            with(binding){
-                if(it?.reason != "") {
+    private fun setDetail() {
+        viewModel.dataOfTransaction.observe(viewLifecycleOwner) {
+            with(binding) {
+                if (it?.reason != "") {
                     messageCard.visibility = View.VISIBLE
                     reasonTransaction.text = it?.reason
-                }else messageCard.visibility = View.GONE
+                } else messageCard.visibility = View.GONE
 
                 if (it != null) {
                     setTags(it.tags)
                 }
-                if(it?.photo != null){
+                if (it?.photo != null) {
                     photoTv.visibility = View.VISIBLE
                     cardViewImg.visibility = View.VISIBLE
                     Glide.with(requireContext())
@@ -146,50 +146,44 @@ class DetailsInnerFeedFragment : Fragment(R.layout.fragment_details_inner_feed) 
                         .centerCrop()
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(binding.senderImage)
-                }else{
+                } else {
                     photoTv.visibility = View.GONE
                     cardViewImg.visibility = View.GONE
                 }
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-                    binding.senderImage.setOnClickListener { view ->
-                        it?.photo?.let { photo ->
-                            (view as ShapeableImageView).imageView(
-                                photo,
-                                requireContext(),
-                                PosterOverlayView(requireContext()) {
-                                    lifecycleScope.launch(Dispatchers.Main) {
+                binding.senderImage.setOnClickListener { view ->
+                    it?.photo?.let { photo ->
+                        (view as ShapeableImageView).imageView(
+                            photo,
+                            requireContext(),
+                            PosterOverlayView(requireContext()) {
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                                         val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
                                         downloadImage(url, requireContext())
-                                    }
-                                }
-                            )
-                        }
-                    }
-                }else {
-                    if (checkPermission()) {
-                        binding.senderImage.setOnClickListener { view ->
-                            it?.photo?.let { photo ->
-                                (view as ShapeableImageView).imageView(
-                                    photo,
-                                    requireContext(),
-                                    PosterOverlayView(requireContext()) {
-                                        lifecycleScope.launch(Dispatchers.Main) {
-                                            val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
-                                            downloadImage(url, requireContext())
+                                    } else {
+                                        when {
+                                            ContextCompat.checkSelfPermission(
+                                                requireContext(),
+                                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                            ) == PackageManager.PERMISSION_GRANTED -> {
+                                                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                                downloadImage(url, requireContext())
+                                            }
+                                            shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
+                                                showRequestPermissionRational()
+                                            }
+                                            else -> {
+                                                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                            }
                                         }
                                     }
-                                )
+                                }
                             }
-                        }
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            requireContext().getString(R.string.dontHaveEnoughPermissions),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        )
                     }
                 }
+
             }
         }
     }

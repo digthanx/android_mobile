@@ -101,11 +101,6 @@ class ContendersAdapter(
                 Log.d("ContendersAdapter", "Кликнутая позиция в адаптере " + position)
                 refuseClickListener.invoke(currentList[position].report_id, 'D')
             }
-            binding.image.setOnClickListener { view ->
-                currentList[position].report_photo?.let { photo ->
-                    (view as ImageView).viewSinglePhoto(photo, binding.root.context)
-                }
-            }
             binding.userAvatar.setOnClickListener { view ->
                 currentList[position].participant_photo?.let { photo ->
                     (view as ShapeableImageView).viewSinglePhoto(photo, binding.root.context)
