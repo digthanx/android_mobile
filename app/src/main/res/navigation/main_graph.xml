@@ -34,6 +34,9 @@
             <action
                 android:id="@+id/action_profileFragment_to_editProfileBottomSheetFragment"
                 app:destination="@id/editProfileBottomSheetFragment" />
+            <action
+                android:id="@+id/action_profileFragment_to_settingsFragment2"
+                app:destination="@id/settingsFragment2" />
         </fragment>
         <fragment
             android:id="@+id/editProfileBottomSheetFragment"
@@ -41,6 +44,14 @@
             android:label="EditProfileBottomSheetFragment">
             <action
                 android:id="@+id/action_editProfileBottomSheetFragment_to_profileFragment"
+                app:destination="@id/profileFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/settingsFragment2"
+            android:name="com.teamforce.thanksapp.presentation.fragment.profileScreen.SettingsFragment"
+            android:label="@string/settings_label" >
+            <action
+                android:id="@+id/action_settingsFragment2_to_profileFragment"
                 app:destination="@id/profileFragment" />
         </fragment>
     </navigation>
