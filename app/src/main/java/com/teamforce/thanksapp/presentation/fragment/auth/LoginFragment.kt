@@ -39,7 +39,6 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
     private var dataBundle: Bundle? = null
     private var username: String? = null
 
-    private var listOfOrgName: MutableList<String> = mutableListOf()
     private var listOfOrg: MutableList<AuthResponse.Organization> = mutableListOf()
     private var checkedOrgId: Int? = null
 
@@ -122,17 +121,14 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
     private fun setData(adapter: ArrayAdapter<String>) {
         viewModel.organizations.observe(viewLifecycleOwner) {
             it?.let {
-                listOfOrgName.clear()
                 adapter.clear()
                 it.organizations?.forEach { orgModel ->
-                    listOfOrgName.add(orgModel.organization_name)
+                    adapter.add(orgModel.organization_name)
                 }
-                it.organizations?.let { it1 -> listOfOrg.addAll(it1) }
-                if (listOfOrgName.size > 1) {
-                    adapter.addAll(listOfOrgName)
+                if (!it.organizations.isNullOrEmpty()) {
+                    listOfOrg.addAll(it.organizations)
                     binding.orgFilterContainer.visible()
                     binding.orgFilterSpinner.visible()
-
                 } else {
                     binding.orgFilterContainer.invisible()
                     binding.orgFilterSpinner.invisible()

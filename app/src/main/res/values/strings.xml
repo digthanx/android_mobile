@@ -51,7 +51,7 @@
     <string name="explainingAboutPermissions">Вы не дали нам достаточно разрешений.
         Данные разрешения нам нужны для работы с медиа.
         Вы можете разрешить их в настройках телефона.</string>
-    <string name="changeOrganisation">Сменить организацию</string>
+    <string name="currentOrganisation">Текущая организация</string>
     <string name="explainingAboutPermissionsRational">
         Вы не дали нам достаточно разрешений для работы.
         Данные разрешения нам нужны для работы с медиа.

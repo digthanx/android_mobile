@@ -61,7 +61,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var contactValue1: String? = null
     private var contactValue2: String? = null
 
-    private var listOfOrgName: MutableList<String> = mutableListOf()
     private var listOfOrg: MutableList<OrganizationModel> = mutableListOf()
 
     private val resultLauncher =
@@ -80,23 +79,44 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         }
 
+    var adapter: ArrayAdapter<String>? = null
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
+        binding.orgFilterSpinner.setAdapter(null)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         requestData()
-        // Передавать сюда список всех организаций
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-            arrayListOf("")
-        )
-        setData(adapter)
+        adapter = ArrayAdapter<String>(requireContext(),
+            android.R.layout.simple_spinner_dropdown_item)
+        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.orgFilterSpinner.setAdapter(adapter)
 
-        binding.typesFilterSpinner.setAdapter(adapter)
-        binding.typesFilterSpinner.onItemClickListener =
+        adapter?.let { setData(it) }
+
+        binding.orgFilterSpinner.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
-                showAlertDialogForChangeOrg(adapter, id)
+                adapter?.let { showAlertDialogForChangeOrg(it, id) }
             }
+
+        binding.orgFilterSpinner.setOnClickListener {
+            binding.orgFilterSpinner.setText("")
+        }
+
+        binding.orgFilterContainer.setOnClickListener {
+            binding.orgFilterSpinner.setText("")
+            binding.orgFilterContainer.isClickable = false
+
+        }
+//        binding.orgFilterContainer.setOnFocusChangeListener{ view, b ->
+//            if (!view.isFocusable) binding.orgFilterSpinner.setText("Типо Тим Форс")
+//        }
+
 
         binding.exitBtn.setOnClickListener {
             showAlertDialogForExit()
@@ -111,7 +131,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         viewModel.isSuccessfulOperation.observe(viewLifecycleOwner) {
             if (it) {
                 requestData()
-                setData(adapter)
+               // setData(adapter)
             }
         }
         viewModel.authResult.observe(viewLifecycleOwner) {
@@ -156,13 +176,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             .setMessage(resources.getString(R.string.wouldYouLikeToChangeOrg))
 
             .setNegativeButton(resources.getString(R.string.decline)) { dialog, which ->
-                binding.typesFilterSpinner.setText("")
+                binding.orgFilterSpinner.setText("")
                 // Сбросить выделение после отказа
                 dialog.dismiss()
             }
             .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
                 dialog.cancel()
-                viewModel.changeOrg(listOfOrg[id.toInt()].id)
+                if (listOfOrg.size > 0){
+                    viewModel.changeOrg(listOfOrg[id.toInt()].id)
+                }
+
             }
             .show()
     }
@@ -277,13 +300,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
         viewModel.organizations.observe(viewLifecycleOwner) {
             it?.let {
-                listOfOrgName.clear()
+                listOfOrg.clear()
                 adapter.clear()
                 it.forEach { orgModel ->
-                    listOfOrgName.add(orgModel.name)
+                    adapter.add(orgModel.name)
+                    listOfOrg.add(orgModel)
+                    if(orgModel.is_current){
+                        binding.orgFilterSpinner.setText(orgModel.name)
+                    }
                 }
-                listOfOrg.addAll(it)
-                adapter.addAll(listOfOrgName)
+                Log.d(TAG, "Size adapter ${adapter.count}")
+                Log.d(TAG, "Size listOfOrg ${listOfOrg.size}")
             }
         }
     }

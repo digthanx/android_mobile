@@ -8,6 +8,7 @@ data class AuthResponse(
         val user_id: Int,
         val organization_id: Int,
         val organization_name: String,
-        val organization_photo: String?
+        val organization_photo: String?,
+        val is_current: Boolean
     )
 }

@@ -75,7 +75,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/typeFilterContainer"
+                    android:id="@+id/orgFilterContainer"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -89,13 +89,14 @@
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     tools:ignore="LabelFor"
-                    android:hint="@string/changeOrganisation">
+                    android:hint="@string/currentOrganisation">
 
                     <AutoCompleteTextView
-                        android:id="@+id/typesFilterSpinner"
+                        android:id="@+id/orgFilterSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="none" />
+                        android:completionThreshold="40"
+                        android:inputType="none"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.card.MaterialCardView
