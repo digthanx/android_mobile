@@ -71,31 +71,30 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
                         data = uri
                     }
                 startActivity(reqIntent)
-                // Почему то повторно не запрашивается разрешение
-                // requestPermissions()
+
             }
             .show()
     }
 
-    private fun checkPermission(): Boolean {
-
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                return true
-            }
-            shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
-                showRequestPermissionRational()
-                return false
-            }
-            else -> {
-                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                return false
-            }
-        }
-    }
+//    private fun checkPermission(): Boolean {
+//
+//        when {
+//            ContextCompat.checkSelfPermission(
+//                requireContext(),
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE
+//            ) == PackageManager.PERMISSION_GRANTED -> {
+//                return true
+//            }
+//            shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
+//                showRequestPermissionRational()
+//                return false
+//            }
+//            else -> {
+//                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                return false
+//            }
+//        }
+//    }
 
     private fun showRequestPermissionRational() {
         MaterialAlertDialogBuilder(requireContext())
@@ -204,7 +203,6 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
                 binding.userAvatar.setImageResource(R.drawable.ic_anon_avatar)
             }
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
                 binding.userAvatar.setOnClickListener { view ->
                 it.profile.photo?.let { photo ->
                     (view as ShapeableImageView).imageView(
@@ -212,37 +210,31 @@ class SomeonesProfileFragment : Fragment(R.layout.fragment_someones_profile) {
                         requireContext(),
                         PosterOverlayView(requireContext()) {
                             lifecycleScope.launch(Dispatchers.Main) {
-                                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
-                                downloadImage(url, requireContext())
+                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                        val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                        downloadImage(url, requireContext())
+                                } else {
+                                    when {
+                                        ContextCompat.checkSelfPermission(
+                                            requireContext(),
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                        ) == PackageManager.PERMISSION_GRANTED -> {
+                                            val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                            downloadImage(url, requireContext())
+                                        }
+                                        shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
+                                            showRequestPermissionRational()
+                                        }
+                                        else -> {
+                                            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                        }
+                                    }
+                                }
                             }
                         }
                     )
                 }
             }
-            }else{
-                if(checkPermission()){
-                    binding.userAvatar.setOnClickListener { view ->
-                        it.profile.photo?.let { photo ->
-                            (view as ShapeableImageView).imageView(
-                                photo,
-                                requireContext(),
-                                PosterOverlayView(requireContext()) {
-                                    lifecycleScope.launch(Dispatchers.Main) {
-                                        val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
-                                        downloadImage(url, requireContext())
-                                    }
-                                }
-                            )
-                        }
-                    }
-                }else{
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().getString(R.string.dontHaveEnoughPermissions),
-                        Toast.LENGTH_LONG).show()
-                }
-            }
-
         }
     }
 }
