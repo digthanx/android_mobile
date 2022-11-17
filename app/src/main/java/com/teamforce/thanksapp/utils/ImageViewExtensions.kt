@@ -208,17 +208,17 @@ private fun saveImage(imageBitmap: Bitmap, storageDir: File, imageFileName: Stri
                     val contentValues = ContentValues().apply {
                         put(MediaStore.MediaColumns.DISPLAY_NAME, imageFileName)
                         put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
-                        put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+//                        put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
                     }
                     val imageURI: Uri? =
-                        resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+                        resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
                     fos = imageURI?.let {
                         resolver.openOutputStream(it)
                     }
                 }
             } else {
                 val imageDirectory =
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 val image = File(imageDirectory, imageFileName)
                 fos = FileOutputStream(image)
             }
