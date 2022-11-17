@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/general_brand">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:elevation="0dp"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="0dp"
+            android:fitsSystemWindows="true"
+            app:collapsedTitleTextColor="@color/general_background"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="32dp"
+            app:expandedTitleTextAppearance="@style/Headline3.White"
+            app:expandedTitleTextColor="@color/white"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/Theme.ThanksApp.PopupOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:title="@string/settings_label"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="enterAlways"
+                app:titleTextColor="@color/white">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/ic_app_logo" />
+
+                <LinearLayout
+                    android:id="@+id/profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/white_circle_background"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:scaleType="matrix"
+                        android:src="@drawable/ic_auth_icon" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:clickable="true"
+                    android:id="@+id/notify_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="10dp"
+                    android:focusable="true">
+
+                    <FrameLayout
+                        android:visibility="gone"
+                        android:id="@+id/active_notify_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:clickable="false"
+                            android:id="@+id/notify_active"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/general_brand"
+                            android:src="@drawable/ic_notification_45" />
+
+                        <TextView
+                            android:id="@+id/notify_badge"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:layout_gravity="right|end|top"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="6dp"
+                            android:background="@drawable/notification_badge_background"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textColor="@color/general_brand"
+                            android:textSize="7sp"
+                            tools:text="0" />
+                    </FrameLayout>
+
+                    <ImageButton
+                        android:clickable="false"
+                        android:id="@+id/notify"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:backgroundTint="@color/general_brand"
+                        android:src="@drawable/ic_bell"
+                        />
+                </FrameLayout>
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:paddingHorizontal="16dp"
+        android:background="@drawable/background_white_rounded_top"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/orgFilterContainer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/general_brand_secondary"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            android:layout_marginBottom="12dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            tools:ignore="LabelFor">
+
+            <AutoCompleteTextView
+                android:id="@+id/orgFilterSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:completionThreshold="40"
+                android:textColorHint="@color/general_contrast"
+                android:inputType="none"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+

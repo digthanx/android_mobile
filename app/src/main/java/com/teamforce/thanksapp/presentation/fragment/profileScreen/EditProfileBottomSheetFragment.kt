@@ -5,28 +5,20 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.net.toUri
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import com.teamforce.thanksapp.R
-import com.teamforce.thanksapp.data.network.models.Contact
 import com.teamforce.thanksapp.databinding.FragmentEditProfileBottomSheetBinding
-import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.domain.models.profile.ContactModel
-import com.teamforce.thanksapp.presentation.viewmodel.EditProfileViewModel
+import com.teamforce.thanksapp.presentation.viewmodel.profile.EditProfileViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.OptionsTransaction
-import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
