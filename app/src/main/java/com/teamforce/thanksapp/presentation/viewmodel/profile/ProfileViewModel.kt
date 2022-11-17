@@ -104,27 +104,6 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-//    fun changeOrg(orgId: Int) {
-//        _isLoading.postValue(true)
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO) {
-//                _isLoading.postValue(true)
-//
-//                when (val result = profileRepository.changeOrganization(orgId)) {
-//                    is ResultWrapper.Success -> {
-//                        xId = result.headers().get("X-Telegram")
-//                        xCode =
-//                    }
-//                    is ResultWrapper.GenericError ->
-//                        _organisationsError.postValue(result.error + " " + result.code)
-//
-//                    is ResultWrapper.NetworkError ->
-//                        _organisationsError.postValue("Ошибка сети")
-//                }
-//                _isLoading.postValue(false)
-//            }
-//        }
-//    }
 
     fun loadUserOrganizations() {
         _isLoading.postValue(true)
