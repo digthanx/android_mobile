@@ -311,6 +311,21 @@
                     android:visibility="gone" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settings_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:paddingVertical="17dp"
+                    style="@style/NotFilledButton.White"
+                    app:icon="@drawable/ic_settings"
+                    app:iconGravity="end"
+                    android:textAlignment="viewStart"
+                    app:strokeColor="@color/general_background"
+                    android:textColor="@color/general_contrast"
+                    app:elevation="0dp"
+                    android:text="@string/settings" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/exit_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

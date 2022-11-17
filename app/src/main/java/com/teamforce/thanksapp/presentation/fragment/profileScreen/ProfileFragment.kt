@@ -108,6 +108,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding.editBtn.setOnClickListener {
             showAlertDialogForEditProfile()
         }
+
+        binding.settingsBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_settingsFragment, null,
+            OptionsTransaction().optionForEditProfile)
+        }
         swipeToRefresh()
         // TODO Странно работает обновление, оно идет, и все ок, но идет 1 запрос почему то
         // Как и должно быть, но по идее должно быть много лишних запросов, но их нет, разобраться
