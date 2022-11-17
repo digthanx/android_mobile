@@ -155,7 +155,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun sendToastAboutVerifyCode() {
-        if (viewModel.authorizationType is ProfileViewModel.AuthorizationType.Telegram) {
+        if (viewModel.authorizationType is SettingsViewModel.AuthorizationType.Telegram) {
             Toast.makeText(
                 requireContext(),
                 R.string.Toast_verifyCode_hintTg,
