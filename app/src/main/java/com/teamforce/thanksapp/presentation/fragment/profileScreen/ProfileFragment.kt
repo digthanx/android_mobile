@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.presentation.fragment.profileScreen
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -11,10 +12,13 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,16 +26,18 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.canhub.cropper.*
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.*
-import java.util.*
 
 
 @AndroidEntryPoint
@@ -54,6 +60,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var contactValue1: String? = null
     private var contactValue2: String? = null
 
+    private var listOfOrg: MutableList<OrganizationModel> = mutableListOf()
+
     private val resultLauncher =
         registerForActivityResult(CropImageContract()) { result ->
             if (result.isSuccessful && result.uriContent != null) {
@@ -70,11 +78,32 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         }
 
+    var adapter: ArrayAdapter<String>? = null
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
+        binding.orgFilterSpinner.setAdapter(null)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         requestData()
-        setData()
+        adapter = ArrayAdapter<String>(requireContext(),
+            android.R.layout.simple_spinner_dropdown_item)
+        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.orgFilterSpinner.setAdapter(adapter)
+
+        adapter?.let { setData(it) }
+
+        binding.orgFilterSpinner.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                adapter?.let { showAlertDialogForChangeOrg(it, id) }
+            }
+
+
         binding.exitBtn.setOnClickListener {
             showAlertDialogForExit()
         }
@@ -88,10 +117,65 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         viewModel.isSuccessfulOperation.observe(viewLifecycleOwner) {
             if (it) {
                 requestData()
-                setData()
+               // setData(adapter)
             }
         }
+        viewModel.authResult.observe(viewLifecycleOwner) {
+            val bundle = Bundle()
+            bundle.putString(XCODE, viewModel.xCode)
+            bundle.putString(XID, viewModel.xId)
+            bundle.putString(ORGID, viewModel.orgCode)
+            if (viewModel.xId != null && viewModel.xCode != null && viewModel.orgCode != null) {
+                sendToastAboutVerifyCode()
+                viewModel.saveCredentialsForChangeOrg()
+                if (it) activityNavController().navigateSafely(
+                    R.id.action_global_signFlowFragment,
+                    bundle,
+                    OptionsTransaction().optionForTransaction
+                )
+            }
+
+        }
     }
+
+    private fun sendToastAboutVerifyCode() {
+        if (viewModel.authorizationType is ProfileViewModel.AuthorizationType.Telegram) {
+            Toast.makeText(
+                requireContext(),
+                R.string.Toast_verifyCode_hintTg,
+                Toast.LENGTH_LONG
+            ).show()
+
+        } else {
+            Toast.makeText(
+                requireContext(),
+                R.string.Toast_verifyCode_hintEmail,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+
+    private fun showAlertDialogForChangeOrg(adapter: ArrayAdapter<String>, id: Long) {
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.wouldYouLikeToChangeOrg))
+
+            .setNegativeButton(resources.getString(R.string.decline)) { dialog, which ->
+                binding.orgFilterSpinner.setText("")
+                // Сбросить выделение после отказа
+                dialog.dismiss()
+            }
+            .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
+                dialog.cancel()
+                if (listOfOrg.size > 0){
+                    viewModel.changeOrg(listOfOrg[id.toInt()].id)
+                }
+
+            }
+            .show()
+    }
+
 
     private fun showPhoneStatePermission() {
 
@@ -141,9 +225,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun requestData() {
         viewModel.loadUserProfile()
+        viewModel.loadUserOrganizations()
     }
 
-    private fun setData() {
+    private fun setData(adapter: ArrayAdapter<String>) {
         viewModel.profile.observe(viewLifecycleOwner) {
             //userName.text = it.profile.firstname
             binding.firstNameValueTv.text = it.profile.firstname
@@ -197,6 +282,23 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 it.profile.photo?.let { photo ->
                     (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
                 }
+            }
+        }
+        viewModel.organizations.observe(viewLifecycleOwner) {
+            it?.let {
+                listOfOrg.clear()
+                adapter.clear()
+                it.forEach { orgModel ->
+                    adapter.add(orgModel.name)
+                    listOfOrg.add(orgModel)
+                    if(orgModel.is_current){
+                        binding.orgFilterSpinner.hint = (orgModel.name)
+                        binding.orgFilterContainer.hint = requireContext().getString(R.string.currentOrganisation)
+                        binding.orgFilterContainer.requestFocus()
+                    }
+                }
+                Log.d(TAG, "Size adapter ${adapter.count}")
+                Log.d(TAG, "Size listOfOrg ${listOfOrg.size}")
             }
         }
     }
@@ -298,8 +400,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
 
-
-
     private fun initViews() {
         binding.swipeRefreshLayout.setColorSchemeColors(requireContext().getColor(R.color.general_brand))
         viewModel.isLoading.observe(
@@ -318,5 +418,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     companion object {
         const val TAG = "ProfileFragment"
+        private const val XCODE = "xCode"
+        private const val XID = "xId"
+        private const val ORGID = "organization_id"
     }
 }

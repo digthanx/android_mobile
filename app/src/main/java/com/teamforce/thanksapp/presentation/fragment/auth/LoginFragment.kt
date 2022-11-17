@@ -9,17 +9,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.teamforce.thanksapp.R
+import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
+import com.teamforce.thanksapp.data.response.AuthResponse
 import com.teamforce.thanksapp.databinding.FragmentLoginBinding
 import com.teamforce.thanksapp.presentation.activity.ILoginAction
 import com.teamforce.thanksapp.presentation.viewmodel.AuthorizationType
 import com.teamforce.thanksapp.presentation.viewmodel.LoginViewModel
 import com.teamforce.thanksapp.utils.Consts
 import com.teamforce.thanksapp.utils.Result
+import com.teamforce.thanksapp.utils.invisible
+import com.teamforce.thanksapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +38,9 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
 
     private var dataBundle: Bundle? = null
     private var username: String? = null
+
+    private var listOfOrg: MutableList<AuthResponse.Organization> = mutableListOf()
+    private var checkedOrgId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +55,29 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         super.onViewCreated(view, savedInstanceState)
         checkAuth()
         checkVerifyCode()
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            arrayListOf("")
+        )
+        setData(adapter)
+
+        binding.orgFilterSpinner.setAdapter(adapter)
+        binding.orgFilterSpinner.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                checkedOrgId = listOfOrg[id.toInt()].organization_id
+                username?.let {
+                    viewModel.chooseOrg(
+                        login = it,
+                        orgId = checkedOrgId,
+                        userId = listOfOrg[id.toInt()].user_id
+                    )
+                }
+
+            }
+
+
         binding.apply {
             getCodeBtn.setOnClickListener(this@LoginFragment)
 
@@ -62,11 +94,17 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
                     if (s?.trim()?.length == 4) {
                         when (viewModel.authorizationType) {
                             AuthorizationType.Telegram -> {
-                                viewModel.verifyCodeTelegram(binding.codeEt.text?.trim().toString())
+                                viewModel.verifyCodeTelegram(
+                                    orgId = checkedOrgId,
+                                    codeFromTg = binding.codeEt.text?.trim().toString()
+                                )
                             }
                             AuthorizationType.Email -> {
                                 Log.d("Token", "Я по почте захожу")
-                                viewModel.verifyCodeEmail(binding.codeEt.text?.trim().toString())
+                                viewModel.verifyCodeEmail(
+                                    orgId = checkedOrgId,
+                                    codeFromTg = binding.codeEt.text?.trim().toString()
+                                )
                             }
                             else -> {
                                 Log.d("Token", "Ни один статус не прошел CheckCodeFragment OnClick")
@@ -80,6 +118,26 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         }
     }
 
+    private fun setData(adapter: ArrayAdapter<String>) {
+        viewModel.organizations.observe(viewLifecycleOwner) {
+            it?.let {
+                adapter.clear()
+                it.organizations?.forEach { orgModel ->
+                    adapter.add(orgModel.organization_name)
+                }
+                if (!it.organizations.isNullOrEmpty()) {
+                    listOfOrg.addAll(it.organizations)
+                    binding.orgFilterContainer.visible()
+                    binding.orgFilterSpinner.visible()
+                } else {
+                    binding.orgFilterContainer.invisible()
+                    binding.orgFilterSpinner.invisible()
+                }
+
+            }
+        }
+    }
+
     private fun checkAuth() {
         viewModel.authResult.observe(viewLifecycleOwner) { result ->
             when (result) {
@@ -90,10 +148,17 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
                 }
                 is Result.Success -> {
                     if (result.value && username != null) {
-                        dataBundle = sendToastAboutVerifyCode()
-                        binding.helperText.visibility = View.VISIBLE
-                        setEditTextCode()
-                        hideGetCodeBtn()
+                        if (viewModel.needChooseOrg.value == false) {
+                            binding.orgFilterSpinner.invisible()
+                            binding.orgFilterContainer.invisible()
+                            dataBundle = sendToastAboutVerifyCode()
+                            binding.helperText.visibility = View.VISIBLE
+                            setEditTextCode()
+                            hideGetCodeBtn()
+                        } else {
+                            binding.orgFilterSpinner.visible()
+                            binding.orgFilterContainer.visible()
+                        }
                     }
                 }
                 else -> {
@@ -130,7 +195,7 @@ class LoginFragment : Fragment(), View.OnClickListener, ILoginAction {
         }
     }
 
-    private fun hideKeyboard(){
+    private fun hideKeyboard() {
         val view: View? = activity?.currentFocus
         if (view != null) {
             val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

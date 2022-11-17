@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/general_brand"
-    tools:context=".presentation.fragment.auth.LoginFragment">
+    tools:context=".presentation.fragment.auth.ChangeOrganizationFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,64 +40,14 @@
             android:padding="@dimen/padding_x"
             android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomEnd="15dp"
-                app:boxCornerRadiusBottomStart="15dp"
-                app:boxCornerRadiusTopEnd="15dp"
-                app:boxCornerRadiusTopStart="15dp"
-                android:layout_marginBottom="10dp"
-                app:boxStrokeWidth="0.5dp"
-                app:startIconDrawable="@drawable/ic_auth_icon"
-                app:startIconTint="@color/general_brand"
-                app:boxStrokeColor="@color/general_color_grey">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/telegram_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/auth_label"
-                    android:lines="1"
-                    android:inputType="text"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/orgFilterContainer"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                app:boxStrokeColor="@color/general_color_grey"
-                app:boxBackgroundMode="outline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxBackgroundColor="@color/general_brand_secondary"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp"
-                android:layout_marginBottom="5dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                android:visibility="gone"
-                tools:ignore="LabelFor"
-                android:hint="@string/chooseOrg">
-
-                <AutoCompleteTextView
-                    android:id="@+id/orgFilterSpinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textFieldCode"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:boxCornerRadiusBottomEnd="15dp"
                 app:boxCornerRadiusBottomStart="15dp"
                 app:boxCornerRadiusTopEnd="15dp"
@@ -123,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:linksClickable="true"
                 android:layout_gravity="center"
                 android:clickable="true"
@@ -148,25 +98,10 @@
                 />
 
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/get_code_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="44dp"
-                android:text="@string/get_code_button_label"
-                style="@style/DefaultButton"
-                android:textAllCaps="true"
-                android:paddingVertical="17dp" />
 
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/codeGroup"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="textFieldCode, code_et, helperLink, helperText"/>
 
 </LinearLayout>

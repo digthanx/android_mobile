@@ -35,5 +35,21 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_greetFragment_to_changeOrganizationFragment"
+            app:destination="@id/changeOrganizationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/changeOrganizationFragment"
+        android:name="com.teamforce.thanksapp.presentation.fragment.auth.ChangeOrganizationFragment"
+        android:label="fragment_change_organization"
+        tools:layout="@layout/fragment_change_organization" >
+        <action
+            android:id="@+id/action_changeOrganizationFragment_to_greetFragment"
+            app:destination="@id/greetFragment" />
+        <action
+            android:id="@+id/action_changeOrganizationFragment_to_mainFlowFragment"
+            app:destination="@id/mainFlowFragment" />
+    </fragment>
+    <action android:id="@+id/action_global_changeOrganizationFragment" app:destination="@id/changeOrganizationFragment" /><action android:id="@+id/action_global_greetFragment" app:destination="@id/greetFragment"/>
 </navigation>

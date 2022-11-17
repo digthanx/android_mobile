@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -22,13 +23,12 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentAdditionalInfoFeedItemBinding
 import com.teamforce.thanksapp.presentation.adapter.feed.DetailFeedStateAdapter
 import com.teamforce.thanksapp.presentation.viewmodel.feed.AdditionalInfoFeedItemViewModel
-import com.teamforce.thanksapp.utils.Consts
+import com.teamforce.thanksapp.utils.*
 import com.teamforce.thanksapp.utils.Consts.AVATAR_USER
 import com.teamforce.thanksapp.utils.Consts.TRANSACTION_ID
-import com.teamforce.thanksapp.utils.OptionsTransaction
-import com.teamforce.thanksapp.utils.username
-import com.teamforce.thanksapp.utils.viewSinglePhoto
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AdditionalInfoFeedItemFragment : Fragment() {
@@ -183,10 +183,19 @@ class AdditionalInfoFeedItemFragment : Fragment() {
                 userIdSender = it?.sender_id
                 setLikes(it?.like_amount, it?.user_liked)
 
-                // Переход к просмотру фото
+                // Переход к просмотру фото с скачиванием
                 binding.userAvatar.setOnClickListener { view ->
                     it?.recipient_photo?.let { photo ->
-                        (view as ShapeableImageView).viewSinglePhoto(photo, requireContext())
+                        (view as ShapeableImageView).imageView(
+                            photo,
+                            requireContext(),
+                            PosterOverlayView(requireContext()) {
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                    downloadImage(url, requireContext())
+                                }
+                            }
+                        )
                     }
                 }
             }

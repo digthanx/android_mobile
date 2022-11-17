@@ -4,6 +4,7 @@ import com.teamforce.thanksapp.data.entities.feed.FeedItemByIdEntity
 import com.teamforce.thanksapp.data.entities.feed.FeedItemEntity
 import com.teamforce.thanksapp.data.entities.notifications.*
 import com.teamforce.thanksapp.data.entities.profile.ContactEntity
+import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.data.entities.profile.ProfileEntity
 import com.teamforce.thanksapp.data.request.*
 import com.teamforce.thanksapp.data.response.*
@@ -19,7 +20,7 @@ interface ThanksApi {
     @POST("/auth/")
     fun authorization(
         @Body authorizationRequest: AuthorizationRequest
-    ): Call<Any>
+    ): Call<AuthResponse>
 
     @POST("/verify/")
     fun verificationWithTelegram(
@@ -35,8 +36,37 @@ interface ThanksApi {
         @Body verificationRequest: VerificationRequest
     ): Call<VerificationResponse>
 
+    @POST("/choose-organization/")
+    fun chooseOrganization(
+        @Header("login") login: String?,
+        @Body chooseOrgRequest: ChooseOrgRequest
+    ): Call<AuthResponse>
+
+    @POST("/user/change-organization/")
+    fun changeOrganization(
+        @Body data: ChangeOrgRequest
+    ): Call<ChangeOrgResponse>
+
+    @POST("/user/change-organization/verify/")
+    suspend fun changeOrganizationVerifyWithTelegram(
+        @Header("tg_id") xId: String?,
+        @Header("X-Code") xCode: String?,
+        @Header("organization_id") orgCode: String?,
+        @Body verificationRequest: VerificationRequestForChangeOrg
+    ): VerificationResponse
+
+    @POST("/user/change-organization/verify/")
+    suspend fun changeOrganizationVerifyWithEmail(
+        @Header("X-Email") xEmail: String?,
+        @Header("X-Code") xCode: String?,
+        @Body verificationRequest: VerificationRequest
+    ): VerificationResponse
+
     @GET("/user/profile/")
     suspend fun getProfile(): ProfileEntity
+
+    @GET("/user/organizations/")
+    suspend fun getOrganizations(): List<OrganizationModel>
 
     @GET("/user/balance/")
     fun getBalance(): Call<BalanceResponse>

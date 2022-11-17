@@ -7,6 +7,20 @@ import javax.inject.Singleton
 class UserDataRepository @Inject constructor(
     private val sharedPreferences: com.teamforce.thanksapp.data.SharedPreferences
 ) {
+
+    fun saveCredentialsForChangeOrg(
+        xCode: String?,
+        orgCode: String?,
+        xId: String?,
+    ) {
+        sharedPreferences.savePreferencesForChangeOrg(
+            xCode = xCode,
+            xId = xId,
+            orgCode = orgCode
+        )
+    }
+
+
     fun saveCredentials(
         authToken: String?,
         telegram: String?,
@@ -18,6 +32,10 @@ class UserDataRepository @Inject constructor(
             username = userName,
         )
     }
+
+    fun getXcode(): String? = sharedPreferences.xCode
+    fun getOrgCode(): String? = sharedPreferences.orgCode
+    fun getXid(): String? = sharedPreferences.xId
 
     fun saveUsername(userName: String?) {
         sharedPreferences.username = userName
