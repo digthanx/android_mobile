@@ -53,6 +53,11 @@
             <action
                 android:id="@+id/action_settingsFragment_to_profileFragment"
                 app:destination="@id/profileFragment" />
+
+            <action
+                android:id="@+id/action_settingsFragment_to_notificationFragment"
+                app:destination="@id/notificationsFragment"
+                />
         </fragment>
     </navigation>
     <navigation android:id="@+id/feed_graph"

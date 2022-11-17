@@ -10,12 +10,15 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.net.toUri
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
+import com.teamforce.thanksapp.NotificationSharedViewModel
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
@@ -29,12 +32,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private val binding: FragmentSettingsBinding by viewBinding()
+
     private val viewModel: SettingsViewModel by viewModels()
+    private val sharedViewModel: NotificationSharedViewModel by activityViewModels()
+
 
 
     private var listOfOrg: MutableList<OrganizationModel> = mutableListOf()
     var adapter: ArrayAdapter<String>? = null
-
 
 
     override fun onDestroyView() {
@@ -50,16 +55,40 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         setData()
         listeners()
 
+        binding.profile.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
+        binding.notifyLayout.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_notificationFragment)
+        }
+
+        sharedViewModel.state.observe(viewLifecycleOwner) { notificationsCount ->
+            if (notificationsCount == 0) {
+                binding.apply {
+                    activeNotifyLayout.invisible()
+                    notify.visible()
+                }
+            } else {
+                binding.apply {
+                    activeNotifyLayout.visible()
+                    notify.invisible()
+                    notifyBadge.text = notificationsCount.toString()
+                }
+            }
+        }
     }
 
-    private fun initAdapter(){
-        adapter = ArrayAdapter<String>(requireContext(),
-            android.R.layout.simple_spinner_dropdown_item)
+    private fun initAdapter() {
+        adapter = ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item
+        )
         adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.orgFilterSpinner.setAdapter(adapter)
     }
 
-    private fun listeners(){
+    private fun listeners() {
         viewModel.authResult.observe(viewLifecycleOwner) {
 
             if (viewModel.xId != null && viewModel.xCode != null && viewModel.orgCode != null) {
@@ -92,9 +121,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 it.forEach { orgModel ->
                     adapter?.add(orgModel.name)
                     listOfOrg.add(orgModel)
-                    if(orgModel.is_current){
+                    if (orgModel.is_current) {
                         binding.orgFilterSpinner.hint = (orgModel.name)
-                        binding.orgFilterContainer.hint = requireContext().getString(R.string.currentOrganisation)
+                        binding.orgFilterContainer.hint =
+                            requireContext().getString(R.string.currentOrganisation)
                         binding.orgFilterContainer.requestFocus()
                     }
                 }
@@ -116,7 +146,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
             .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
                 dialog.cancel()
-                if (listOfOrg.size > 0){
+                if (listOfOrg.size > 0) {
                     viewModel.changeOrg(listOfOrg[id.toInt()].id)
                 }
 
