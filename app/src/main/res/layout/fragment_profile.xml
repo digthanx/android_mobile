@@ -88,14 +88,14 @@
                     android:layout_marginBottom="12dp"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
-                    tools:ignore="LabelFor"
-                    android:hint="@string/currentOrganisation">
+                    tools:ignore="LabelFor">
 
                     <AutoCompleteTextView
                         android:id="@+id/orgFilterSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:completionThreshold="40"
+                        android:textColorHint="@color/general_contrast"
                         android:inputType="none"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

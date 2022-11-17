@@ -1,6 +1,7 @@
 package com.teamforce.thanksapp.presentation.fragment.profileScreen
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -11,15 +12,16 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -31,14 +33,11 @@ import com.canhub.cropper.CropImageView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.teamforce.thanksapp.R
-
 import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
 import com.teamforce.thanksapp.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.utils.*
-import com.teamforce.thanksapp.utils.getFilePathFromUri
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.FieldPosition
 
 
 @AndroidEntryPoint
@@ -103,19 +102,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             AdapterView.OnItemClickListener { parent, view, position, id ->
                 adapter?.let { showAlertDialogForChangeOrg(it, id) }
             }
-
-        binding.orgFilterSpinner.setOnClickListener {
-            binding.orgFilterSpinner.setText("")
-        }
-
-        binding.orgFilterContainer.setOnClickListener {
-            binding.orgFilterSpinner.setText("")
-            binding.orgFilterContainer.isClickable = false
-
-        }
-//        binding.orgFilterContainer.setOnFocusChangeListener{ view, b ->
-//            if (!view.isFocusable) binding.orgFilterSpinner.setText("Типо Тим Форс")
-//        }
 
 
         binding.exitBtn.setOnClickListener {
@@ -306,7 +292,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     adapter.add(orgModel.name)
                     listOfOrg.add(orgModel)
                     if(orgModel.is_current){
-                        binding.orgFilterSpinner.setText(orgModel.name)
+                        binding.orgFilterSpinner.hint = (orgModel.name)
+                        binding.orgFilterContainer.hint = requireContext().getString(R.string.currentOrganisation)
+                        binding.orgFilterContainer.requestFocus()
                     }
                 }
                 Log.d(TAG, "Size adapter ${adapter.count}")
