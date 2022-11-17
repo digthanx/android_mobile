@@ -1,4 +1,4 @@
-package com.teamforce.thanksapp.presentation.viewmodel
+package com.teamforce.thanksapp.presentation.viewmodel.profile
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,12 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.teamforce.thanksapp.NotificationsRepository
 import com.teamforce.thanksapp.PushNotificationService
 import com.teamforce.thanksapp.data.entities.profile.OrganizationModel
-import com.teamforce.thanksapp.data.request.AuthorizationRequest
 import com.teamforce.thanksapp.data.response.ChangeOrgResponse
 import com.teamforce.thanksapp.domain.models.profile.ProfileModel
 import com.teamforce.thanksapp.domain.repositories.ProfileRepository
 import com.teamforce.thanksapp.domain.usecases.LoadProfileUseCase
-import com.teamforce.thanksapp.utils.Result
 import com.teamforce.thanksapp.utils.ResultWrapper
 import com.teamforce.thanksapp.utils.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

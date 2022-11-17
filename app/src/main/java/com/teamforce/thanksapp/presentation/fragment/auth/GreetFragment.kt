@@ -2,18 +2,12 @@ package com.teamforce.thanksapp.presentation.fragment.auth
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.FragmentGreetBinding
-import com.teamforce.thanksapp.databinding.FragmentProfileBinding
-import com.teamforce.thanksapp.databinding.FragmentTransactionResultBinding
-import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
-import com.teamforce.thanksapp.presentation.viewmodel.ProfileViewModel
 import com.teamforce.thanksapp.presentation.viewmodel.auth.GreetViewModel
 import com.teamforce.thanksapp.utils.OptionsTransaction
 import dagger.hilt.android.AndroidEntryPoint
