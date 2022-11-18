@@ -16,7 +16,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -30,10 +29,8 @@ import com.teamforce.thanksapp.R
 import com.teamforce.thanksapp.databinding.DialogDatePickerBinding
 import com.teamforce.thanksapp.databinding.FragmentCreateChallengeBinding
 import com.teamforce.thanksapp.model.domain.ChallengeModel
-import com.teamforce.thanksapp.presentation.fragment.profileScreen.ProfileFragment
 import com.teamforce.thanksapp.presentation.viewmodel.challenge.CreateChallengeViewModel
 import com.teamforce.thanksapp.utils.*
-import com.teamforce.thanksapp.utils.getFilePathFromUri
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -127,6 +124,7 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
             val binding = DialogDatePickerBinding.inflate(inflater)
             val datePickerLayout = binding.root
             val datePicker = DatePicker(requireContext())
+            datePicker.minDate = Date().time
             binding.linearForDatePicker.addView(datePicker)
             val today = Calendar.getInstance()
             datePicker.init(
@@ -139,14 +137,24 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
                 .setPositiveButton(getString(R.string.applyValues),
                     DialogInterface.OnClickListener { dialog, which ->
                         // Сохранения значения в переменную
-                        dateForTextView = "${binding.datePicker.dayOfMonth}" +
-                                ".${binding.datePicker.month + 1}" +
-                                ".${binding.datePicker.year}"
-                        dateForSendingFormatted = "${binding.datePicker.year}" +
-                                "-${binding.datePicker.month + 1}" +
-                                "-${binding.datePicker.dayOfMonth}"
-                        dialog.cancel()
-                        myBinding.dateEt.setText(dateForTextView)
+                        val clickedDate = Calendar.getInstance()
+                        clickedDate.set(binding.datePicker.year, binding.datePicker.month, binding.datePicker.dayOfMonth)
+                        if(today.compareTo(clickedDate) == 0 || today.compareTo(clickedDate) == -1) {
+                            dateForTextView = "${binding.datePicker.dayOfMonth}" +
+                                    ".${binding.datePicker.month + 1}" +
+                                    ".${binding.datePicker.year}"
+                            dateForSendingFormatted = "${binding.datePicker.year}" +
+                                    "-${binding.datePicker.month + 1}" +
+                                    "-${binding.datePicker.dayOfMonth}"
+                            myBinding.dateEt.setText(dateForTextView)
+                            dialog.cancel()
+                        }else {
+                            Toast.makeText(
+                                requireContext(),
+                                requireContext().getString(R.string.forbiddenSetAPastDate),
+                                Toast.LENGTH_LONG)
+                                .show()
+                        }
                     })
                 .setNegativeButton(
                     getString(R.string.refuse),
@@ -336,6 +344,10 @@ class CreateChallengeFragment : Fragment(R.layout.fragment_create_challenge) {
                 // requestPermissions()
             }
             .show()
+    }
+
+    companion object {
+        const val TAG = "Create Challenge Fragment"
     }
 
 
