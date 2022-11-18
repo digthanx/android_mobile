@@ -61,7 +61,8 @@ class CommentsFeedFragment : Fragment(R.layout.fragment_comments_feed) {
     }
 
     private fun createComment(challengeId: Int, text: String) {
-        viewModel.createComment(challengeId, text)
+        // Удаление лишних пробелов(двух и более подряд)
+        viewModel.createComment(challengeId, text.replace("\\s+".toRegex(), " "))
     }
 
     private fun listeners() {
