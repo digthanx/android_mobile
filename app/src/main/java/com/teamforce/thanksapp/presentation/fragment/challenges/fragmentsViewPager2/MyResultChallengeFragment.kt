@@ -69,26 +69,6 @@ class MyResultChallengeFragment : Fragment(R.layout.fragment_my_result_challenge
             .show()
     }
 
-    private fun checkPermission(): Boolean {
-
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                return true
-            }
-            shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
-                showRequestPermissionRational()
-                return false
-            }
-            else -> {
-                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                return false
-            }
-        }
-    }
-
     private fun showRequestPermissionRational() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.explainingAboutPermissionsRational))
@@ -117,52 +97,50 @@ class MyResultChallengeFragment : Fragment(R.layout.fragment_my_result_challenge
         loadMyResult()
         listeners()
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-            listAdapter?.onImageClicked = { clickedView, photo ->
-                (view as ShapeableImageView).imageView(
-                    photo,
-                    requireContext(),
-                    PosterOverlayView(requireContext()) {
-                        lifecycleScope.launch(Dispatchers.Main) {
+        listAdapter?.onImageClicked = { clickedView, photo ->
+            (clickedView as ShapeableImageView).imageView(
+                photo,
+                requireContext(),
+                PosterOverlayView(requireContext()) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                             val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
                             downloadImage(url, requireContext())
-                        }
-                    }
-                )            }
-        }else{
-            if(checkPermission()){
-                listAdapter?.onImageClicked = { clickedView, photo ->
-                    (view as ShapeableImageView).imageView(
-                        photo,
-                        requireContext(),
-                        PosterOverlayView(requireContext()) {
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
-                                downloadImage(url, requireContext())
+                        } else {
+                            when {
+                                ContextCompat.checkSelfPermission(
+                                    requireContext(),
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                ) == PackageManager.PERMISSION_GRANTED -> {
+                                    val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                    downloadImage(url, requireContext())
+                                }
+                                shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
+                                    showRequestPermissionRational()
+                                }
+                                else -> {
+                                    requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                }
                             }
                         }
-                    )                }
-            }else{
-                Toast.makeText(
-                    requireContext(),
-                    requireContext().getString(R.string.dontHaveEnoughPermissions),
-                    Toast.LENGTH_LONG).show()
-            }
+                    }
+                }
+            )
         }
     }
 
-    private fun loadMyResult(){
+    private fun loadMyResult() {
         idChallenge?.let {
             viewModel.loadChallengeResult(it)
         }
     }
 
-    private fun listeners(){
-        viewModel.myResultError.observe(viewLifecycleOwner){
+    private fun listeners() {
+        viewModel.myResultError.observe(viewLifecycleOwner) {
             binding.noData.visibility = View.VISIBLE
         }
 
-        viewModel.myResult.observe(viewLifecycleOwner){
+        viewModel.myResult.observe(viewLifecycleOwner) {
             (binding.listOfResults.adapter as ResultChallengeAdapter).submitList(it?.reversed())
         }
     }

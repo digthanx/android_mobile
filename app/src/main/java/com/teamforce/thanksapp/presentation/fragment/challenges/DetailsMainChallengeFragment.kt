@@ -264,46 +264,40 @@ class DetailsMainChallengeFragment : Fragment(R.layout.fragment_details_main_cha
                     )
                 }
             }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                binding.imageBackground.setOnClickListener { view ->
-                    urlPhoto?.let { photo ->
-                        (view as ShapeableImageView).imageView(
-                            photo,
-                            requireContext(),
-                            PosterOverlayView(requireContext()) {
-                                lifecycleScope.launch(Dispatchers.Main) {
+            binding.imageBackground.setOnClickListener { view ->
+                urlPhoto?.let { photo ->
+                    (view as ShapeableImageView).imageView(
+                        photo,
+                        requireContext(),
+                        PosterOverlayView(requireContext()) {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                                     val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
                                     downloadImage(url, requireContext())
-                                }
-                            }
-                        )
-                    }
-                }
-            } else {
-                if (checkPermission()) {
-                    binding.imageBackground.setOnClickListener { view ->
-                        urlPhoto?.let { photo ->
-                            (view as ShapeableImageView).imageView(
-                                photo,
-                                requireContext(),
-                                PosterOverlayView(requireContext()) {
-                                    lifecycleScope.launch(Dispatchers.Main) {
-                                        val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
-                                        downloadImage(url, requireContext())
+                                } else {
+                                    when {
+                                        ContextCompat.checkSelfPermission(
+                                            requireContext(),
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                        ) == PackageManager.PERMISSION_GRANTED -> {
+                                            val url =
+                                                "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                            downloadImage(url, requireContext())
+                                        }
+                                        shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
+                                            showRequestPermissionRational()
+                                        }
+                                        else -> {
+                                            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                        }
                                     }
                                 }
-                            )
+                            }
                         }
-                    }
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().getString(R.string.dontHaveEnoughPermissions),
-                        Toast.LENGTH_LONG
-                    ).show()
+                    )
                 }
             }
+
         } else {
             binding.standardCard.visibility = View.VISIBLE
             binding.secondaryCard.visibility = View.GONE

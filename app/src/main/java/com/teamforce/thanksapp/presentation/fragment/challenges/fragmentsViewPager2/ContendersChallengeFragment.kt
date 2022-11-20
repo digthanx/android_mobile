@@ -42,11 +42,10 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
     private val viewModel: ContendersChallengeViewModel by viewModels()
 
     private var idChallenge: Int? = null
-   // private var listOfContenders: MutableList<GetChallengeContendersResponse.Contender> = mutableListOf()
 
     private var contendersAdapter: ContendersAdapter? = null
 
-    //private var currentPositionItem = -1
+
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -77,26 +76,6 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
                 // requestPermissions()
             }
             .show()
-    }
-
-    private fun checkPermission(): Boolean {
-
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                return true
-            }
-            shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
-                showRequestPermissionRational()
-                return false
-            }
-            else -> {
-                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                return false
-            }
-        }
     }
 
     private fun showRequestPermissionRational() {
@@ -138,44 +117,42 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
             )
         )
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-            contendersAdapter?.onImageClicked = { clickedView, photo ->
-                (view as ShapeableImageView).imageView(
-                    photo,
-                    requireContext(),
-                    PosterOverlayView(requireContext()) {
-                        lifecycleScope.launch(Dispatchers.Main) {
+        contendersAdapter?.onImageClicked = { clickedView, photo ->
+            (clickedView as ShapeableImageView).imageView(
+                photo,
+                requireContext(),
+                PosterOverlayView(requireContext()) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                             val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
                             downloadImage(url, requireContext())
-                        }
-                    }
-                )            }
-        }else{
-            if(checkPermission()){
-                contendersAdapter?.onImageClicked = { clickedView, photo ->
-                    (view as ShapeableImageView).imageView(
-                        photo,
-                        requireContext(),
-                        PosterOverlayView(requireContext()) {
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
-                                downloadImage(url, requireContext())
+                        } else {
+                            when {
+                                ContextCompat.checkSelfPermission(
+                                    requireContext(),
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                ) == PackageManager.PERMISSION_GRANTED -> {
+                                    val url = "${Consts.BASE_URL}${photo.replace("_thumb", "")}"
+                                    downloadImage(url, requireContext())
+                                }
+                                shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
+                                    showRequestPermissionRational()
+                                }
+                                else -> {
+                                    requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                }
                             }
                         }
-                    )                }
-            }else{
-                Toast.makeText(
-                    requireContext(),
-                    requireContext().getString(R.string.dontHaveEnoughPermissions),
-                    Toast.LENGTH_LONG).show()
-            }
+                    }
+                }
+            )
         }
+
         loadParticipants()
         setData()
         listeners()
 
     }
-
 
 
     private fun listeners() {
@@ -229,7 +206,7 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
             if (dialog.findViewById<TextInputEditText>(R.id.description_et)
                     .text?.trim()?.isNotEmpty() == true
             ) {
-                if (idChallenge != null){
+                if (idChallenge != null) {
                     viewModel.checkReport(
                         reportId, state,
                         dialog.findViewById<TextInputEditText>(R.id.description_et).text.toString(),
@@ -266,13 +243,13 @@ class ContendersChallengeFragment : Fragment(R.layout.fragment_contenders_challe
     }
 
     private fun apply(reportId: Int, state: Char) {
-       // currentPositionItem = position
+        // currentPositionItem = position
         idChallenge?.let { viewModel.checkReport(reportId, state, " ", it) }
     }
 
     private fun refuse(reportId: Int, state: Char) {
-       // Log.d(TAG, "onViewCreated: refused item index $position")
-       // currentPositionItem = position
+        // Log.d(TAG, "onViewCreated: refused item index $position")
+        // currentPositionItem = position
         createDialog(reportId, state)
     }
 
