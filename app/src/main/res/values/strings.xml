@@ -165,6 +165,7 @@
     <string name="challengeWasCreated">Челлендж успешно создан</string>
     <string name="requiredField">Поле обязательно</string>
     <string name="creatorOfChallenge">от %s %s</string>
+    <string name="forbiddenSetAPastDate">Запрещено указывать прошедшие даты</string>
 
     <!-- Челлендж фрагмент детали -->
     <string name="details">Детали</string>

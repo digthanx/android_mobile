@@ -65,7 +65,7 @@ class CommentsChallengeFragment : Fragment(R.layout.fragment_comments_challenge)
 //    }
 
     private fun createComment(challengeId: Int, text: String) {
-        viewModel.createComment(challengeId, text)
+        viewModel.createComment(challengeId, text.replace("\\s+".toRegex(), " "))
     }
 
     private fun listeners() {
