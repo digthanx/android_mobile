@@ -75,6 +75,34 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/status"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_width="match_parent"
+                    android:backgroundTint="@color/general_brand"
+                    app:cardCornerRadius="16dp"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_margin="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            style="@style/Body1.White"
+                            android:text="Статус">
+                        </TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Body1.White"
+                            android:textSize="14sp"
+                            android:text="В отпуске >"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/information"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

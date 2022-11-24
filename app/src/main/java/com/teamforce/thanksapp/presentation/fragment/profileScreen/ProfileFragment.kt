@@ -107,6 +107,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                // setData(adapter)
             }
         }
+
+        binding.status.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_statisticsFragment)
+        }
     }
 
 
